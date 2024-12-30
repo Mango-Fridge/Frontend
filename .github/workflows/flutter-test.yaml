@@ -9,7 +9,9 @@ on:
 jobs:
   Tests-and-build-macos-x64:
     name: Tests and Build on MacOS
-    runs-on: macos-latest
+    runs-on: [ macos-latest ]
+    env:
+      working-directory: ./mango
     steps:
     - uses: actions/checkout@v4
     - uses: subosito/flutter-action@v2
@@ -17,7 +19,6 @@ jobs:
         flutter-version: '3.27.1'
         channel: 'stable'
         architecture: x64
-    - run: flutter pub add mango
     - run: flutter pub upgrade --major-versions
     - run: flutter pub get
     - run: flutter test
