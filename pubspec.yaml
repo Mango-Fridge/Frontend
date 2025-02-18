@@ -14,7 +14,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   sign_in_with_apple: ^6.1.4
   kakao_flutter_sdk: ^1.9.6
-  riverpod: ^2.6.1
+  flutter_riverpod: ^2.6.1
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
