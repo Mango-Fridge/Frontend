@@ -35,9 +35,8 @@ class KakaoAuthService implements AbstractAuth {
     // 카카오톡 실행이 가능하면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
     if (await isKakaoTalkInstalled()) {
       try {
-        // OAuthToken: 액세스 토큰이 만료되었을 때, 새로운 액세스 토큰을 받기 위한 토큰
-        OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
-        print('카카오톡으로 로그인 성공 ${token.accessToken}');
+        await UserApi.instance.loginWithKakaoTalk();
+        print('카카오톡으로 로그인 성공');
 
         User user = await UserApi.instance.me();
         return UserInfo(
@@ -54,8 +53,8 @@ class KakaoAuthService implements AbstractAuth {
 
         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
         try {
-          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-          print('카카오계정으로 로그인 성공 ${token.accessToken}');
+          await UserApi.instance.loginWithKakaoAccount();
+          print('카카오계정으로 로그인 성공');
 
           User user = await UserApi.instance.me();
           return UserInfo(
@@ -68,8 +67,8 @@ class KakaoAuthService implements AbstractAuth {
     } else {
       // 카카오톡이 설치X, 카카오계정으로 로그인
       try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-        print('카카오계정으로 로그인 성공 ${token.accessToken}');
+        await UserApi.instance.loginWithKakaoAccount();
+        print('카카오계정으로 로그인 성공');
 
         User user = await UserApi.instance.me();
         return UserInfo(
