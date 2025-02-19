@@ -5,11 +5,12 @@ import 'package:mango/view/login/exam_apple_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  runApp(const ProviderScope(child: MyApp()));
   await dotenv.load(fileName: 'assets/config/.env');
 
   WidgetsFlutterBinding.ensureInitialized(); // 비동기 작업을 실행하기 전에 위젯 시스템을 초기화
   KakaoSdk.init(nativeAppKey: dotenv.get('KAKAO_API_KEY')); // 카카오 초기화
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

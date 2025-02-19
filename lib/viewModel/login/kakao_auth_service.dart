@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
-import 'package:mango/model/user_model.dart';
+import 'package:mango/model/login/user_model.dart';
 import 'package:mango/viewModel/login/abstract_auth.dart';
 
 class KakaoAuthService implements AbstractAuth {

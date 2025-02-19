@@ -1,6 +1,5 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/user_model.dart';
+import 'package:mango/model/login/user_model.dart';
 import '../viewModel/login/kakao_auth_service.dart';
 
 // 상태 관리를 위한 provider와 notifier
@@ -22,4 +21,6 @@ class AuthNotifier extends Notifier<UserInfo?> {
 }
 
 // NotifierProvider 사용
-final kakaoAuthProvider = NotifierProvider<AuthNotifier, UserInfo?>(AuthNotifier.new);
+final kakaoAuthProvider = NotifierProvider<AuthNotifier, UserInfo?>(
+  AuthNotifier.new,
+);

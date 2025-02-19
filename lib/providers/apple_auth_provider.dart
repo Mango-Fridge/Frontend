@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/user_model.dart';
+import 'package:mango/model/login/user_model.dart';
 import 'package:mango/viewModel/login/apple_auth_service.dart.dart';
 
 // 상태 관리를 위한 provider와 notifier

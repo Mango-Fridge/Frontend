@@ -1,4 +1,4 @@
-import 'package:mango/model/user_model.dart';
+import 'package:mango/model/login/user_model.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:mango/viewModel/login/abstract_auth.dart';
 
