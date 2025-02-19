@@ -44,10 +44,14 @@ class KakaoAuthService implements AbstractAuth {
     if (await isKakaoTalkInstalled()) {
       try {
         if (kDebugMode) {
-          print('[Kakao] 카카오톡으로 로그인');
+          print('[Kakao] 카카오톡으로 로그인 시도');
         }
         await UserApi.instance.loginWithKakaoTalk(); // 카카오앱으로 로그인
         User user = await UserApi.instance.me();
+
+        if (kDebugMode) {
+          print('[Kakao] 카카오톡으로 로그인 성공');
+        }
         return UserInfo(email: user.kakaoAccount?.email);
       } catch (error) {
         if (kDebugMode) {
@@ -65,10 +69,14 @@ class KakaoAuthService implements AbstractAuth {
         // 카카오톡이 설치O, 카카오계정이 없는 경우
         try {
           if (kDebugMode) {
-            print('[Kakao] 카카오계정으로 로그인');
+            print('[Kakao] 카카오계정으로 로그인 시도');
           }
           await UserApi.instance.loginWithKakaoAccount(); // 웹사이트에서 로그인
           User user = await UserApi.instance.me();
+
+          if (kDebugMode) {
+            print('[Kakao] 카카오톡으로 로그인 성공');
+          }
           return UserInfo(email: user.kakaoAccount?.email);
         } catch (error) {
           if (kDebugMode) {
@@ -80,9 +88,13 @@ class KakaoAuthService implements AbstractAuth {
     } else {
       try {
         if (kDebugMode) {
-          print('[Kakao] 카카오계정으로 로그인');
+          print('[Kakao] 카카오계정으로 로그인 시도');
         }
         await UserApi.instance.loginWithKakaoAccount(); // 웹사이트에서 로그인
+
+        if (kDebugMode) {
+          print('[Kakao] 카카오톡으로 로그인 성공');
+        }
         User user = await UserApi.instance.me();
         return UserInfo(email: user.kakaoAccount?.email);
       } catch (error) {

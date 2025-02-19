@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
-import 'package:mango/view/login/login_view.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mango/view/splashView.dart';
 

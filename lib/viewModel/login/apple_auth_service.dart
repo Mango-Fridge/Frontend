@@ -10,7 +10,7 @@ class AppleAuthService implements AbstractAuth {
   Future<UserInfo?> login() async {
     try {
       if (kDebugMode) {
-        print("[Apple] 애플 로그인");
+        print("[Apple] 애플 로그인 시도");
       }
       // apple 로그인 시 로그인 정보에 따른 내용
       // 사용자가 "가리기" 요청하면 이메일은 [암호화@appleid.com] 으로 변경 됨
