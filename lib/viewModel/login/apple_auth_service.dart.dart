@@ -1,9 +1,11 @@
 import 'package:mango/model/user_model.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:mango/viewModel/login/abstract_auth.dart';
 
 // apple 로그인 인증 관련 Service이자 ViewModel
-class AppleAuthService {
-  Future<UserInfo?> signInWithApple() async {
+class AppleAuthService implements AbstractAuth {
+  @override
+  Future<UserInfo?> login() async {
     try {
       final AuthorizationCredentialAppleID
       credential = // apple 로그인 시 로그인 정보에 따른 내용
@@ -14,14 +16,7 @@ class AppleAuthService {
         ],
       );
 
-      final String? identityToken =
-          credential.identityToken; // JWT형식으로 반환 된다고 한다.
-      final String? authorizationCode =
-          credential.authorizationCode; // 임시 인증 코드 인듯.
-
-      return UserInfo(
-        email: credential.email,
-      );
+      return UserInfo(email: credential.email);
     } catch (e) {
       /*
       return null;
@@ -38,5 +33,10 @@ class AppleAuthService {
       print(e.toString()); // 에러 내용 출력 후
       return null; // 원하는 리턴 값
     }
+  }
+
+  @override
+  Future<UserInfo?> logout() async {
+    return null;
   }
 }

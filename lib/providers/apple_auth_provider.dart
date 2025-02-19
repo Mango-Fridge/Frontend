@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/user_model.dart';
 import 'package:mango/viewModel/login/apple_auth_service.dart.dart';
 
-
 // 상태 관리를 위한 provider와 notifier
 final StateNotifierProvider<AuthNotifier, UserInfo?> authProvider =
     StateNotifierProvider<AuthNotifier, UserInfo?>((ref) {
@@ -15,7 +14,7 @@ class AuthNotifier extends StateNotifier<UserInfo?> {
   final AppleAuthService _authService = AppleAuthService();
 
   Future<void> signInWithApple() async {
-    state = await _authService.signInWithApple();
+    state = await _authService.login();
   }
 
   void signOut() {
