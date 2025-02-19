@@ -17,7 +17,7 @@ class AuthNotifier extends StateNotifier<UserInfo?> {
     state = await _authService.login();
   }
 
-  void signOut() {
-    state = null;
+  Future<void> signOut() async {
+    state = await _authService.logout();
   }
 }
