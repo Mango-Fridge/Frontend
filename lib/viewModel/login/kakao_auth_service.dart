@@ -63,7 +63,6 @@ class KakaoAuthService implements AbstractAuth {
     } else {
       // 카카오톡이 설치X, 카카오계정으로 로그인
       try {
-        print("test");
         await UserApi.instance.loginWithKakaoAccount();
         print('카카오계정으로 로그인 성공');
 
