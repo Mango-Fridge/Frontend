@@ -1,6 +1,6 @@
-// 추상화 클래스를 이용하여 로그인 구현 일관되게 관리
 import 'package:mango/model/login/user_model.dart';
 
+// 로그인 추상화
 abstract class AbstractAuth {
   Future<UserInfo?> login(); // 로그인
   Future<UserInfo?> logout(); // 로그아웃

@@ -7,13 +7,13 @@ import 'package:mango/providers/apple_auth_provider.dart';
 
 import '../../model/login/user_model.dart';
 
-// apple 로그인 화면 예시
-class ExamAppleLogin extends ConsumerWidget {
-  const ExamAppleLogin({super.key});
+// 로그인 화면
+class LoginView extends ConsumerWidget {
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final UserInfo? user = ref.watch(authProvider); // service 쪽 함수에서 리턴 받는 user
+    ref.watch(authProvider); // 계정 Provider
     final UserInfo? kakaoUser = ref.watch(kakaoAuthProvider);
 
     return Scaffold(
