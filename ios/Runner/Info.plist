@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao897680a377df9915cefd100eca700720</string>
+				<string>kakao$(DART_DEFINES)</string>
 			</array>
 		</dict>
 	</array>
