@@ -1,0 +1,26 @@
+name: Flutter CI (test & build)
+
+on:
+  pull_request:
+    branches: [ main, release ]
+  push:
+    branches: [ main, release ]
+    
+jobs:
+  Tests-and-build-macos-x64:
+    name: Tests and Build on MacOS
+    runs-on: [ macos-latest ]
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.0'
+          channel: 'stable'
+          architecture: x64
+      - run: flutter pub upgrade --major-versions
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build ios --release --no-codesign
