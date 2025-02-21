@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
+import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/user_model.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 
@@ -21,7 +22,7 @@ class KakaoAuthService implements AbstractAuth {
         }
         // 카카오에서 사용자 정보 가져오기
         User user = await UserApi.instance.me();
-        return UserInfo(email: user.kakaoAccount?.email);
+        return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
         if (error is KakaoException && error.isInvalidTokenError()) {
           if (kDebugMode) {
@@ -52,7 +53,7 @@ class KakaoAuthService implements AbstractAuth {
         if (kDebugMode) {
           print('[Kakao] 카카오톡으로 로그인 성공');
         }
-        return UserInfo(email: user.kakaoAccount?.email);
+        return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오톡으로 로그인 실패 $error');
@@ -77,7 +78,7 @@ class KakaoAuthService implements AbstractAuth {
           if (kDebugMode) {
             print('[Kakao] 카카오톡으로 로그인 성공');
           }
-          return UserInfo(email: user.kakaoAccount?.email);
+          return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
         } catch (error) {
           if (kDebugMode) {
             print('[Kakao] 카카오계정으로 로그인 실패 $error');
@@ -96,7 +97,7 @@ class KakaoAuthService implements AbstractAuth {
           print('[Kakao] 카카오톡으로 로그인 성공');
         }
         User user = await UserApi.instance.me();
-        return UserInfo(email: user.kakaoAccount?.email);
+        return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오계정으로 로그인 실패 $error');

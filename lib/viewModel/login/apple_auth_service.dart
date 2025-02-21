@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/user_model.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:mango/model/login/abstract_auth.dart';
@@ -25,7 +26,7 @@ class AppleAuthService implements AbstractAuth {
       if (kDebugMode) {
         print("[Apple] 애플 로그인 성공");
       }
-      return UserInfo(email: credential.email);
+      return UserInfo(platform: AuthPlatform.apple, email: credential.email);
     } catch (error) {
       if (kDebugMode) {
         print("[Apple] 애플 로그인 오류 : ${error.toString()}"); // 에러 내용 출력
