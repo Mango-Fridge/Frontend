@@ -17,7 +17,7 @@ class LoginView extends ConsumerWidget {
     // 로그인에 따른 해당 플랫폼으로 리스너처리(반응)
     // 로그인 과정 중 '취소'를 누를 시 홈뷰로 이동X
     ref.listen(authProvider, (previousState, newState) {
-      // authProviderf를 통해 변경 전, 변경 후를 따짐. 즉 newState가 userInfo를 말함.
+      // authProvider를 통해 변경 전, 변경 후를 따짐. 즉 newState가 userInfo를 말함.
       if (newState != null) {
         // 로그인 성공 시 홈 화면으로 이동 (userInfo에 정보가 담겨있을 때)
         Navigator.of(context).pushReplacement(
@@ -66,7 +66,7 @@ class LoginView extends ConsumerWidget {
       onPressed: () async {
         await ref
             .read(authProvider.notifier)
-            .login(AuthPlatform.apple); // 버튼을 눌렀을 시 함수 실행
+            .login(AuthPlatform.apple); // 버튼을 눌렀을 시 함수 실행(로그인)
       },
     );
   }
@@ -82,7 +82,7 @@ class LoginView extends ConsumerWidget {
       onPressed: () async {
         await ref
             .read(authProvider.notifier)
-            .login(AuthPlatform.kakao); // 버튼을 눌렀을 시 함수 실행
+            .login(AuthPlatform.kakao); // 버튼을 눌렀을 시 함수 실행(로그인)
       },
       child: const Text("카카오로그인"),
     );

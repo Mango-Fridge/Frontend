@@ -37,6 +37,7 @@ class AppleAuthService implements AbstractAuth {
 
   @override
   Future<UserInfo?> logout() async {
+    print("[Apple] 애플 로그아웃 성공");
     return null;
   }
 }
