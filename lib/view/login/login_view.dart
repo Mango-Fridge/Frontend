@@ -14,6 +14,18 @@ class LoginView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(authProvider); // 계정 Provider
 
+    // 로그인에 따른 해당 플랫폼으로 리스너처리(반응)
+    // 로그인 과정 중 '취소'를 누를 시 홈뷰로 이동X
+    ref.listen(authProvider, (previousState, newState) {
+      // authProviderf를 통해 변경 전, 변경 후를 따짐. 즉 newState가 userInfo를 말함.
+      if (newState != null) {
+        // 로그인 성공 시 홈 화면으로 이동 (userInfo에 정보가 담겨있을 때)
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeView()),
+        );
+      }
+    });
+
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
@@ -55,11 +67,6 @@ class LoginView extends ConsumerWidget {
         await ref
             .read(authProvider.notifier)
             .login(AuthPlatform.apple); // 버튼을 눌렀을 시 함수 실행
-        // (애플 로그인이 성공했을 때, 로직 추가)
-        // 현재는 메인화면으로 넘어가게만 유도 (추후 추가)
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => const HomeView()));
       },
     );
   }
@@ -76,11 +83,6 @@ class LoginView extends ConsumerWidget {
         await ref
             .read(authProvider.notifier)
             .login(AuthPlatform.kakao); // 버튼을 눌렀을 시 함수 실행
-        // (카카오 로그인이 성공했을 때, 로직 추가)
-        // 현재는 메인화면으로 넘어가게만 유도 (추후 추가)
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => const HomeView()));
       },
       child: const Text("카카오로그인"),
     );

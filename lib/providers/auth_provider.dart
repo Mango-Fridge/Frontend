@@ -19,9 +19,11 @@ class AuthNotifier extends Notifier<UserInfo?> {
     switch (platform) {
       case AuthPlatform.kakao:
         state = await _kakaoAuthService.login();
+        print(state?.email);
         break;
       case AuthPlatform.apple:
         state = await _appleAuthService.login();
+        break;
     }
   }
 
@@ -33,6 +35,7 @@ class AuthNotifier extends Notifier<UserInfo?> {
         break;
       case AuthPlatform.apple:
         state = await _appleAuthService.logout();
+        break;
     }
   }
 }
