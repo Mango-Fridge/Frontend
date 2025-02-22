@@ -28,7 +28,7 @@ class KakaoAuthService implements AbstractAuth {
         // 카카오에서 사용자 정보 가져오기(email)
         User user = await UserApi.instance.me();
         _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
+        print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}'); // email 로컬 저장 확인
 
         return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
