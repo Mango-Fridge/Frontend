@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/%08auth_model.dart';
-import 'package:mango/viewModel/login/shared_prefs.dart';
+import 'package:mango/viewModel/login/login_shared_prefs.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 
@@ -10,7 +10,7 @@ class AppleAuthService implements AbstractAuth {
   // 애플 로그인
   @override
   Future<AuthInfo?> login() async {
-    final SharedPrefs _sharedPrefs = SharedPrefs(); // shared_preferences 뷰모델
+    final LoginSharePrefs _LoginSharePrefs = LoginSharePrefs(); // shared_preferences 뷰모델
 
     try {
       if (kDebugMode) {
@@ -28,8 +28,8 @@ class AppleAuthService implements AbstractAuth {
 
       if (kDebugMode) {
         print("[Apple] 애플 로그인 성공");
-        _sharedPrefs.saveAuth(AuthPlatform.apple.name, '${credential.email}'); // 애플 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}'); // email 로컬 저장 확인
+        _LoginSharePrefs.saveAuth(AuthPlatform.apple.name, '${credential.email}'); // 애플 platform, email 데이터를 로컬에 저장
+        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}'); // email 로컬 저장 확인
       }
       return AuthInfo(platform: AuthPlatform.apple, email: credential.email);
     } catch (error) {
@@ -42,11 +42,11 @@ class AppleAuthService implements AbstractAuth {
 
   @override
   Future<AuthInfo?> logout() async {
-    final SharedPrefs _sharedPrefs = SharedPrefs(); // shared_preferences 뷰모델
+    final LoginSharePrefs _LoginSharePrefs = LoginSharePrefs(); // shared_preferences 뷰모델
 
     print("[Apple] 애플 로그아웃 성공");
-    _sharedPrefs.clearAuth(); // 로컬 platform, email 삭제
-    print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
+    _LoginSharePrefs.clearAuth(); // 로컬 platform, email 삭제
+    print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
 
     return null;
   }

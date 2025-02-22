@@ -4,11 +4,11 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/%08auth_model.dart';
 import 'package:mango/model/login/abstract_auth.dart';
-import 'package:mango/viewModel/login/shared_prefs.dart';
+import 'package:mango/viewModel/login/login_shared_prefs.dart';
 
 // Kakao Login viewModel
 class KakaoAuthService implements AbstractAuth {
-  final SharedPrefs _sharedPrefs = SharedPrefs(); // shared_preferences 뷰모델
+  final LoginSharePrefs _LoginSharePrefs = LoginSharePrefs(); // shared_preferences 뷰모델
 
   // 카카오 로그인
   @override
@@ -27,8 +27,8 @@ class KakaoAuthService implements AbstractAuth {
 
         // 카카오에서 사용자 정보 가져오기(email)
         User user = await UserApi.instance.me();
-        _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}'); // email 로컬 저장 확인
+        _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
+        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}'); // email 로컬 저장 확인
 
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
@@ -62,8 +62,8 @@ class KakaoAuthService implements AbstractAuth {
           print('[Kakao] 카카오톡으로 로그인 성공');
         }
 
-        _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
+        _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
+        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
 
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
@@ -91,8 +91,8 @@ class KakaoAuthService implements AbstractAuth {
             print('[Kakao] 카카오톡으로 로그인 성공');
           }
 
-          _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-          print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
+          _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
+          print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
 
           return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
         } catch (error) {
@@ -114,8 +114,8 @@ class KakaoAuthService implements AbstractAuth {
         }
 
         User user = await UserApi.instance.me();
-        _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
+        _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
+        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
         
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
@@ -130,14 +130,14 @@ class KakaoAuthService implements AbstractAuth {
   // 카카오 로그아웃
   @override
   Future<AuthInfo?> logout() async {
-    final SharedPrefs _sharedPrefs = SharedPrefs(); // shared_preferences 뷰모델
+    final LoginSharePrefs _LoginSharePrefs = LoginSharePrefs(); // shared_preferences 뷰모델
     
     try {
       await UserApi.instance.logout(); // 로그아웃
       if (kDebugMode) {
         print("[Kakao] 로그아웃 성공");
-        _sharedPrefs.clearAuth(); // 로컬 email 삭제
-        print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
+        _LoginSharePrefs.clearAuth(); // 로컬 email 삭제
+        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
       }
       return null;
     } catch (error) {
