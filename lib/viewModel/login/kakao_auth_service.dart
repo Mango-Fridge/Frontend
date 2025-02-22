@@ -27,7 +27,7 @@ class KakaoAuthService implements AbstractAuth {
 
         // 카카오에서 사용자 정보 가져오기(email)
         User user = await UserApi.instance.me();
-        _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
+        _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}'); // email 로컬 저장 확인
 
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
@@ -62,7 +62,7 @@ class KakaoAuthService implements AbstractAuth {
           print('[Kakao] 카카오톡으로 로그인 성공');
         }
 
-        _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
+        _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
 
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
@@ -91,7 +91,7 @@ class KakaoAuthService implements AbstractAuth {
             print('[Kakao] 카카오톡으로 로그인 성공');
           }
 
-          _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
+          _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
           print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
 
           return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
@@ -114,7 +114,7 @@ class KakaoAuthService implements AbstractAuth {
         }
 
         User user = await UserApi.instance.me();
-        _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
+        _sharedPrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
         
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
@@ -136,7 +136,7 @@ class KakaoAuthService implements AbstractAuth {
       await UserApi.instance.logout(); // 로그아웃
       if (kDebugMode) {
         print("[Kakao] 로그아웃 성공");
-        _sharedPrefs.clearEmail(); // 로컬 email 삭제
+        _sharedPrefs.clearAuth(); // 로컬 email 삭제
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
       }
       return null;
