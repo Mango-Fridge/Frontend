@@ -6,6 +6,7 @@ class HomeView extends StatefulWidget {
   @override
   State<HomeView> createState() => _HomeViewState();
 }
+    final authNotifier = ref.read(authProvider.notifier);
 
 class _HomeViewState extends State<HomeView> {
   @override

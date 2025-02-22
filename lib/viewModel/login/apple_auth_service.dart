@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mango/model/login/platform_auth.dart';
-import 'package:mango/model/login/user_model.dart';
+import 'package:mango/model/login/%08auth_model.dart';
 import 'package:mango/viewModel/login/shared_prefs.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:mango/model/login/abstract_auth.dart';
@@ -9,7 +9,7 @@ import 'package:mango/model/login/abstract_auth.dart';
 class AppleAuthService implements AbstractAuth {
   // 애플 로그인
   @override
-  Future<UserInfo?> login() async {
+  Future<AuthInfo?> login() async {
     final SharedPrefs _sharedPrefs = SharedPrefs(); // shared_preferences 뷰모델
 
     try {
@@ -31,7 +31,7 @@ class AppleAuthService implements AbstractAuth {
         _sharedPrefs.saveEmail('${credential.email}'); // 애플 email 데이터를 로컬에 저장
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}'); // email 로컬 저장 확인
       }
-      return UserInfo(platform: AuthPlatform.apple, email: credential.email);
+      return AuthInfo(platform: AuthPlatform.apple, email: credential.email);
     } catch (error) {
       if (kDebugMode) {
         print("[Apple] 애플 로그인 오류 : ${error.toString()}"); // 에러 내용 출력
@@ -41,7 +41,7 @@ class AppleAuthService implements AbstractAuth {
   }
 
   @override
-  Future<UserInfo?> logout() async {
+  Future<AuthInfo?> logout() async {
     final SharedPrefs _sharedPrefs = SharedPrefs(); // shared_preferences 뷰모델
 
     print("[Apple] 애플 로그아웃 성공");

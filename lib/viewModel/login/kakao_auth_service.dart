@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/platform_auth.dart';
-import 'package:mango/model/login/user_model.dart';
+import 'package:mango/model/login/%08auth_model.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/viewModel/login/shared_prefs.dart';
 
@@ -12,7 +12,7 @@ class KakaoAuthService implements AbstractAuth {
 
   // 카카오 로그인
   @override
-  Future<UserInfo?> login() async {
+  Future<AuthInfo?> login() async {
     // 토큰 존재 여부 확인
     if (await AuthApi.instance.hasToken()) {
       try {
@@ -30,7 +30,7 @@ class KakaoAuthService implements AbstractAuth {
         _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}'); // email 로컬 저장 확인
 
-        return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+        return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
         if (error is KakaoException && error.isInvalidTokenError()) {
           if (kDebugMode) {
@@ -65,7 +65,7 @@ class KakaoAuthService implements AbstractAuth {
         _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
 
-        return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+        return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오톡으로 로그인 실패 $error');
@@ -94,7 +94,7 @@ class KakaoAuthService implements AbstractAuth {
           _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
           print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
 
-          return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+          return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
         } catch (error) {
           if (kDebugMode) {
             print('[Kakao] 카카오계정으로 로그인 실패 $error');
@@ -117,7 +117,7 @@ class KakaoAuthService implements AbstractAuth {
         _sharedPrefs.saveEmail('${user.kakaoAccount?.email}'); // 카카오 email 데이터를 로컬에 저장
         print('[shared_preferences] email: ${await _sharedPrefs.getEmail()}');
         
-        return UserInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+        return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오계정으로 로그인 실패 $error');
@@ -129,7 +129,7 @@ class KakaoAuthService implements AbstractAuth {
 
   // 카카오 로그아웃
   @override
-  Future<UserInfo?> logout() async {
+  Future<AuthInfo?> logout() async {
     final SharedPrefs _sharedPrefs = SharedPrefs(); // shared_preferences 뷰모델
     
     try {
