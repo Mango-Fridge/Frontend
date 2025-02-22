@@ -29,7 +29,6 @@ class AppleAuthService implements AbstractAuth {
       if (kDebugMode) {
         print("[Apple] 애플 로그인 성공");
         _LoginSharePrefs.saveAuth(AuthPlatform.apple.name, '${credential.email}'); // 애플 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}'); // email 로컬 저장 확인
       }
       return AuthInfo(platform: AuthPlatform.apple, email: credential.email);
     } catch (error) {
@@ -46,7 +45,6 @@ class AppleAuthService implements AbstractAuth {
 
     print("[Apple] 애플 로그아웃 성공");
     _LoginSharePrefs.clearAuth(); // 로컬 platform, email 삭제
-    print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
 
     return null;
   }

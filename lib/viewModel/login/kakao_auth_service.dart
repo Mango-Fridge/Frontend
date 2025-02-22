@@ -28,7 +28,6 @@ class KakaoAuthService implements AbstractAuth {
         // 카카오에서 사용자 정보 가져오기(email)
         User user = await UserApi.instance.me();
         _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}'); // email 로컬 저장 확인
 
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
@@ -63,7 +62,6 @@ class KakaoAuthService implements AbstractAuth {
         }
 
         _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
 
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
@@ -92,7 +90,6 @@ class KakaoAuthService implements AbstractAuth {
           }
 
           _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-          print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
 
           return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
         } catch (error) {
@@ -115,7 +112,6 @@ class KakaoAuthService implements AbstractAuth {
 
         User user = await UserApi.instance.me();
         _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
         
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
       } catch (error) {
@@ -137,7 +133,6 @@ class KakaoAuthService implements AbstractAuth {
       if (kDebugMode) {
         print("[Kakao] 로그아웃 성공");
         _LoginSharePrefs.clearAuth(); // 로컬 email 삭제
-        print('[shared_preferences] email: ${await _LoginSharePrefs.getEmail()}');
       }
       return null;
     } catch (error) {
