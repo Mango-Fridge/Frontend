@@ -1,16 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/login/platform_auth.dart';
+import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/view/login/login_view.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  ConsumerState<HomeView> createState() => _HomeViewState();
 }
-    final authNotifier = ref.read(authProvider.notifier);
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends ConsumerState<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+
+    // 2초 대기 후 자동 로그인 실행 (로그인 여부 확인하는 동안 뷰 유지하기 위해)
+    Future.delayed(const Duration(seconds: 2), () {
+      // 비동기 작업의 결과를 위젯에 반영하기 전에 위젯이 여전히 유효한 상태인지 확인
+      if (mounted) {
+        // 함수
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar());
+    final user = ref.watch(loginAuthProvider); // 현재 로그인된 사용자 정보 가져오기
+    final authNotifier = ref.read(loginAuthProvider.notifier);
+
+    return Scaffold(
+      appBar: AppBar(title: Text("${user?.platform.name ?? '알 수 없음'} 로그인 완료")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("환영합니다, ${user?.email ?? '사용자'}님!", style: TextStyle(fontSize: 20)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                if (user != null) {
+                  await authNotifier.logout(user.platform); // 해당 플랫폼에서 로그아웃
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginView()), // 로그인 화면으로 이동
+                  );
+                }
+              },
+              child: Text("로그아웃"),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

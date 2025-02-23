@@ -28,7 +28,6 @@ class LoginSharePrefs {
   Future<void> removeAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('platform');
-    await prefs.remove('email');
 
     print('[shared_preferences] email: ${prefs.getString('email')}');
     print('[shared_preferences] platform: ${prefs.getString('platform')}');
