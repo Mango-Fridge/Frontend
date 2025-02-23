@@ -44,7 +44,7 @@ class AppleAuthService implements AbstractAuth {
     final LoginSharePrefs _LoginSharePrefs = LoginSharePrefs(); // shared_preferences 뷰모델
 
     print("[Apple] 애플 로그아웃 성공");
-    _LoginSharePrefs.clearAuth(); // 로컬 platform, email 삭제
+    _LoginSharePrefs.removeAuth(); // 로컬 platform, email 삭제
 
     return null;
   }

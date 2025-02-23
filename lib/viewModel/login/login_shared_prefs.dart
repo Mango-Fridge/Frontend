@@ -25,7 +25,7 @@ class LoginSharePrefs {
   }
 
   // 로컬에 저장한 플랫폼과 이메일 제거
-  Future<void> clearAuth() async {
+  Future<void> removeAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('platform');
     await prefs.remove('email');
