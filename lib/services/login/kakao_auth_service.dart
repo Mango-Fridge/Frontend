@@ -4,11 +4,12 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/%08auth_model.dart';
 import 'package:mango/model/login/abstract_auth.dart';
-import 'package:mango/viewModel/login/login_shared_prefs.dart';
+import 'package:mango/services/login/login_shared_prefs.dart';
 
 // Kakao Login viewModel
 class KakaoAuthService implements AbstractAuth {
-  final LoginSharePrefs _LoginSharePrefs = LoginSharePrefs(); // shared_preferences 뷰모델
+  final LoginSharePrefs _LoginSharePrefs =
+      LoginSharePrefs(); // shared_preferences 뷰모델
 
   // 카카오 로그인
   @override
@@ -27,9 +28,15 @@ class KakaoAuthService implements AbstractAuth {
 
         // 카카오에서 사용자 정보 가져오기(email)
         User user = await UserApi.instance.me();
-        _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
+        _LoginSharePrefs.saveAuth(
+          AuthPlatform.kakao.name,
+          '${user.kakaoAccount?.email}',
+        ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+        return AuthInfo(
+          platform: AuthPlatform.kakao,
+          email: user.kakaoAccount?.email,
+        );
       } catch (error) {
         if (error is KakaoException && error.isInvalidTokenError()) {
           if (kDebugMode) {
@@ -61,9 +68,15 @@ class KakaoAuthService implements AbstractAuth {
         }
 
         User user = await UserApi.instance.me();
-        _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
+        _LoginSharePrefs.saveAuth(
+          AuthPlatform.kakao.name,
+          '${user.kakaoAccount?.email}',
+        ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+        return AuthInfo(
+          platform: AuthPlatform.kakao,
+          email: user.kakaoAccount?.email,
+        );
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오톡으로 로그인 실패 $error');
@@ -89,9 +102,15 @@ class KakaoAuthService implements AbstractAuth {
           }
 
           User user = await UserApi.instance.me();
-          _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
+          _LoginSharePrefs.saveAuth(
+            AuthPlatform.kakao.name,
+            '${user.kakaoAccount?.email}',
+          ); // 카카오 platform, email 데이터를 로컬에 저장
 
-          return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+          return AuthInfo(
+            platform: AuthPlatform.kakao,
+            email: user.kakaoAccount?.email,
+          );
         } catch (error) {
           if (kDebugMode) {
             print('[Kakao] 카카오계정으로 로그인 실패 $error');
@@ -111,9 +130,15 @@ class KakaoAuthService implements AbstractAuth {
         }
 
         User user = await UserApi.instance.me();
-        _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
-        
-        return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
+        _LoginSharePrefs.saveAuth(
+          AuthPlatform.kakao.name,
+          '${user.kakaoAccount?.email}',
+        ); // 카카오 platform, email 데이터를 로컬에 저장
+
+        return AuthInfo(
+          platform: AuthPlatform.kakao,
+          email: user.kakaoAccount?.email,
+        );
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오계정으로 로그인 실패 $error');
@@ -126,8 +151,9 @@ class KakaoAuthService implements AbstractAuth {
   // 카카오 로그아웃
   @override
   Future<AuthInfo?> logout() async {
-    final LoginSharePrefs _LoginSharePrefs = LoginSharePrefs(); // shared_preferences 뷰모델
-    
+    final LoginSharePrefs _LoginSharePrefs =
+        LoginSharePrefs(); // shared_preferences 뷰모델
+
     try {
       await UserApi.instance.logout(); // 로그아웃
       if (kDebugMode) {

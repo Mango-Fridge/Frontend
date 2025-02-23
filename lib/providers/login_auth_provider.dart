@@ -2,21 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/%08auth_model.dart';
+import 'package:mango/services/login/terms_service.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/login/login_view.dart';
-import 'package:mango/viewModel/login/apple_auth_service.dart';
-import 'package:mango/viewModel/login/login_shared_prefs.dart';
-import '../viewModel/login/kakao_auth_service.dart';
+import 'package:mango/services/login/apple_auth_service.dart';
+import 'package:mango/services/login/login_shared_prefs.dart';
+import '../services/login/kakao_auth_service.dart';
 
 // 상태 관리를 위한 provider와 notifier
 class LoginAuthNotifier extends Notifier<AuthInfo?> {
   final KakaoAuthService _kakaoAuthService = KakaoAuthService(); // 카카오 서비스
   final AppleAuthService _appleAuthService = AppleAuthService(); // 애플 서비스
   final LoginSharePrefs loginSharePrefs = LoginSharePrefs();
+  final TermsService _termsService = TermsService(); // 약관 관련 서비스
 
   @override
   AuthInfo? build() {
     return null; // 초기 상태는 로그인되지 않은 상태
+  }
+
+  Future<void> checkForTerms(String termsType) async {
+    switch (termsType) {
+      case 'privacy policy':
+        state = state?.copyWith(isPrivacyPolicyAccepted: true);
+        break;
+      case 'terms':
+        state = state?.copyWith(isTermsAccepted: true);
+        break;
+    }
+
+    _termsService.updateTerms(termsType);
   }
 
   // swift 문을 통해 platform을 확인 후, 해당 플랫폼으로 로그인
@@ -56,10 +71,13 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     } else if (platformStr == 'Apple') {
       platform = AuthPlatform.apple;
     }
-    
+
     // email이 null이 아니고 platform도 null이 아닐 때 HomeView로 이동
     if (email != null && platform != null) {
-      state = AuthInfo(platform: platform, email: email); // AuthInfo 객체를 생성하여 반환
+      state = AuthInfo(
+        platform: platform,
+        email: email,
+      ); // AuthInfo 객체를 생성하여 반환
 
       Navigator.pushReplacement(
         context,
