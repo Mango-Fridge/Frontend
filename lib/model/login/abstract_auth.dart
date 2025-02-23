@@ -1,4 +1,4 @@
-import 'package:mango/model/login/%08auth_model.dart';
+import 'package:mango/model/login/auth_model.dart';
 
 // 로그인 추상화
 abstract class AbstractAuth {

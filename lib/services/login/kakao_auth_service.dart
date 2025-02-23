@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/platform_auth.dart';
-import 'package:mango/model/login/%08auth_model.dart';
+import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 
