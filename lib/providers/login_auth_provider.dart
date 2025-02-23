@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/login/platform_auth.dart';
-import 'package:mango/model/login/%08auth_model.dart';
-import 'package:mango/services/login/terms_service.dart';
+import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/services/login/apple_auth_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 import '../services/login/kakao_auth_service.dart';
+import 'package:mango/services/login/terms_service.dart';
 
 // 상태 관리를 위한 provider와 notifier
 class LoginAuthNotifier extends Notifier<AuthInfo?> {
@@ -60,9 +60,11 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
 
   // 자동 로그인 기능
   Future<void> autoLogin(BuildContext context, WidgetRef ref) async {
-    String? email = await loginSharePrefs.getEmail();
-    String? platformStr = await loginSharePrefs.getPlatform();
-    AuthPlatform? platform;
+    String? platformStr = await loginSharePrefs.getPlatform(); // 로컬에서 플랫폼 가져오기
+    String? email = await loginSharePrefs.getEmail(
+      platformStr ?? '사용자',
+    ); // 로컬에서 이메일 가져오기
+    AuthPlatform? platform; // 열거형 플랫폼 변수
 
     // AuthInfo에 platform은 열거형이기에 사용
     // 즉, 로컬에 저장된 (String)platform을 (열거형)platform으로 만들어 AuthInfo 이용
@@ -73,7 +75,7 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     }
 
     // email이 null이 아니고 platform도 null이 아닐 때 HomeView로 이동
-    if (email != null && platform != null) {
+    if (platform != null && email != null) {
       state = AuthInfo(
         platform: platform,
         email: email,

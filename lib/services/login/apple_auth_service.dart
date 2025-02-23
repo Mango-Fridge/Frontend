@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mango/model/login/platform_auth.dart';
-import 'package:mango/model/login/%08auth_model.dart';
+import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:mango/model/login/abstract_auth.dart';
@@ -29,12 +29,20 @@ class AppleAuthService implements AbstractAuth {
 
       if (kDebugMode) {
         print("[Apple] 애플 로그인 성공");
-        _LoginSharePrefs.saveAuth(
-          AuthPlatform.apple.name,
-          '${credential.email}',
-        ); // 애플 platform, email 데이터를 로컬에 저장
       }
-      return AuthInfo(platform: AuthPlatform.apple, email: credential.email);
+
+      String? shareEmail = await _LoginSharePrefs.getEmail(
+        'Apple',
+      ); // 로컬에 저장된 이메일 가져오기
+      // 애플은 한번 로그인 된거면 이메일을 제공하지만 그 이후부터는 null을 제공, null일 경우 로컬에 있는 email 가져옴
+      String email = credential.email ?? shareEmail ?? '';
+
+      await _LoginSharePrefs.saveAuth(
+        AuthPlatform.apple.name,
+        email,
+      ); // 로컬에 플랫폼, 이메일 저장
+
+      return AuthInfo(platform: AuthPlatform.apple, email: email);
     } catch (error) {
       if (kDebugMode) {
         print("[Apple] 애플 로그인 오류 : ${error.toString()}"); // 에러 내용 출력

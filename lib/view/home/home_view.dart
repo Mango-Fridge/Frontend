@@ -13,15 +13,6 @@ class HomeView extends ConsumerStatefulWidget {
 
 class _HomeViewState extends ConsumerState<HomeView> {
   @override
-  void initState() {
-    super.initState();
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {}
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final user = ref.watch(loginAuthProvider); // 현재 로그인된 사용자 정보 가져오기
     final authNotifier = ref.read(loginAuthProvider.notifier);
