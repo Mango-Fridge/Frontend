@@ -12,7 +12,7 @@ import '../viewModel/login/kakao_auth_service.dart';
 class LoginAuthNotifier extends Notifier<AuthInfo?> {
   final KakaoAuthService _kakaoAuthService = KakaoAuthService(); // 카카오 서비스
   final AppleAuthService _appleAuthService = AppleAuthService(); // 애플 서비스
-  final LoginSharePrefs loginSharePrefs = LoginSharePrefs();
+  final LoginSharePrefs loginSharePrefs = LoginSharePrefs(); // 로그인 관련 뷰모델
 
   @override
   AuthInfo? build() {
