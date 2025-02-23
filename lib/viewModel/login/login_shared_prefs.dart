@@ -41,7 +41,7 @@ class LoginSharePrefs {
     return prefs.getString('platform');
   }
 
-  // 로컬에 저장한 플랫폼과 이메일 제거
+  // 로컬에 저장한 플랫폼 제거
   Future<void> removeAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('platform');

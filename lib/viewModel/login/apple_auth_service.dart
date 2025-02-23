@@ -28,12 +28,15 @@ class AppleAuthService implements AbstractAuth {
 
       if (kDebugMode) {
         print("[Apple] 애플 로그인 성공");
-        if  (await _LoginSharePrefs.getEmail('Apple') == 'null') {
-          _LoginSharePrefs.saveAuth(AuthPlatform.apple.name, '${credential.email}'); // 애플 platform, email 데이터를 로컬에 저장          
-        } 
       }
+
+      String? shareEmail = await _LoginSharePrefs.getEmail('Apple'); // 로컬에 저장된 이메일 가져오기
+      // 애플은 한번 로그인 된거면 이메일을 제공하지만 그 이후부터는 null을 제공, null일 경우 로컬에 있는 email 가져옴
+      String email = credential.email ?? shareEmail ?? '';
       
-      return AuthInfo(platform: AuthPlatform.apple, email: await _LoginSharePrefs.getEmail('Apple'));
+      await _LoginSharePrefs.saveAuth(AuthPlatform.apple.name, email); // 로컬에 플랫폼, 이메일 저장
+      
+      return AuthInfo(platform: AuthPlatform.apple, email: email);
     } catch (error) {
       if (kDebugMode) {
         print("[Apple] 애플 로그인 오류 : ${error.toString()}"); // 에러 내용 출력

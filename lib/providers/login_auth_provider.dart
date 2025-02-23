@@ -45,9 +45,9 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
 
   // 자동 로그인 기능
   Future<void> autoLogin(BuildContext context, WidgetRef ref) async {
-    String? platformStr = await loginSharePrefs.getPlatform();
-    String? email = await loginSharePrefs.getEmail(platformStr ?? '사용자');
-    AuthPlatform? platform;
+    String? platformStr = await loginSharePrefs.getPlatform(); // 로컬에서 플랫폼 가져오기
+    String? email = await loginSharePrefs.getEmail(platformStr ?? '사용자'); // 로컬에서 이메일 가져오기
+    AuthPlatform? platform; // 열거형 플랫폼 변수
 
     // AuthInfo에 platform은 열거형이기에 사용
     // 즉, 로컬에 저장된 (String)platform을 (열거형)platform으로 만들어 AuthInfo 이용
