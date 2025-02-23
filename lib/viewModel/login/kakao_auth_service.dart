@@ -55,12 +55,12 @@ class KakaoAuthService implements AbstractAuth {
           print('[Kakao] 카카오톡으로 로그인 시도');
         }
         await UserApi.instance.loginWithKakaoTalk(); // 카카오앱으로 로그인
-        User user = await UserApi.instance.me();
 
         if (kDebugMode) {
           print('[Kakao] 카카오톡으로 로그인 성공');
         }
 
+        User user = await UserApi.instance.me();
         _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
 
         return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
@@ -83,12 +83,12 @@ class KakaoAuthService implements AbstractAuth {
             print('[Kakao] 카카오계정으로 로그인 시도');
           }
           await UserApi.instance.loginWithKakaoAccount(); // 웹사이트에서 로그인
-          User user = await UserApi.instance.me();
 
           if (kDebugMode) {
             print('[Kakao] 카카오톡으로 로그인 성공');
           }
 
+          User user = await UserApi.instance.me();
           _LoginSharePrefs.saveAuth(AuthPlatform.kakao.name, '${user.kakaoAccount?.email}'); // 카카오 platform, email 데이터를 로컬에 저장
 
           return AuthInfo(platform: AuthPlatform.kakao ,email: user.kakaoAccount?.email);
