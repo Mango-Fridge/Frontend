@@ -13,19 +13,6 @@ class HomeView extends ConsumerStatefulWidget {
 
 class _HomeViewState extends ConsumerState<HomeView> {
   @override
-  void initState() {
-    super.initState();
-
-    // 2초 대기 후 자동 로그인 실행 (로그인 여부 확인하는 동안 뷰 유지하기 위해)
-    Future.delayed(const Duration(seconds: 2), () {
-      // 비동기 작업의 결과를 위젯에 반영하기 전에 위젯이 여전히 유효한 상태인지 확인
-      if (mounted) {
-        // 함수
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final user = ref.watch(loginAuthProvider); // 현재 로그인된 사용자 정보 가져오기
     final authNotifier = ref.read(loginAuthProvider.notifier);

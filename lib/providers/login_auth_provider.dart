@@ -45,8 +45,8 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
 
   // 자동 로그인 기능
   Future<void> autoLogin(BuildContext context, WidgetRef ref) async {
-    String? email = await loginSharePrefs.getEmail();
     String? platformStr = await loginSharePrefs.getPlatform();
+    String? email = await loginSharePrefs.getEmail(platformStr ?? '사용자');
     AuthPlatform? platform;
 
     // AuthInfo에 platform은 열거형이기에 사용
@@ -58,7 +58,7 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     }
     
     // email이 null이 아니고 platform도 null이 아닐 때 HomeView로 이동
-    if (email != null && platform != null) {
+    if (platform != null && email != null) {
       state = AuthInfo(platform: platform, email: email); // AuthInfo 객체를 생성하여 반환
 
       Navigator.pushReplacement(

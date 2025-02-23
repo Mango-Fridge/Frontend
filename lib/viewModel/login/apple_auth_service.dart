@@ -24,13 +24,16 @@ class AppleAuthService implements AbstractAuth {
               AppleIDAuthorizationScopes.email, // 이메일
               AppleIDAuthorizationScopes.fullName, // 이름
             ],
-          );
+          );      
 
       if (kDebugMode) {
         print("[Apple] 애플 로그인 성공");
-        _LoginSharePrefs.saveAuth(AuthPlatform.apple.name, '${credential.email}'); // 애플 platform, email 데이터를 로컬에 저장
+        if  (await _LoginSharePrefs.getEmail('Apple') == 'null') {
+          _LoginSharePrefs.saveAuth(AuthPlatform.apple.name, '${credential.email}'); // 애플 platform, email 데이터를 로컬에 저장          
+        } 
       }
-      return AuthInfo(platform: AuthPlatform.apple, email: credential.email);
+      
+      return AuthInfo(platform: AuthPlatform.apple, email: await _LoginSharePrefs.getEmail('Apple'));
     } catch (error) {
       if (kDebugMode) {
         print("[Apple] 애플 로그인 오류 : ${error.toString()}"); // 에러 내용 출력
