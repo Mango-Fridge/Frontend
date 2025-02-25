@@ -42,24 +42,10 @@ class AppleAuthService implements AbstractAuth {
         // 애플 로그인에서 제공된 이메일 사용 (최초 로그인 시)
         email = credential.email!;
       } else if (credential.identityToken != null) {
-        // identityToken에서 이메일 추출
         if (kDebugMode) print("[Apple] 데이터 가져오기");
-
-        List<String> tokenStr = credential.identityToken!.split('.');
-        if (tokenStr.length < 2) {
-          throw Exception("[Apple] 잘못된 identityToken 형식");
-        }
-        print("$tokenStr");
-        String payload = base64.normalize(tokenStr[1]);
-        final List<int> jsonData = base64.decode(payload);
-        final userInfo = jsonDecode(utf8.decode(jsonData));
-        print("내용 $userInfo");
-        if (userInfo.containsKey('email')) {
-          email = userInfo['email'];
-          if (kDebugMode) print("[Apple] 추출된 이메일: $email");
-        } else {
-          throw Exception("[Apple] identityToken에 이메일 정보 없음");
-        }
+        // identityToken에서 이메일 추출
+        email =
+            (await decodeIdentityToken(credential.identityToken!.split('.')))!;
       } else {
         if (kDebugMode) print("[Apple] 이메일 정보를 찾을 수 없음");
       }
@@ -71,6 +57,23 @@ class AppleAuthService implements AbstractAuth {
     } catch (error) {
       if (kDebugMode) print("[Apple] 애플 로그인 오류: $error");
       return null;
+    }
+  }
+
+  // identityToken에서 데이터 추출 (이메일)
+  Future<String?> decodeIdentityToken(List<String> token) async {
+    List<String> tokenStr = token;
+    if (tokenStr.length < 2) {
+      throw Exception("[Apple] 잘못된 identityToken 형식");
+    }
+    String payload = base64.normalize(tokenStr[1]);
+    final List<int> jsonData = base64.decode(payload);
+    final userInfo = jsonDecode(utf8.decode(jsonData));
+    if (userInfo.containsKey('email')) {
+      if (kDebugMode) print("[Apple] 추출된 이메일: ${userInfo['email']}");
+      return userInfo['email'];
+    } else {
+      throw Exception("[Apple] identityToken에 이메일 정보 없음");
     }
   }
 
