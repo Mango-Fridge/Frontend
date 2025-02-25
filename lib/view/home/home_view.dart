@@ -17,27 +17,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
   // 로그인된 사용자 정보와 AuthNotifier를 가져오는 메소드
   AuthInfo? get user => ref.watch(loginAuthProvider);
 
-  // TermsOverlay 표시 여부를 결정하는 메소드
-  Widget _buildTermsOverlay() {
-    // 유저가 없으면 화면을 띄우지 않음.
-    if (user == null) return const SizedBox.shrink();
-
-    // 유저가 동의를 하지 않았을 때,
-    if (!user!.isPrivacyPolicyAccepted) {
-      return const TermsOverlay(
-        key: ValueKey('privacyPolicy'),
-        termsType: 'privacy policy',
-      );
-    }
-    // 유저가 동의를 하지 않았을 때,
-    if (!user!.isTermsAccepted) {
-      return const TermsOverlay(key: ValueKey('terms'), termsType: 'terms');
-    }
-
-    // 유저가 모든 동의를 했을경우, 화면을 띄우지 않음.
-    return const SizedBox.shrink();
-  }
-
   // 로그아웃 처리 메소드
   Future<void> _logout() async {
     final authNotifier = ref.read(loginAuthProvider.notifier);
@@ -71,5 +50,26 @@ class _HomeViewState extends ConsumerState<HomeView> {
         ],
       ),
     );
+  }
+
+  // TermsOverlay 표시 여부를 결정하는 메소드
+  Widget _buildTermsOverlay() {
+    // 유저가 없으면 화면을 띄우지 않음.
+    if (user == null) return const SizedBox.shrink();
+
+    // 유저가 동의를 하지 않았을 때,
+    if (user!.isPrivacyPolicyAccepted) {
+      return const TermsOverlay(
+        key: ValueKey('privacyPolicy'),
+        termsType: 'privacy policy',
+      );
+    }
+    // 유저가 동의를 하지 않았을 때,
+    if (user!.isTermsAccepted) {
+      return const TermsOverlay(key: ValueKey('terms'), termsType: 'terms');
+    }
+
+    // 유저가 모든 동의를 했을경우, 화면을 띄우지 않음.
+    return const SizedBox.shrink();
   }
 }

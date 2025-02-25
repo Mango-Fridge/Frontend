@@ -64,6 +64,7 @@ class _LoginButton extends StatelessWidget {
       width: 300,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
+        spacing: 5,
         children: <Widget>[
           // (IOS 한정) 애플 로그인 버튼
           if (Platform.isIOS) appleLoginButton(context, ref),
