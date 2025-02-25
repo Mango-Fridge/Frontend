@@ -1,36 +1,35 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-// 로그인 화면
+// 로그인 View
 class LoginView extends ConsumerWidget {
   const LoginView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(loginAuthProvider); // 계정 Provider
+    // 로그인 상태를 watch
+    ref.watch(loginAuthProvider);
 
-    // 로그인에 따른 해당 플랫폼으로 리스너처리(반응)
-    // 로그인 과정 중 '취소'를 누를 시 홈뷰로 이동X
-    ref.listen(loginAuthProvider, (previousState, newState) {
-      // authProvider를 통해 변경 전, 변경 후를 따짐. 즉 newState가 userInfo를 말함.
+    // 로그인 상태 변경 시 반응
+    ref.listen(loginAuthProvider, (AuthInfo? previousState, newState) {
       if (newState != null) {
-        // 로그인 성공 시 홈 화면으로 이동 (userInfo에 정보가 담겨있을 때)
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeView()),
-        );
+        // 로그인 성공 시 홈 화면으로 이동
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (context) => HomeView()));
       }
     });
 
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Column(
               spacing: 30,
@@ -39,21 +38,31 @@ class LoginView extends ConsumerWidget {
                 const Text("Mango"),
               ],
             ),
-            Container(
-              width: 300,
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  // IOS 사용자는 애플 로그인 버튼 표시
-                  Platform.isIOS ? appleLoginButton(context, ref) : Container(),
-                  // 카카오 로그인 버튼
-                  kakaoLoginButton(context, ref),
-                ],
-              ),
-            ),
+            const SizedBox(height: 50),
+            _LoginButton(ref: ref), // 로그인 버튼
           ],
         ),
+      ),
+    );
+  }
+}
+
+// 로그인 버튼
+class _LoginButton extends StatelessWidget {
+  final WidgetRef ref;
+  const _LoginButton({required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        children: <Widget>[
+          // (IOS 한정) 애플 로그인 버튼
+          if (Platform.isIOS) appleLoginButton(context, ref),
+          kakaoLoginButton(context, ref), // 카카오 로그인 버튼
+        ],
       ),
     );
   }
@@ -64,9 +73,7 @@ class LoginView extends ConsumerWidget {
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       height: 40,
       onPressed: () async {
-        await ref
-            .read(loginAuthProvider.notifier)
-            .login(AuthPlatform.apple); // 버튼을 눌렀을 시 함수 실행(로그인)
+        await ref.read(loginAuthProvider.notifier).login(AuthPlatform.apple);
       },
     );
   }
@@ -77,12 +84,10 @@ class LoginView extends ConsumerWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.yellow,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        minimumSize: const Size.fromHeight(40), // 높이만 맞추고 가로는 최대
+        minimumSize: const Size.fromHeight(40),
       ),
       onPressed: () async {
-        await ref
-            .read(loginAuthProvider.notifier)
-            .login(AuthPlatform.kakao); // 버튼을 눌렀을 시 함수 실행(로그인)
+        await ref.read(loginAuthProvider.notifier).login(AuthPlatform.kakao);
       },
       child: const Text("카카오로그인"),
     );
