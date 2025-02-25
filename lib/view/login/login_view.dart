@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/providers/login_auth_provider.dart';
@@ -13,6 +14,8 @@ class LoginView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Design design = Design(context);
+
     // 로그인 상태를 watch
     ref.watch(loginAuthProvider);
 
@@ -34,11 +37,14 @@ class LoginView extends ConsumerWidget {
             Column(
               spacing: 30,
               children: <Widget>[
-                Image.asset("assets/images/title.png", scale: 5),
+                Image.asset(
+                  "assets/images/title.png",
+                  scale: design.splashImageSize,
+                ),
                 const Text("Mango"),
               ],
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 100),
             _LoginButton(ref: ref), // 로그인 버튼
           ],
         ),

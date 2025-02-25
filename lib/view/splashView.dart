@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/design.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 
 // loginAuthProvider -> autoLogin는 riverpod을 이용한 것이기에 ConsumerStatefulWidget을 extends
@@ -33,8 +34,28 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()), // 로딩 화면
+    final Design design = Design(context);
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              spacing: 30,
+              children: <Widget>[
+                Image.asset(
+                  "assets/images/title.png",
+                  scale: design.splashImageSize,
+                ),
+                const Text("Mango"),
+              ],
+            ),
+            const SizedBox(height: 100),
+            const CircularProgressIndicator(),
+          ],
+        ),
+      ),
     );
   }
 }

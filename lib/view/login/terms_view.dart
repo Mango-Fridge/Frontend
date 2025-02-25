@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mango/design.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // 약관 동의 View
@@ -32,6 +33,8 @@ class _TermsViewState extends State<TermsView> {
 
   @override
   Widget build(BuildContext context) {
+    final Design design = Design(context);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -42,7 +45,11 @@ class _TermsViewState extends State<TermsView> {
             ElevatedButton(
               onPressed: widget.onAccept,
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+                minimumSize: Size(
+                  double.infinity,
+                  design.termsAgreeButtonHeight,
+                ),
+                backgroundColor: Colors.lightGreen,
               ),
               child: const Text('동의'),
             ),
