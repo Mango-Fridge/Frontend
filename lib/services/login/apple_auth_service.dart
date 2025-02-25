@@ -66,6 +66,8 @@ class AppleAuthService implements AbstractAuth {
     if (tokenStr.length < 2) {
       throw Exception("[Apple] 잘못된 identityToken 형식");
     }
+    // 0 : header, alg / kid
+    // 1 : id Token, JWT
     String payload = base64.normalize(tokenStr[1]);
     final List<int> jsonData = base64.decode(payload);
     final userInfo = jsonDecode(utf8.decode(jsonData));
