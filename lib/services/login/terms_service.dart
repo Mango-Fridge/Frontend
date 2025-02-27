@@ -3,9 +3,9 @@ class TermsService {
   void updateTerms(String termsType) {
     switch (termsType) {
       case 'privacy policy':
-      // api 호출
+      // terms로 페이지 전환
       case 'terms':
-      // api 호출
+      // 2개의 약관 동의 완료 및 API 호출
     }
   }
 }

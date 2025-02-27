@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/view/home/home_view.dart';
@@ -11,90 +13,82 @@ import 'package:mango/services/login/terms_service.dart';
 
 // 상태 관리를 위한 provider와 notifier
 class LoginAuthNotifier extends Notifier<AuthInfo?> {
-  final KakaoAuthService _kakaoAuthService = KakaoAuthService(); // 카카오 서비스
-  final AppleAuthService _appleAuthService = AppleAuthService(); // 애플 서비스
-  final LoginSharePrefs loginSharePrefs = LoginSharePrefs();
-  final TermsService _termsService = TermsService(); // 약관 관련 서비스
+  final KakaoAuthService _kakaoAuthService = KakaoAuthService();
+  final AppleAuthService _appleAuthService = AppleAuthService();
+  final LoginSharePrefs _loginSharePrefs = LoginSharePrefs();
+  final TermsService _termsService = TermsService();
 
   @override
-  AuthInfo? build() {
-    return null; // 초기 상태는 로그인되지 않은 상태
-  }
+  AuthInfo? build() => null; // 초기 상태: 로그인되지 않은 상태
 
+  // 약관 동의 여부 업데이트
   Future<void> checkForTerms(String termsType) async {
-    switch (termsType) {
-      case 'privacy policy':
-        state = state?.copyWith(isPrivacyPolicyAccepted: true);
-        break;
-      case 'terms':
-        state = state?.copyWith(isTermsAccepted: true);
-        break;
-    }
+    final Map<String, AuthInfo?> termsMap = <String, AuthInfo?>{
+      'privacy policy': state?.copyWith(isPrivacyPolicyAccepted: true),
+      'terms': state?.copyWith(isTermsAccepted: true),
+    };
 
+    state = termsMap[termsType] ?? state;
     _termsService.updateTerms(termsType);
   }
 
-  // swift 문을 통해 platform을 확인 후, 해당 플랫폼으로 로그인
+  // 로그인
   Future<void> login(AuthPlatform platform) async {
-    switch (platform) {
-      case AuthPlatform.kakao:
-        state = await _kakaoAuthService.login();
-        break;
-      case AuthPlatform.apple:
-        state = await _appleAuthService.login();
-        break;
-    }
+    final authService = _getAuthService(platform); // platform에 따른 서비스 반환
+    if (authService == null) return;
+
+    state = await authService.login();
   }
 
-  // swift 문을 통해 platform을 확인 후, 해당 플랫폼으로 로그아웃
+  // 로그아웃
   Future<void> logout(AuthPlatform platform) async {
-    switch (platform) {
-      case AuthPlatform.kakao:
-        state = await _kakaoAuthService.logout();
-        break;
-      case AuthPlatform.apple:
-        state = await _appleAuthService.logout();
-        break;
-    }
+    final authService = _getAuthService(platform); // platform에 따른 서비스 반환
+    if (authService == null) return;
+
+    state = await authService.logout();
   }
 
   // 자동 로그인 기능
-  Future<void> autoLogin(BuildContext context, WidgetRef ref) async {
-    String? platformStr = await loginSharePrefs.getPlatform(); // 로컬에서 플랫폼 가져오기
-    String? email = await loginSharePrefs.getEmail(
+  Future<void> autoLogin(BuildContext context) async {
+    final String? platformStr =
+        await _loginSharePrefs.getPlatform(); // 로컬에 저장된 platform 가져오기
+    final String? email = await _loginSharePrefs.getEmail(
       platformStr ?? '사용자',
-    ); // 로컬에서 이메일 가져오기
-    AuthPlatform? platform; // 열거형 플랫폼 변수
+    ); // (platform에 해당하는) 로컬에 저장된 email 가져오기
 
-    // AuthInfo에 platform은 열거형이기에 사용
-    // 즉, 로컬에 저장된 (String)platform을 (열거형)platform으로 만들어 AuthInfo 이용
-    if (platformStr == 'Kakao') {
-      platform = AuthPlatform.kakao;
-    } else if (platformStr == 'Apple') {
-      platform = AuthPlatform.apple;
-    }
+    final AuthPlatform? platform = _getPlatformFromString(
+      platformStr,
+    ); // platform에 따른 서비스 반환
 
-    // email이 null이 아니고 platform도 null이 아닐 때 HomeView로 이동
+    // 저장된 platform & email이 존재한다면,
     if (platform != null && email != null) {
-      state = AuthInfo(
-        platform: platform,
-        email: email,
-      ); // AuthInfo 객체를 생성하여 반환
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeView()),
-      );
+      // 현재 상태 기억하기
+      state = AuthInfo(platform: platform, email: email);
+      context.go('/home'); // 메인화면으로 이동
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginView()),
-      );
+      context.go('/login'); // 로그인 화면으로 이동
     }
+  }
+
+  // 문자열을 AuthPlatform Enum으로 변환
+  AuthPlatform? _getPlatformFromString(String? platformStr) {
+    const Map<String, AuthPlatform> platformMap = <String, AuthPlatform>{
+      'Kakao': AuthPlatform.kakao,
+      'Apple': AuthPlatform.apple,
+    };
+    return platformMap[platformStr];
+  }
+
+  // AuthPlatform에 따른 로그인/로그아웃 서비스 반환
+  dynamic _getAuthService(AuthPlatform platform) {
+    return <AuthPlatform, AbstractAuth>{
+      AuthPlatform.kakao: _kakaoAuthService,
+      AuthPlatform.apple: _appleAuthService,
+    }[platform];
   }
 }
 
-// NotifierProvider 사용
+// NotifierProvider 정의
 final loginAuthProvider = NotifierProvider<LoginAuthNotifier, AuthInfo?>(
   LoginAuthNotifier.new,
 );

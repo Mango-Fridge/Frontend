@@ -155,16 +155,12 @@ class KakaoAuthService implements AbstractAuth {
         LoginSharePrefs(); // shared_preferences 뷰모델
 
     try {
-      await UserApi.instance.logout(); // 로그아웃
-      if (kDebugMode) {
-        print("[Kakao] 로그아웃 성공");
-        _LoginSharePrefs.removeAuth(); // 로컬 email 삭제
-      }
+      await UserApi.instance.logout(); // 카카오 로그아웃
+      await _LoginSharePrefs.removeAuth('Kakao'); // 로컬 계정 삭제
+      if (kDebugMode) print("[Kakao] 로그아웃 성공");
       return null;
     } catch (error) {
-      if (kDebugMode) {
-        print("[Kakao] 로그아웃 실패 $error");
-      }
+      if (kDebugMode) print("[Kakao] 로그아웃 실패 $error");
     }
     return null;
   }

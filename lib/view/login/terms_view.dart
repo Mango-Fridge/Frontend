@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mango/design.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+// 약관 동의 View
 class TermsView extends StatefulWidget {
   final VoidCallback onAccept;
   final String termsType;
@@ -31,6 +33,8 @@ class _TermsViewState extends State<TermsView> {
 
   @override
   Widget build(BuildContext context) {
+    final Design design = Design(context);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -38,15 +42,16 @@ class _TermsViewState extends State<TermsView> {
           children: <Widget>[
             Expanded(child: WebViewWidget(controller: _webViewController)),
             const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: GestureDetector(
-                onTap: () {},
-                child: ElevatedButton(
-                  onPressed: widget.onAccept,
-                  child: const Text('동의'),
+            ElevatedButton(
+              onPressed: widget.onAccept,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(
+                  double.infinity,
+                  design.termsAgreeButtonHeight,
                 ),
+                backgroundColor: Colors.lightGreen,
               ),
+              child: const Text('동의'),
             ),
           ],
         ),
