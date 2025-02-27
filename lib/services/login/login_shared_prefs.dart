@@ -9,13 +9,17 @@ class LoginSharePrefs {
 
     switch (platform) {
       case 'Kakao':
-        await prefs.setString('kakaoEmail', email);
-        print('[shared_preferences] KakaoEmail: ${prefs.getString('kakaoEmail')}');
+        await prefs.setString('KakaoEmail', email);
+        print(
+          '[shared_preferences] KakaoEmail: ${prefs.getString('KakaoEmail')}',
+        );
         print('[shared_preferences] platform: ${prefs.getString('platform')}');
         break;
       case 'Apple':
-        await prefs.setString('appleEmail', email);
-        print('[shared_preferences] AppleEmail: ${prefs.getString('appleEmail')}');
+        await prefs.setString('AppleEmail', email);
+        print(
+          '[shared_preferences] AppleEmail: ${prefs.getString('AppleEmail')}',
+        );
         print('[shared_preferences] platform: ${prefs.getString('platform')}');
         break;
     }
@@ -27,11 +31,11 @@ class LoginSharePrefs {
 
     switch (platform) {
       case 'Kakao':
-        return prefs.getString('kakaoEmail');
+        return prefs.getString('KakaoEmail');
       case 'Apple':
-        return prefs.getString('appleEmail');
+        return prefs.getString('AppleEmail');
     }
-    
+
     return null;
   }
 
@@ -41,9 +45,10 @@ class LoginSharePrefs {
     return prefs.getString('platform');
   }
 
-  // 로컬에 저장한 플랫폼 제거
-  Future<void> removeAuth() async {
+  // 로컬에 저장한 플랫폼/이메일 제거
+  Future<void> removeAuth(String platform) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('platform');
+    await prefs.remove(platform);
+    await prefs.remove('${platform}Email');
   }
 }
