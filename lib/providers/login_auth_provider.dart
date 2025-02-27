@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
@@ -63,9 +64,9 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     if (platform != null && email != null) {
       // 현재 상태 기억하기
       state = AuthInfo(platform: platform, email: email);
-      _navigateToNextScreen(context, const HomeView()); // 메인화면으로 이동
+      context.go('/home'); // 메인화면으로 이동
     } else {
-      _navigateToNextScreen(context, const LoginView()); // 로그인 화면으로 이동
+      context.go('/login'); // 로그인 화면으로 이동
     }
   }
 
@@ -84,14 +85,6 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
       AuthPlatform.kakao: _kakaoAuthService,
       AuthPlatform.apple: _appleAuthService,
     }[platform];
-  }
-
-  /// 특정 화면으로 이동
-  void _navigateToNextScreen(BuildContext context, Widget nextScreen) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (BuildContext context) => nextScreen),
-    );
   }
 }
 

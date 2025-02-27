@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/login_auth_provider.dart';
-import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/login/terms_overlay.dart';
 
 // 메인화면
@@ -22,9 +22,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final authNotifier = ref.read(loginAuthProvider.notifier);
     if (user != null) {
       await authNotifier.logout(user!.platform);
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => LoginView()));
+      context.go('/login'); // 로그인 화면
     }
   }
 

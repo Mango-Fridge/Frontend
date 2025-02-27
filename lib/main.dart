@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mango/view/splashView.dart';
+import 'package:mango/router.dart';
 
 void main() async {
   await dotenv.load(fileName: 'assets/.env');
@@ -18,14 +18,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 232, 176, 7),
         ),
       ),
-      home: const SplashView(), // 초기화면
+      routerConfig: RouterPage().routers,
     );
   }
 }

@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/providers/login_auth_provider.dart';
-import 'package:mango/view/home/home_view.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 // 로그인 View
@@ -23,9 +23,7 @@ class LoginView extends ConsumerWidget {
     ref.listen(loginAuthProvider, (AuthInfo? previousState, newState) {
       if (newState != null) {
         // 로그인 성공 시 홈 화면으로 이동
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (context) => HomeView()));
+        context.go('/home'); // 메인화면으로 이동
       }
     });
 
