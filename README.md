@@ -6,6 +6,7 @@
  - sign_in_with_apple 에서 이메일을 못가져오는 현상 수정
  - shared_preferences를 활용한 로컬 저장 (email, platform)
  - go_router 적용
+ - AndroidManifest에서 노출된 key 숨기기
  - (임시) 약관 동의 View
 
 <details>
@@ -13,7 +14,7 @@
 
 | 버전           | 설명                           | 날짜               |
 | ------------ | ---------------------------- | ----------------- |
-| `1.0.1`      | 카카오 / 애플 로그인 구현       | `2025-02-19` |
+| `1.0.1`      | 카카오 / 애플 로그인 구현, env 적용      | `2025-02-19` |
 | `1.0.0`      | 프로젝트 생성       | `2025-02-17` |
 
 </details>
@@ -26,6 +27,7 @@
 | `Dart`      | 개발 프로그래밍 언어       | `3.7.0` |
 | `flutter_riverpod`      | 상태관리 패키지       | `2.6.1` |
 | `go_router`      | 라우팅 패키지       | `14.8.1` |
+| `flutter_dotenv`      | 환경 변수 설정 패키지       | `5.2.1` |
 | `shared_preferences`      | 로컬 저장소 패키지       | `2.5.2` |
 | `sign_in_with_apple`      | Apple 로그인 패키지       | `2.6.1` |
 | `kakao_flutter_sdk`      | Kakao 로그인 패키지       | `1.9.6` |
