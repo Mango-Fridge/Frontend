@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
-import 'package:mango/view/home/home_view.dart';
-import 'package:mango/view/login/login_view.dart';
 import 'package:mango/services/login/apple_auth_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 import '../services/login/kakao_auth_service.dart';
