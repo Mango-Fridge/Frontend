@@ -26,7 +26,7 @@ class GroupView extends ConsumerWidget {
               children: [
                 groupGuideText(context, ref), // 안내 문구
                 const SizedBox(height: 20),
-                groupStartButton(context, ref), // 그룹 만들기 버튼
+                groupStartButton(context, ref), // '그룹' 시작하기 버튼
               ],
             ),
           ),
@@ -52,7 +52,7 @@ Widget groupGuideText(BuildContext context, WidgetRef ref) {
   );
 }
 
-// 그룹 만들기 버튼
+// '그룹' 시작하기 버튼
 Widget groupStartButton(BuildContext context, WidgetRef ref) {
   return SizedBox(
     height: 80,
@@ -68,7 +68,7 @@ Widget groupStartButton(BuildContext context, WidgetRef ref) {
           borderRadius: BorderRadius.circular(12), // 버튼 라운딩
         ),
       ),
-      child: const Text("그룹 만들기", style: TextStyle(fontSize: 25)),
+      child: const Text("시작하기", style: TextStyle(fontSize: 25)),
     ),
   );
 }
