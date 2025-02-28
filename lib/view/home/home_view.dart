@@ -26,15 +26,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
   String? _selectedGroup; // 선택 된 그룹
   String? _selectedGroupId; // 선택 된 그룹 Id
 
-  // 로그아웃 처리 메소드
-  Future<void> _logout() async {
-    final authNotifier = ref.read(loginAuthProvider.notifier);
-    if (user != null) {
-      await authNotifier.logout(user!.platform);
-      context.go('/login'); // 로그인 화면
-    }
-  }
-
   // initState()로 watch하니까 자꾸 에러나서 찾아보니 initState 후에 호출되는 함수라고 하여 사용.
   @override
   void didChangeDependencies() {
@@ -299,5 +290,14 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
     // 유저가 모든 동의를 했을경우, 화면을 띄우지 않음.
     return const SizedBox.shrink();
+  }
+
+  // 로그아웃 처리 메소드
+  Future<void> _logout() async {
+    final authNotifier = ref.read(loginAuthProvider.notifier);
+    if (user != null) {
+      await authNotifier.logout(user!.platform);
+      context.go('/login'); // 로그인 화면
+    }
   }
 }
