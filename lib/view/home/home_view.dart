@@ -26,6 +26,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
     }
   }
 
+  // CookView로 이동하는 메소드
+  void _navigateToCookView() {
+    context.go('/cook'); // cook_view.dart로 이동하는 경로
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +46,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(onPressed: _logout, child: const Text("로그아웃")),
+                const SizedBox(height: 10), // 로그아웃 버튼과 새 버튼 사이 간격 추가
+                ElevatedButton(
+                  onPressed: _navigateToCookView, // CookView로 이동
+                  child: const Text("요리 화면으로 이동"),
+                ),
               ],
             ),
           ),

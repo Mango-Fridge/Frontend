@@ -14,9 +14,9 @@ class SecondPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('요리 기록'), // 두 번째 뷰의 제목
+        title: const Text('요리하기'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.purple), // 뒤로 가기 버튼
+          icon: const Icon(Icons.arrow_back, color: Colors.yellow), // 뒤로 가기 버튼
           onPressed: () {
             Navigator.pop(context); // 이전 화면으로 이동
           },
@@ -31,7 +31,7 @@ class SecondPage extends ConsumerWidget {
               controller: _recipeNameController,
               decoration: const InputDecoration(
                 labelText: '요리 이름',
-                border: OutlineInputBorder(), // 테두리 스타일
+                border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10), // 간격 추가
@@ -55,7 +55,7 @@ class SecondPage extends ConsumerWidget {
                 if (recipeName.isNotEmpty && ingredients.isNotEmpty) {
                   ref.read(recipeNameProvider.notifier).state = recipeName;
                   ref.read(ingredientsProvider.notifier).state = ingredients;
-                  Navigator.pop(context); // 첫 번째 뷰로 돌아감
+                  Navigator.pop(context); // cook view로 돌아감
                 } else {
                   // 입력값이 비어 있을 경우 경고 메시지
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -63,9 +63,7 @@ class SecondPage extends ConsumerWidget {
                   );
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple, // 버튼 색상
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
               child: const Text('저장', style: TextStyle(color: Colors.white)),
             ),
           ],

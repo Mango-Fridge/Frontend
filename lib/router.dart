@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/splashView.dart';
+import 'view/cook/cook_view.dart';
 
 // 화면 이동 (go_router)
 class RouterPage {
@@ -25,6 +26,10 @@ class RouterPage {
         path: '/home',
         builder:
             (BuildContext context, GoRouterState state) => const HomeView(),
+      ),
+      GoRoute(
+        path: '/cook', // 요리 화면 경로
+        builder: (context, state) => const CookView(), // CookView로 이동
       ),
     ],
   );
