@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group.dart';
@@ -149,6 +150,11 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               ],
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context.push('/cook');
+          },
         ),
       ),
     );

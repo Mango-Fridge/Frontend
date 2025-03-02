@@ -17,7 +17,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("설정")),
+      appBar: AppBar(title: const Text("설정")),
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
@@ -27,7 +27,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
               context.go('/login'); // 로그인 화면
             }
           },
-          child: Text("로그아웃"),
+          child: const Text("로그아웃"),
         ),
       ),
     );
