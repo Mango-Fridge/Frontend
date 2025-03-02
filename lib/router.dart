@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mango/view/home/home_view.dart';
+import 'package:mango/view/refrigerator/refrigerator_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/splashView.dart';
 
@@ -14,5 +15,10 @@ final GoRouter goRouter = GoRouter(
     GoRoute(path: '/login', builder: (context, state) => const LoginView()),
     // 메인 화면
     GoRoute(path: '/home', builder: (context, state) => const HomeView()),
+    // 냉장고 화면
+    GoRoute(
+      path: '/refrigerator',
+      builder: (context, state) => const RefrigeratorView(),
+    ),
   ],
 );
