@@ -14,15 +14,7 @@ class CookView extends ConsumerWidget {
     final ingredients = ref.watch(ingredientsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('요리'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.yellow), // 뒤로 가기 버튼
-          onPressed: () {
-            Navigator.pop(context); // 이전 화면으로 이동
-          },
-        ),
-      ),
+      appBar: AppBar(title: const Text('요리')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,17 +53,6 @@ class CookView extends ConsumerWidget {
             const Text('식사를 추가해보세요', style: TextStyle(fontSize: 16)),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.yellow,
-        onPressed: () {
-          // + 버튼 클릭 시 두 번째 뷰로 이동
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SecondPage()),
-          );
-        },
-        child: const Icon(Icons.add, color: Colors.white), // + 아이콘
       ),
     );
   }
