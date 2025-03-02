@@ -76,7 +76,11 @@ Widget groupStartButton(BuildContext context, WidgetRef ref) {
 // 모달창 띄었을 때 제스처 (뒷 배경 클릭 시)
 Widget modalGesture(BuildContext context, WidgetRef ref) {
   return GestureDetector(
-    onTap: () => ref.read(groupModalProvider.notifier).hideModal(), // 모달 닫기 (뒷 배경 클릭)
+    onTap:
+        () =>
+            ref
+                .read(groupModalProvider.notifier)
+                .hideModal(), // 모달 닫기 (뒷 배경 클릭)
     child: Container(
       // ignore: deprecated_member_use
       color: Colors.black.withOpacity(0.5), // 반투명 배경
