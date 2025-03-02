@@ -2,22 +2,13 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.0.2 (2025-02-28)
- - sign_in_with_apple 에서 이메일을 못가져오는 현상 수정
- - shared_preferences를 활용한 로컬 저장 (email, platform)
- - go_router 적용
- - AndroidManifest에서 노출된 key 숨기기
- - (임시) 약관 동의 View
+## VERSION 1.0.3 (2025-03-03)
+ - Hot Reload 이슈로 go_router 로직 변경
+ - 메인화면 연결 (TabBarView & BottomNavigationBar)
+ - (임시) 설정 View 구현
+ - 일부 코드 개선 (메인화면 Appbar, 요리 View 등)
 
-<details>
-    <summary>이전 버전</summary>
-
-| 버전           | 설명                           | 날짜               |
-| ------------ | ---------------------------- | ----------------- |
-| `1.0.1`      | 카카오 / 애플 로그인 구현, env 적용      | `2025-02-19` |
-| `1.0.0`      | 프로젝트 생성       | `2025-02-17` |
-
-</details>
+### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
 ## 주요 라이브러리
 
