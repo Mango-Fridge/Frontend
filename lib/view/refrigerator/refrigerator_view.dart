@@ -269,13 +269,4 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       ),
     );
   }
-
-  // 로그아웃 처리 메소드
-  Future<void> _logout() async {
-    final authNotifier = ref.read(loginAuthProvider.notifier);
-    if (user != null) {
-      await authNotifier.logout(user!.platform);
-      context.go('/login'); // 로그인 화면
-    }
-  }
 }
