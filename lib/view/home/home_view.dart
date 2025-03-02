@@ -35,6 +35,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
     ref.watch(contentProvider.notifier).loadContentList('groupId');
   }
 
+  // CookView로 이동하는 메소드
+  void _navigateToCookView() {
+    context.go('/cook'); // cook_view.dart로 이동하는 경로
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
