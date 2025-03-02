@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/content_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
-import 'package:mango/view/login/terms_overlay.dart';
 
 // 냉장고 화면
 class RefrigeratorView extends ConsumerStatefulWidget {
@@ -37,15 +36,30 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   @override
   Widget build(BuildContext context) {
+    final Design design = Design(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          leadingWidth: double.infinity,
+          leading: Row(
+            spacing: 15,
+            children: <Widget>[
+              Container(),
+              Image.asset(
+                "assets/images/title.png",
+                width: design.homeImageSize,
+              ),
+              const Text("Mango"),
+            ],
+          ),
+        ),
         backgroundColor: Colors.white,
         body: Stack(
           children: <Widget>[
             Column(
               children: <Widget>[
-                const SizedBox(height: 100),
                 Container(
                   padding: const EdgeInsets.all(8),
                   child: Row(
