@@ -1,36 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/splashView.dart';
-import 'view/cook/cook_view.dart';
 
-// 화면 이동 (go_router)
-class RouterPage {
-  final GoRouter routers = GoRouter(
-    routes: <RouteBase>[
-      // 초기 화면
-      GoRoute(
-        path: '/',
-        builder:
-            (BuildContext context, GoRouterState state) => const SplashView(),
-      ),
-      // 로그인 화면
-      GoRoute(
-        path: '/login',
-        builder:
-            (BuildContext context, GoRouterState state) => const LoginView(),
-      ),
-      // 메인 화면
-      GoRoute(
-        path: '/home',
-        builder:
-            (BuildContext context, GoRouterState state) => const HomeView(),
-      ),
-      GoRoute(
-        path: '/cook', // 요리 화면 경로
-        builder: (context, state) => const CookView(), // CookView로 이동
-      ),
-    ],
-  );
-}
+// 라우터 관리(go_router)
+final GoRouter goRouter = GoRouter(
+  initialLocation: '/',
+  debugLogDiagnostics: true, // 라우팅 디버깅 로그 활성화
+  routes: <RouteBase>[
+    // 초기 화면
+    GoRoute(path: '/', builder: (context, state) => const SplashView()),
+    // 로그인 화면
+    GoRoute(path: '/login', builder: (context, state) => const LoginView()),
+    // 메인 화면
+    GoRoute(path: '/home', builder: (context, state) => const HomeView()),
+  ],
+);

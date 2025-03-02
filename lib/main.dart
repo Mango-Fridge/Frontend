@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           seedColor: const Color.fromARGB(255, 232, 176, 7),
         ),
       ),
-      routerConfig: RouterPage().routers,
+      routerConfig: goRouter,
     );
   }
 }
