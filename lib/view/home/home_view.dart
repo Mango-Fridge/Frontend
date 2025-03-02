@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/model/content.dart';
+import 'package:mango/model/group.dart';
 import 'package:mango/model/login/auth_model.dart';
+import 'package:mango/providers/content_provider.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/view/login/terms_overlay.dart';
 
@@ -14,16 +18,21 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 class _HomeViewState extends ConsumerState<HomeView> {
-  // 로그인된 사용자 정보와 AuthNotifier를 가져오는 메소드
+  // 상태관리 관련 선언부
   AuthInfo? get user => ref.watch(loginAuthProvider);
+  List<Group>? get _groupList => ref.watch(groupProvider);
+  List<Content>? get _contentList => ref.watch(contentProvider);
 
-  // 로그아웃 처리 메소드
-  Future<void> _logout() async {
-    final authNotifier = ref.read(loginAuthProvider.notifier);
-    if (user != null) {
-      await authNotifier.logout(user!.platform);
-      context.go('/login'); // 로그인 화면
-    }
+  String? _selectedGroup; // 선택 된 그룹
+  String? _selectedGroupId; // 선택 된 그룹 Id
+
+  // initState()로 watch하니까 자꾸 에러나서 찾아보니 initState 후에 호출되는 함수라고 하여 사용.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
+    ref.watch(contentProvider.notifier).loadContentList('groupId');
   }
 
   // CookView로 이동하는 메소드
@@ -33,29 +42,236 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                const SizedBox(height: 100),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      // 그룹 콤보 박스
+                      PopupMenuButton<String>(
+                        onSelected: (String value) {
+                          setState(() {
+                            _selectedGroupId = value;
+                            _selectedGroup =
+                                _groupList!
+                                    .firstWhere(
+                                      (Group group) => group.groupId == value,
+                                    )
+                                    .groupName;
+                          });
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return _groupList!.map<PopupMenuEntry<String>>((
+                            Group group,
+                          ) {
+                            return PopupMenuItem<String>(
+                              value: group.groupId,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12.0,
+                                  horizontal: 16.0,
+                                ),
+                                child: Text(group.groupName),
+                              ),
+                            );
+                          }).toList();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 16.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.amber[300],
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Text(_selectedGroup ?? '그룹을 선택 해 주세요.'),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: <Widget>[
+                          // 새로고침 버튼
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.refresh),
+                          ),
+                          // 물품 추가 버튼
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              backgroundColor: Colors.amber[300],
+                              foregroundColor: Colors.black,
+                            ),
+                            child: const Text('물품 추가'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                // 물품 List
+                Expanded(
+                  child:
+                      _groupList!.isEmpty
+                          ? const Center(
+                            child: Text(
+                              "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                          : ListView(
+                            padding: EdgeInsets.zero,
+                            children: <Widget>[_buildContent(_contentList)],
+                          ),
+                ),
+              ],
+            ),
+            _buildTermsOverlay(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 보관장소 별 UI 구성
+  Widget _buildContent(List<Content>? contentList) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Column(
         children: <Widget>[
-          Center(
+          const Divider(),
+          ExpansionTile(
+            title: const Text(
+              '냉장',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            shape: Border.all(color: Colors.transparent),
+            children:
+                contentList!
+                    .where((Content content) => content.storageArea == '냉장')
+                    .map((Content content) => _buildItemRow(content))
+                    .toList(),
+          ),
+          const Divider(),
+          Container(height: 10),
+          const Divider(),
+          ExpansionTile(
+            title: const Text(
+              '냉동',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            shape: Border.all(color: Colors.transparent),
+            children:
+                contentList!
+                    .where((Content content) => content.storageArea == '냉동')
+                    .map((Content content) => _buildItemRow(content))
+                    .toList(),
+          ),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+
+  // 물품 별 UI 구성
+  Widget _buildItemRow(Content content) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.amber[300],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "환영합니다, ${user?.email ?? '사용자'}님!",
-                  style: const TextStyle(fontSize: 20),
+                  content.contentName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(onPressed: _logout, child: const Text("로그아웃")),
-                const SizedBox(height: 10), // 로그아웃 버튼과 새 버튼 사이 간격 추가
-                ElevatedButton(
-                  onPressed: _navigateToCookView, // CookView로 이동
-                  child: const Text("요리 화면으로 이동"),
+                Text(
+                  '소비기한 ${content.expDate}',
+                  style: const TextStyle(fontSize: 12),
                 ),
               ],
             ),
           ),
-          _buildTermsOverlay(), // 약관 동의 화면
+          // 수량 조절 버튼
+          Row(
+            children: <Widget>[
+              _quantityButton('-', () {
+                ref
+                    .watch(contentProvider.notifier)
+                    .subContentCount(content.contentId);
+              }),
+              const SizedBox(width: 5),
+              Container(
+                width: 30,
+                height: 30,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  '${content.count}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 5),
+              _quantityButton('+', () {
+                ref
+                    .watch(contentProvider.notifier)
+                    .addContentCount(content.contentId);
+              }),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  // 수량 조절 버튼
+  Widget _quantityButton(String symbol, VoidCallback onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 30,
+        height: 30,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Text(
+          symbol,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
@@ -66,18 +282,27 @@ class _HomeViewState extends ConsumerState<HomeView> {
     if (user == null) return const SizedBox.shrink();
 
     // 유저가 동의를 하지 않았을 때,
-    if (user!.isPrivacyPolicyAccepted) {
+    if (!user!.isPrivacyPolicyAccepted) {
       return const TermsOverlay(
         key: ValueKey('privacyPolicy'),
         termsType: 'privacy policy',
       );
     }
     // 유저가 동의를 하지 않았을 때,
-    if (user!.isTermsAccepted) {
+    if (!user!.isTermsAccepted) {
       return const TermsOverlay(key: ValueKey('terms'), termsType: 'terms');
     }
 
     // 유저가 모든 동의를 했을경우, 화면을 띄우지 않음.
     return const SizedBox.shrink();
+  }
+
+  // 로그아웃 처리 메소드
+  Future<void> _logout() async {
+    final authNotifier = ref.read(loginAuthProvider.notifier);
+    if (user != null) {
+      await authNotifier.logout(user!.platform);
+      context.go('/login'); // 로그인 화면
+    }
   }
 }
