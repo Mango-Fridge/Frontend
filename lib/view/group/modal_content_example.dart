@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // 모달 예제 뷰
 class ModalContentExample extends StatelessWidget {
@@ -29,7 +30,7 @@ class ModalContentExample extends StatelessWidget {
                       const Text('Modal BottomSheet'),
                       ElevatedButton(
                         child: const Text('Close BottomSheet'),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () => context.pop(), // go_router 사용하여 해당 모달창 닫기
                       ),
                     ],
                   ),
