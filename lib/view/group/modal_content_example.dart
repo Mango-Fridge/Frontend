@@ -7,7 +7,9 @@ class ModalContentExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.height * 0.1,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue, // 배경색
@@ -17,30 +19,36 @@ class ModalContentExample extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          showModalBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: 400,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Text('Modal BottomSheet'),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet'),
-                        onPressed: () => context.pop(), // go_router 사용하여 해당 모달창 닫기
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+          showModalGroup(context); // '시작하기'버튼 클릭 시, 모달창 띄우기
         },
         child: const Text("시작하기", style: TextStyle(fontSize: 25)),
       ),
     );
   }
+}
+
+
+// 그룹에서 모달창
+void showModalGroup(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return SizedBox(
+        height: 400,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text('Modal BottomSheet'),
+              ElevatedButton(
+                child: const Text('Close BottomSheet'),
+                onPressed: () => context.pop(), // go_router 사용하여 해당 모달창 닫기
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

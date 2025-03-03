@@ -34,11 +34,13 @@ class GroupView extends ConsumerWidget {
   }
 }
 
+
+
 // 안내 문구 텍스트 글
 Widget groupGuideText(BuildContext context) {
-  return const SizedBox(
-    width: 330,
-    child: Text(
+  return SizedBox(
+    width: MediaQuery.of(context).size.width * 0.9,
+    child: const Text(
       "그룹이 없습니다.\n그룹을 생성하거나 참여해보세요.",
       style: TextStyle(fontSize: 25),
       textAlign: TextAlign.center,
