@@ -117,7 +117,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           ),
                           // 물품 추가 버튼
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.go('/addContent');
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
