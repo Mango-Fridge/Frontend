@@ -4,6 +4,7 @@ import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/refrigerator/refrigerator_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/splashView.dart';
+import 'package:mango/view/cook/second_page.dart';
 
 // 라우터 관리(go_router)
 final GoRouter goRouter = GoRouter(
@@ -21,7 +22,10 @@ final GoRouter goRouter = GoRouter(
       path: '/refrigerator',
       builder: (context, state) => const RefrigeratorView(),
     ),
+    GoRoute(path: '/', builder: (context, state) => const CookView()),
     // 요리 화면
     GoRoute(path: '/cook', builder: (context, state) => const CookView()),
+
+    GoRoute(path: '/second', builder: (context, state) => const SecondPage()),
   ],
 );

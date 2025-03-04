@@ -1,57 +1,123 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/providers/cook_provider.dart';
 import 'second_page.dart';
 
-// Riverpod 상태를 구독하기 위해 ConsumerWidget 사용
 class CookView extends ConsumerWidget {
-  const CookView({super.key});
+  const CookView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Riverpod Provider에서 요리 이름과 재료를 실시간으로 읽음
+    // MediaQuery를 통해 화면 크기를 가져오기
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // 요리 이름과 재료 상태를 읽기
     final recipeName = ref.watch(recipeNameProvider);
     final ingredients = ref.watch(ingredientsProvider);
 
+    // 요리 리스트 상태를 읽기
+    final recipeList = ref.watch(recipeListProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('요리')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // + 버튼 (상단 박스 형태)
-            Container(
-              width: 200, // 전체 너비
-              height: 50, // 버튼 높이
-              color: Colors.yellow, // 이미지와 동일한 색상
-              child: IconButton(
-                icon: const Icon(Icons.add, color: Colors.white),
-                onPressed: () {
-                  // + 버튼 클릭 시 두 번째 뷰로 이동
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SecondPage()),
-                  );
-                },
+      body: SingleChildScrollView(
+        child: Padding(
+          // 좌우, 상하 여백도 화면 크기에 따라 비율로 설정
+          padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.05,
+            vertical: screenHeight * 0.02,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              /// + 버튼을 화면 상단에 배치
+              Container(
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.07,
+                decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  onPressed: () {
+                    // + 버튼 클릭 시 go_router를 사용한 화면 이동
+                    context.go('/second');
+                  },
+                ),
               ),
-            ),
-            // 요리 이름 표시, 값이 없으면 "없음" 출력
-            Text(
-              '현재 요리: ${recipeName.isEmpty ? "없음" : recipeName}',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 10),
-            // 재료 표시, 값이 없으면 "없음" 출력
-            Text(
-              '재료: ${ingredients.isEmpty ? "없음" : ingredients}',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 20),
-            // 요리 추가를 위한 아이콘 (이미지와 유사)
-            const Icon(Icons.local_dining, size: 50, color: Colors.black),
-            const SizedBox(height: 10),
-            const Text('식사를 추가해보세요', style: TextStyle(fontSize: 16)),
-          ],
+
+              SizedBox(height: screenHeight * 0.03),
+
+              // 요리 리스트를 동적으로 표시
+              if (recipeList.isNotEmpty)
+                Column(
+                  children:
+                      recipeList.map((recipe) {
+                        return Padding(
+                          padding: EdgeInsets.only(top: screenHeight * 0.02),
+                          child: Container(
+                            width: screenWidth * 0.9,
+                            height: screenHeight * 0.1,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(screenWidth * 0.04),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    recipe.name,
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.045,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: screenHeight * 0.01),
+                                  Text(
+                                    recipe.ingredients,
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.035,
+                                      color: Colors.grey[700],
+                                    ),
+                                    maxLines: 2, // 재료가 길 경우 2줄로 제한
+                                    overflow:
+                                        TextOverflow
+                                            .ellipsis, // 텍스트가 길어질 경우 ...으로 표시
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                ),
+
+              // 요리가 없을 시 아이콘과 안내 문구 표시
+              if (recipeList.isEmpty)
+                Column(
+                  children: [
+                    SizedBox(height: screenHeight * 0.3),
+                    Icon(
+                      Icons.local_dining,
+                      size: screenWidth * 0.08,
+                      color: Colors.black,
+                    ),
+                    SizedBox(height: screenHeight * 0.01),
+                    Text(
+                      '식사를 추가해보세요',
+                      style: TextStyle(fontSize: screenWidth * 0.04),
+                    ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );
