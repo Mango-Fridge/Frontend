@@ -1,35 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/providers/group_modal_provider.dart';
+import 'package:go_router/go_router.dart';
 
 // 모달 예제 뷰
-class ModalContentExample extends ConsumerWidget {
-  const ModalContentExample({Key? key}) : super(key: key);
+class ModalContentExample extends StatelessWidget {
+  const ModalContentExample({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bool isModalOpen = ref.watch(groupModalProvider);
-
-    double screenHeight = MediaQuery.of(context).size.height;
-    double height = isModalOpen ? screenHeight - 500 : screenHeight;
-
-    return AnimatedContainer(
-      transform: Matrix4.translationValues(0, height, 0),
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.ease,
-      child: Container(
-        height: 500,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          color: Colors.white,
-        ),
-        child: const Center(
-          child: Text(
-            'Bottom Modal Sheet',
-            style: TextStyle(fontSize: 20),
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.height * 0.1,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue, // 배경색
+          foregroundColor: Colors.black, // 텍스트색
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12), // 버튼 라운딩
           ),
         ),
+        onPressed: () {
+          showModalGroup(context); // '시작하기'버튼 클릭 시, 모달창 띄우기
+        },
+        child: const Text("시작하기", style: TextStyle(fontSize: 25)),
       ),
     );
   }
+}
+
+
+// 그룹에서 모달창
+void showModalGroup(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return SizedBox(
+        height: 400,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text('Modal BottomSheet'),
+              ElevatedButton(
+                child: const Text('Close BottomSheet'),
+                onPressed: () => context.pop(), // go_router 사용하여 해당 모달창 닫기
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
