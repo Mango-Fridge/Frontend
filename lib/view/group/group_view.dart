@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/view/group/group_modal_start_view.dart';
+import 'package:mango/view/group/group_modal_start_button.dart';
 
 
 class GroupView extends ConsumerWidget {
@@ -39,7 +39,7 @@ Widget groupGuideText(BuildContext context) {
     width: MediaQuery.of(context).size.width * 0.9,
     child: const Text(
       "그룹이 없습니다.\n그룹을 생성하거나 참여해보세요.",
-      style: TextStyle(fontSize: 25),
+      style: TextStyle(fontSize: 22),
       textAlign: TextAlign.center,
     ),
   );

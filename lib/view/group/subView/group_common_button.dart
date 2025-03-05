@@ -7,7 +7,7 @@ Widget groupCommonButton({
   required VoidCallback onPressed, // 버튼 액션
 }) {
   return SizedBox(
-    width: MediaQuery.of(context).size.width * 0.87,
+    width: MediaQuery.of(context).size.width * 0.8,
     height: MediaQuery.of(context).size.height * 0.1,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
