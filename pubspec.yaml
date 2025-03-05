@@ -32,6 +32,7 @@ flutter:
   assets:
     - assets/.env
     - assets/images/title.png
+    - assets/images/cart.png
 
   # fonts:
   #   - family: Schyler
