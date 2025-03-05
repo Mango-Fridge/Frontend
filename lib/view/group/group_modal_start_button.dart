@@ -15,14 +15,14 @@ class GroupModalStartButton extends ConsumerWidget {
       context: context,
       text: "시작하기",
       onPressed: () {
-        showModalStartGroup(context, ref);
+        showModalStartGroupView(context, ref);
       },
     );
   }
 }
 
 // '시작하기' 클릭 시, 처음으로 보이는 모달창
-void showModalStartGroup(BuildContext context, WidgetRef ref) {
+void showModalStartGroupView(BuildContext context, WidgetRef ref) {
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
