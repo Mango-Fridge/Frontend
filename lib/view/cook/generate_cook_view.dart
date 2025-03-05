@@ -5,14 +5,14 @@ import 'package:mango/providers/cook_provider.dart';
 import 'package:mango/view/cook/cook_view.dart';
 
 // Riverpod 상태를 업데이트하기 위해 ConsumerWidget 사용
-class SecondPage extends ConsumerStatefulWidget {
-  const SecondPage({super.key});
+class GenerateCookView extends ConsumerStatefulWidget {
+  const GenerateCookView({super.key});
 
   @override
-  ConsumerState<SecondPage> createState() => _SecondPageState();
+  ConsumerState<GenerateCookView> createState() => _SecondPageState();
 }
 
-class _SecondPageState extends ConsumerState<SecondPage> {
+class _SecondPageState extends ConsumerState<GenerateCookView> {
   // 텍스트 필드 입력을 관리하기 위한 컨트롤러
   final _recipeNameController = TextEditingController();
   final _ingredientsController = TextEditingController();
