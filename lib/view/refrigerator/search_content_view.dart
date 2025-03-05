@@ -43,11 +43,14 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 border: InputBorder.none,
               ),
               onChanged: (String value) {
+                // 값이 변경 될 때마다 api 호출 해야 함. (ItemRepository 및 ItemList를 관리해주는 Provider 구현 필요)
+                // 호출 결과에 따라 ListView인지 예외 처리인지 구분
                 print(value);
                 setState(() {});
               },
             ),
           ),
+          // SizedBox 부터 Spacer 까지는 api 호출 결과에 따라 노출/비노출
           const SizedBox(height: 100),
           Image.asset(
             "assets/images/cart.png",

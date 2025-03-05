@@ -77,7 +77,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 children: <Widget>[
                   SizedBox(
                     width: design.screenWidth * 0.22,
-                    child: const Text('카테고리 *'),
+                    child: const Row(
+                      children: <Widget>[
+                        Text('카테고리 '),
+                        Text('*', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
                   ),
 
                   Expanded(
@@ -105,7 +110,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 children: <Widget>[
                   SizedBox(
                     width: design.screenWidth * 0.22,
-                    child: const Text('수량 (인분) *'),
+                    child: const Row(
+                      children: <Widget>[
+                        Text('수량 (인분) '),
+                        Text('*', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
                   ),
 
                   Expanded(
@@ -126,7 +136,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 children: <Widget>[
                   SizedBox(
                     width: design.screenWidth * 0.22,
-                    child: const Text('등록 날짜 *'),
+                    child: const Row(
+                      children: <Widget>[
+                        Text('등록 날짜 '),
+                        Text('*', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: Text(
@@ -144,7 +159,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 children: <Widget>[
                   SizedBox(
                     width: design.screenWidth * 0.22,
-                    child: const Text('소비 기한 *'),
+                    child: const Row(
+                      children: <Widget>[
+                        Text('소비 기한 '),
+                        Text('*', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
                   ),
 
                   Expanded(
@@ -171,7 +191,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 children: <Widget>[
                   SizedBox(
                     width: design.screenWidth * 0.22,
-                    child: const Text('보관 장소 *'),
+                    child: const Row(
+                      children: <Widget>[
+                        Text('보관 장소 '),
+                        Text('*', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: DropdownButton<String>(
