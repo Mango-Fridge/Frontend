@@ -28,7 +28,10 @@ class _SecondPageState extends ConsumerState<SecondPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('요리하기')),
+      appBar: AppBar(
+        title: const Text('요리하기'),
+        automaticallyImplyLeading: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -68,11 +71,11 @@ class _SecondPageState extends ConsumerState<SecondPage> {
                           Recipe(name: recipeName, ingredients: ingredients),
                         ],
                       );
-                  // 이전 상태 초기화 (선택 사항)
+                  // 이전 상태 초기화
                   ref.read(recipeNameProvider.notifier).state = '';
                   ref.read(ingredientsProvider.notifier).state = '';
 
-                  // 네비게이션 스택에 이전 화면이 있는지 확인 후 pop
+                  // 이전 화면으로 이동
                   if (GoRouter.of(context).canPop()) {
                     context.pop();
                   } else {

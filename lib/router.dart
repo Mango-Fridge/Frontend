@@ -22,10 +22,9 @@ final GoRouter goRouter = GoRouter(
       path: '/refrigerator',
       builder: (context, state) => const RefrigeratorView(),
     ),
-    GoRoute(path: '/', builder: (context, state) => const CookView()),
     // 요리 화면
     GoRoute(path: '/cook', builder: (context, state) => const CookView()),
-
+    // 두 번째 요리 입력 화면
     GoRoute(path: '/second', builder: (context, state) => const SecondPage()),
   ],
 );
