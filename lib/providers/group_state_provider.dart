@@ -34,7 +34,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
     return GroupState(groupName: '', errorMessage: null, isButton: false);
   }
 
-  // 그룹 이름 업데이트 및 유효성 검사
+  // 그룹 생성 유효성 검사 및 업데이트
   void updateGroupName(String groupName) {
     // 공백 제거
     final trimmedName = groupName.trim();
@@ -69,7 +69,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
       return;
     }
 
-    // 정상적 입력
+    // 그룹 생성 정상적 입력
     state = state.copyWith(
       groupName: trimmedName,
       errorMessage: null,
@@ -77,10 +77,13 @@ class GroupStateNotifier extends Notifier<GroupState> {
     );
   }
 
-  // 상태초기화
+  // 그룹 생성하기 뷰로 갈 시, 상태초기화
   void resetState() {
     state = GroupState(groupName: '', errorMessage: null, isButton: false);
   }
+
+  // 추후 참여하기 유효성 검사에 대한 로직 @@@@@@@@@@@@@@@@@@@
+   
 }
 
 // NotifierProvider 정의
