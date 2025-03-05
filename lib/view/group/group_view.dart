@@ -20,7 +20,6 @@ class GroupView extends ConsumerWidget {
           SizedBox.expand(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 groupGuideText(context), // 안내 문구
                 const SizedBox(height: 40),
@@ -33,8 +32,6 @@ class GroupView extends ConsumerWidget {
     );
   }
 }
-
-
 
 // 안내 문구 텍스트 글
 Widget groupGuideText(BuildContext context) {
