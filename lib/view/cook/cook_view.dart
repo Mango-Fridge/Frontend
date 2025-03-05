@@ -1,118 +1,186 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
+import 'package:mango/model/group.dart';
+import 'package:mango/model/login/auth_model.dart';
+import 'package:mango/providers/group_provider.dart';
+import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/providers/cook_provider.dart';
-import 'second_page.dart';
+import 'generate_cook_view.dart';
 
+// Riverpod 상태를 구독하기 위해 ConsumerWidget 사용
 class CookView extends ConsumerWidget {
-  const CookView({Key? key}) : super(key: key);
+  const CookView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // MediaQuery를 통해 화면 크기를 가져오기
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    // Riverpod Provider에서 요리 리스트를 실시간으로 읽음
+    final recipes = ref.watch(recipeListProvider);
+    final user = ref.watch(loginAuthProvider); // 로그인 사용자 정보
+    final groups = ref.watch(groupProvider); // 그룹 리스트
+    final Design design = Design(context);
 
-    // 요리 리스트 상태를 읽기
-    final recipeList = ref.watch(recipeListProvider);
+    // 선택된 그룹 상태 관리 (ref로 관리)
+    String? _selectedGroupId; // 선택된 그룹 ID
+
+    // didChangeDependencies에서 그룹 리스트 로드 (postFrameCallback 사용)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (user != null && user.email != null) {
+        ref.read(groupProvider.notifier).loadGroupList(user.email!);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(title: const Text('요리')),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.05,
-          vertical: screenHeight * 0.02,
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // 세로 중앙 정렬 유지
-          crossAxisAlignment: CrossAxisAlignment.center, // 가로 중앙 정렬 유지
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            /// + 버튼을 화면 상단에 배치
+            // 그룹 콤보박스 (RefrigeratorView와 동일 위치, + 버튼 상단)
             Container(
-              width: screenWidth * 0.9,
-              height: screenHeight * 0.07,
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PopupMenuButton<String>(
+                    onSelected: (String value) {
+                      // ref를 사용해 상태 갱신
+                      ref
+                          .read(groupProvider.notifier)
+                          .updateSelectedGroupId(value);
+                      _selectedGroupId = value; // 로컬 상태 업데이트
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return groups.map<PopupMenuEntry<String>>((Group group) {
+                        return PopupMenuItem<String>(
+                          value: group.groupId,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12.0,
+                              horizontal: 16.0,
+                            ),
+                            child: Text(group.groupName),
+                          ),
+                        );
+                      }).toList();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 16.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.amber[300],
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Text(
+                        groups.isEmpty
+                            ? '그룹을 선택 해 주세요.'
+                            : groups
+                                .firstWhere(
+                                  (group) => group.groupId == _selectedGroupId,
+                                  orElse: () => groups.first,
+                                )
+                                .groupName,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            // + 버튼
+            Container(
+              width: 400,
+              height: 50,
               decoration: BoxDecoration(
-                color: Colors.orange, // 배경색 (기존 yellow에서 orange로 변경됨)
+                color: Colors.orange,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
                 icon: const Icon(Icons.add, color: Colors.white),
                 onPressed: () {
-                  // + 버튼 클릭 시 go_router를 사용한 화면 이동
-                  context.push('/second');
+                  // + 버튼 클릭 시 GenerateCookView로 이동
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GenerateCookView(),
+                    ),
+                  );
                 },
               ),
             ),
-
-            SizedBox(height: screenHeight * 0.03), // 버튼과 리스트/메시지 사이 간격
-            // 요리 리스트를 동적으로 표시 (스크롤 가능)
-            if (recipeList.isNotEmpty)
-              Column(
-                children:
-                    recipeList.map((recipe) {
-                      return Padding(
-                        padding: EdgeInsets.only(top: screenHeight * 0.02),
-                        child: Container(
-                          width: screenWidth * 0.9,
-                          height: screenHeight * 0.1,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(screenWidth * 0.04),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  recipe.name,
-                                  style: TextStyle(
-                                    fontSize: screenWidth * 0.045,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                Text(
-                                  recipe.ingredients,
-                                  style: TextStyle(
-                                    fontSize: screenWidth * 0.035,
-                                    color: Colors.grey[700],
-                                  ),
-                                  maxLines: 2, // 재료가 길 경우 2줄로 제한
-                                  overflow:
-                                      TextOverflow
-                                          .ellipsis, // 텍스트가 길어질 경우 ...으로 표시
-                                ),
-                              ],
+            const SizedBox(height: 10),
+            // 요리 데이터 박스 리스트 (데이터가 있으면 표시)
+            if (recipes.isNotEmpty) ...[
+              Expanded(
+                child: ListView.builder(
+                  itemCount: recipes.length,
+                  itemBuilder: (context, index) {
+                    final recipe = recipes[index];
+                    return Container(
+                      width: 200,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '요리 ${index + 1}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                          Text(
+                            recipe.name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            recipe.ingredients,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-
-            // 요리가 없을 시 아이콘과 안내 문구 표시 (스크롤 가능)
-            if (recipeList.isEmpty)
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center, // 세로 중앙 정렬
-                crossAxisAlignment: CrossAxisAlignment.center, // 가로 중앙 정렬
-                children: [
-                  Icon(
-                    Icons.local_dining,
-                    size: screenWidth * 0.08,
-                    color: Colors.black,
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  Text(
+            ] else ...[
+              const Expanded(
+                child: Center(
+                  child: Text(
                     '식사를 추가해보세요',
-                    style: TextStyle(fontSize: screenWidth * 0.04),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
-                ],
+                ),
               ),
+            ],
           ],
         ),
       ),
     );
+  }
+}
+
+// GroupNotifier에 선택된 그룹 ID 상태 관리 추가
+extension GroupNotifierX on GroupNotifier {
+  void updateSelectedGroupId(String? groupId) {
+    // 선택된 그룹 ID를 상태로 저장하거나, 필요 시 다른 로직 추가
+    // 현재는 단순히 로깅하거나 상태를 유지하는 용도로 사용
+    print('Selected group ID: $groupId');
   }
 }
