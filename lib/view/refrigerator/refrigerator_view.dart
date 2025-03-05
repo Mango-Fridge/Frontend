@@ -178,9 +178,20 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             shape: Border.all(color: Colors.transparent),
             children:
                 contentList!
-                    .where((Content content) => content.storageArea == '냉장')
-                    .map((Content content) => _buildItemRow(content))
-                    .toList(),
+                        .where((Content content) => content.storageArea == '냉장')
+                        .isEmpty
+                    ? <Widget>[
+                      const Center(
+                        child: Text(
+                          "냉장고에 보관중인 물품이 없어요.",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ]
+                    : contentList!
+                        .where((Content content) => content.storageArea == '냉장')
+                        .map((Content content) => _buildItemRow(content))
+                        .toList(),
           ),
           const Divider(),
           Container(height: 10),
@@ -193,9 +204,20 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             shape: Border.all(color: Colors.transparent),
             children:
                 contentList!
-                    .where((Content content) => content.storageArea == '냉동')
-                    .map((Content content) => _buildItemRow(content))
-                    .toList(),
+                        .where((Content content) => content.storageArea == '냉동')
+                        .isEmpty
+                    ? <Widget>[
+                      const Center(
+                        child: Text(
+                          "냉동고에 보관중인 물품이 없어요.",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ]
+                    : contentList!
+                        .where((Content content) => content.storageArea == '냉동')
+                        .map((Content content) => _buildItemRow(content))
+                        .toList(),
           ),
           const Divider(),
         ],
