@@ -132,7 +132,7 @@ class CookView extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '요리 ${index + 1}',
+                            recipe.name,
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -140,16 +140,9 @@ class CookView extends ConsumerWidget {
                             ),
                           ),
                           Text(
-                            recipe.name,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
                             recipe.ingredients,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 14,
                             ),
                           ),

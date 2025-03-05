@@ -191,96 +191,83 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
           ],
         ),
       ),
+
+      /// ✅ 스크롤 가능한 화면 적용
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // 재료 입력 필드
-              TextField(
-                controller: _ingredientsController,
-                decoration: const InputDecoration(
-                  labelText: '재료 내용',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-                onChanged: (value) {
-                  ref.read(ingredientsProvider.notifier).state = value;
-                },
-              ),
-              const SizedBox(height: 10),
-              // 열량 입력 필드
-              TextField(
-                controller: _caloriesController,
-                decoration: const InputDecoration(
-                  labelText: '열량 (kcal)',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 10),
-              // 탄수화물 입력 필드
-              TextField(
-                controller: _carbohydratesController,
-                decoration: const InputDecoration(
-                  labelText: '탄수화물 (g)',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 10),
-              // 단백질 입력 필드
-              TextField(
-                controller: _proteinController,
-                decoration: const InputDecoration(
-                  labelText: '단백질 (g)',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 10),
-              // 지방 입력 필드
-              TextField(
-                controller: _fatController,
-                decoration: const InputDecoration(
-                  labelText: '지방 (g)',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomSheet: Container(
-        height: 200,
-        color: const Color.fromARGB(255, 194, 194, 194),
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
+            // 재료 입력 필드
             TextField(
+              controller: _ingredientsController,
               decoration: const InputDecoration(
-                hintText: '요리에 대한 메모를 입력해보세요',
+                labelText: '재료 내용',
                 border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
               ),
-              maxLength: 90,
+              maxLines: 3,
               onChanged: (value) {
-                ref.read(memoProvider.notifier).state = value;
+                ref.read(ingredientsProvider.notifier).state = value;
               },
             ),
             const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _saveRecipe,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 40),
+
+            // 영양소 입력 필드들
+            for (var field in [
+              {'controller': _caloriesController, 'label': '열량 (kcal)'},
+              {'controller': _carbohydratesController, 'label': '탄수화물 (g)'},
+              {'controller': _proteinController, 'label': '단백질 (g)'},
+              {'controller': _fatController, 'label': '지방 (g)'},
+            ])
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: TextField(
+                  controller: field['controller'] as TextEditingController,
+                  decoration: InputDecoration(
+                    labelText: field['label'] as String,
+                    border: const OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
               ),
-              child: const Text('추가하기', style: TextStyle(color: Colors.black)),
-            ),
           ],
+        ),
+      ),
+
+      /// ✅ bottomSheet 유지
+      bottomSheet: SafeArea(
+        child: Container(
+          height: 200,
+          color: const Color.fromARGB(255, 234, 223, 169),
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: const InputDecoration(
+                  hintText: '요리에 대한 메모를 입력해보세요',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+                maxLength: 90,
+                onChanged: (value) {
+                  ref.read(memoProvider.notifier).state = value;
+                },
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _saveRecipe,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 40),
+                ),
+                child: const Text(
+                  '추가하기',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
