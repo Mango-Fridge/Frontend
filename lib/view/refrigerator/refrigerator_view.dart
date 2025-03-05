@@ -191,7 +191,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     ]
                     : contentList!
                         .where((Content content) => content.storageArea == '냉장')
-                        .map((Content content) => _buildItemRow(content))
+                        .map((Content content) => _buildContentRow(content))
                         .toList(),
           ),
           const Divider(),
@@ -217,7 +217,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     ]
                     : contentList!
                         .where((Content content) => content.storageArea == '냉동')
-                        .map((Content content) => _buildItemRow(content))
+                        .map((Content content) => _buildContentRow(content))
                         .toList(),
           ),
           const Divider(),
@@ -227,7 +227,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   }
 
   // 물품 별 UI 구성
-  Widget _buildItemRow(Content content) {
+  Widget _buildContentRow(Content content) {
     return GestureDetector(
       onTap: () {
         showDialog(
