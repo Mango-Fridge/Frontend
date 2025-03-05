@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 
 class SearchContentView extends ConsumerStatefulWidget {
   const SearchContentView({super.key});
@@ -13,6 +14,8 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
 
   @override
   Widget build(BuildContext context) {
+    Design design = Design(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("물품 추가"),
@@ -23,8 +26,12 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         spacing: 20,
         children: <Widget>[
           Container(
-            margin: const EdgeInsets.all(16), // 나중에 변경
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            margin: EdgeInsets.symmetric(
+              horizontal: design.screenWidth * 0.035,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: design.screenWidth * 0.035,
+            ),
             decoration: BoxDecoration(
               color: Colors.amber[200],
               borderRadius: BorderRadius.circular(8),
@@ -42,7 +49,11 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             ),
           ),
           const SizedBox(height: 100),
-          Image.asset("assets/images/cart.png", width: 120, height: 120),
+          Image.asset(
+            "assets/images/cart.png",
+            width: design.cartImageSize,
+            height: design.cartImageSize,
+          ),
           const Text(
             "찾고 싶은 물품을 검색하거나,\n원하는 물품이 없다면 직접 추가해 보세요!",
             textAlign: TextAlign.center,
@@ -55,7 +66,6 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.amber[300],
               foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

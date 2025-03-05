@@ -8,6 +8,7 @@ class Design {
   final double termsOverlayHeight; // 약관 동의 overlay 세로 크기
   final double termsAgreeButtonHeight; // 약관 동의 버튼 세로 크기
   final double homeImageSize; // refrigerator 로고 이미지 크기
+  final double cartImageSize; // cart 이미지 크기
 
   // 생성자에서 초기화
   Design(BuildContext context)
@@ -17,5 +18,6 @@ class Design {
       termsOverlayWidth = MediaQuery.of(context).size.width * 0.9,
       termsOverlayHeight = MediaQuery.of(context).size.height * 0.7,
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
-      homeImageSize = MediaQuery.of(context).size.width * 0.12;
+      homeImageSize = MediaQuery.of(context).size.width * 0.12,
+      cartImageSize = MediaQuery.of(context).size.width * 0.35;
 }
