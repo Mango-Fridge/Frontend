@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/view/group/modal_content_example.dart';
+import 'package:mango/view/group/group_modal_start_view.dart';
 
 
 class GroupView extends ConsumerWidget {
@@ -24,7 +24,7 @@ class GroupView extends ConsumerWidget {
               children: <Widget>[
                 groupGuideText(context), // 안내 문구
                 const SizedBox(height: 40),
-                const ModalContentExample(), // '그룹' 시작하기 버튼(모달 띄우기)
+                const GroupModalStartView(), // '그룹' 시작하기 버튼(모달 띄우기)
               ],
             ),
           ),

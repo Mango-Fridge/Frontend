@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // 모달 예제 뷰
-class ModalContentExample extends StatelessWidget {
-  const ModalContentExample({super.key});
+class GroupModalStartView extends StatelessWidget {
+  const GroupModalStartView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class ModalContentExample extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          showModalGroup(context); // '시작하기'버튼 클릭 시, 모달창 띄우기
+          showModalStartGroup(context); // '시작하기'버튼 클릭 시, 모달창 띄우기
         },
         child: const Text("시작하기", style: TextStyle(fontSize: 25)),
       ),
@@ -29,7 +29,7 @@ class ModalContentExample extends StatelessWidget {
 
 
 // 그룹에서 모달창
-void showModalGroup(BuildContext context) {
+void showModalStartGroup(BuildContext context) {
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
