@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchContentView extends ConsumerStatefulWidget {
   const SearchContentView({super.key});
@@ -49,7 +50,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
           ),
           ElevatedButton(
             onPressed: () {
-              // 직접 추가 로직
+              context.push('/addContent');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.amber[300],
