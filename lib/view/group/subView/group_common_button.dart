@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 Widget groupCommonButton({
   required BuildContext context,
   required String text, // 버튼 텍스트
-  required VoidCallback onPressed, // 버튼 액션
+  VoidCallback? onPressed, // 버튼 액션
 }) {
   return SizedBox(
     width: MediaQuery.of(context).size.width * 0.8,
