@@ -8,6 +8,7 @@ import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/content_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/view/refrigerator/content_detail_view.dart';
 
 // 냉장고 화면
 class RefrigeratorView extends ConsumerStatefulWidget {
@@ -227,69 +228,85 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 물품 별 UI 구성
   Widget _buildItemRow(Content content) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.amber[300],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  content.contentName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: ContentDetailView(content: content),
+            );
+          },
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.amber[300],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    content.contentName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  Text(
+                    '소비기한 ${content.expDate}',
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            // 수량 조절 버튼
+            Row(
+              children: <Widget>[
+                _quantityButton('-', () {
+                  ref
+                      .watch(contentProvider.notifier)
+                      .subContentCount(content.contentId);
+                }),
+                const SizedBox(width: 5),
+                Container(
+                  width: 30,
+                  height: 30,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    '${content.count}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                Text(
-                  '소비기한 ${content.expDate}',
-                  style: const TextStyle(fontSize: 12),
-                ),
+                const SizedBox(width: 5),
+                _quantityButton('+', () {
+                  ref
+                      .watch(contentProvider.notifier)
+                      .addContentCount(content.contentId);
+                }),
               ],
             ),
-          ),
-          // 수량 조절 버튼
-          Row(
-            children: <Widget>[
-              _quantityButton('-', () {
-                ref
-                    .watch(contentProvider.notifier)
-                    .subContentCount(content.contentId);
-              }),
-              const SizedBox(width: 5),
-              Container(
-                width: 30,
-                height: 30,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  '${content.count}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 5),
-              _quantityButton('+', () {
-                ref
-                    .watch(contentProvider.notifier)
-                    .addContentCount(content.contentId);
-              }),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
