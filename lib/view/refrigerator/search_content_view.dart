@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddContentView extends ConsumerStatefulWidget {
-  const AddContentView({super.key});
+class SearchContentView extends ConsumerStatefulWidget {
+  const SearchContentView({super.key});
   @override
-  ConsumerState<AddContentView> createState() => _AddContentViewState();
+  ConsumerState<SearchContentView> createState() => _SearchContentViewState();
 }
 
-class _AddContentViewState extends ConsumerState<AddContentView> {
+class _SearchContentViewState extends ConsumerState<SearchContentView> {
   final TextEditingController _controller = TextEditingController();
 
   @override
