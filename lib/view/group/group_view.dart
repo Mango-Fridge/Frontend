@@ -23,7 +23,7 @@ class GroupView extends ConsumerWidget {
               children: <Widget>[
                 groupGuideText(context), // 안내 문구
                 const SizedBox(height: 40),
-                const GroupModalStartView(), // '그룹' 시작하기 버튼(모달 띄우기)
+                const GroupModalStartButton(), // '그룹' 시작하기 버튼(모달 띄우기)
               ],
             ),
           ),
