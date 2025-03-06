@@ -20,34 +20,60 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
 
   bool showNutrition = false;
 
+  final TextEditingController capacityController = TextEditingController();
   final TextEditingController caloriesController = TextEditingController();
   final TextEditingController carbsController = TextEditingController();
   final TextEditingController proteinController = TextEditingController();
   final TextEditingController fatController = TextEditingController();
 
   bool get isNutritionEmpty {
-    return caloriesController.text.isEmpty ||
+    return capacityController.text.isEmpty ||
+        caloriesController.text.isEmpty ||
         carbsController.text.isEmpty ||
         proteinController.text.isEmpty ||
         fatController.text.isEmpty;
   }
 
-  Future<void> _selectDate(BuildContext context, bool isRegisterDate) async {
-    final DateTime? picked = await showDatePicker(
+  Future<void> _selectDateTime(
+    BuildContext context,
+    bool isRegisterDate,
+  ) async {
+    // 날짜 선택
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate:
           isRegisterDate ? registerDate : (expirationDate ?? DateTime.now()),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
+      locale: const Locale('ko', 'KR'),
     );
-    if (picked != null) {
-      setState(() {
-        if (isRegisterDate) {
-          registerDate = picked;
-        } else {
-          expirationDate = picked;
-        }
-      });
+
+    if (pickedDate != null) {
+      // 시간 선택
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(
+          isRegisterDate ? registerDate : (expirationDate ?? DateTime.now()),
+        ),
+      );
+
+      if (pickedTime != null) {
+        final DateTime combinedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        setState(() {
+          if (isRegisterDate) {
+            registerDate = combinedDateTime;
+          } else {
+            expirationDate = combinedDateTime;
+          }
+        });
+      }
     }
   }
 
@@ -145,12 +171,15 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                   Expanded(
                     child: Text(
-                      DateFormat('yyyy-MM-dd HH:mm:ss').format(registerDate),
+                      DateFormat(
+                        'a yyyy년 M월 d일 h시 mm분',
+                        'ko',
+                      ).format(registerDate),
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.calendar_today),
-                    onPressed: () => _selectDate(context, true),
+                    onPressed: () => _selectDateTime(context, true),
                   ),
                 ],
               ),
@@ -172,7 +201,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       expirationDate == null
                           ? '선택하세요'
                           : DateFormat(
-                            'yyyy-MM-dd HH:mm:ss',
+                            'a yyyy년 M월 d일 h시 mm분',
+                            'ko',
                           ).format(expirationDate!),
                       style: TextStyle(
                         color:
@@ -182,7 +212,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.calendar_today),
-                    onPressed: () => _selectDate(context, false),
+                    onPressed: () => _selectDateTime(context, false),
                   ),
                 ],
               ),
@@ -253,29 +283,30 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     IconButton(
                       icon: const Icon(Icons.help_outline),
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('영양 성분 입력 안내'),
-                              content: const Text(
-                                "각 영양 성분을 입력해야 '물품 공개 등록' 버튼을 활성화할 수 있습니다.",
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('확인'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return AlertDialog(
+                        //       title: const Text('영양 성분 입력 안내'),
+                        //       content: const Text(
+                        //         "각 영양 성분을 입력해야 '물품 공개 등록' 버튼을 활성화할 수 있습니다.",
+                        //       ),
+                        //       actions: <Widget>[
+                        //         TextButton(
+                        //           onPressed: () => Navigator.pop(context),
+                        //           child: const Text('확인'),
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // );
                       },
                     ),
                   ],
                 ),
                 children: <Widget>[
                   Column(
+                    spacing: 10,
                     children: <Widget>[
                       Row(
                         spacing: 10,
@@ -286,8 +317,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           ),
                           Expanded(
                             child: TextField(
-                              controller: caloriesController,
+                              controller: capacityController,
                               decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
                                 hintText: 'ex) 150',
                               ),
                               onChanged: (_) => setState(() {}),
@@ -310,27 +342,28 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       nutritionInputRow(
                         label: '열량',
                         controller: caloriesController,
-                        hintText: 'ex) 150kcal',
+                        hintText: 'ex) 150',
                         onChanged: () {},
                       ),
                       nutritionInputRow(
                         label: '탄수화물',
                         controller: carbsController,
-                        hintText: 'ex) 50g',
+                        hintText: 'ex) 50',
                         onChanged: () {},
                       ),
                       nutritionInputRow(
                         label: '단백질',
                         controller: proteinController,
-                        hintText: 'ex) 150g',
+                        hintText: 'ex) 150',
                         onChanged: () {},
                       ),
                       nutritionInputRow(
                         label: '지방',
                         controller: fatController,
-                        hintText: 'ex) 150g',
+                        hintText: 'ex) 150',
                         onChanged: () {},
                       ),
+                      const SizedBox(),
                     ],
                   ),
                 ],
@@ -341,7 +374,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   Expanded(
                     child: buildElevatedButton(
                       label: '물품 공개 등록',
-                      onPressed: isNutritionEmpty ? () {} : () {},
+                      onPressed: isNutritionEmpty ? null : () {},
                       backgroundColor: Colors.amber[200]!,
                       foregroundColor: Colors.black,
                     ),
@@ -380,7 +413,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         Expanded(
           child: TextField(
             controller: controller,
-            decoration: InputDecoration(hintText: hintText),
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              hintText: hintText,
+            ),
             onChanged: (_) {},
           ),
         ),
@@ -390,7 +426,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
 
   Widget buildElevatedButton({
     required String label,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
     required Color backgroundColor,
     required Color foregroundColor,
   }) {

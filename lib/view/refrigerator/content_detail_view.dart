@@ -45,12 +45,11 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
             children: <Widget>[
               Text('카테고리: ${widget.content.category}'),
               Text('수량: ${widget.content.count}'),
-              // 포맷 변경 해주기
               Text(
-                '등록 날짜: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.content.regDate)}',
+                '등록 날짜: ${DateFormat('a yyyy년 M월 d일 h시 mm분', 'ko').format(widget.content.regDate)}',
               ),
               Text(
-                '소비 기한: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.content.expDate)}',
+                '소비 기한: ${DateFormat('a yyyy년 M월 d일 h시 mm분', 'ko').format(widget.content.expDate)}',
               ),
               Text('보관 장소: ${widget.content.storageArea}'),
               Text('메모: ${widget.content.memo}', maxLines: 3),
