@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/view/group/group_modal_start_button.dart';
-
+import 'package:mango/providers/group_state_provider.dart';
+import 'package:mango/view/group/subView/group_common_button.dart';
 
 class GroupView extends ConsumerWidget {
   const GroupView({super.key});
@@ -23,7 +23,7 @@ class GroupView extends ConsumerWidget {
               children: <Widget>[
                 groupGuideText(context), // 안내 문구
                 const SizedBox(height: 40),
-                const GroupModalStartButton(), // '그룹' 시작하기 버튼(모달 띄우기)
+                groupModalStartButton(context, ref), // '그룹' 시작하기 버튼(모달 띄우기)
               ],
             ),
           ),
@@ -42,5 +42,17 @@ Widget groupGuideText(BuildContext context) {
       style: TextStyle(fontSize: 22),
       textAlign: TextAlign.center,
     ),
+  );
+}
+
+// 시작하기 버튼
+Widget groupModalStartButton(BuildContext context, WidgetRef ref) {
+  return groupCommonButton(
+    context: context,
+    text: "시작하기",
+    onPressed: () {
+      ref.read(groupModalStateProvider.notifier).state = GroupModalState.start; // 시작하기 버튼 클릭 시, 모달 '시작하기' 뷰로 초기화
+      showModalStartGroupView(context, ref);
+    },
   );
 }
