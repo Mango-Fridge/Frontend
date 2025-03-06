@@ -11,7 +11,7 @@ class GroupParticipationView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GroupState groupState = ref.watch(groupStateProvider);
-    final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
+    // final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
 
     return SizedBox(
       height: 400,

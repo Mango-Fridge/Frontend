@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/providers/group_state_provider.dart';
-import 'package:mango/view/group/modal_view/group_create_view.dart';
-import 'package:mango/view/group/modal_view/group_participation_view.dart';
 import 'package:mango/view/group/subView/group_common_button.dart';
 import 'package:mango/view/group/subView/group_modal_title.dart';
 
