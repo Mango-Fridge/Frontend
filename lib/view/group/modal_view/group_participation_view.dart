@@ -11,7 +11,7 @@ class GroupParticipationView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GroupState groupState = ref.watch(groupStateProvider);
-    // final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
+    final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
 
     return SizedBox(
       height: 400,
@@ -32,16 +32,16 @@ class GroupParticipationView extends ConsumerWidget {
                   hintText: '냉장고ID 입력',
                   errorText: groupState.errorMessage, // 에러 메시지 표시
                 ),
-                // onChanged:  // 입력값 지속적으로 상태확인
+                onChanged:  (String groupId) => groupNotifier.checkGroupParticipation(groupId),// 입력값 지속적으로 상태확인
               ),
             ),
             const Spacer(),
             groupCommonButton(
               context: context,
               text: "참여하기",
-              onPressed: () {
+              onPressed: groupState.isButton? () {
                 // 참여 로직 추가
-              },
+              } : null,
             ),
             const Spacer(),
           ],

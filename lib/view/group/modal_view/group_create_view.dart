@@ -32,7 +32,7 @@ class GroupCreateView extends ConsumerWidget {
                   hintText: '2~8자 입력',
                   errorText: groupState.errorMessage, // 에러 메시지 표시
                 ),
-                onChanged: (String groupName) => groupNotifier.updateGroupName(groupName), // 입력값 지속적으로 상태확인
+                onChanged: (String groupName) => groupNotifier.checkGroupName(groupName), // 입력값 지속적으로 상태확인
               ),
             ),
             const Spacer(),

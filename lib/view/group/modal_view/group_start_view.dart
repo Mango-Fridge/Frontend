@@ -34,7 +34,8 @@ class GroupStartView extends ConsumerWidget {
                 context: context,
                 text: "참여하기",
                 onPressed: () {
-                  ref.read(groupModalStateProvider.notifier).state = GroupModalState.participation; // '그룹(냉장고)' 생성하기 버튼 클릭 시, 모달 뷰
+                  ref.read(groupStateProvider.notifier).resetState(); // 참여하기 뷰로 갈 때, 상태초기화
+                  ref.read(groupModalStateProvider.notifier).state = GroupModalState.participation; // '그룹(냉장고)' 참여하기 버튼 클릭 시, 모달 뷰
                 },
               ),
               const Spacer(),

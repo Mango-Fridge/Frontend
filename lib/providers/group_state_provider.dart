@@ -1,30 +1,36 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/view/group/modal_view/group_create_view.dart';
 import 'package:mango/view/group/modal_view/group_participation_view.dart';
 import 'package:mango/view/group/modal_view/group_start_view.dart';
 
-// 그룹(냉장고) 유효성 상태관리를 위해 사용
+Timer? _debounce; // 타이머 선언 (멤버변수)
 
+// 그룹(냉장고) 유효성 상태관리를 위해 사용
 // 상태클래스
 class GroupState {
   final String groupName; // 그룹 이름
+  final String groupId; // 그룹id
   final String? errorMessage; // 에러메시지
   final bool isButton; // 버튼활성
 
   GroupState({
     required this.groupName,
+    required this.groupId,
     this.errorMessage,
     required this.isButton,
   });
 
   GroupState copyWith({
     String? groupName,
+    String? groupId,
     String? errorMessage,
     bool? isButton,
   }) {
     return GroupState(
       groupName: groupName ?? this.groupName,
+      groupId: groupId ?? this.groupId,
       errorMessage: errorMessage,
       isButton: isButton ?? this.isButton,
     );
@@ -35,11 +41,11 @@ class GroupStateNotifier extends Notifier<GroupState> {
   @override
   GroupState build() {
     // 초기 상태
-    return GroupState(groupName: '', errorMessage: null, isButton: false);
+    return GroupState(groupName: '', groupId: '', errorMessage: null, isButton: false);
   }
 
   // 그룹 생성 유효성 검사 및 업데이트
-  void updateGroupName(String groupName) {
+  void checkGroupName(String groupName) {
     // 공백 제거
     final trimmedName = groupName.trim();
 
@@ -89,12 +95,45 @@ class GroupStateNotifier extends Notifier<GroupState> {
     );
   }
 
-  // 그룹 생성하기 뷰로 갈 시, 상태초기화
-  void resetState() {
-    state = GroupState(groupName: '', errorMessage: null, isButton: false);
+  // 테스트: 참여하기 모달 뷰 - 타이머를 활용해서, 1.5초 뒤에 print
+  void checkGroupParticipation(String groupId) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 600), () {
+    // 공백 제거
+    final trimmeGroupId = groupId.trim();
+
+    // 문자가 공백일 때
+    if (trimmeGroupId.isEmpty) {
+      state = state.copyWith(
+        groupName: trimmeGroupId,
+        errorMessage: null,
+        isButton: false,
+      );
+      return;
+    } else if (!RegExp(r'^[가-힣a-zA-Z\s]+$').hasMatch(trimmeGroupId)) {
+      state = state.copyWith(
+        groupName: trimmeGroupId,
+        errorMessage: "한글과 영문만 입력해주세요.",
+        isButton: false,
+      );
+      return;
+    }
+    print(groupId);
+
+    // 그룹 참여 정상적 입력
+    state = state.copyWith(
+      groupId: trimmeGroupId,
+      errorMessage: null,
+      isButton: true,
+    );
+    });
   }
 
-  // 추후 참여하기 유효성 검사에 대한 로직 @@@@@@@@@@@@@@@@@@@
+  // 그룹 생성하기 뷰로 갈 시, 상태초기화
+  void resetState() {
+    state = GroupState(groupName: '', groupId: '', errorMessage: null, isButton: false);
+  }
 }
 
 // NotifierProvider 정의
