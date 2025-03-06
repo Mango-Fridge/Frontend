@@ -44,30 +44,38 @@ class GroupStateNotifier extends Notifier<GroupState> {
     final trimmedName = groupName.trim();
 
     // 문자가 공백일 때
-    if (trimmedName == '') {
+    if (trimmedName.isEmpty) {
       state = state.copyWith(
         groupName: trimmedName,
         errorMessage: null,
         isButton: false,
       );
       return;
-    }
-
-    // 문자 길이 (2~8자)
-    if (trimmedName.length < 2 || trimmedName.length > 8) {
+    } else if (RegExp(r'[~!@#$%^&*()_+|<>?:{}]').hasMatch(groupName)) { // 특수문자 사용 여부 확인
       state = state.copyWith(
         groupName: trimmedName,
-        errorMessage: "2~8자로 입력해주세요.",
+        errorMessage: "특수문자는 사용할 수 없습니다.",
         isButton: false,
       );
       return;
-    }
-
-    // 한글 & 영문만 (띄어쓰기, 특수문자 X)
-    if (!RegExp(r'^[가-힣a-zA-Z]+$').hasMatch(trimmedName)) {
+    } else if (!RegExp(r'^[가-힣a-zA-Z\s]+$').hasMatch(trimmedName)) { // 한글과 영문만 입력 가능
       state = state.copyWith(
         groupName: trimmedName,
         errorMessage: "한글과 영문만 입력해주세요.",
+        isButton: false,
+      );
+      return;
+    } else if (groupName.contains(' ')) { // 띄어쓰기 포함 여부 확인
+      state = state.copyWith(
+        groupName: trimmedName,
+        errorMessage: "띄어쓰기는 사용할 수 없습니다.",
+        isButton: false,
+      );
+      return;
+    } else if (trimmedName.length < 2 || trimmedName.length > 8) { // 문자 길이 (2~8자)
+      state = state.copyWith(
+        groupName: trimmedName,
+        errorMessage: "2~8자로 입력해주세요.",
         isButton: false,
       );
       return;
