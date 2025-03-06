@@ -18,13 +18,9 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
   Widget build(BuildContext context) {
     Design design = Design(context);
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: design.termsOverlayWidth * 0.035,
-        vertical: design.termsOverlayHeight * 0.02,
-      ),
+    return SizedBox(
       width: design.termsOverlayWidth,
-      height: design.termsOverlayHeight,
+      height: design.termsOverlayHeight * 0.85,
       child: Column(
         spacing: 10,
         children: <Widget>[
@@ -49,6 +45,7 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
             children: <Widget>[
               Text('카테고리: ${widget.content.category}'),
               Text('수량: ${widget.content.count}'),
+              // 포맷 변경 해주기
               Text(
                 '등록 날짜: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.content.regDate)}',
               ),
@@ -56,7 +53,7 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
                 '소비 기한: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.content.expDate)}',
               ),
               Text('보관 장소: ${widget.content.storageArea}'),
-              Text('메모: ${widget.content.memo}'),
+              Text('메모: ${widget.content.memo}', maxLines: 3),
               const Divider(),
               const Text(
                 '영양 성분',
@@ -67,21 +64,6 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
               Text('탄수화물: ${widget.content.nutriCarbohydrate}'),
               Text('단백질: ${widget.content.nutriProtein}'),
               Text('지방: ${widget.content.nutriFat}'),
-              const SizedBox(height: 60),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      '닫기',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ],

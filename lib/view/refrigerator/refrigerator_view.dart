@@ -41,9 +41,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     final Design design = Design(context);
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          scrolledUnderElevation: 0,
           leadingWidth: double.infinity,
           leading: Row(
             spacing: 15,
@@ -233,12 +234,23 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return Dialog(
+            return AlertDialog(
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              child: ContentDetailView(content: content),
+              content: ContentDetailView(content: content),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    '닫기',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
             );
           },
         );
