@@ -1,6 +1,10 @@
 import 'package:mango/model/content.dart';
 
 class ContentRepository {
+  Future<void> saveContent(Content content) async {
+    await Future.delayed(Duration(seconds: 1));
+  }
+
   // groupId로 content list 불러오는 함수
   Future<List<Content>> loadContentList(String groupId) async {
     // groupId 해당하는 content list 불러오는 api 호출

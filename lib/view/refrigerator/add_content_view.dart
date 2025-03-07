@@ -19,7 +19,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   DateTime? expirationDate;
 
   bool showNutrition = false;
+  final int _memoMaxLine = 3;
+  final int _memoMaxLength = 120;
 
+  final TextEditingController memoController = TextEditingController();
   final TextEditingController capacityController = TextEditingController();
   final TextEditingController caloriesController = TextEditingController();
   final TextEditingController carbsController = TextEditingController();
@@ -45,7 +48,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           isRegisterDate ? registerDate : (expirationDate ?? DateTime.now()),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
-      locale: const Locale('ko', 'KR'),
     );
 
     if (pickedDate != null) {
@@ -94,9 +96,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const TextField(
-                style: TextStyle(fontSize: 22.0),
-                decoration: InputDecoration(hintText: '물품 명을 입력해 주세요'),
+              TextField(
+                style: const TextStyle(fontSize: 22.0),
+                decoration: const InputDecoration(hintText: '물품 명을 입력해 주세요'),
+                onChanged: (String value) {
+                  // 물품 명 길이 예외 처리
+                },
               ),
               Row(
                 spacing: 10,
@@ -110,7 +115,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       ],
                     ),
                   ),
-
                   Expanded(
                     child: DropdownButton<String>(
                       value: category,
@@ -123,6 +127,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             );
                           }).toList(),
                       onChanged: (newValue) {
+                        // selectedCategory
                         setState(() {
                           category = newValue!;
                         });
@@ -143,7 +148,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       ],
                     ),
                   ),
-
                   Expanded(
                     child: TextField(
                       keyboardType: TextInputType.number,
@@ -153,6 +157,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       controller: TextEditingController(
                         text: quantity.toString(),
                       ),
+                      onChanged: (String value) {
+                        // 갯수 1개 미만 예외 처리
+                      },
                     ),
                   ),
                 ],
@@ -197,9 +204,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
 
                   Expanded(
+                    // expirationDate가 null일 때 예외 처리, 이건 submit 할 때.
                     child: Text(
                       expirationDate == null
-                          ? '선택하세요'
+                          ? '날짜를 선택하세요'
                           : DateFormat(
                             'a yyyy년 M월 d일 h시 mm분',
                             'ko',
@@ -240,6 +248,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             );
                           }).toList(),
                       onChanged: (newValue) {
+                        // selectedStorage
                         setState(() {
                           storage = newValue!;
                         });
@@ -248,7 +257,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                 ],
               ),
-
               Row(
                 spacing: 10,
                 children: <Widget>[
@@ -256,51 +264,34 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     width: design.screenWidth * 0.22,
                     child: const Text('메모'),
                   ),
-
                   Expanded(
-                    child: TextField(
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: '메모를 입력하세요',
-                      ),
-                      onChanged: (text) {
-                        setState(() {
-                          memo = text;
-                        });
-                      },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextField(
+                          controller: memoController,
+                          maxLines: _memoMaxLine,
+                          maxLength: _memoMaxLength,
+                          decoration: const InputDecoration(
+                            hintText: "메모를 입력하세요",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-
               ExpansionTile(
                 tilePadding: EdgeInsets.zero,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                title: const Row(
+                  spacing: 10,
                   children: <Widget>[
-                    const Text('영양 성분', style: TextStyle(fontSize: 14)),
-                    IconButton(
-                      icon: const Icon(Icons.help_outline),
-                      onPressed: () {
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return AlertDialog(
-                        //       title: const Text('영양 성분 입력 안내'),
-                        //       content: const Text(
-                        //         "각 영양 성분을 입력해야 '물품 공개 등록' 버튼을 활성화할 수 있습니다.",
-                        //       ),
-                        //       actions: <Widget>[
-                        //         TextButton(
-                        //           onPressed: () => Navigator.pop(context),
-                        //           child: const Text('확인'),
-                        //         ),
-                        //       ],
-                        //     );
-                        //   },
-                        // );
-                      },
+                    Text('영양 성분', style: TextStyle(fontSize: 14)),
+                    Tooltip(
+                      triggerMode: TooltipTriggerMode.tap,
+                      message: "각 영양 성분을 입력해야 \n'물품 공개 등록' 버튼을 \n활성화할 수 있습니다.",
+                      child: Icon(Icons.help_outline),
                     ),
                   ],
                 ),

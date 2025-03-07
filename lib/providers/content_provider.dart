@@ -8,6 +8,14 @@ class ContentNotifier extends Notifier<List<Content>> {
   @override
   List<Content> build() => <Content>[];
 
+  Future<void> saveContent(Content content) async {
+    try {
+      _contentRepository.saveContent(content);
+    } catch (e) {
+      // 에러 처리
+    }
+  }
+
   Future<void> loadContentList(String groupId) async {
     try {
       final List<Content> contentList = await _contentRepository
