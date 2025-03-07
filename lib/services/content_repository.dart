@@ -1,6 +1,7 @@
 import 'package:mango/model/content.dart';
 
 class ContentRepository {
+  // content 저장 함수
   Future<void> saveContent(Content content) async {
     await Future.delayed(Duration(seconds: 1));
   }

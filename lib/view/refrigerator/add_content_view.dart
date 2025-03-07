@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:intl/intl.dart';
+import 'package:mango/providers/add_content_provider.dart';
+import 'package:mango/providers/content_provider.dart';
+import 'package:mango/state/add_content_state.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
   const AddContentView({super.key});
@@ -10,18 +13,18 @@ class AddContentView extends ConsumerStatefulWidget {
 }
 
 class _AddContentViewState extends ConsumerState<AddContentView> {
-  String category = '아이스크림';
-  String storage = '냉장';
-  int quantity = 0;
-  String memo = '';
+  List<String> contentCategory = <String>['육류', '음료류', '채소류', '과자류', '아이스크림류'];
+  List<String> contentStorage = <String>['냉장', '냉동'];
 
-  DateTime registerDate = DateTime.now();
-  DateTime? expirationDate;
+  AddContentState? get addContentState => ref.watch(addContentProvider);
 
-  bool showNutrition = false;
-  final int _memoMaxLine = 3;
-  final int _memoMaxLength = 120;
+  static const int _memoMaxLine = 3;
+  static const int _memoMaxLength = 120;
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController countController = TextEditingController(
+    text: '1',
+  );
   final TextEditingController memoController = TextEditingController();
   final TextEditingController capacityController = TextEditingController();
   final TextEditingController caloriesController = TextEditingController();
@@ -29,54 +32,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   final TextEditingController proteinController = TextEditingController();
   final TextEditingController fatController = TextEditingController();
 
-  bool get isNutritionEmpty {
-    return capacityController.text.isEmpty ||
-        caloriesController.text.isEmpty ||
-        carbsController.text.isEmpty ||
-        proteinController.text.isEmpty ||
-        fatController.text.isEmpty;
-  }
-
-  Future<void> _selectDateTime(
-    BuildContext context,
-    bool isRegisterDate,
-  ) async {
-    // 날짜 선택
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate:
-          isRegisterDate ? registerDate : (expirationDate ?? DateTime.now()),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate != null) {
-      // 시간 선택
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(
-          isRegisterDate ? registerDate : (expirationDate ?? DateTime.now()),
-        ),
-      );
-
-      if (pickedTime != null) {
-        final DateTime combinedDateTime = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-
-        setState(() {
-          if (isRegisterDate) {
-            registerDate = combinedDateTime;
-          } else {
-            expirationDate = combinedDateTime;
-          }
-        });
-      }
-    }
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -97,10 +55,19 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextField(
+                controller: nameController,
                 style: const TextStyle(fontSize: 22.0),
-                decoration: const InputDecoration(hintText: '물품 명을 입력해 주세요'),
+                decoration: InputDecoration(
+                  hintText: '물품 명을 입력해 주세요',
+                  errorText:
+                      addContentState?.contentNameErrorMessage?.isEmpty ?? true
+                          ? null
+                          : addContentState?.contentNameErrorMessage,
+                ),
                 onChanged: (String value) {
-                  // 물품 명 길이 예외 처리
+                  ref
+                      .watch(addContentProvider.notifier)
+                      .updateNameErrorMessage(value);
                 },
               ),
               Row(
@@ -117,20 +84,21 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                   Expanded(
                     child: DropdownButton<String>(
-                      value: category,
+                      value:
+                          addContentState?.selectedContentCategory ??
+                          contentCategory[0],
                       isExpanded: true,
                       items:
-                          <String>['수제쿠키', '아이스크림', '육류'].map((String value) {
+                          contentCategory.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
                             );
                           }).toList(),
-                      onChanged: (newValue) {
-                        // selectedCategory
-                        setState(() {
-                          category = newValue!;
-                        });
+                      onChanged: (String? newValue) {
+                        ref
+                            .watch(addContentProvider.notifier)
+                            .setCategory(newValue ?? '');
                       },
                     ),
                   ),
@@ -150,15 +118,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: countController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      controller: TextEditingController(
-                        text: quantity.toString(),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        errorText:
+                            addContentState
+                                        ?.contentCountErrorMessage
+                                        ?.isEmpty ??
+                                    true
+                                ? null
+                                : addContentState?.contentCountErrorMessage,
                       ),
                       onChanged: (String value) {
-                        // 갯수 1개 미만 예외 처리
+                        ref
+                            .watch(addContentProvider.notifier)
+                            .updateCount(value);
                       },
                     ),
                   ),
@@ -178,10 +153,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                   Expanded(
                     child: Text(
-                      DateFormat(
-                        'a yyyy년 M월 d일 h시 mm분',
-                        'ko',
-                      ).format(registerDate),
+                      DateFormat('a yyyy년 M월 d일 h시 mm분', 'ko').format(
+                        addContentState?.selectedRegDate ?? DateTime.now(),
+                      ),
                     ),
                   ),
                   IconButton(
@@ -206,15 +180,16 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   Expanded(
                     // expirationDate가 null일 때 예외 처리, 이건 submit 할 때.
                     child: Text(
-                      expirationDate == null
+                      addContentState?.selectedExpDate == null
                           ? '날짜를 선택하세요'
-                          : DateFormat(
-                            'a yyyy년 M월 d일 h시 mm분',
-                            'ko',
-                          ).format(expirationDate!),
+                          : DateFormat('a yyyy년 M월 d일 h시 mm분', 'ko').format(
+                            addContentState!.selectedExpDate ?? DateTime.now(),
+                          ),
                       style: TextStyle(
                         color:
-                            expirationDate == null ? Colors.grey : Colors.black,
+                            addContentState?.selectedExpDate == null
+                                ? Colors.red[300]
+                                : Colors.black,
                       ),
                     ),
                   ),
@@ -238,20 +213,21 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                   Expanded(
                     child: DropdownButton<String>(
-                      value: storage,
+                      value:
+                          addContentState?.selectedContentStorage ??
+                          contentStorage[0],
                       isExpanded: true,
                       items:
-                          <String>['냉장', '냉동'].map((String value) {
+                          contentStorage.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
                             );
                           }).toList(),
-                      onChanged: (newValue) {
-                        // selectedStorage
-                        setState(() {
-                          storage = newValue!;
-                        });
+                      onChanged: (String? newValue) {
+                        ref
+                            .watch(addContentProvider.notifier)
+                            .setStorage(newValue ?? '');
                       },
                     ),
                   ),
@@ -308,23 +284,36 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           ),
                           Expanded(
                             child: TextField(
+                              keyboardType: TextInputType.number,
                               controller: capacityController,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 hintText: 'ex) 150',
                               ),
-                              onChanged: (_) => setState(() {}),
+                              onChanged: (String? newValue) {
+                                ref
+                                    .read(addContentProvider.notifier)
+                                    .updateCapacity(capacityController.text);
+                              },
                             ),
                           ),
                           buildElevatedButton(
                             label: 'g',
-                            onPressed: () {},
+                            onPressed: () {
+                              ref
+                                  .watch(addContentProvider.notifier)
+                                  .setUnit('g');
+                            },
                             backgroundColor: Colors.amber[300]!,
                             foregroundColor: Colors.black,
                           ),
                           buildElevatedButton(
                             label: 'ml',
-                            onPressed: () {},
+                            onPressed: () {
+                              ref
+                                  .watch(addContentProvider.notifier)
+                                  .setUnit('ml');
+                            },
                             backgroundColor: Colors.amber[300]!,
                             foregroundColor: Colors.black,
                           ),
@@ -334,25 +323,41 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         label: '열량',
                         controller: caloriesController,
                         hintText: 'ex) 150',
-                        onChanged: () {},
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateCalories(caloriesController.text);
+                        },
                       ),
                       nutritionInputRow(
                         label: '탄수화물',
                         controller: carbsController,
                         hintText: 'ex) 50',
-                        onChanged: () {},
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateCarbs(carbsController.text);
+                        },
                       ),
                       nutritionInputRow(
                         label: '단백질',
                         controller: proteinController,
                         hintText: 'ex) 150',
-                        onChanged: () {},
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateProtein(proteinController.text);
+                        },
                       ),
                       nutritionInputRow(
                         label: '지방',
                         controller: fatController,
                         hintText: 'ex) 150',
-                        onChanged: () {},
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateFat(fatController.text);
+                        },
                       ),
                       const SizedBox(),
                     ],
@@ -365,7 +370,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   Expanded(
                     child: buildElevatedButton(
                       label: '물품 공개 등록',
-                      onPressed: isNutritionEmpty ? null : () {},
+                      onPressed:
+                          addContentState?.isNutritionEmpty ?? false
+                              ? () {
+                                print('test');
+                              }
+                              : null,
                       backgroundColor: Colors.amber[200]!,
                       foregroundColor: Colors.black,
                     ),
@@ -373,7 +383,43 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   Expanded(
                     child: buildElevatedButton(
                       label: '물품 등록',
-                      onPressed: () {},
+                      onPressed:
+                          addContentState?.isDetailInfoEmpty ?? false
+                              ? () {
+                                ref
+                                    .watch(contentProvider.notifier)
+                                    .saveContent(
+                                      nameController.text,
+                                      addContentState
+                                              ?.selectedContentCategory ??
+                                          contentCategory[0],
+                                      int.parse(countController.text),
+                                      addContentState?.selectedRegDate ??
+                                          DateTime.now(),
+                                      addContentState?.selectedRegDate ??
+                                          DateTime.now(),
+                                      addContentState?.selectedContentStorage ??
+                                          contentStorage[0],
+                                      memoController.text,
+                                      '',
+                                      capacityController.text.isNotEmpty
+                                          ? int.parse(capacityController.text)
+                                          : 0,
+                                      caloriesController.text.isNotEmpty
+                                          ? int.parse(caloriesController.text)
+                                          : 0,
+                                      carbsController.text.isNotEmpty
+                                          ? int.parse(carbsController.text)
+                                          : 0,
+                                      proteinController.text.isNotEmpty
+                                          ? int.parse(proteinController.text)
+                                          : 0,
+                                      fatController.text.isNotEmpty
+                                          ? int.parse(fatController.text)
+                                          : 0,
+                                    );
+                              }
+                              : null,
                       backgroundColor: Colors.amber[300]!,
                       foregroundColor: Colors.black,
                     ),
@@ -403,12 +449,17 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         ),
         Expanded(
           child: TextField(
+            keyboardType: TextInputType.number,
             controller: controller,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               hintText: hintText,
             ),
-            onChanged: (_) {},
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                onChanged();
+              }
+            },
           ),
         ),
       ],
@@ -432,5 +483,49 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       ),
       child: Text(label, style: TextStyle(color: foregroundColor)),
     );
+  }
+
+  Future<void> _selectDateTime(
+    BuildContext context,
+    bool isRegisterDate,
+  ) async {
+    // 날짜 선택
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate:
+          isRegisterDate
+              ? addContentState?.selectedRegDate
+              : (addContentState?.selectedExpDate ?? DateTime.now()),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      // 시간 선택
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(
+          isRegisterDate
+              ? addContentState?.selectedRegDate ?? DateTime.now()
+              : (addContentState?.selectedExpDate ?? DateTime.now()),
+        ),
+      );
+
+      if (pickedTime != null) {
+        final DateTime combinedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        if (isRegisterDate) {
+          ref.watch(addContentProvider.notifier).setRegDate(combinedDateTime);
+        } else {
+          ref.watch(addContentProvider.notifier).setExpDate(combinedDateTime);
+        }
+      }
+    }
   }
 }

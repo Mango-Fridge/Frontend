@@ -15,7 +15,7 @@ class Content {
   final int nutriFat;
 
   Content({
-    required this.contentId,
+    this.contentId = '',
     required this.contentName,
     required this.category,
     required this.count,
