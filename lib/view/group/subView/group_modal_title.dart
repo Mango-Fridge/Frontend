@@ -12,16 +12,20 @@ Widget groupModalTitle({
 }) {
   return Consumer(
     builder: (context, ref, child) {
+      final currentState = ref.read(groupModalStateProvider);
+
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start, // 위쪽 정렬
           children: <Widget>[
             IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: Icon(
+                // '냉장고 시작하기' 모달 뷰일 때는 뒤로가기 버튼 'X'
+                currentState == GroupModalViewState.start ? Icons.close : Icons.arrow_back,
+              ),
               iconSize: 25,
               onPressed: () {
-                final currentState = ref.read(groupModalStateProvider);
                 if (currentState == GroupModalViewState.start) {
                   context.pop(); // go_router 사용하여 해당 모달창 닫기
                 } else {
