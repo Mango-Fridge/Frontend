@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/model/group_state.dart';
 import 'package:mango/providers/group_state_provider.dart';
 import 'package:mango/view/group/subView/group_common_button.dart';
@@ -42,6 +43,8 @@ class GroupParticipationView extends ConsumerWidget {
               text: "참여하기",
               onPressed: groupState.isButton? () {
                 // 참여 로직 추가
+                
+                context.pop(); // Sheet 닫기
               } : null,
             ),
             const Spacer(),
