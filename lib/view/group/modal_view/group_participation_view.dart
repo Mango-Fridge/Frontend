@@ -25,7 +25,7 @@ class GroupParticipationView extends ConsumerWidget {
               textTitle: '기존 냉장고 참여하기',
               textSub: '다른 냉장고ID를 입력해 참여하세요',
             ),
-            const Spacer(),
+            // const Spacer(),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: TextField(

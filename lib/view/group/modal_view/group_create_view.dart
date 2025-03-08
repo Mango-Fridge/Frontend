@@ -25,7 +25,7 @@ class GroupCreateView extends ConsumerWidget {
               textTitle: '냉장고 생성하기',
               textSub: '냉장고 이름을 정하여 만들어보세요',
             ),
-            const Spacer(),
+            // const Spacer(),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.1,
