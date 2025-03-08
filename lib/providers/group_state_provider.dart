@@ -1,10 +1,6 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/group_state.dart';
-import 'package:mango/view/group/modal_view/group_create_view.dart';
-import 'package:mango/view/group/modal_view/group_participation_view.dart';
-import 'package:mango/view/group/modal_view/group_start_view.dart';
 
 // 그룹(냉장고) 유효성 상태관리를 위해 사용
 class GroupStateNotifier extends Notifier<GroupState> {
@@ -13,98 +9,116 @@ class GroupStateNotifier extends Notifier<GroupState> {
   @override
   GroupState build() {
     // 초기 상태
-    return GroupState(groupName: '', groupId: '', errorMessage: null, isButton: false);
+    return GroupState(
+      groupName: '',
+      groupId: '',
+      errorMessage: null,
+      isButton: false,
+    );
   }
 
   // 그룹 생성 유효성 검사 및 업데이트
   void checkGroupName(String groupName) {
-    // 공백 제거
-    final trimmedName = groupName.trim();
+    final trimmedName = groupName.trim(); // 공백 제거
 
-    // 문자가 공백일 때
-    if (trimmedName.isEmpty) {
+    // 새로운 입력이 발생할 때마다 이전 타이머를 취소하는 역할
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    // 타이머 시작
+    _debounce = Timer(const Duration(milliseconds: 600), () {
+      // 문자가 공백일 때
+      if (trimmedName.isEmpty) {
+        state = state.copyWith(
+          groupName: trimmedName,
+          errorMessage: null,
+          isButton: false,
+        );
+        return;
+      }
+      if (RegExp(r'[~!@#$%^&*()_+|<>?:{}]').hasMatch(groupName)) {
+        // 특수문자 사용 여부 확인
+        state = state.copyWith(
+          groupName: trimmedName,
+          errorMessage: "특수문자는 사용할 수 없습니다.",
+          isButton: false,
+        );
+        return;
+      } else if (!RegExp(r'^[가-힣a-zA-Z\s]+$').hasMatch(trimmedName)) {
+        // 한글과 영문만 입력 가능
+        state = state.copyWith(
+          groupName: trimmedName,
+          errorMessage: "한글과 영문만 입력해주세요.",
+          isButton: false,
+        );
+        return;
+      } else if (groupName.contains(' ')) {
+        // 띄어쓰기 포함 여부 확인
+        state = state.copyWith(
+          groupName: trimmedName,
+          errorMessage: "띄어쓰기는 사용할 수 없습니다.",
+          isButton: false,
+        );
+        return;
+      } else if (trimmedName.length < 2 || trimmedName.length > 8) {
+        // 문자 길이 (2~8자)
+        state = state.copyWith(
+          groupName: trimmedName,
+          errorMessage: "2~8자로 입력해주세요.",
+          isButton: false,
+        );
+        return;
+      }
+
+      // 그룹 생성 정상적 입력
       state = state.copyWith(
         groupName: trimmedName,
         errorMessage: null,
-        isButton: false,
+        isButton: true,
       );
-      return;
-    } else if (RegExp(r'[~!@#$%^&*()_+|<>?:{}]').hasMatch(groupName)) { // 특수문자 사용 여부 확인
-      state = state.copyWith(
-        groupName: trimmedName,
-        errorMessage: "특수문자는 사용할 수 없습니다.",
-        isButton: false,
-      );
-      return;
-    } else if (!RegExp(r'^[가-힣a-zA-Z\s]+$').hasMatch(trimmedName)) { // 한글과 영문만 입력 가능
-      state = state.copyWith(
-        groupName: trimmedName,
-        errorMessage: "한글과 영문만 입력해주세요.",
-        isButton: false,
-      );
-      return;
-    } else if (groupName.contains(' ')) { // 띄어쓰기 포함 여부 확인
-      state = state.copyWith(
-        groupName: trimmedName,
-        errorMessage: "띄어쓰기는 사용할 수 없습니다.",
-        isButton: false,
-      );
-      return;
-    } else if (trimmedName.length < 2 || trimmedName.length > 8) { // 문자 길이 (2~8자)
-      state = state.copyWith(
-        groupName: trimmedName,
-        errorMessage: "2~8자로 입력해주세요.",
-        isButton: false,
-      );
-      return;
-    }
-
-    // 그룹 생성 정상적 입력
-    state = state.copyWith(
-      groupName: trimmedName,
-      errorMessage: null,
-      isButton: true,
-    );
+    });
   }
 
   // 테스트: 참여하기 모달 뷰 - 타이머를 활용해서, 1.5초 뒤에 print
   void checkGroupParticipation(String groupId) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-
     _debounce = Timer(const Duration(milliseconds: 600), () {
-    // 공백 제거
-    final trimmeGroupId = groupId.trim();
+      // 공백 제거
+      final trimmeGroupId = groupId.trim();
 
-    // 문자가 공백일 때
-    if (trimmeGroupId.isEmpty) {
+      // 문자가 공백일 때
+      if (trimmeGroupId.isEmpty) {
+        state = state.copyWith(
+          groupName: trimmeGroupId,
+          errorMessage: null,
+          isButton: false,
+        );
+        return;
+      } else if (!RegExp(r'^[가-힣a-zA-Z\s]+$').hasMatch(trimmeGroupId)) {
+        state = state.copyWith(
+          groupName: trimmeGroupId,
+          errorMessage: "한글과 영문만 입력해주세요.",
+          isButton: false,
+        );
+        return;
+      }
+      print(groupId);
+
+      // 그룹 참여 정상적 입력
       state = state.copyWith(
-        groupName: trimmeGroupId,
+        groupId: trimmeGroupId,
         errorMessage: null,
-        isButton: false,
+        isButton: true,
       );
-      return;
-    } else if (!RegExp(r'^[가-힣a-zA-Z\s]+$').hasMatch(trimmeGroupId)) {
-      state = state.copyWith(
-        groupName: trimmeGroupId,
-        errorMessage: "한글과 영문만 입력해주세요.",
-        isButton: false,
-      );
-      return;
-    }
-    print(groupId);
-
-    // 그룹 참여 정상적 입력
-    state = state.copyWith(
-      groupId: trimmeGroupId,
-      errorMessage: null,
-      isButton: true,
-    );
     });
   }
 
   // 그룹 생성하기 뷰로 갈 시, 상태초기화
   void resetState() {
-    state = GroupState(groupName: '', groupId: '', errorMessage: null, isButton: false);
+    state = GroupState(
+      groupName: '',
+      groupId: '',
+      errorMessage: null,
+      isButton: false,
+    );
   }
 }
 
@@ -124,40 +138,3 @@ enum GroupModalState {
 final groupModalStateProvider = StateProvider<GroupModalState>((ref) {
   return GroupModalState.start; // 초기 값 - 그룹 '시작하기' 뷰
 });
-
-// 모달창을 보여주는 함수
-void showModalStartGroupView(BuildContext context, WidgetRef ref) {
-  showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true, // 키보드 올라올 때 모달 크기 조정 가능하게
-    builder: (BuildContext context) {
-      return GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
-        },
-        behavior: HitTestBehavior.opaque, // 빈 공간 터치 가능하게
-        child: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom, //키보드 높이만큼 패딩 추가
-          ),
-          child: Consumer(
-            builder: (context, WidgetRef ref, child) {
-              final groupModalState = ref.watch(
-                groupModalStateProvider,
-              ); // 상태를 계속 추적하여 변화
-
-              switch (groupModalState) {
-                case GroupModalState.start:
-                  return const GroupStartView(); // 모달 시작하기 뷰
-                case GroupModalState.create:
-                  return const GroupCreateView(); // 모달 생성하기 뷰
-                case GroupModalState.participation:
-                  return const GroupParticipationView(); // 모달 참여하기 뷰
-              }
-            },
-          ),
-        ),
-      );
-    },
-  );
-}
