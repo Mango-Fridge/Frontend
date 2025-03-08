@@ -1,4 +1,4 @@
-// 그룹 - 상태 클래스
+// 그룹 - 상태 클래스: 유효성 검사 및 통신에 사용
 class GroupState {
   final String groupName; // 그룹 이름
   final String groupId; // 그룹id

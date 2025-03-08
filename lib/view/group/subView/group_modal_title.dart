@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/model/group_modal_view_state.dart';
 import 'package:mango/providers/group_state_provider.dart';
 
 // 공통적으로 그룹 모달에서 사용할 상단바
@@ -21,10 +22,10 @@ Widget groupModalTitle({
               iconSize: 25,
               onPressed: () {
                 final currentState = ref.read(groupModalStateProvider);
-                if (currentState == GroupModalState.start) {
+                if (currentState == GroupModalViewState.start) {
                   context.pop(); // go_router 사용하여 해당 모달창 닫기
                 } else {
-                  ref.read(groupModalStateProvider.notifier).state = GroupModalState.start; // 그룹 모달 시작 뷰
+                  ref.read(groupModalStateProvider.notifier).state = GroupModalViewState.start; // 그룹 모달 시작 뷰
                 }
               },
             ),
