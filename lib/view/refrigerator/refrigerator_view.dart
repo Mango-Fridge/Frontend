@@ -22,7 +22,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 상태관리 관련 선언부
   AuthInfo? get user => ref.watch(loginAuthProvider);
   List<Group>? get _groupList => ref.watch(groupProvider);
-  List<Content>? get _contentList => ref.watch(contentProvider);
+  RefrigeratorState? get _refrigeratorViewState => ref.watch(contentProvider);
+
+  // 추후 옮길 상태 관리 변수
+  bool isUpdatedContent = false;
 
   String? _selectedGroup; // 선택 된 그룹
   String? _selectedGroupId; // 선택 된 그룹 Id
@@ -148,18 +151,28 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           )
                           : ListView(
                             padding: EdgeInsets.zero,
-                            children: <Widget>[_buildContent(_contentList)],
+                            children: <Widget>[
+                              _buildContent(
+                                _refrigeratorViewState?.contentList,
+                              ),
+                            ],
                           ),
                 ),
+
+                if (isUpdatedContent) _contentUpdateView(),
               ],
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.push('/cook');
-          },
-        ),
+
+        floatingActionButton:
+            isUpdatedContent
+                ? null
+                : FloatingActionButton(
+                  onPressed: () {
+                    context.push('/cook');
+                  },
+                ),
       ),
     );
   }
@@ -291,6 +304,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   ref
                       .watch(contentProvider.notifier)
                       .subContentCount(content.contentId);
+                  isUpdatedContent = true;
                 }),
                 const SizedBox(width: 5),
                 Container(
@@ -314,6 +328,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   ref
                       .watch(contentProvider.notifier)
                       .addContentCount(content.contentId);
+                  print('개수1 : ${content.count}');
+                  print(
+                    '개수2 : ${_refrigeratorViewState!.contentList![0].count}',
+                  );
                 }),
               ],
             ),
@@ -339,6 +357,88 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           symbol,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
+      ),
+    );
+  }
+
+  Widget _contentUpdateView() {
+    final List<Map<String, dynamic>> items = [
+      {"name": "코카콜라", "count": 1},
+      {"name": "냉동 삼겹살", "count": -1},
+    ];
+    Design design = Design(context);
+    return Container(
+      color: Colors.grey[200],
+      height: design.screenHeight * 0.2,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return ListTile(
+                  leading: Icon(Icons.cancel, color: Colors.red),
+                  title: Text(item['name']),
+                  trailing: Text(
+                    '${item['count'] > 0 ? '+' : ''}${item['count']}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                );
+              },
+            ),
+          ),
+          _contentUpdateButtons(),
+        ],
+      ),
+    );
+  }
+
+  Widget _contentUpdateButtons() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      child: Row(
+        spacing: 10,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isUpdatedContent = false;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('전체 취소'),
+            ),
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isUpdatedContent = false;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                backgroundColor: Colors.amber[300],
+                foregroundColor: Colors.black,
+              ),
+              child: const Text('물품 개수 반영'),
+            ),
+          ),
+        ],
       ),
     );
   }

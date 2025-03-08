@@ -2,11 +2,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/services/content_repository.dart';
 
-class ContentNotifier extends Notifier<List<Content>> {
+class RefrigeratorState {
+  List<Content>? contentList;
+  List<Content>? updateContentList;
+
+  RefrigeratorState({this.contentList, this.updateContentList});
+
+  RefrigeratorState copyWith({
+    List<Content>? contentList,
+    List<Content>? updateContentList,
+  }) {
+    return RefrigeratorState(
+      contentList: contentList ?? this.contentList,
+      updateContentList: updateContentList ?? this.updateContentList,
+    );
+  }
+}
+
+class ContentNotifier extends Notifier<RefrigeratorState?> {
   final ContentRepository _contentRepository = ContentRepository();
+  RefrigeratorState _refrigeratorState = RefrigeratorState();
 
   @override
-  List<Content> build() => <Content>[];
+  RefrigeratorState? build() => null;
 
   Future<void> saveContent(
     String contentName,
@@ -50,33 +68,37 @@ class ContentNotifier extends Notifier<List<Content>> {
     try {
       final List<Content> contentList = await _contentRepository
           .loadContentList(groupId);
-      state = contentList;
+      _refrigeratorState.contentList = contentList;
+      state = _refrigeratorState;
     } catch (e) {
-      state = <Content>[];
+      state = null;
     }
   }
 
   void addContentCount(String contentId) {
-    state =
-        state.map((Content content) {
+    _refrigeratorState.contentList =
+        state?.contentList?.map((Content content) {
           if (content.contentId == contentId) {
             return content.copyWith(count: content.count + 1);
           }
-
           return content;
         }).toList();
+
+    state = _refrigeratorState;
   }
 
   void subContentCount(String contentId) {
-    state =
-        state.map((Content content) {
+    state?.contentList =
+        state?.contentList?.map((Content content) {
           if (content.contentId == contentId && content.count > 0) {
             return content.copyWith(count: content.count - 1);
           }
           return content;
         }).toList();
+
+    state = state;
   }
 }
 
-final NotifierProvider<ContentNotifier, List<Content>> contentProvider =
-    NotifierProvider<ContentNotifier, List<Content>>(ContentNotifier.new);
+final NotifierProvider<ContentNotifier, RefrigeratorState?> contentProvider =
+    NotifierProvider<ContentNotifier, RefrigeratorState?>(ContentNotifier.new);
