@@ -152,5 +152,5 @@ class GroupStateNotifier extends Notifier<GroupState> {
 }
 
 // NotifierProvider 정의
-final NotifierProviderImpl<GroupStateNotifier, GroupState> groupStateProvider =
+final NotifierProvider<GroupStateNotifier, GroupState> groupStateProvider =
     NotifierProvider<GroupStateNotifier, GroupState>(GroupStateNotifier.new);
