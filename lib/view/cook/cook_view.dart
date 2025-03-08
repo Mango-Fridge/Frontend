@@ -21,9 +21,9 @@ class CookView extends ConsumerWidget {
           children: [
             // + 버튼 (상단 박스 형태)
             Container(
-              width: 200, // 전체 너비
-              height: 50, // 버튼 높이
-              color: Colors.yellow, // 이미지와 동일한 색상
+              width: 200,
+              height: 50,
+              color: Colors.yellow,
               child: IconButton(
                 icon: const Icon(Icons.add, color: Colors.white),
                 onPressed: () {
@@ -49,7 +49,7 @@ class CookView extends ConsumerWidget {
             const SizedBox(height: 20),
             // 요리 추가를 위한 아이콘 (이미지와 유사)
             const Icon(Icons.local_dining, size: 50, color: Colors.black),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             const Text('식사를 추가해보세요', style: TextStyle(fontSize: 16)),
           ],
         ),
