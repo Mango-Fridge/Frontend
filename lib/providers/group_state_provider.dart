@@ -1,43 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/group_state.dart';
 import 'package:mango/view/group/modal_view/group_create_view.dart';
 import 'package:mango/view/group/modal_view/group_participation_view.dart';
 import 'package:mango/view/group/modal_view/group_start_view.dart';
 
-Timer? _debounce; // 타이머 선언 (멤버변수)
-
 // 그룹(냉장고) 유효성 상태관리를 위해 사용
-// 상태클래스
-class GroupState {
-  final String groupName; // 그룹 이름
-  final String groupId; // 그룹id
-  final String? errorMessage; // 에러메시지
-  final bool isButton; // 버튼활성
-
-  GroupState({
-    required this.groupName,
-    required this.groupId,
-    this.errorMessage,
-    required this.isButton,
-  });
-
-  GroupState copyWith({
-    String? groupName,
-    String? groupId,
-    String? errorMessage,
-    bool? isButton,
-  }) {
-    return GroupState(
-      groupName: groupName ?? this.groupName,
-      groupId: groupId ?? this.groupId,
-      errorMessage: errorMessage,
-      isButton: isButton ?? this.isButton,
-    );
-  }
-}
-
 class GroupStateNotifier extends Notifier<GroupState> {
+  Timer? _debounce; // 타이머 선언
+
   @override
   GroupState build() {
     // 초기 상태
@@ -176,11 +148,11 @@ void showModalStartGroupView(BuildContext context, WidgetRef ref) {
 
               switch (groupModalState) {
                 case GroupModalState.start:
-                  return const GroupStartView();
+                  return const GroupStartView(); // 모달 시작하기 뷰
                 case GroupModalState.create:
-                  return const GroupCreateView();
+                  return const GroupCreateView(); // 모달 생성하기 뷰
                 case GroupModalState.participation:
-                  return const GroupParticipationView();
+                  return const GroupParticipationView(); // 모달 참여하기 뷰
               }
             },
           ),
