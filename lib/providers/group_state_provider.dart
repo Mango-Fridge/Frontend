@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/group.dart';
 import 'package:mango/model/group_state.dart';
 import 'package:mango/services/group_repository.dart';
-import 'package:riverpod/src/notifier.dart';
 
 // 그룹(냉장고) 유효성 상태관리를 위해 사용
 class GroupStateNotifier extends Notifier<GroupState> {
@@ -15,8 +13,8 @@ class GroupStateNotifier extends Notifier<GroupState> {
     return GroupState(
       groupId: null,
       groupName: null,
-      groupOwner: null,
-      groupUsers: <GroupUser>[],
+      gruoupUserKing: null,
+      groupUserCount: null,
       errorMessage: null,
       isButton: false,
     );
@@ -94,10 +92,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
       // 문자가 공백일 때
       if (trimmeGroupId.isEmpty) {
         state = state.copyWith(
-          groupId: '',
-          groupName: '',
-          groupOwner: '',
-          groupUsers: <GroupUser>[],
+          groupId: null,
           errorMessage: null,
           isButton: false,
         );
@@ -105,20 +100,13 @@ class GroupStateNotifier extends Notifier<GroupState> {
       }
 
       // 그룹 ID가 존재하는 지 확인 후, 데이터 담기
-      final Group selectedGroup = groupRepository.dummyGroups.firstWhere(
-        (group) => group.groupId == trimmeGroupId,
-        orElse:
-            () => Group(
-              // 그룹 ID가 없다면
-              groupId: '',
-              groupName: '',
-              groupOwner: '',
-              groupUsers: <GroupUser>[],
-            ),
+      final Map<String, dynamic> selectedGroup = groupRepository.dummyGroups.firstWhere(
+        (group) => group['groupId'] == trimmeGroupId,
+        orElse: () => <String, dynamic>{}, // 없다면 빈값으로 반환
       );
 
       // 냉장고ID가 존재하지 않을 때
-      if (selectedGroup.groupId == '') {
+      if (selectedGroup.isEmpty) {
         state = state.copyWith(
           errorMessage: "냉장고ID가 존재하지 않습니다",
           isButton: false,
@@ -127,12 +115,9 @@ class GroupStateNotifier extends Notifier<GroupState> {
         // 그룹 참여 정상적 입력
         state = state.copyWith(
           groupId: trimmeGroupId, // 존재하는 그룹ID
-          groupName: selectedGroup.groupName, // 존재하는 그룹이름
-          groupOwner: selectedGroup.groupUsers?.firstWhere(
-            (user) => user.email == selectedGroup.groupOwner,
-            orElse: () => GroupUser(email: '', nickName: ''),
-          ).nickName, // 그룹장 닉네임
-          groupUsers: selectedGroup.groupUsers, // 존재하는 그룹인원들
+          groupName: selectedGroup['groupName'], // 존재하는 그룹이름
+          gruoupUserKing: selectedGroup['groupUserKing'],
+          groupUserCount: selectedGroup['groupUserCount'],
           errorMessage: null,
           isButton: true,
         );

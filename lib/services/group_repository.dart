@@ -13,37 +13,25 @@ class GroupRepository {
     ];
   }
 
-  // 그룹id 존재 여부 - 더미값
-  final List<Group> dummyGroups = <Group>[
-    Group(
-      groupId: 'g000000001',
-      groupName: '본가냉장고',
-      groupOwner: 'qwer1234@gmail.com',
-      groupUsers: <GroupUser>[
-        GroupUser(email: 'qqq@gmail.com', nickName: '안녕'),
-        GroupUser(email: 'qwer1234@gmail.com', nickName: '그룹장입니다'),
-        GroupUser(email: 'qwer12341234@gmail.com', nickName: '테스트용')
-      ],
-    ),
-    Group(
-      groupId: 'g000000002',
-      groupName: '자취방냉장고',
-      groupOwner: 'qqq@gmail.com',
-      groupUsers: <GroupUser>[
-        GroupUser(email: 'qqq@gmail.com', nickName: '그룹장이다'),
-        GroupUser(email: 'qwer1234@gmail.com', nickName: '헬로우'),
-        GroupUser(email: 'qwer1234@gmail.com', nickName: '테스트용')
-      ],
-    ),
-    Group(
-      groupId: 'g000000003',
-      groupName: '식당냉장고',
-      groupOwner: 'qwer1234@gmail.com',
-      groupUsers: <GroupUser>[
-        GroupUser(email: 'qqq@gmail.com', nickName: '안녕'),
-        GroupUser(email: 'qwer1234@gmail.com', nickName: '나는그룹장'),
-        GroupUser(email: 'qw1234@gmail.com', nickName: '테스트용')
-      ],
-    ),
+  // 참여하기 - GroupId를 통해 냉장고그룹 정보 확인 여부 '더미값'
+  final List<Map<String, dynamic>> dummyGroups = <Map<String, dynamic>>[
+    {
+      "groupId": "g000000001",
+      "groupName": "가족냉장고",
+      "groupUserKing": "나는김종혁",
+      "groupUserCount": 3,
+    },
+    {
+      "groupId": "g000000002",
+      "groupName": "자취방냉장고",
+      "groupUserKing": "박자취",
+      "groupUserCount": 2,
+    },
+    {
+      "groupId": "g000000003",
+      "groupName": "식당냉장고",
+      "groupUserKing": "이요리",
+      "groupUserCount": 5,
+    },
   ];
 }
