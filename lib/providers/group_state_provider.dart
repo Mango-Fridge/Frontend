@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/group.dart';
 import 'package:mango/model/group_state.dart';
+import 'package:mango/services/group_repository.dart';
+import 'package:riverpod/src/notifier.dart';
 
 // 그룹(냉장고) 유효성 상태관리를 위해 사용
 class GroupStateNotifier extends Notifier<GroupState> {
@@ -10,8 +13,10 @@ class GroupStateNotifier extends Notifier<GroupState> {
   GroupState build() {
     // 초기 상태
     return GroupState(
-      groupName: '',
-      groupId: '',
+      groupId: null,
+      groupName: null,
+      groupOwner: null,
+      groupUsers: <GroupUser>[],
       errorMessage: null,
       isButton: false,
     );
@@ -19,14 +24,14 @@ class GroupStateNotifier extends Notifier<GroupState> {
 
   // 그룹 생성 유효성 검사 및 업데이트
   void checkGroupName(String groupName) {
-    final trimmedName = groupName.trim(); // 공백 제거
+    final String trimmedName = groupName.trim(); // 공백 제거
 
     // 새로운 입력이 발생할 때마다 이전 타이머를 취소하는 역할
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     // 타이머 시작
     _debounce = Timer(const Duration(milliseconds: 600), () {
-      // 문자가 공백일 때
       if (trimmedName.isEmpty) {
+        // 문자가 공백일 때
         state = state.copyWith(
           groupName: trimmedName,
           errorMessage: null,
@@ -77,45 +82,69 @@ class GroupStateNotifier extends Notifier<GroupState> {
     });
   }
 
-  // 테스트: 참여하기 모달 뷰 - 타이머를 활용해서, 1.5초 뒤에 print
+  // 그룹id로 해당 그룹 존재 여부 확인
   void checkGroupParticipation(String groupId) {
+    final GroupRepository groupRepository = GroupRepository(); // 그룹 레포지터리 인스턴스
+
+    // 공백 제거
+    final String trimmeGroupId = groupId.trim();
+
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 600), () {
-      // 공백 제거
-      final trimmeGroupId = groupId.trim();
-
       // 문자가 공백일 때
       if (trimmeGroupId.isEmpty) {
         state = state.copyWith(
-          groupName: trimmeGroupId,
+          groupId: '',
+          groupName: '',
+          groupOwner: '',
+          groupUsers: <GroupUser>[],
           errorMessage: null,
           isButton: false,
         );
         return;
-      } else if (!RegExp(r'^[가-힣a-zA-Z\s]+$').hasMatch(trimmeGroupId)) {
+      }
+
+      // 그룹 ID가 존재하는 지 확인 후, 데이터 담기
+      final Group selectedGroup = groupRepository.dummyGroups.firstWhere(
+        (group) => group.groupId == trimmeGroupId,
+        orElse:
+            () => Group(
+              // 그룹 ID가 없다면
+              groupId: '',
+              groupName: '',
+              groupOwner: '',
+              groupUsers: <GroupUser>[],
+            ),
+      );
+
+      // 냉장고ID가 존재하지 않을 때
+      if (selectedGroup.groupId == '') {
         state = state.copyWith(
-          groupName: trimmeGroupId,
-          errorMessage: "한글과 영문만 입력해주세요.",
+          errorMessage: "냉장고ID가 존재하지 않습니다",
           isButton: false,
         );
-        return;
+      } else {
+        // 그룹 참여 정상적 입력
+        state = state.copyWith(
+          groupId: trimmeGroupId, // 존재하는 그룹ID
+          groupName: selectedGroup.groupName, // 존재하는 그룹이름
+          groupOwner: selectedGroup.groupUsers?.firstWhere(
+            (user) => user.email == selectedGroup.groupOwner,
+            orElse: () => GroupUser(email: '', nickName: ''),
+          ).nickName, // 그룹장 닉네임
+          groupUsers: selectedGroup.groupUsers, // 존재하는 그룹인원들
+          errorMessage: null,
+          isButton: true,
+        );
       }
-      print(groupId);
-
-      // 그룹 참여 정상적 입력
-      state = state.copyWith(
-        groupId: trimmeGroupId,
-        errorMessage: null,
-        isButton: true,
-      );
     });
   }
 
-  // 그룹 생성하기 뷰로 갈 시, 상태초기화
+  // 그룹 생성하기, 참여하기 뷰 - 상태초기화
   void resetState() {
     state = GroupState(
-      groupName: '',
-      groupId: '',
+      groupId: null,
+      groupName: null,
       errorMessage: null,
       isButton: false,
     );
@@ -123,6 +152,5 @@ class GroupStateNotifier extends Notifier<GroupState> {
 }
 
 // NotifierProvider 정의
-final groupStateProvider = NotifierProvider<GroupStateNotifier, GroupState>(
-  GroupStateNotifier.new,
-);
+final NotifierProviderImpl<GroupStateNotifier, GroupState> groupStateProvider =
+    NotifierProvider<GroupStateNotifier, GroupState>(GroupStateNotifier.new);
