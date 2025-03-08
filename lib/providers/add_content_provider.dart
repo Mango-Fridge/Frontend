@@ -10,6 +10,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   @override
   AddContentState? build() => null;
 
+  // Content 저장 함수
   Future<void> saveContent(
     String contentName,
     String category,
@@ -48,6 +49,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     }
   }
 
+  // name error message 관리 함수
   void updateNameErrorMessage(String contentName) {
     if (contentName.length > 20) {
       _addContentState = _addContentState.copyWith(
@@ -71,6 +73,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // count error message 관리 함수
   void updateCount(String contentCount) {
     if (contentCount.isEmpty) {
       _addContentState = _addContentState.copyWith(
@@ -92,6 +95,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // capacity의 존재 여부에 따른 상태 처리 함수
   void updateCapacity(String capacity) {
     if (capacity.isNotEmpty) {
       _addContentState = _addContentState.copyWith(isCapacityEmpty: true);
@@ -102,6 +106,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // calories의 존재 여부에 따른 상태 처리 함수
   void updateCalories(String calories) {
     if (calories.isNotEmpty) {
       _addContentState = _addContentState.copyWith(isCaloriesEmpty: true);
@@ -112,6 +117,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // carbs의 존재 여부에 따른 상태 처리 함수
   void updateCarbs(String carbs) {
     if (carbs.isNotEmpty) {
       _addContentState = _addContentState.copyWith(isCarbsEmpty: true);
@@ -122,6 +128,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // protein의 존재 여부에 따른 상태 처리 함수
   void updateProtein(String protein) {
     if (protein.isNotEmpty) {
       _addContentState = _addContentState.copyWith(isProteinEmpty: true);
@@ -132,6 +139,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // fat의 존재 여부에 따른 상태 처리 함수
   void updateFat(String fat) {
     if (fat.isNotEmpty) {
       _addContentState = _addContentState.copyWith(isFatEmpty: true);
@@ -142,6 +150,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // view에서 선택 된 category 관리 함수
   void setCategory(String category) {
     _addContentState = _addContentState.copyWith(
       selectedContentCategory: category,
@@ -149,6 +158,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // view에서 선택 된 storage 관리 함수
   void setStorage(String storage) {
     _addContentState = _addContentState.copyWith(
       selectedContentStorage: storage,
@@ -156,11 +166,13 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // view에서 선택 된 regDate 관리 함수
   void setRegDate(DateTime regDate) {
     _addContentState = _addContentState.copyWith(selectedRegDate: regDate);
     state = _addContentState;
   }
 
+  // view에서 선택 된 expDate 관리 함수
   void setExpDate(DateTime expDate) {
     _addContentState = _addContentState.copyWith(
       selectedExpDate: expDate,
@@ -170,6 +182,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  // view에서 선택 된 unit 관리 함수
   void setUnit(String unit) {
     _addContentState = _addContentState.copyWith(
       selectUnit: unit,
