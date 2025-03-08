@@ -10,6 +10,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   @override
   RefrigeratorState? build() => null;
 
+  // Content list load 함수
   Future<void> loadContentList(String groupId) async {
     try {
       final List<Content> contentList = await _contentRepository
@@ -21,7 +22,9 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     }
   }
 
+  // count 증가 함수
   void addContentCount(String contentId) {
+    // list 전체 Content에서 count 증가가 반영 된 list
     final List<Content>? addedList =
         state?.contentList?.map((Content content) {
           if (content.contentId == contentId) {
@@ -39,14 +42,17 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
             .firstOrNull;
 
     if (existingContent != null) {
+      // update list에 중복 Content가 있다면 count +1
       final Content updatedContent = existingContent.copyWith(
         count: existingContent.count + 1,
       );
 
+      // 개수가 0이 될 시 해당 Content를 update list에서 제거
       if (updatedContent.count == 0) {
         updateList.removeWhere(
           (Content content) => content.contentId == contentId,
         );
+        // 비어있다면 뷰 닫기를 위함
         if (updateList.isEmpty) {
           closeUpdateContentCountView();
         }
@@ -59,7 +65,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
               ?.where((Content content) => content.contentId == contentId)
               .toList()
               .firstOrNull;
-
+      // update list에 중복 Content가 없다면 list에 추가
       if (newContent != null) {
         updateList.add(newContent.copyWith(count: 1));
       }
@@ -72,7 +78,9 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     );
   }
 
+  // count 감소 함수
   void reduceContentCount(String contentId) {
+    // list 전체 Content에서 count 감소 반영 된 list
     final List<Content>? reducedList =
         state?.contentList?.map((Content content) {
           if (content.contentId == contentId && content.count > 0) {
@@ -90,14 +98,17 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
             .firstOrNull;
 
     if (existingContent != null) {
+      // update list에 중복 Content가 있다면 count -1
       final Content updatedContent = existingContent.copyWith(
         count: existingContent.count - 1,
       );
 
+      // 개수가 0이 될 시 해당 Content를 update list에서 제거
       if (updatedContent.count == 0) {
         updateList.removeWhere(
           (Content content) => content.contentId == contentId,
         );
+        // 비어있다면 뷰 닫기를 위함
         if (updateList.isEmpty) {
           closeUpdateContentCountView();
         }
@@ -110,7 +121,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
               ?.where((Content content) => content.contentId == contentId)
               .toList()
               .firstOrNull;
-
+      // update list에 중복 Content가 없다면 list에 추가
       if (newContent != null) {
         updateList.add(newContent.copyWith(count: -1));
       }
@@ -123,22 +134,27 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     );
   }
 
+  // update view를 띄우기 위해 상태값을 true로 변경하는 함수
   void openUpdateContentCountView() {
     state = state?.copyWith(isUpdatedContent: true);
   }
 
+  // update view를 닫기 위해 상태값을 false로 변경하는 함수
   void closeUpdateContentCountView() {
     state = state?.copyWith(isUpdatedContent: false);
   }
 
+  // update list 비우는 함수
   void clearUpdateContentList() {
     state = state?.copyWith(updateContentList: <Content>[]);
   }
 
+  // update view에서 취소를 눌렀을 때 count를 되돌려 놓는 함수
   void cancelUpdate() {
     if (state?.contentList != null && state?.updateContentList != null) {
       List<Content> updatedContentList = state!.contentList!;
 
+      // 원래의 것과 update list의 count 계산
       for (Content updateContent in state!.updateContentList!) {
         for (int i = 0; i < updatedContentList.length; i++) {
           if (updatedContentList[i].contentId == updateContent.contentId) {
@@ -156,6 +172,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     }
   }
 
+  // update view에서 x_rouded 버튼을 눌렀을 때 count를 되돌려 놓는 함수
   void removeUpdateContentById(String contentId) {
     List<Content> updatedUpdateList = state?.updateContentList ?? <Content>[];
 
@@ -188,6 +205,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     }
   }
 
+  // count가 0인 Content list에서 제거하는 함수
   void removeZeroCountContent() {
     final List<Content> removedList =
         state!.contentList!

@@ -361,6 +361,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     );
   }
 
+  // 수량 조절 버튼 탭 했을 시 나오는 수량 업데이트 뷰
   Widget _contentUpdateView() {
     Design design = Design(context);
     return Container(
@@ -421,6 +422,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     );
   }
 
+  // 수량 업데이트 뷰 버튼
   Widget _contentUpdateButtons() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
