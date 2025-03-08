@@ -1,11 +1,52 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/content.dart';
+import 'package:mango/services/content_repository.dart';
 import 'package:mango/state/add_content_state.dart';
 
 class AddContentNotifier extends Notifier<AddContentState?> {
+  final ContentRepository _contentRepository = ContentRepository();
   AddContentState _addContentState = AddContentState();
 
   @override
   AddContentState? build() => null;
+
+  Future<void> saveContent(
+    String contentName,
+    String category,
+    int count,
+    DateTime regDate,
+    DateTime expDate,
+    String storageArea,
+    String memo,
+    String nutriUnit,
+    int nutriCapacity,
+    int nutriKcal,
+    int nutriCarbohydrate,
+    int nutriProtein,
+    int nutriFat,
+  ) async {
+    try {
+      await _contentRepository.saveContent(
+        Content(
+          contentName: contentName,
+          category: category,
+          count: count,
+          regDate: regDate,
+          expDate: expDate,
+          storageArea: storageArea,
+          memo: memo,
+          nutriUnit: nutriUnit,
+          nutriCapacity: nutriCapacity,
+          nutriKcal: nutriKcal,
+          nutriCarbohydrate: nutriCarbohydrate,
+          nutriProtein: nutriProtein,
+          nutriFat: nutriFat,
+        ),
+      );
+    } catch (e) {
+      // 에러 처리
+    }
+  }
 
   void updateNameErrorMessage(String contentName) {
     if (contentName.length > 20) {

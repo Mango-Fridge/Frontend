@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:mango/providers/content_provider.dart';
+import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/view/cook/cook_view.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/refrigerator/add_content_view.dart';

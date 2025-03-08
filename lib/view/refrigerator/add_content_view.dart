@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:intl/intl.dart';
 import 'package:mango/providers/add_content_provider.dart';
-import 'package:mango/providers/content_provider.dart';
+import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_content_state.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
@@ -406,7 +406,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         addContentState?.isDetailInfoEmpty ?? false
                             ? () {
                               ref
-                                  .watch(contentProvider.notifier)
+                                  .watch(addContentProvider.notifier)
                                   .saveContent(
                                     nameController.text,
                                     addContentState?.selectedContentCategory ??

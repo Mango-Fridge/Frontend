@@ -5,9 +5,10 @@ import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group.dart';
 import 'package:mango/model/login/auth_model.dart';
-import 'package:mango/providers/content_provider.dart';
+import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/state/refrigerator_state.dart';
 import 'package:mango/view/refrigerator/content_detail_view.dart';
 
 // 냉장고 화면
@@ -22,10 +23,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 상태관리 관련 선언부
   AuthInfo? get user => ref.watch(loginAuthProvider);
   List<Group>? get _groupList => ref.watch(groupProvider);
-  RefrigeratorState? get _refrigeratorViewState => ref.watch(contentProvider);
-
-  // 추후 옮길 상태 관리 변수
-  bool isUpdatedContent = false;
+  RefrigeratorState? get _refrigeratorState => ref.watch(refrigeratorNotifier);
 
   String? _selectedGroup; // 선택 된 그룹
   String? _selectedGroupId; // 선택 된 그룹 Id
@@ -36,7 +34,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     super.didChangeDependencies();
 
     ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
-    ref.watch(contentProvider.notifier).loadContentList('groupId');
+    ref.watch(refrigeratorNotifier.notifier).loadContentList('groupId');
   }
 
   @override
@@ -152,21 +150,20 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           : ListView(
                             padding: EdgeInsets.zero,
                             children: <Widget>[
-                              _buildContent(
-                                _refrigeratorViewState?.contentList,
-                              ),
+                              _buildContent(_refrigeratorState?.contentList),
                             ],
                           ),
                 ),
 
-                if (isUpdatedContent) _contentUpdateView(),
+                if (_refrigeratorState?.isUpdatedContent ?? false)
+                  _contentUpdateView(),
               ],
             ),
           ],
         ),
 
         floatingActionButton:
-            isUpdatedContent
+            _refrigeratorState?.isUpdatedContent ?? false
                 ? null
                 : FloatingActionButton(
                   onPressed: () {
@@ -203,7 +200,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         ),
                       ),
                     ]
-                    : contentList!
+                    : contentList
                         .where((Content content) => content.storageArea == '냉장')
                         .map((Content content) => _buildContentRow(content))
                         .toList(),
@@ -218,7 +215,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
             shape: Border.all(color: Colors.transparent),
             children:
-                contentList!
+                contentList
                         .where((Content content) => content.storageArea == '냉동')
                         .isEmpty
                     ? <Widget>[
@@ -229,7 +226,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         ),
                       ),
                     ]
-                    : contentList!
+                    : contentList
                         .where((Content content) => content.storageArea == '냉동')
                         .map((Content content) => _buildContentRow(content))
                         .toList(),
@@ -253,7 +250,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 borderRadius: BorderRadius.circular(12.0),
               ),
               content: ContentDetailView(content: content),
-              actions: [
+              actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -302,9 +299,13 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               children: <Widget>[
                 _quantityButton('-', () {
                   ref
-                      .watch(contentProvider.notifier)
-                      .subContentCount(content.contentId);
-                  isUpdatedContent = true;
+                      .watch(refrigeratorNotifier.notifier)
+                      .openUpdateContentCountView();
+                  if (content.count > 0) {
+                    ref
+                        .watch(refrigeratorNotifier.notifier)
+                        .reduceContentCount(content.contentId);
+                  }
                 }),
                 const SizedBox(width: 5),
                 Container(
@@ -326,12 +327,11 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 const SizedBox(width: 5),
                 _quantityButton('+', () {
                   ref
-                      .watch(contentProvider.notifier)
+                      .watch(refrigeratorNotifier.notifier)
+                      .openUpdateContentCountView();
+                  ref
+                      .watch(refrigeratorNotifier.notifier)
                       .addContentCount(content.contentId);
-                  print('개수1 : ${content.count}');
-                  print(
-                    '개수2 : ${_refrigeratorViewState!.contentList![0].count}',
-                  );
                 }),
               ],
             ),
@@ -362,27 +362,54 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   }
 
   Widget _contentUpdateView() {
-    final List<Map<String, dynamic>> items = [
-      {"name": "코카콜라", "count": 1},
-      {"name": "냉동 삼겹살", "count": -1},
-    ];
     Design design = Design(context);
     return Container(
       color: Colors.grey[200],
-      height: design.screenHeight * 0.2,
+      height: design.screenHeight * 0.20,
       child: Column(
         children: <Widget>[
           Expanded(
             child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
+              padding: EdgeInsets.zero,
+              itemCount: _refrigeratorState?.updateContentList?.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Content? content =
+                    _refrigeratorState?.updateContentList?[index];
                 return ListTile(
-                  leading: Icon(Icons.cancel, color: Colors.red),
-                  title: Text(item['name']),
+                  dense: true,
+                  contentPadding: const EdgeInsets.only(right: 10),
+                  leading: IconButton(
+                    onPressed: () {
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .removeUpdateContentById(content!.contentId);
+                    },
+                    icon: Container(
+                      padding: const EdgeInsets.all(1),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        color: Colors.white,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    content!.contentName,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   trailing: Text(
-                    '${item['count'] > 0 ? '+' : ''}${item['count']}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    content.count.toString(),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 );
               },
@@ -403,13 +430,14 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       child: Row(
         spacing: 10,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
+        children: <Widget>[
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                setState(() {
-                  isUpdatedContent = false;
-                });
+                ref.watch(refrigeratorNotifier.notifier).cancelUpdate();
+                ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .closeUpdateContentCountView();
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -424,9 +452,15 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                setState(() {
-                  isUpdatedContent = false;
-                });
+                ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .clearUpdateContentList();
+                ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .removeZeroCountContent();
+                ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .closeUpdateContentCountView();
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
