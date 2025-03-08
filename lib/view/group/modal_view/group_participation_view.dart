@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/group_state.dart';
-import 'package:mango/providers/group_state_provider.dart';
+import 'package:mango/providers/group_participation_provider.dart';
 import 'package:mango/view/group/subView/group_common_button.dart';
 import 'package:mango/view/group/subView/group_modal_title.dart';
 
@@ -12,8 +12,8 @@ class GroupParticipationView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final GroupState groupState = ref.watch(groupStateProvider);
-    final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
+    final GroupState groupState = ref.watch(groupParticipationProvider);
+    final GroupParticipationNotifier groupNotifier = ref.read(groupParticipationProvider.notifier);
 
     return SizedBox(
       height: groupState.isButton ? MediaQuery.of(context).size.height * 0.55 : MediaQuery.of(context).size.height * 0.45,
@@ -33,7 +33,7 @@ class GroupParticipationView extends ConsumerWidget {
                   hintText: '냉장고ID 입력',
                   errorText: groupState.errorMessage, // 에러 메시지 표시
                 ),
-                onChanged:  (String groupId) => groupNotifier.checkGroupParticipation(groupId),// 입력값 지속적으로 상태확인
+                onChanged:  (String groupId) => groupNotifier.checkGroupId(groupId),// 입력값 지속적으로 상태확인
               ),
             ),
             const Spacer(),

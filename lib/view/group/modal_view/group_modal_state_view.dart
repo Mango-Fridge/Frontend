@@ -7,7 +7,7 @@ import 'package:mango/view/group/modal_view/group_participation_view.dart';
 import 'package:mango/view/group/modal_view/group_start_view.dart';
 
 // 상태에따라 모달창을 보여줌
-void showModalStartGroupView(BuildContext context, WidgetRef ref) {
+void groupModalStateView(BuildContext context, WidgetRef ref) {
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true, // 키보드 올라올 때 모달 크기 조정 가능하게

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/group_state.dart';
-import 'package:mango/providers/group_state_provider.dart';
+import 'package:mango/providers/group_create_provider.dart';
 import 'package:mango/view/group/subView/group_common_button.dart';
 import 'package:mango/view/group/subView/group_modal_title.dart';
 
@@ -12,8 +12,8 @@ class GroupCreateView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final GroupState groupState = ref.watch(groupStateProvider);
-    final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
+    final GroupState groupState = ref.watch(groupCreateProvider);
+    final GroupCreateNotifier groupNotifier = ref.read(groupCreateProvider.notifier);
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
