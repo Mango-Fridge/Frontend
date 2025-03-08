@@ -50,9 +50,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.035),
         child: Column(
-          children: [
+          children: <Widget>[
             Expanded(
               child: SingleChildScrollView(
+                // Content detail info view
                 child: Column(
                   spacing: 10,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +185,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         ),
 
                         Expanded(
-                          // expirationDate가 null일 때 예외 처리, 이건 submit 할 때.
                           child: Text(
                             addContentState?.selectedExpDate == null
                                 ? '날짜를 선택하세요'
@@ -268,6 +268,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         ),
                       ],
                     ),
+                    // nutrition view
                     ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       title: const Row(
@@ -381,6 +382,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ),
               ),
             ),
+            // Bottom Submit Buttons
             Row(
               spacing: 10,
               children: <Widget>[
@@ -544,3 +546,5 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     }
   }
 }
+
+class AddContentBottomButton {}
