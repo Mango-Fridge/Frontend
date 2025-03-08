@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/group_modal_view_state.dart';
 import 'package:mango/model/group_state.dart';
 
 // 그룹(냉장고) 유효성 상태관리를 위해 사용
@@ -127,8 +126,3 @@ class GroupStateNotifier extends Notifier<GroupState> {
 final groupStateProvider = NotifierProvider<GroupStateNotifier, GroupState>(
   GroupStateNotifier.new,
 );
-
-// 모달 화면 상태 관리
-final groupModalStateProvider = StateProvider<GroupModalViewState>((ref) {
-  return GroupModalViewState.start; // 초기 값 - 그룹 '시작하기' 뷰
-});
