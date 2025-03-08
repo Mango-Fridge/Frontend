@@ -16,7 +16,7 @@ class GroupParticipationView extends ConsumerWidget {
     final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
 
     return SizedBox(
-      height: 400,
+      height: groupState.isButton ? MediaQuery.of(context).size.height * 0.55 : MediaQuery.of(context).size.height * 0.45,
       child: Center(
         child: Column(
           children: <Widget>[
@@ -28,7 +28,6 @@ class GroupParticipationView extends ConsumerWidget {
             const Spacer(),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.1,
               child: TextField(
                 decoration: InputDecoration(
                   hintText: '냉장고ID 입력',
@@ -37,6 +36,36 @@ class GroupParticipationView extends ConsumerWidget {
                 onChanged:  (String groupId) => groupNotifier.checkGroupParticipation(groupId),// 입력값 지속적으로 상태확인
               ),
             ),
+            const Spacer(),
+            if (groupState.isButton) ...[ //g000000001
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  children: [
+                    Text(
+                      groupState.groupName ?? '',
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.emoji_events, size: 20, color: Colors.amber),
+                        Text(
+                          '${groupState.gruoupUserKing ?? ''}외 ${groupState.groupUserCount ?? 0}명',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              const Text(
+                '참여하려는 냉장고가 맞나요?',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
             const Spacer(),
             groupCommonButton(
               context: context,

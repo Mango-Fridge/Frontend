@@ -16,7 +16,7 @@ class GroupCreateView extends ConsumerWidget {
     final GroupStateNotifier groupNotifier = ref.read(groupStateProvider.notifier);
 
     return SizedBox(
-      height: 400,
+      height: MediaQuery.of(context).size.height * 0.45,
       child: Center(
         child: Column(
           children: <Widget>[
@@ -44,7 +44,6 @@ class GroupCreateView extends ConsumerWidget {
               onPressed: groupState.isButton? () {
                 // 생성 로직 추가
                 print(groupState.groupName);
-                
                 context.pop(); // Sheet 닫기
               } : null,
             ),

@@ -24,13 +24,13 @@ class GroupRepository {
     {
       "groupId": "g000000002",
       "groupName": "자취방냉장고",
-      "groupUserKing": "박자취",
+      "groupUserKing": "나는박준영",
       "groupUserCount": 2,
     },
     {
       "groupId": "g000000003",
       "groupName": "식당냉장고",
-      "groupUserKing": "이요리",
+      "groupUserKing": "나는신현우",
       "groupUserCount": 5,
     },
   ];

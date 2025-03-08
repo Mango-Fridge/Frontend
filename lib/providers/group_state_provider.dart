@@ -41,7 +41,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
         // 특수문자 사용 여부 확인
         state = state.copyWith(
           groupName: trimmedName,
-          errorMessage: "특수문자는 사용할 수 없습니다.",
+          errorMessage: '특수문자는 사용할 수 없습니다.',
           isButton: false,
         );
         return;
@@ -49,7 +49,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
         // 한글과 영문만 입력 가능
         state = state.copyWith(
           groupName: trimmedName,
-          errorMessage: "한글과 영문만 입력해주세요.",
+          errorMessage: '한글과 영문만 입력해주세요.',
           isButton: false,
         );
         return;
@@ -57,7 +57,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
         // 띄어쓰기 포함 여부 확인
         state = state.copyWith(
           groupName: trimmedName,
-          errorMessage: "띄어쓰기는 사용할 수 없습니다.",
+          errorMessage: '띄어쓰기는 사용할 수 없습니다.',
           isButton: false,
         );
         return;
@@ -65,7 +65,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
         // 문자 길이 (2~8자)
         state = state.copyWith(
           groupName: trimmedName,
-          errorMessage: "2~8자로 입력해주세요.",
+          errorMessage: '2~8자로 입력해주세요.',
           isButton: false,
         );
         return;
@@ -108,7 +108,7 @@ class GroupStateNotifier extends Notifier<GroupState> {
       // 냉장고ID가 존재하지 않을 때
       if (selectedGroup.isEmpty) {
         state = state.copyWith(
-          errorMessage: "냉장고ID가 존재하지 않습니다",
+          errorMessage: '냉장고ID가 존재하지 않습니다',
           isButton: false,
         );
       } else {

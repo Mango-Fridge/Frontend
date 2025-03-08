@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/group_modal_view_state.dart';
+import 'package:mango/model/group_modal_state.dart';
 import 'package:mango/providers/group_modal_state_provider.dart';
 import 'package:mango/view/group/modal_view/group_create_view.dart';
 import 'package:mango/view/group/modal_view/group_participation_view.dart';
@@ -28,11 +28,11 @@ void showModalStartGroupView(BuildContext context, WidgetRef ref) {
               ); // 상태를 계속 추적하여 변화
 
               switch (groupModalState) {
-                case GroupModalViewState.start:
+                case GroupModalState.start:
                   return const GroupStartView(); // 모달 시작하기 뷰
-                case GroupModalViewState.create:
+                case GroupModalState.create:
                   return const GroupCreateView(); // 모달 생성하기 뷰
-                case GroupModalViewState.participation:
+                case GroupModalState.participation:
                   return const GroupParticipationView(); // 모달 참여하기 뷰
               }
             },
