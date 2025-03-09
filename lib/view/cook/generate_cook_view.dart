@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/providers/cook_provider.dart';
 import 'cook_view.dart';
 
-// Riverpod 상태를 업데이트하기 위해 ConsumerWidget 사용
 class GenerateCookView extends ConsumerWidget {
   const GenerateCookView({super.key});
 
@@ -14,16 +13,11 @@ class GenerateCookView extends ConsumerWidget {
     final _recipeNameController = TextEditingController();
     final _ingredientsController = TextEditingController();
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('요리하기'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.yellow), // 뒤로 가기 버튼
-          onPressed: () {
-            Navigator.pop(context); // 이전 화면으로 이동
-          },
-        ),
-      ),
+      appBar: AppBar(title: const Text('요리하기')),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // 여백 추가
         child: Column(
@@ -65,10 +59,50 @@ class GenerateCookView extends ConsumerWidget {
                   );
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
               child: const Text('저장', style: TextStyle(color: Colors.white)),
             ),
           ],
+        ),
+      ),
+
+      // 바텀 시트
+      bottomSheet: SafeArea(
+        child: Container(
+          height: screenWidth * 0.5,
+          color: Colors.amber,
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 메모 입력란
+              TextField(
+                decoration: const InputDecoration(
+                  hintText: '요리에 대한 메모를 입력해보세요',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+                maxLength: 90,
+              ),
+              const SizedBox(height: 10),
+
+              // 추가하기 버튼
+              ElevatedButton(
+                onPressed: () {
+                  context.pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 40),
+                ),
+                child: const Text(
+                  '추가하기',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
