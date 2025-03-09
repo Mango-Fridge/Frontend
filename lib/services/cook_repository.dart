@@ -1,0 +1,126 @@
+import 'package:mango/model/cook.dart';
+import 'package:mango/model/content.dart';
+
+class CookRepository {
+  /// 'groupID'로 cook list 불러오는 함수
+  Future<List<Cook>> loadCookList(String groupID) async {
+    // groupId 해당하는 cook list 불러오는 api 호출
+    await Future.delayed(const Duration(seconds: 1));
+
+    return [
+      Cook(
+        groupID: groupID,
+        cookingName: "스파게티 카르보나라",
+        cookingMemo: "베이컨과 크림이 어우러진 부드러운 파스타",
+        cookingNutriKcal: "450",
+        cookingNutriCarbohydrate: "55",
+        cookingNutriFat: "20",
+        cookingNutriProtein: "15",
+        cookingItems: [
+          Content(
+            contentId: "1",
+            contentName: "스파게티 면",
+            category: "면류",
+            count: 1,
+            regDate: DateTime.now(),
+            expDate: DateTime.now().add(Duration(days: 365)),
+            storageArea: "실온 보관",
+            memo: "이탈리아산 파스타 면",
+            nutriUnit: "g",
+            nutriCapacity: 200,
+            nutriKcal: 350,
+            nutriCarbohydrate: 70,
+            nutriProtein: 12,
+            nutriFat: 1,
+          ),
+          Content(
+            contentId: "2",
+            contentName: "베이컨",
+            category: "육류",
+            count: 1,
+            regDate: DateTime.now(),
+            expDate: DateTime.now().add(Duration(days: 7)),
+            storageArea: "냉장 보관",
+            memo: "훈제 베이컨",
+            nutriUnit: "g",
+            nutriCapacity: 100,
+            nutriKcal: 250,
+            nutriCarbohydrate: 1,
+            nutriProtein: 15,
+            nutriFat: 20,
+          ),
+        ],
+      ),
+      Cook(
+        groupID: groupID,
+        cookingName: "김치찌개",
+        cookingMemo: "진한 국물과 깊은 맛을 내는 한국 전통 찌개",
+        cookingNutriKcal: "500",
+        cookingNutriCarbohydrate: "45",
+        cookingNutriFat: "15",
+        cookingNutriProtein: "20",
+        cookingItems: [
+          Content(
+            contentId: "3",
+            contentName: "김치",
+            category: "발효식품",
+            count: 1,
+            regDate: DateTime.now(),
+            expDate: DateTime.now().add(Duration(days: 30)),
+            storageArea: "냉장 보관",
+            memo: "집에서 직접 담근 김치",
+            nutriUnit: "g",
+            nutriCapacity: 200,
+            nutriKcal: 100,
+            nutriCarbohydrate: 22,
+            nutriProtein: 4,
+            nutriFat: 0,
+          ),
+          Content(
+            contentId: "4",
+            contentName: "돼지고기",
+            category: "육류",
+            count: 1,
+            regDate: DateTime.now(),
+            expDate: DateTime.now().add(Duration(days: 5)),
+            storageArea: "냉장 보관",
+            memo: "삼겹살 부위",
+            nutriUnit: "g",
+            nutriCapacity: 150,
+            nutriKcal: 300,
+            nutriCarbohydrate: 0,
+            nutriProtein: 25,
+            nutriFat: 20,
+          ),
+        ],
+      ),
+      Cook(
+        groupID: groupID,
+        cookingName: "비빔밥",
+        cookingMemo: "다양한 나물과 고기를 넣고 비벼먹는 한국식 한 그릇 요리",
+        cookingNutriKcal: "600",
+        cookingNutriCarbohydrate: "80",
+        cookingNutriFat: "20",
+        cookingNutriProtein: "25",
+        cookingItems: [
+          Content(
+            contentId: "5",
+            contentName: "밥",
+            category: "곡물",
+            count: 1,
+            regDate: DateTime.now(),
+            expDate: DateTime.now().add(Duration(days: 1)),
+            storageArea: "실온 보관",
+            memo: "한국산 백미",
+            nutriUnit: "g",
+            nutriCapacity: 200,
+            nutriKcal: 300,
+            nutriCarbohydrate: 65,
+            nutriProtein: 5,
+            nutriFat: 0,
+          ),
+        ],
+      ),
+    ];
+  }
+}

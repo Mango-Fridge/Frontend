@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mango/view/cook/cook_view.dart';
+import 'package:mango/view/cook/generate_cook_view.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/refrigerator/refrigerator_view.dart';
 import 'package:mango/view/login/login_view.dart';
@@ -26,7 +27,7 @@ final GoRouter goRouter = GoRouter(
     // 요리 제작 화면
     GoRoute(
       path: '/generatecook',
-      builder: (context, state) => const CookView(),
+      builder: (context, state) => const GenerateCookView(),
     ),
   ],
 );

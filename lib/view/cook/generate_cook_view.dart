@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/providers/cook_provider.dart';
+import 'cook_view.dart';
 
 // Riverpod 상태를 업데이트하기 위해 ConsumerWidget 사용
-class SecondPage extends ConsumerWidget {
-  const SecondPage({super.key});
+class GenerateCookView extends ConsumerWidget {
+  const GenerateCookView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
