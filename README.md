@@ -2,11 +2,13 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.0.3 (2025-03-03)
- - Hot Reload 이슈로 go_router 로직 변경
- - 메인화면 연결 (TabBarView & BottomNavigationBar)
- - (임시) 설정 View 구현
- - 일부 코드 개선 (메인화면 Appbar, 요리 View 등)
+## VERSION 1.0.4 (2025-03-09)
+ - 메인화면
+   - 물품 수량 추가/감소 View 및 로직
+   - 물품 상세정보 View
+   - 물품 추가 View
+ - 그룹
+   - 그룹 생성/참여 View 및 로직 (유효성 체크)
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
