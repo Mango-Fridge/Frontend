@@ -34,7 +34,7 @@ class CookView extends ConsumerWidget {
               width: screenWidth * 0.3,
               height: screenHeight * 0.05,
               decoration: BoxDecoration(
-                color: Colors.yellow,
+                color: Colors.amber,
                 borderRadius: BorderRadius.circular(8),
               ),
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
@@ -55,7 +55,7 @@ class CookView extends ConsumerWidget {
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.07,
                 decoration: BoxDecoration(
-                  color: Colors.yellow,
+                  color: Colors.amber,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: IconButton(

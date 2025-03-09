@@ -30,7 +30,7 @@ class GenerateCookView extends ConsumerWidget {
             !_ingredientsFocusNode.hasFocus;
 
         return Scaffold(
-          // // 메모 입력 시에만 키보드 위로 올라옴
+          // 메모 입력 시에만 키보드 위로 올라옴
           resizeToAvoidBottomInset: shouldResizeForBottomSheet,
           appBar: AppBar(
             title: StatefulBuilder(
