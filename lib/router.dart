@@ -23,5 +23,10 @@ final GoRouter goRouter = GoRouter(
     ),
     // 요리 화면
     GoRoute(path: '/cook', builder: (context, state) => const CookView()),
+    // 요리 제작 화면
+    GoRoute(
+      path: '/generatecook',
+      builder: (context, state) => const CookView(),
+    ),
   ],
 );
