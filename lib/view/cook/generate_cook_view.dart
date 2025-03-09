@@ -19,49 +19,17 @@ class GenerateCookView extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('요리하기')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), // 여백 추가
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // 요리 이름 입력 필드
             TextField(
-              controller: _recipeNameController,
               decoration: const InputDecoration(
-                labelText: '요리 이름',
+                hintText: '냉장고에 있는 음식 재료를 추가해보세요',
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 10), // 간격 추가
-            // 재료 입력 필드 (여러 줄 허용)
-            TextField(
-              controller: _ingredientsController,
-              decoration: const InputDecoration(
-                labelText: '재료 내용',
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 3, // 최대 3줄 입력 가능
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // 입력값 가져오기
-                final recipeName = _recipeNameController.text;
-                final ingredients = _ingredientsController.text;
-
-                // 입력값이 비어 있지 않으면 상태 업데이트
-                if (recipeName.isNotEmpty && ingredients.isNotEmpty) {
-                  ref.read(recipeNameProvider.notifier).state = recipeName;
-                  ref.read(ingredientsProvider.notifier).state = ingredients;
-                  Navigator.pop(context); // cook view로 돌아감
-                } else {
-                  // 입력값이 비어 있을 경우 경고 메시지
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('요리 이름과 재료를 입력하세요.')),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-              child: const Text('저장', style: TextStyle(color: Colors.white)),
-            ),
+            SizedBox(height: 200),
+            Text("재료를 추가해주세요."),
           ],
         ),
       ),
@@ -90,7 +58,13 @@ class GenerateCookView extends ConsumerWidget {
               // 추가하기 버튼
               ElevatedButton(
                 onPressed: () {
-                  context.pop();
+                  // 입력값 가져오기
+                  final recipeName = _recipeNameController.text;
+                  final ingredients = _ingredientsController.text;
+
+                  ref.read(recipeNameProvider.notifier).state = recipeName;
+                  ref.read(ingredientsProvider.notifier).state = ingredients;
+                  Navigator.pop(context); // cook view로 돌아감
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
