@@ -13,159 +13,174 @@ class GenerateCookView extends ConsumerWidget {
     final _recipeNameController = TextEditingController();
     final _ingredientsController = TextEditingController();
 
-    // 포커스 노드: 텍스트 필드의 포커스 상태 관리 -> 클릭 시 확장
-    final _focusNode = FocusNode();
+    // 포커스 노드: 텍스트 필드의 포커스 상태 관리 -> 키보드 상태 관리 목적
+    final _recipeNameFocusNode = FocusNode(); // -> 클릭 시 확장도 관리
+    final _ingredientsFocusNode = FocusNode();
+    final _memoFocusNode = FocusNode();
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: StatefulBuilder(
-          builder: (context, setState) {
-            // 포커스 상태에 따라 너비 동적으로 변경
-            final isFocused = _focusNode.hasFocus;
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: isFocused ? screenWidth * 0.75 : null, // 포커스 시 확장
-                  child: IntrinsicWidth(
-                    child: TextField(
-                      controller: _recipeNameController,
-                      focusNode: _focusNode,
-                      decoration: InputDecoration(
-                        hintText: '요리 이름 입력',
-                        suffixIcon: const Icon(Icons.edit, size: 20),
-                        border: OutlineInputBorder(
+    return StatefulBuilder(
+      builder: (context, setState) {
+        // 포커스 상태에 따라 resizeToAvoidBottomInset(scaffold에서 bottom sheet 관리하는 속성) 동적 변경
+        final bool shouldResizeForBottomSheet =
+            _memoFocusNode.hasFocus &&
+            !_recipeNameFocusNode.hasFocus &&
+            !_ingredientsFocusNode.hasFocus;
+
+        return Scaffold(
+          // // 메모 입력 시에만 키보드 위로 올라옴
+          resizeToAvoidBottomInset: shouldResizeForBottomSheet,
+          appBar: AppBar(
+            title: StatefulBuilder(
+              builder: (context, setState) {
+                // 포커스 상태에 따라 너비 동적으로 변경
+                final isFocused = _recipeNameFocusNode.hasFocus;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: isFocused ? screenWidth * 0.75 : null, // 포커스 시 확장
+                      child: IntrinsicWidth(
+                        child: TextField(
+                          controller: _recipeNameController,
+                          focusNode: _recipeNameFocusNode,
+                          decoration: InputDecoration(
+                            hintText: '요리 이름 입력',
+                            suffixIcon: const Icon(Icons.edit, size: 20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 12.0,
+                            ),
+                            isDense: true,
+                          ),
+                          style: const TextStyle(fontSize: 16),
+                          onTap: () {
+                            setState(() {}); // 포커스 상태 변경 시 애니메이션 트리거
+                          },
+                          onSubmitted: (_) {
+                            setState(() {}); // 입력 완료 후 상태 업데이트
+                          },
+                        ),
+                      ),
+                    ),
+
+                    // 영양성분 표시 box
+                    if (!isFocused) ...[
+                      const SizedBox(width: 8.0),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
+                        child: Wrap(
+                          spacing: 15.0,
+                          children: [
+                            Column(
+                              children: const [
+                                Text('열량', style: TextStyle(fontSize: 12)),
+                                Text('300', style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
+
+                            Column(
+                              children: const [
+                                Text('탄', style: TextStyle(fontSize: 12)),
+                                Text('50', style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
+                            Column(
+                              children: const [
+                                Text('단', style: TextStyle(fontSize: 12)),
+                                Text('20', style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
+                            Column(
+                              children: const [
+                                Text('지', style: TextStyle(fontSize: 12)),
+                                Text('10', style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
+                          ],
                         ),
-                        isDense: true,
                       ),
-                      style: const TextStyle(fontSize: 16),
-                      onTap: () {
-                        setState(() {}); // 포커스 상태 변경 시 애니메이션 트리거
-                      },
-                      onSubmitted: (_) {
-                        setState(() {}); // 입력 완료 후 상태 업데이트
-                      },
-                    ),
+                    ],
+                  ],
+                );
+              },
+            ),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  decoration: const InputDecoration(
+                    hintText: '냉장고에 있는 음식 재료를 추가해보세요',
+                    border: OutlineInputBorder(),
                   ),
                 ),
+                SizedBox(height: 200),
+                Text("재료를 추가해주세요."),
+              ],
+            ),
+          ),
 
-                // 영양성분 표시 box
-                if (!isFocused) ...[
-                  const SizedBox(width: 8.0),
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8.0),
+          // 바텀 시트
+          bottomSheet: SafeArea(
+            child: Container(
+              height: screenWidth * 0.5,
+              color: Colors.amber,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 메모 입력란
+                  TextField(
+                    decoration: const InputDecoration(
+                      hintText: '요리에 대한 메모를 입력해보세요',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
                     ),
-                    child: Wrap(
-                      spacing: 15.0,
-                      children: [
-                        Column(
-                          children: const [
-                            Text('열량', style: TextStyle(fontSize: 12)),
-                            Text('300', style: TextStyle(fontSize: 12)),
-                          ],
-                        ),
+                    maxLength: 90,
+                  ),
+                  const SizedBox(height: 10),
 
-                        Column(
-                          children: const [
-                            Text('탄', style: TextStyle(fontSize: 12)),
-                            Text('50', style: TextStyle(fontSize: 12)),
-                          ],
-                        ),
-                        Column(
-                          children: const [
-                            Text('단', style: TextStyle(fontSize: 12)),
-                            Text('20', style: TextStyle(fontSize: 12)),
-                          ],
-                        ),
-                        Column(
-                          children: const [
-                            Text('지', style: TextStyle(fontSize: 12)),
-                            Text('10', style: TextStyle(fontSize: 12)),
-                          ],
-                        ),
-                      ],
+                  // 추가하기 버튼
+                  ElevatedButton(
+                    onPressed: () {
+                      // 입력값 가져오기
+                      final recipeName = _recipeNameController.text;
+                      final ingredients = _ingredientsController.text;
+
+                      ref.read(recipeNameProvider.notifier).state = recipeName;
+                      ref.read(ingredientsProvider.notifier).state =
+                          ingredients;
+                      Navigator.pop(context); // cook view로 돌아감
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 40),
+                    ),
+                    child: const Text(
+                      '추가하기',
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ],
-              ],
-            );
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              decoration: const InputDecoration(
-                hintText: '냉장고에 있는 음식 재료를 추가해보세요',
-                border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 200),
-            Text("재료를 추가해주세요."),
-          ],
-        ),
-      ),
-
-      // 바텀 시트
-      bottomSheet: SafeArea(
-        child: Container(
-          height: screenWidth * 0.5,
-          color: Colors.amber,
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // 메모 입력란
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: '요리에 대한 메모를 입력해보세요',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-                maxLength: 90,
-              ),
-              const SizedBox(height: 10),
-
-              // 추가하기 버튼
-              ElevatedButton(
-                onPressed: () {
-                  // 입력값 가져오기
-                  final recipeName = _recipeNameController.text;
-                  final ingredients = _ingredientsController.text;
-
-                  ref.read(recipeNameProvider.notifier).state = recipeName;
-                  ref.read(ingredientsProvider.notifier).state = ingredients;
-                  Navigator.pop(context); // cook view로 돌아감
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 40),
-                ),
-                child: const Text(
-                  '추가하기',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
