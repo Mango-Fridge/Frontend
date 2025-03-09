@@ -28,9 +28,10 @@ class GenerateCookView extends ConsumerWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: isFocused ? screenWidth * 0.8 : null, // 포커스 시 확장
+                  width: isFocused ? screenWidth * 0.75 : null, // 포커스 시 확장
                   child: IntrinsicWidth(
                     child: TextField(
                       controller: _recipeNameController,
@@ -57,6 +58,48 @@ class GenerateCookView extends ConsumerWidget {
                     ),
                   ),
                 ),
+
+                // 영양성분 표시 box
+                if (!isFocused) ...[
+                  const SizedBox(width: 8.0),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Wrap(
+                      spacing: 15.0,
+                      children: [
+                        Column(
+                          children: const [
+                            Text('열량', style: TextStyle(fontSize: 12)),
+                            Text('300', style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+
+                        Column(
+                          children: const [
+                            Text('탄', style: TextStyle(fontSize: 12)),
+                            Text('50', style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            Text('단', style: TextStyle(fontSize: 12)),
+                            Text('20', style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            Text('지', style: TextStyle(fontSize: 12)),
+                            Text('10', style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             );
           },
