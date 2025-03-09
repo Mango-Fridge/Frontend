@@ -13,11 +13,55 @@ class GenerateCookView extends ConsumerWidget {
     final _recipeNameController = TextEditingController();
     final _ingredientsController = TextEditingController();
 
+    // 포커스 노드: 텍스트 필드의 포커스 상태 관리 -> 클릭 시 확장
+    final _focusNode = FocusNode();
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('요리하기')),
+      appBar: AppBar(
+        title: StatefulBuilder(
+          builder: (context, setState) {
+            // 포커스 상태에 따라 너비 동적으로 변경
+            final isFocused = _focusNode.hasFocus;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: isFocused ? screenWidth * 0.8 : null, // 포커스 시 확장
+                  child: IntrinsicWidth(
+                    child: TextField(
+                      controller: _recipeNameController,
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        hintText: '요리 이름 입력',
+                        suffixIcon: const Icon(Icons.edit, size: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 12.0,
+                        ),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(fontSize: 16),
+                      onTap: () {
+                        setState(() {}); // 포커스 상태 변경 시 애니메이션 트리거
+                      },
+                      onSubmitted: (_) {
+                        setState(() {}); // 입력 완료 후 상태 업데이트
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
