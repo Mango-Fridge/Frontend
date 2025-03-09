@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 import 'package:mango/providers/cook_provider.dart';
 import 'generate_cook_view.dart';
 
@@ -10,11 +11,10 @@ class CookView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recipeName = ref.watch(recipeNameProvider);
-    final ingredients = ref.watch(ingredientsProvider);
+    final String recipeName = ref.watch(recipeNameProvider);
+    final String ingredients = ref.watch(ingredientsProvider);
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final Design design = Design(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +23,7 @@ class CookView extends ConsumerWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+        padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.05),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -31,15 +31,17 @@ class CookView extends ConsumerWidget {
 
             // 상단 그룹 선택 박스
             Container(
-              width: screenWidth * 0.3,
-              height: screenHeight * 0.05,
+              width: design.screenWidth * 0.3,
+              height: design.screenHeight * 0.05,
               decoration: BoxDecoration(
                 color: Colors.amber,
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-              child: Row(
-                children: const [
+              padding: EdgeInsets.symmetric(
+                horizontal: design.screenWidth * 0.03,
+              ),
+              child: const Row(
+                children: [
                   Icon(Icons.keyboard_arrow_down),
                   SizedBox(width: 5),
                   Text('가족 냉장고', style: TextStyle(fontSize: 14)),
@@ -52,8 +54,8 @@ class CookView extends ConsumerWidget {
             // + 버튼 -> 클릭 시 generate_cook_view로 이동
             Center(
               child: Container(
-                width: screenWidth * 0.9,
-                height: screenHeight * 0.07,
+                width: design.screenWidth * 0.9,
+                height: design.screenHeight * 0.07,
                 decoration: BoxDecoration(
                   color: Colors.amber,
                   borderRadius: BorderRadius.circular(8),
@@ -72,7 +74,7 @@ class CookView extends ConsumerWidget {
             // 요리 정보 표시
             Center(
               child: Column(
-                children: [
+                children: <Widget>[
                   if (recipeName.isNotEmpty && ingredients.isNotEmpty) ...[
                     // 요리 정보가 비워져 있지 않을 때 표시
                     Text(
@@ -84,7 +86,7 @@ class CookView extends ConsumerWidget {
                       '재료: $ingredients',
                       style: const TextStyle(fontSize: 14),
                     ),
-                  ] else ...[
+                  ] else ...<Widget>[
                     // 요리 정보가 비워져 있을 때 표시
                     const Icon(
                       Icons.local_dining,
