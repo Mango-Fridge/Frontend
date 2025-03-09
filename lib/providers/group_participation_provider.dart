@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/group_state.dart';
+import 'package:mango/state/group_state.dart';
 import 'package:mango/services/group_repository.dart';
 
 // 그룹(냉장고) 유효성 상태관리를 위해 사용
@@ -40,10 +40,11 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
       }
 
       // 그룹 ID가 존재하는 지 확인 후, 데이터 담기
-      final Map<String, dynamic> selectedGroup = groupRepository.dummyGroups.firstWhere(
-        (group) => group['groupId'] == trimmeGroupId,
-        orElse: () => <String, dynamic>{}, // 없다면 빈값으로 반환
-      );
+      final Map<String, dynamic> selectedGroup = groupRepository.dummyGroups
+          .firstWhere(
+            (group) => group['groupId'] == trimmeGroupId,
+            orElse: () => <String, dynamic>{}, // 없다면 빈값으로 반환
+          );
 
       // 냉장고ID가 존재하지 않을 때
       if (selectedGroup.isEmpty) {
@@ -77,5 +78,8 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
 }
 
 // NotifierProvider 정의
-final NotifierProvider<GroupParticipationNotifier, GroupState> groupParticipationProvider =
-    NotifierProvider<GroupParticipationNotifier, GroupState>(GroupParticipationNotifier.new);
+final NotifierProvider<GroupParticipationNotifier, GroupState>
+groupParticipationProvider =
+    NotifierProvider<GroupParticipationNotifier, GroupState>(
+      GroupParticipationNotifier.new,
+    );

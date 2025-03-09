@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mango/model/group_state.dart';
+import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_create_provider.dart';
 import 'package:mango/view/group/subView/group_common_button.dart';
 import 'package:mango/view/group/subView/group_modal_title.dart';
@@ -13,7 +13,9 @@ class GroupCreateView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GroupState groupState = ref.watch(groupCreateProvider);
-    final GroupCreateNotifier groupNotifier = ref.read(groupCreateProvider.notifier);
+    final GroupCreateNotifier groupNotifier = ref.read(
+      groupCreateProvider.notifier,
+    );
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
@@ -34,18 +36,24 @@ class GroupCreateView extends ConsumerWidget {
                   hintText: '2~8자 입력',
                   errorText: groupState.errorMessage, // 에러 메시지 표시
                 ),
-                onChanged: (String groupName) => groupNotifier.checkGroupName(groupName), // 입력값 지속적으로 상태확인
+                onChanged:
+                    (String groupName) => groupNotifier.checkGroupName(
+                      groupName,
+                    ), // 입력값 지속적으로 상태확인
               ),
             ),
             const Spacer(),
             groupCommonButton(
               context: context,
               text: "생성하기",
-              onPressed: groupState.isButton? () {
-                // 생성 로직 추가
-                print(groupState.groupName);
-                context.pop(); // Sheet 닫기
-              } : null,
+              onPressed:
+                  groupState.isButton
+                      ? () {
+                        // 생성 로직 추가
+                        print(groupState.groupName);
+                        context.pop(); // Sheet 닫기
+                      }
+                      : null,
             ),
             const Spacer(),
           ],

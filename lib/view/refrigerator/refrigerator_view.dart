@@ -41,136 +41,131 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Widget build(BuildContext context) {
     final Design design = Design(context);
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          scrolledUnderElevation: 0,
-          leadingWidth: double.infinity,
-          leading: Row(
-            spacing: 15,
-            children: <Widget>[
-              Container(),
-              Image.asset(
-                "assets/images/title.png",
-                width: design.homeImageSize,
-              ),
-              const Text("Mango"),
-            ],
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        body: Stack(
+        scrolledUnderElevation: 0,
+        leadingWidth: double.infinity,
+        leading: Row(
+          spacing: 15,
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      // 그룹 콤보 박스
-                      PopupMenuButton<String>(
-                        onSelected: (String value) {
-                          setState(() {
-                            _selectedGroupId = value;
-                            _selectedGroup =
-                                _groupList!
-                                    .firstWhere(
-                                      (Group group) => group.groupId == value,
-                                    )
-                                    .groupName;
-                          });
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return _groupList!.map<PopupMenuEntry<String>>((
-                            Group group,
-                          ) {
-                            return PopupMenuItem<String>(
-                              value: group.groupId,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0,
-                                  horizontal: 16.0,
-                                ),
-                                child: Text(group.groupName),
-                              ),
-                            );
-                          }).toList();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10.0,
-                            horizontal: 16.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.amber[300],
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Text(_selectedGroup ?? '그룹을 선택 해 주세요.'),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: <Widget>[
-                          // 새로고침 버튼
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.refresh),
-                          ),
-                          // 물품 추가 버튼
-                          ElevatedButton(
-                            onPressed: () {
-                              context.push('/searchContent');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              backgroundColor: Colors.amber[300],
-                              foregroundColor: Colors.black,
-                            ),
-                            child: const Text('물품 추가'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                // 물품 List
-                Expanded(
-                  child:
-                      _groupList!.isEmpty
-                          ? const Center(
-                            child: Text(
-                              "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                          : ListView(
-                            padding: EdgeInsets.zero,
-                            children: <Widget>[
-                              _buildContent(_refrigeratorState?.contentList),
-                            ],
-                          ),
-                ),
-
-                if (_refrigeratorState?.isUpdatedContent ?? false)
-                  _contentUpdateView(),
-              ],
-            ),
+            Container(),
+            Image.asset("assets/images/title.png", width: design.homeImageSize),
+            const Text("Mango"),
           ],
         ),
-
-        floatingActionButton:
-            _refrigeratorState?.isUpdatedContent ?? false
-                ? null
-                : FloatingActionButton(
-                  onPressed: () {
-                    context.push('/cook');
-                  },
-                ),
       ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    // 그룹 콤보 박스
+                    PopupMenuButton<String>(
+                      onSelected: (String value) {
+                        setState(() {
+                          _selectedGroupId = value;
+                          _selectedGroup =
+                              _groupList!
+                                  .firstWhere(
+                                    (Group group) => group.groupId == value,
+                                  )
+                                  .groupName;
+                        });
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return _groupList!.map<PopupMenuEntry<String>>((
+                          Group group,
+                        ) {
+                          return PopupMenuItem<String>(
+                            value: group.groupId,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                                horizontal: 16.0,
+                              ),
+                              child: Text(group.groupName),
+                            ),
+                          );
+                        }).toList();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 16.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.amber[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Text(_selectedGroup ?? '그룹을 선택 해 주세요.'),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: <Widget>[
+                        // 새로고침 버튼
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.refresh),
+                        ),
+                        // 물품 추가 버튼
+                        ElevatedButton(
+                          onPressed: () {
+                            context.push('/searchContent');
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            backgroundColor: Colors.amber[300],
+                            foregroundColor: Colors.black,
+                          ),
+                          child: const Text('물품 추가'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // 물품 List
+              Expanded(
+                child:
+                    _groupList!.isEmpty
+                        ? const Center(
+                          child: Text(
+                            "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                        : ListView(
+                          padding: EdgeInsets.zero,
+                          children: <Widget>[
+                            _buildContent(_refrigeratorState?.contentList),
+                          ],
+                        ),
+              ),
+
+              if (_refrigeratorState?.isUpdatedContent ?? false)
+                _contentUpdateView(),
+            ],
+          ),
+        ],
+      ),
+
+      floatingActionButton:
+          _refrigeratorState?.isUpdatedContent ?? false
+              ? null
+              : FloatingActionButton(
+                onPressed: () {
+                  context.push('/cook');
+                },
+              ),
     );
   }
 
