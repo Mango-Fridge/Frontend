@@ -11,7 +11,6 @@ class GroupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // 본문 콘텐츠를 AppBar 뒤로 확장
       appBar: AppBar(
         title: const Text("그룹", style: TextStyle(fontSize: 30)),
         centerTitle: false, // 앱바 텍스트 중앙정렬X
@@ -53,7 +52,8 @@ Widget groupModalStartButton(BuildContext context, WidgetRef ref) {
     context: context,
     text: "시작하기",
     onPressed: () {
-      ref.read(groupModalStateProvider.notifier).state = GroupModalState.start; // 시작하기 버튼 클릭 시, 모달 '시작하기' 뷰로 초기화
+      ref.read(groupModalStateProvider.notifier).state =
+          GroupModalState.start; // 시작하기 버튼 클릭 시, 모달 '시작하기' 뷰로 초기화
       groupModalStateView(context, ref);
     },
   );
