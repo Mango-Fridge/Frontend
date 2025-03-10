@@ -85,9 +85,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           return PopupMenuItem<String>(
                             value: group.groupId,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 vertical: 12.0,
-                                horizontal: 16.0,
+                                horizontal: design.marginAndPadding,
                               ),
                               child: Text(group.groupName),
                             ),
@@ -95,9 +95,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         }).toList();
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           vertical: 10.0,
-                          horizontal: 16.0,
+                          horizontal: design.marginAndPadding,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.amber[300],
@@ -234,6 +234,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 물품 별 UI 구성
   Widget _buildContentRow(Content content) {
+    final Design design = Design(context);
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -262,7 +264,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color: Colors.amber[300],
           borderRadius: BorderRadius.circular(8),
@@ -361,7 +363,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     Design design = Design(context);
     return Container(
       color: Colors.grey[200],
-      height: design.screenHeight * 0.20,
+      height: design.contentUpdateViewHeight,
       child: Column(
         children: <Widget>[
           Expanded(

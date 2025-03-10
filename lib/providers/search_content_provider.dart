@@ -14,15 +14,27 @@ class SearchContentState {
   }
 }
 
-class SearchContentProvider extends Notifier<SearchContentState?> {
+class SearchContentNotifier extends Notifier<SearchContentState?> {
   final ItemRepository _itemRepository = ItemRepository();
+  final SearchContentState _searchContentState = SearchContentState();
 
   @override
   SearchContentState? build() => null;
 
   Future<void> loadItemListByString(String searchTerm) async {
-    List<RefrigeratorItem> refrigeratorList = await _itemRepository
+    final List<RefrigeratorItem> refrigeratorList = await _itemRepository
         .loadItemListByString(searchTerm);
-    state = state?.copyWith(refrigeratorItemList: refrigeratorList);
+    try {
+      _searchContentState.refrigeratorItemList = refrigeratorList;
+      state = _searchContentState;
+    } catch (e) {
+      state = null;
+    }
   }
 }
+
+final NotifierProvider<SearchContentNotifier, SearchContentState?>
+searchContentNotifier =
+    NotifierProvider<SearchContentNotifier, SearchContentState?>(
+      SearchContentNotifier.new,
+    );
