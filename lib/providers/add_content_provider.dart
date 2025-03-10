@@ -8,7 +8,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   AddContentState _addContentState = AddContentState();
 
   @override
-  AddContentState? build() => null;
+  AddContentState? build() => AddContentState();
+
+  void resetState() {
+    _addContentState = AddContentState();
+    state = _addContentState;
+  }
 
   // Content 저장 함수
   Future<void> saveContent(
@@ -184,10 +189,9 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // view에서 선택 된 unit 관리 함수
   void setUnit(String unit) {
-    _addContentState = _addContentState.copyWith(
-      selectUnit: unit,
-      isUnitEmpty: true,
-    );
+    if (state != null) {
+      _addContentState = state!.copyWith(selectedUnit: unit, isUnitEmpty: true);
+    }
 
     state = _addContentState;
   }

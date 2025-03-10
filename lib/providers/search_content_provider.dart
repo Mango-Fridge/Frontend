@@ -1,32 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/services/item_repository.dart';
-
-class SearchContentState {
-  List<RefrigeratorItem>? refrigeratorItemList;
-
-  SearchContentState({this.refrigeratorItemList});
-
-  SearchContentState copyWith({List<RefrigeratorItem>? refrigeratorItemList}) {
-    return SearchContentState(
-      refrigeratorItemList: refrigeratorItemList ?? this.refrigeratorItemList,
-    );
-  }
-}
+import 'package:mango/state/search_content_state.dart';
 
 class SearchContentNotifier extends Notifier<SearchContentState?> {
   final ItemRepository _itemRepository = ItemRepository();
-  final SearchContentState _searchContentState = SearchContentState();
+  SearchContentState _searchContentState = SearchContentState();
 
   @override
   SearchContentState? build() => null;
+
+  void resetState() {
+    _searchContentState = SearchContentState();
+    state = _searchContentState;
+  }
 
   Future<void> loadItemListByString(String searchTerm) async {
     final List<RefrigeratorItem> refrigeratorList = await _itemRepository
         .loadItemListByString(searchTerm);
     try {
-      _searchContentState.refrigeratorItemList = refrigeratorList;
-      state = _searchContentState;
+      state = state?.copyWith(refrigeratorItemList: refrigeratorList);
     } catch (e) {
       state = null;
     }

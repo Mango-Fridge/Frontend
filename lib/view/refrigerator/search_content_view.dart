@@ -19,6 +19,15 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(searchContentNotifier.notifier).resetState();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     Design design = Design(context);
 
@@ -80,46 +89,53 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
 
   Widget _buildItemRow(RefrigeratorItem item) {
     Design design = Design(context);
-    return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: 4,
-        horizontal: design.marginAndPadding,
-      ),
-      padding: EdgeInsets.all(design.marginAndPadding),
-      decoration: BoxDecoration(
-        color: Colors.amber[300],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return GestureDetector(
+      onTap: () {
+        ref.watch(searchContentNotifier.notifier).resetState();
+        _controller.text = '';
+        context.push('/addContent');
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: design.marginAndPadding,
+        ),
+        padding: EdgeInsets.all(design.marginAndPadding),
+        decoration: BoxDecoration(
+          color: Colors.amber[300],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    item.itemName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  item.itemName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+                  '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
+                  style: const TextStyle(fontSize: 12),
                 ),
+                Text(item.brandName, style: const TextStyle(fontSize: 12)),
               ],
             ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
-                style: const TextStyle(fontSize: 12),
-              ),
-              Text(item.brandName, style: const TextStyle(fontSize: 12)),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
