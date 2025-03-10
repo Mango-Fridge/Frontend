@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/state/group_state.dart';
 
 // 그룹(냉장고) 유효성 상태관리를 위해 사용
 class GroupCreateNotifier extends Notifier<GroupState> {
-  Timer? _debounce; // 타이머 선언
+  
 
   @override
   GroupState build() {
