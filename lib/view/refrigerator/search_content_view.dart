@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/search_content_provider.dart';
+import 'package:mango/state/search_content_state.dart';
 
 class SearchContentView extends ConsumerStatefulWidget {
   const SearchContentView({super.key});
