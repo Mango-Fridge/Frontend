@@ -14,7 +14,6 @@ class GroupView extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("그룹", style: TextStyle(fontSize: 30)),
         centerTitle: false, // 앱바 텍스트 중앙정렬X
-        backgroundColor: Colors.transparent, // AppBar의 배경색을 투명하게 설정 (모달 띄울 때)
       ),
       body: Stack(
         children: <Widget>[
