@@ -22,6 +22,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(searchContentNotifier.notifier).resetState();
     });
@@ -140,6 +141,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
     );
   }
 
+  // 검색어에 의한 물품이 없을 시 화면
   Widget _noItemView() {
     Design design = Design(context);
 

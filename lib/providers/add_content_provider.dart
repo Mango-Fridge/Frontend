@@ -10,6 +10,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   @override
   AddContentState? build() => AddContentState();
 
+  // 초기화 함수
   void resetState() {
     _addContentState = AddContentState();
     state = _addContentState;

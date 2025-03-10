@@ -33,6 +33,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(refrigeratorNotifier.notifier).resetState();
       ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
