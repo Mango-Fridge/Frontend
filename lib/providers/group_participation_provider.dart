@@ -23,9 +23,8 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
   // 그룹id로 해당 그룹 존재 여부 확인
   void checkGroupId(String groupId) {
     final GroupRepository groupRepository = GroupRepository(); // 그룹 레포지터리 인스턴스
-
-    // 공백 제거
-    final String trimmeGroupId = groupId.trim();
+ 
+    final String trimmeGroupId = groupId.trim(); // 공백 제거
 
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 600), () {
@@ -42,7 +41,7 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
       // 그룹 ID가 존재하는 지 확인 후, 데이터 담기
       final Map<String, dynamic> selectedGroup = groupRepository.dummyGroups
           .firstWhere(
-            (group) => group['groupId'] == trimmeGroupId,
+            (Map<String, dynamic> group) => group['groupId'] == trimmeGroupId,
             orElse: () => <String, dynamic>{}, // 없다면 빈값으로 반환
           );
 
@@ -52,17 +51,18 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
           errorMessage: '냉장고ID가 존재하지 않습니다',
           isButton: false,
         );
-      } else {
-        // 그룹 참여 정상적 입력
-        state = state.copyWith(
-          groupId: trimmeGroupId, // 존재하는 그룹ID
-          groupName: selectedGroup['groupName'], // 존재하는 그룹이름
-          gruoupUserKing: selectedGroup['groupUserKing'], // 존재하는 그룹장
-          groupUserCount: selectedGroup['groupUserCount'], // 존재하는 그룹인원 수
-          errorMessage: null,
-          isButton: true,
-        );
+        return;
       }
+
+      // 그룹 참여 정상적 입력
+      state = state.copyWith(
+        groupId: trimmeGroupId, // 존재하는 그룹ID
+        groupName: selectedGroup['groupName'], // 존재하는 그룹이름
+        gruoupUserKing: selectedGroup['groupUserKing'], // 존재하는 그룹장
+        groupUserCount: selectedGroup['groupUserCount'], // 존재하는 그룹인원 수
+        errorMessage: null,
+        isButton: true,
+      );
     });
   }
 
