@@ -57,8 +57,8 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
         state = state.copyWith(
           groupId: trimmeGroupId, // 존재하는 그룹ID
           groupName: selectedGroup['groupName'], // 존재하는 그룹이름
-          gruoupUserKing: selectedGroup['groupUserKing'],
-          groupUserCount: selectedGroup['groupUserCount'],
+          gruoupUserKing: selectedGroup['groupUserKing'], // 존재하는 그룹장
+          groupUserCount: selectedGroup['groupUserCount'], // 존재하는 그룹인원 수
           errorMessage: null,
           isButton: true,
         );
