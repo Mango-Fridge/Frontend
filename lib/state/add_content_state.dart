@@ -8,7 +8,7 @@ class AddContentState {
   String? selectedContentStorage;
   DateTime? selectedRegDate;
   DateTime? selectedExpDate;
-  String? selectUnit;
+  String? selectedUnit;
 
   // 기본 세부 정보 체크
   bool isNameEmpty;
@@ -43,7 +43,7 @@ class AddContentState {
     this.selectedContentStorage,
     this.selectedRegDate,
     this.selectedExpDate,
-    this.selectUnit,
+    this.selectedUnit,
     this.isUnitEmpty = false,
     this.isNameEmpty = false,
     this.isCheckedCount = true,
@@ -62,7 +62,7 @@ class AddContentState {
     String? selectedContentStorage,
     DateTime? selectedRegDate,
     DateTime? selectedExpDate,
-    String? selectUnit,
+    String? selectedUnit,
 
     bool? isNameEmpty,
     bool? isCheckecCount,
@@ -86,6 +86,7 @@ class AddContentState {
           selectedContentStorage ?? this.selectedContentStorage,
       selectedRegDate: selectedRegDate ?? this.selectedRegDate,
       selectedExpDate: selectedExpDate ?? this.selectedExpDate,
+      selectedUnit: selectedUnit ?? this.selectedUnit,
 
       isNameEmpty: isNameEmpty ?? this.isNameEmpty,
       isCheckedCount: isCheckecCount ?? this.isCheckedCount,

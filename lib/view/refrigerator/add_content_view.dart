@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:intl/intl.dart';
 import 'package:mango/providers/add_content_provider.dart';
-import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_content_state.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
@@ -16,7 +15,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   List<String> contentCategory = <String>['육류', '음료류', '채소류', '과자류', '아이스크림류'];
   List<String> contentStorage = <String>['냉장', '냉동'];
 
-  AddContentState? get addContentState => ref.watch(addContentProvider);
+  AddContentState? get _addContentState => ref.watch(addContentProvider);
 
   static const int _memoMaxLine = 3;
   static const int _memoMaxLength = 120;
@@ -33,419 +32,507 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   final TextEditingController fatController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // view init 후 데이터 처리를 하기 위함
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(addContentProvider.notifier).resetState();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Design design = Design(context);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('물품 추가 상세 입력'),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.035),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                // Content detail info view
-                child: Column(
-                  spacing: 10,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextField(
-                      controller: nameController,
-                      style: const TextStyle(fontSize: 22.0),
-                      decoration: InputDecoration(
-                        hintText: '물품 명을 입력해 주세요',
-                        errorText:
-                            addContentState?.contentNameErrorMessage?.isEmpty ??
-                                    true
-                                ? null
-                                : addContentState?.contentNameErrorMessage,
+        appBar: AppBar(
+          title: const Text('물품 추가 상세 입력'),
+          backgroundColor: Colors.white,
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
+          child: Column(
+            spacing: 20,
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  // Content detail info view
+                  child: Column(
+                    spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextField(
+                        controller: nameController,
+                        style: const TextStyle(
+                          fontSize: 19.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: '물품 명을 입력해 주세요',
+                          hintStyle: TextStyle(color: Colors.red[200]),
+                          errorText:
+                              _addContentState
+                                          ?.contentNameErrorMessage
+                                          ?.isEmpty ??
+                                      true
+                                  ? null
+                                  : _addContentState?.contentNameErrorMessage,
+                        ),
+                        onChanged: (String value) {
+                          ref
+                              .watch(addContentProvider.notifier)
+                              .updateNameErrorMessage(value);
+                        },
                       ),
-                      onChanged: (String value) {
-                        ref
-                            .watch(addContentProvider.notifier)
-                            .updateNameErrorMessage(value);
-                      },
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        SizedBox(
-                          width: design.screenWidth * 0.22,
-                          child: const Row(
-                            children: <Widget>[
-                              Text('카테고리 '),
-                              Text('*', style: TextStyle(color: Colors.red)),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: DropdownButton<String>(
-                            value:
-                                addContentState?.selectedContentCategory ??
-                                contentCategory[0],
-                            isExpanded: true,
-                            items:
-                                contentCategory.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                            onChanged: (String? newValue) {
-                              ref
-                                  .watch(addContentProvider.notifier)
-                                  .setCategory(newValue ?? '');
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        SizedBox(
-                          width: design.screenWidth * 0.22,
-                          child: const Row(
-                            children: <Widget>[
-                              Text('수량 (인분) '),
-                              Text('*', style: TextStyle(color: Colors.red)),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            controller: countController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(),
-                              errorText:
-                                  addContentState
-                                              ?.contentCountErrorMessage
-                                              ?.isEmpty ??
-                                          true
-                                      ? null
-                                      : addContentState
-                                          ?.contentCountErrorMessage,
-                            ),
-                            onChanged: (String value) {
-                              ref
-                                  .watch(addContentProvider.notifier)
-                                  .updateCount(value);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        SizedBox(
-                          width: design.screenWidth * 0.22,
-                          child: const Row(
-                            children: <Widget>[
-                              Text('등록 날짜 '),
-                              Text('*', style: TextStyle(color: Colors.red)),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            DateFormat('a yyyy년 M월 d일 h시 mm분', 'ko').format(
-                              addContentState?.selectedRegDate ??
-                                  DateTime.now(),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () => _selectDateTime(context, true),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        SizedBox(
-                          width: design.screenWidth * 0.22,
-                          child: const Row(
-                            children: <Widget>[
-                              Text('소비 기한 '),
-                              Text('*', style: TextStyle(color: Colors.red)),
-                            ],
-                          ),
-                        ),
-
-                        Expanded(
-                          child: Text(
-                            addContentState?.selectedExpDate == null
-                                ? '날짜를 선택하세요'
-                                : DateFormat(
-                                  'a yyyy년 M월 d일 h시 mm분',
-                                  'ko',
-                                ).format(
-                                  addContentState!.selectedExpDate ??
-                                      DateTime.now(),
-                                ),
-                            style: TextStyle(
-                              color:
-                                  addContentState?.selectedExpDate == null
-                                      ? Colors.red[300]
-                                      : Colors.black,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () => _selectDateTime(context, false),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        SizedBox(
-                          width: design.screenWidth * 0.22,
-                          child: const Row(
-                            children: <Widget>[
-                              Text('보관 장소 '),
-                              Text('*', style: TextStyle(color: Colors.red)),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: DropdownButton<String>(
-                            value:
-                                addContentState?.selectedContentStorage ??
-                                contentStorage[0],
-                            isExpanded: true,
-                            items:
-                                contentStorage.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                            onChanged: (String? newValue) {
-                              ref
-                                  .watch(addContentProvider.notifier)
-                                  .setStorage(newValue ?? '');
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        SizedBox(
-                          width: design.screenWidth * 0.22,
-                          child: const Text('메모'),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              TextField(
-                                controller: memoController,
-                                maxLines: _memoMaxLine,
-                                maxLength: _memoMaxLength,
-                                decoration: const InputDecoration(
-                                  hintText: "메모를 입력하세요",
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    // nutrition view
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: const Row(
+                      Row(
                         spacing: 10,
                         children: <Widget>[
-                          Text('영양 성분', style: TextStyle(fontSize: 14)),
-                          Tooltip(
-                            triggerMode: TooltipTriggerMode.tap,
-                            message:
-                                "각 영양 성분을 입력해야 \n'물품 공개 등록' 버튼을 \n활성화할 수 있습니다.",
-                            child: Icon(Icons.help_outline),
-                          ),
-                        ],
-                      ),
-                      children: <Widget>[
-                        Column(
-                          spacing: 10,
-                          children: <Widget>[
-                            Row(
-                              spacing: 10,
+                          SizedBox(
+                            width: design.screenWidth * 0.22,
+                            child: const Row(
                               children: <Widget>[
-                                SizedBox(
-                                  width: design.screenWidth * 0.22,
-                                  child: const Text('단위'),
+                                Text(
+                                  '카테고리 ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Expanded(
-                                  child: TextField(
-                                    keyboardType: TextInputType.number,
-                                    controller: capacityController,
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      hintText: 'ex) 150',
-                                    ),
-                                    onChanged: (String? newValue) {
-                                      ref
-                                          .read(addContentProvider.notifier)
-                                          .updateCapacity(
-                                            capacityController.text,
-                                          );
-                                    },
+                                Text(
+                                  '*',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                buildElevatedButton(
-                                  label: 'g',
-                                  onPressed: () {
-                                    ref
-                                        .watch(addContentProvider.notifier)
-                                        .setUnit('g');
-                                  },
-                                  backgroundColor: Colors.amber[300]!,
-                                  foregroundColor: Colors.black,
-                                ),
-                                buildElevatedButton(
-                                  label: 'ml',
-                                  onPressed: () {
-                                    ref
-                                        .watch(addContentProvider.notifier)
-                                        .setUnit('ml');
-                                  },
-                                  backgroundColor: Colors.amber[300]!,
-                                  foregroundColor: Colors.black,
                                 ),
                               ],
                             ),
-                            nutritionInputRow(
-                              label: '열량',
-                              controller: caloriesController,
-                              hintText: 'ex) 150',
-                              onChanged: () {
+                          ),
+                          Expanded(
+                            child: DropdownButton<String>(
+                              value:
+                                  _addContentState?.selectedContentCategory ??
+                                  contentCategory[0],
+                              isExpanded: true,
+                              items:
+                                  contentCategory.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                              onChanged: (String? newValue) {
                                 ref
-                                    .read(addContentProvider.notifier)
-                                    .updateCalories(caloriesController.text);
+                                    .watch(addContentProvider.notifier)
+                                    .setCategory(newValue ?? '');
                               },
                             ),
-                            nutritionInputRow(
-                              label: '탄수화물',
-                              controller: carbsController,
-                              hintText: 'ex) 50',
-                              onChanged: () {
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: <Widget>[
+                          SizedBox(
+                            width: design.screenWidth * 0.22,
+                            child: const Row(
+                              children: <Widget>[
+                                Text(
+                                  '수량 (인분) ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  '*',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: TextField(
+                              controller: countController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                errorText:
+                                    _addContentState
+                                                ?.contentCountErrorMessage
+                                                ?.isEmpty ??
+                                            true
+                                        ? null
+                                        : _addContentState
+                                            ?.contentCountErrorMessage,
+                              ),
+                              onChanged: (String value) {
                                 ref
-                                    .read(addContentProvider.notifier)
-                                    .updateCarbs(carbsController.text);
+                                    .watch(addContentProvider.notifier)
+                                    .updateCount(value);
                               },
                             ),
-                            nutritionInputRow(
-                              label: '단백질',
-                              controller: proteinController,
-                              hintText: 'ex) 150',
-                              onChanged: () {
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: <Widget>[
+                          SizedBox(
+                            width: design.screenWidth * 0.22,
+                            child: const Row(
+                              children: <Widget>[
+                                Text(
+                                  '등록 날짜 ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  '*',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
+                                _addContentState?.selectedRegDate ??
+                                    DateTime.now(),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.calendar_today),
+                            onPressed: () => _selectDateTime(context, true),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: <Widget>[
+                          SizedBox(
+                            width: design.screenWidth * 0.22,
+                            child: const Row(
+                              children: <Widget>[
+                                Text(
+                                  '소비 기한 ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  '*',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Expanded(
+                            child: Text(
+                              _addContentState?.selectedExpDate == null
+                                  ? '날짜를 선택하세요'
+                                  : DateFormat(
+                                    'yyyy년 M월 d일 a h시 m분',
+                                    'ko',
+                                  ).format(
+                                    _addContentState!.selectedExpDate ??
+                                        DateTime.now(),
+                                  ),
+                              style: TextStyle(
+                                color:
+                                    _addContentState?.selectedExpDate == null
+                                        ? Colors.red[300]
+                                        : Colors.black,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.calendar_today),
+                            onPressed: () => _selectDateTime(context, false),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: <Widget>[
+                          SizedBox(
+                            width: design.screenWidth * 0.22,
+                            child: const Row(
+                              children: <Widget>[
+                                Text(
+                                  '보관 장소 ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  '*',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: DropdownButton<String>(
+                              value:
+                                  _addContentState?.selectedContentStorage ??
+                                  contentStorage[0],
+                              isExpanded: true,
+                              items:
+                                  contentStorage.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                              onChanged: (String? newValue) {
                                 ref
-                                    .read(addContentProvider.notifier)
-                                    .updateProtein(proteinController.text);
+                                    .watch(addContentProvider.notifier)
+                                    .setStorage(newValue ?? '');
                               },
                             ),
-                            nutritionInputRow(
-                              label: '지방',
-                              controller: fatController,
-                              hintText: 'ex) 150',
-                              onChanged: () {
-                                ref
-                                    .read(addContentProvider.notifier)
-                                    .updateFat(fatController.text);
-                              },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: <Widget>[
+                          SizedBox(
+                            width: design.screenWidth * 0.22,
+                            child: const Text(
+                              '메모',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                TextField(
+                                  controller: memoController,
+                                  maxLines: _memoMaxLine,
+                                  maxLength: _memoMaxLength,
+                                  decoration: const InputDecoration(
+                                    hintText: "메모를 입력하세요",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      // nutrition view
+                      ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
+                        title: const Row(
+                          spacing: 10,
+                          children: <Widget>[
+                            Text(
+                              '영양 성분',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Tooltip(
+                              triggerMode: TooltipTriggerMode.tap,
+                              message:
+                                  "각 영양 성분을 입력해야 \n'물품 공개 등록' 버튼을 \n활성화할 수 있습니다.",
+                              child: Icon(Icons.help_outline),
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  ],
+                        children: <Widget>[
+                          Column(
+                            spacing: 10,
+                            children: <Widget>[
+                              Row(
+                                spacing: 10,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: design.screenWidth * 0.22,
+                                    child: const Text(
+                                      '단위',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller: capacityController,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: 'ex) 150',
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        ref
+                                            .read(addContentProvider.notifier)
+                                            .updateCapacity(
+                                              capacityController.text,
+                                            );
+                                      },
+                                    ),
+                                  ),
+                                  buildElevatedButton(
+                                    label: 'g',
+                                    onPressed: () {
+                                      ref
+                                          .watch(addContentProvider.notifier)
+                                          .setUnit('g');
+                                    },
+                                    backgroundColor: Colors.amber[300]!,
+                                    foregroundColor: Colors.black,
+                                    borderColor:
+                                        _addContentState?.selectedUnit == 'g'
+                                            ? Colors.red
+                                            : Colors.transparent,
+                                  ),
+                                  buildElevatedButton(
+                                    label: 'ml',
+                                    onPressed: () {
+                                      ref
+                                          .watch(addContentProvider.notifier)
+                                          .setUnit('ml');
+                                    },
+                                    backgroundColor: Colors.amber[300]!,
+                                    foregroundColor: Colors.black,
+                                    borderColor:
+                                        _addContentState?.selectedUnit == 'ml'
+                                            ? Colors.red
+                                            : Colors.transparent,
+                                  ),
+                                ],
+                              ),
+                              nutritionInputRow(
+                                label: '열량',
+                                controller: caloriesController,
+                                hintText: 'ex) 150',
+                                onChanged: () {
+                                  ref
+                                      .read(addContentProvider.notifier)
+                                      .updateCalories(caloriesController.text);
+                                },
+                              ),
+                              nutritionInputRow(
+                                label: '탄수화물',
+                                controller: carbsController,
+                                hintText: 'ex) 50',
+                                onChanged: () {
+                                  ref
+                                      .read(addContentProvider.notifier)
+                                      .updateCarbs(carbsController.text);
+                                },
+                              ),
+                              nutritionInputRow(
+                                label: '단백질',
+                                controller: proteinController,
+                                hintText: 'ex) 150',
+                                onChanged: () {
+                                  ref
+                                      .read(addContentProvider.notifier)
+                                      .updateProtein(proteinController.text);
+                                },
+                              ),
+                              nutritionInputRow(
+                                label: '지방',
+                                controller: fatController,
+                                hintText: 'ex) 150',
+                                onChanged: () {
+                                  ref
+                                      .read(addContentProvider.notifier)
+                                      .updateFat(fatController.text);
+                                },
+                              ),
+                              const SizedBox(),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            // Bottom Submit Buttons
-            Row(
-              spacing: 10,
-              children: <Widget>[
-                Expanded(
-                  child: buildElevatedButton(
-                    label: '물품 공개 등록',
-                    onPressed:
-                        addContentState?.isNutritionEmpty ?? false
-                            ? () {
-                              print('test');
-                            }
-                            : null,
-                    backgroundColor: Colors.amber[200]!,
-                    foregroundColor: Colors.black,
+              // Bottom Submit Buttons
+              Row(
+                spacing: 10,
+                children: <Widget>[
+                  Expanded(
+                    child: buildElevatedButton(
+                      label: '물품 공개 등록',
+                      onPressed:
+                          _addContentState?.isNutritionEmpty ?? false
+                              ? () {
+                                print('test');
+                              }
+                              : null,
+                      backgroundColor: Colors.amber[200]!,
+                      foregroundColor: Colors.black,
+                      borderColor: Colors.transparent,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: buildElevatedButton(
-                    label: '물품 등록',
-                    onPressed:
-                        addContentState?.isDetailInfoEmpty ?? false
-                            ? () {
-                              ref
-                                  .watch(addContentProvider.notifier)
-                                  .saveContent(
-                                    nameController.text,
-                                    addContentState?.selectedContentCategory ??
-                                        contentCategory[0],
-                                    int.parse(countController.text),
-                                    addContentState?.selectedRegDate ??
-                                        DateTime.now(),
-                                    addContentState?.selectedRegDate ??
-                                        DateTime.now(),
-                                    addContentState?.selectedContentStorage ??
-                                        contentStorage[0],
-                                    memoController.text,
-                                    '',
-                                    capacityController.text.isNotEmpty
-                                        ? int.parse(capacityController.text)
-                                        : 0,
-                                    caloriesController.text.isNotEmpty
-                                        ? int.parse(caloriesController.text)
-                                        : 0,
-                                    carbsController.text.isNotEmpty
-                                        ? int.parse(carbsController.text)
-                                        : 0,
-                                    proteinController.text.isNotEmpty
-                                        ? int.parse(proteinController.text)
-                                        : 0,
-                                    fatController.text.isNotEmpty
-                                        ? int.parse(fatController.text)
-                                        : 0,
-                                  );
-                            }
-                            : null,
-                    backgroundColor: Colors.amber[300]!,
-                    foregroundColor: Colors.black,
+                  Expanded(
+                    child: buildElevatedButton(
+                      label: '물품 등록',
+                      onPressed:
+                          _addContentState?.isDetailInfoEmpty ?? false
+                              ? () {
+                                ref
+                                    .watch(addContentProvider.notifier)
+                                    .saveContent(
+                                      nameController.text,
+                                      _addContentState
+                                              ?.selectedContentCategory ??
+                                          contentCategory[0],
+                                      int.parse(countController.text),
+                                      _addContentState?.selectedRegDate ??
+                                          DateTime.now(),
+                                      _addContentState?.selectedRegDate ??
+                                          DateTime.now(),
+                                      _addContentState
+                                              ?.selectedContentStorage ??
+                                          contentStorage[0],
+                                      memoController.text,
+                                      '',
+                                      capacityController.text.isNotEmpty
+                                          ? int.parse(capacityController.text)
+                                          : 0,
+                                      caloriesController.text.isNotEmpty
+                                          ? int.parse(caloriesController.text)
+                                          : 0,
+                                      carbsController.text.isNotEmpty
+                                          ? int.parse(carbsController.text)
+                                          : 0,
+                                      proteinController.text.isNotEmpty
+                                          ? int.parse(proteinController.text)
+                                          : 0,
+                                      fatController.text.isNotEmpty
+                                          ? int.parse(fatController.text)
+                                          : 0,
+                                    );
+                              }
+                              : null,
+                      backgroundColor: Colors.amber[300]!,
+                      foregroundColor: Colors.black,
+                      borderColor: Colors.transparent,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 50),
-          ],
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
@@ -462,7 +549,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       children: <Widget>[
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.22,
-          child: Text(label),
+          child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         Expanded(
           child: TextField(
@@ -488,12 +575,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required VoidCallback? onPressed,
     required Color backgroundColor,
     required Color foregroundColor,
+    required Color borderColor,
   }) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
+          side: BorderSide(color: borderColor, width: 2.0),
         ),
         backgroundColor: backgroundColor,
         foregroundColor: foregroundColor,
@@ -511,8 +600,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       context: context,
       initialDate:
           isRegisterDate
-              ? addContentState?.selectedRegDate
-              : (addContentState?.selectedExpDate ?? DateTime.now()),
+              ? _addContentState?.selectedRegDate
+              : (_addContentState?.selectedExpDate ?? DateTime.now()),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -523,8 +612,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         context: context,
         initialTime: TimeOfDay.fromDateTime(
           isRegisterDate
-              ? addContentState?.selectedRegDate ?? DateTime.now()
-              : (addContentState?.selectedExpDate ?? DateTime.now()),
+              ? _addContentState?.selectedRegDate ?? DateTime.now()
+              : (_addContentState?.selectedExpDate ?? DateTime.now()),
         ),
       );
 
@@ -546,5 +635,3 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     }
   }
 }
-
-class AddContentBottomButton {}

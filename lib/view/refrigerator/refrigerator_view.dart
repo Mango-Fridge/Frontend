@@ -33,8 +33,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
-    ref.watch(refrigeratorNotifier.notifier).loadContentList('groupId');
+    // view init 후 데이터 처리를 하기 위함
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(refrigeratorNotifier.notifier).resetState();
+      ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
+      ref.watch(refrigeratorNotifier.notifier).loadContentList('groupId');
+    });
   }
 
   @override
@@ -85,9 +89,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           return PopupMenuItem<String>(
                             value: group.groupId,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 vertical: 12.0,
-                                horizontal: 16.0,
+                                horizontal: design.marginAndPadding,
                               ),
                               child: Text(group.groupName),
                             ),
@@ -95,9 +99,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         }).toList();
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           vertical: 10.0,
-                          horizontal: 16.0,
+                          horizontal: design.marginAndPadding,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.amber[300],
@@ -117,6 +121,15 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         // 물품 추가 버튼
                         ElevatedButton(
                           onPressed: () {
+                            ref
+                                .watch(refrigeratorNotifier.notifier)
+                                .resetState();
+                            ref
+                                .watch(groupProvider.notifier)
+                                .loadGroupList('example@example.com');
+                            ref
+                                .watch(refrigeratorNotifier.notifier)
+                                .loadContentList('groupId');
                             context.push('/searchContent');
                           },
                           style: ElevatedButton.styleFrom(
@@ -184,21 +197,27 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
             shape: Border.all(color: Colors.transparent),
             children:
-                contentList!
-                        .where((Content content) => content.storageArea == '냉장')
-                        .isEmpty
-                    ? <Widget>[
-                      const Center(
-                        child: Text(
-                          "냉장고에 보관중인 물품이 없어요.",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ]
-                    : contentList
-                        .where((Content content) => content.storageArea == '냉장')
-                        .map((Content content) => _buildContentRow(content))
-                        .toList(),
+                contentList != null
+                    ? contentList
+                            .where(
+                              (Content content) => content.storageArea == '냉장',
+                            )
+                            .isEmpty
+                        ? <Widget>[
+                          const Center(
+                            child: Text(
+                              "냉장고에 보관중인 물품이 없어요.",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ]
+                        : contentList
+                            .where(
+                              (Content content) => content.storageArea == '냉장',
+                            )
+                            .map((Content content) => _buildContentRow(content))
+                            .toList()
+                    : <Widget>[],
           ),
           const Divider(),
           Container(height: 10),
@@ -210,21 +229,27 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
             shape: Border.all(color: Colors.transparent),
             children:
-                contentList
-                        .where((Content content) => content.storageArea == '냉동')
-                        .isEmpty
-                    ? <Widget>[
-                      const Center(
-                        child: Text(
-                          "냉동고에 보관중인 물품이 없어요.",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ]
-                    : contentList
-                        .where((Content content) => content.storageArea == '냉동')
-                        .map((Content content) => _buildContentRow(content))
-                        .toList(),
+                contentList != null
+                    ? contentList
+                            .where(
+                              (Content content) => content.storageArea == '냉동',
+                            )
+                            .isEmpty
+                        ? <Widget>[
+                          const Center(
+                            child: Text(
+                              "냉동고에 보관중인 물품이 없어요.",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ]
+                        : contentList
+                            .where(
+                              (Content content) => content.storageArea == '냉동',
+                            )
+                            .map((Content content) => _buildContentRow(content))
+                            .toList()
+                    : <Widget>[],
           ),
           const Divider(),
         ],
@@ -234,6 +259,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 물품 별 UI 구성
   Widget _buildContentRow(Content content) {
+    final Design design = Design(context);
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -248,7 +275,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                   },
                   child: const Text(
                     '닫기',
@@ -262,7 +289,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color: Colors.amber[300],
           borderRadius: BorderRadius.circular(8),
@@ -361,7 +388,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     Design design = Design(context);
     return Container(
       color: Colors.grey[200],
-      height: design.screenHeight * 0.20,
+      height: design.contentUpdateViewHeight,
       child: Column(
         children: <Widget>[
           Expanded(

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
+import 'package:mango/model/refrigerator_item.dart';
+import 'package:mango/providers/search_content_provider.dart';
+import 'package:mango/state/search_content_state.dart';
 
 class SearchContentView extends ConsumerStatefulWidget {
   const SearchContentView({super.key});
@@ -10,7 +13,20 @@ class SearchContentView extends ConsumerStatefulWidget {
 }
 
 class _SearchContentViewState extends ConsumerState<SearchContentView> {
+  SearchContentState? get _searchContentState =>
+      ref.watch(searchContentNotifier);
+
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // view init 후 데이터 처리를 하기 위함
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(searchContentNotifier.notifier).resetState();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +42,8 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         spacing: 20,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: design.screenWidth * 0.035,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: design.screenWidth * 0.035,
-            ),
+            margin: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
+            padding: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
             decoration: BoxDecoration(
               color: Colors.amber[200],
               borderRadius: BorderRadius.circular(8),
@@ -43,41 +55,124 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 border: InputBorder.none,
               ),
               onChanged: (String value) {
-                // 값이 변경 될 때마다 api 호출 해야 함. (ItemRepository 및 ItemList를 관리해주는 Provider 구현 필요)
-                // 호출 결과에 따라 ListView인지 예외 처리인지 구분
-                print(value);
-                setState(() {});
+                ref
+                    .watch(searchContentNotifier.notifier)
+                    .loadItemListByString(value);
               },
             ),
           ),
-          // SizedBox 부터 Spacer 까지는 api 호출 결과에 따라 노출/비노출
-          const SizedBox(height: 100),
-          Image.asset(
-            "assets/images/cart.png",
-            width: design.cartImageSize,
-            height: design.cartImageSize,
+          Expanded(
+            child:
+                _searchContentState != null &&
+                        _searchContentState?.refrigeratorItemList != null &&
+                        _searchContentState!.refrigeratorItemList!.isNotEmpty
+                    ? _buildItem(_searchContentState?.refrigeratorItemList!)
+                    : _noItemView(),
           ),
-          const Text(
-            "찾고 싶은 물품을 검색하거나,\n원하는 물품이 없다면 직접 추가해 보세요!",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              context.push('/addContent');
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber[300],
-              foregroundColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text("직접 물품 추가"),
-          ),
-          const Spacer(),
         ],
       ),
+    );
+  }
+
+  Widget _buildItem(List<RefrigeratorItem>? itemList) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Column(
+        children: <Widget>[
+          const Divider(),
+          ...itemList!.map((RefrigeratorItem item) => _buildItemRow(item)),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemRow(RefrigeratorItem item) {
+    Design design = Design(context);
+    return GestureDetector(
+      onTap: () {
+        ref.watch(searchContentNotifier.notifier).resetState();
+        _controller.text = '';
+        context.push('/addContent');
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: design.marginAndPadding,
+        ),
+        padding: EdgeInsets.all(design.marginAndPadding),
+        decoration: BoxDecoration(
+          color: Colors.amber[300],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    item.itemName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
+                  style: const TextStyle(fontSize: 12),
+                ),
+                Text(item.brandName, style: const TextStyle(fontSize: 12)),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 검색어에 의한 물품이 없을 시 화면
+  Widget _noItemView() {
+    Design design = Design(context);
+
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 100),
+        Image.asset(
+          "assets/images/cart.png",
+          width: design.cartImageSize,
+          height: design.cartImageSize,
+        ),
+        const Text(
+          "찾고 싶은 물품을 검색하거나,\n원하는 물품이 없다면 직접 추가해 보세요!",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            context.push('/addContent');
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.amber[300],
+            foregroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: const Text("직접 물품 추가"),
+        ),
+        const Spacer(),
+      ],
     );
   }
 }

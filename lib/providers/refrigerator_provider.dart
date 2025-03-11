@@ -5,10 +5,16 @@ import 'package:mango/state/refrigerator_state.dart';
 
 class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   final ContentRepository _contentRepository = ContentRepository();
-  final RefrigeratorState _refrigeratorState = RefrigeratorState();
+  RefrigeratorState _refrigeratorState = RefrigeratorState();
 
   @override
-  RefrigeratorState? build() => null;
+  RefrigeratorState? build() => RefrigeratorState();
+
+  // 초기화 함수
+  void resetState() {
+    _refrigeratorState = RefrigeratorState();
+    state = _refrigeratorState;
+  }
 
   // Content list load 함수
   Future<void> loadContentList(String groupId) async {
