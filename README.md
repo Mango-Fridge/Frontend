@@ -2,13 +2,14 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.0.4 (2025-03-09)
+## VERSION 1.0.5 (2025-03-11)
  - 메인화면
-   - 물품 수량 추가/감소 View 및 로직
-   - 물품 상세정보 View
-   - 물품 추가 View
+   - 물품 추가 검색필드
+   - 물품 추가 상세정보 로직
+   - View 전환시, state 초기화
  - 그룹
-   - 그룹 생성/참여 View 및 로직 (유효성 체크)
+   - 생성하기에서 타이머 제거 
+   - 코드 리팩토링 (Guard clause)
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
