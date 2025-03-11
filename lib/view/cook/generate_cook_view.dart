@@ -16,8 +16,9 @@ class GenerateCookView extends ConsumerWidget {
 
     // 포커스 노드: 텍스트 필드의 포커스 상태 관리 -> 키보드 상태 관리 목적
     final FocusNode recipeNameFocusNode = FocusNode(); // -> 클릭 시 확장도 관리
-    final FocusNode ingredientsFocusNode = FocusNode();
-    final FocusNode memoFocusNode = FocusNode();
+    // final FocusNode ingredientsFocusNode = FocusNode();
+    // final FocusNode memoFocusNode = FocusNode();
+    bool _isFocused = false; // 포커스 상태 관리
 
     final Design design = Design(context);
 
@@ -131,7 +132,6 @@ class GenerateCookView extends ConsumerWidget {
       // 바텀 시트
       bottomSheet: SafeArea(
         child: Container(
-          height: design.screenWidth * 0.5,
           color: Colors.amber,
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -169,6 +169,7 @@ class GenerateCookView extends ConsumerWidget {
                   style: TextStyle(color: Colors.black),
                 ),
               ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
