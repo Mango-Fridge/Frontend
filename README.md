@@ -10,6 +10,7 @@
  - 그룹
    - 생성하기에서 타이머 제거 
    - 코드 리팩토링 (Guard clause)
+ - Toast Message 패키지 적용 (fluttertoast)
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
@@ -25,3 +26,4 @@
 | `shared_preferences`      | 로컬 저장소 패키지       | `2.5.2` |
 | `sign_in_with_apple`      | Apple 로그인 패키지       | `2.6.1` |
 | `kakao_flutter_sdk`      | Kakao 로그인 패키지       | `1.9.6` |
+| `fluttertoast`      | Toast Message 패키지       | `8.2.12` |
