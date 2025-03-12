@@ -14,30 +14,36 @@ class GenerateCookView extends ConsumerStatefulWidget {
 
 class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
   // 텍스트 필드 입력을 관리하기 위한 컨트롤러
-  final TextEditingController _recipeNameController = TextEditingController();
-  final TextEditingController _ingredientsController = TextEditingController();
+  final TextEditingController _cookNameController = TextEditingController();
+  final TextEditingController _searchIngridientController =
+      TextEditingController();
 
   // 포커스 노드: 텍스트 필드의 포커스 상태 관리 -> 키보드 상태 관리 목적
-  final FocusNode _recipeNameFocusNode = FocusNode();
-  bool _isFocused = false;
+  final FocusNode _cookNameFocusNode = FocusNode();
+  final FocusNode _searchIngredientFocusNode = FocusNode();
+
+  bool _isCookNameFocused = false;
+  bool _isSearchIngredientFocused = false;
+
+  // 검색어 입력값을 초기화할 때 사용되는 변수
+  bool _isSearchFieldEmpty = true;
 
   @override
   void initState() {
     super.initState();
-    // 포커스 상태 변경 리스너 추가
-    _recipeNameFocusNode.addListener(() {
+    // 포커스 상태 변경 리스너
+    _cookNameFocusNode.addListener(() {
       setState(() {
-        _isFocused = _recipeNameFocusNode.hasFocus;
+        _isCookNameFocused = _cookNameFocusNode.hasFocus;
       });
     });
-  }
 
-  @override
-  void dispose() {
-    _recipeNameController.dispose();
-    _ingredientsController.dispose();
-    _recipeNameFocusNode.dispose();
-    super.dispose();
+    _searchIngredientFocusNode.addListener(() {
+      setState(() {
+        _isSearchIngredientFocused = _searchIngredientFocusNode.hasFocus;
+        _isSearchFieldEmpty = _searchIngridientController.text.isEmpty;
+      });
+    });
   }
 
   @override
@@ -48,39 +54,39 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
             AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: _isFocused ? design.screenWidth * 0.75 : null, // 포커스 시 확장
-              child: IntrinsicWidth(
-                child: TextField(
-                  controller: _recipeNameController,
-                  focusNode: _recipeNameFocusNode,
-                  decoration: InputDecoration(
-                    hintText: '요리 이름 입력',
-                    suffixIcon: const Icon(Icons.edit, size: 20),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    isDense: true,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.fastOutSlowIn,
+              width:
+                  _isCookNameFocused
+                      ? design.screenWidth * 0.75
+                      : design.screenWidth * 0.4, // 포커스 시 확장
+
+              child: TextField(
+                // controller 를 텍스트필드에 연결
+                controller: _cookNameController,
+                focusNode: _cookNameFocusNode,
+                decoration: InputDecoration(
+                  hintText: '요리 이름 입력',
+                  suffixIcon: const Icon(Icons.edit, size: 20),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  style: const TextStyle(fontSize: 16),
-                  onTap: () {
-                    // 포커스를 강제로 설정
-                    FocusScope.of(context).requestFocus(_recipeNameFocusNode);
-                  },
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 12.0,
+                  ),
+                  isDense: true,
                 ),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
+            const SizedBox(width: 8.0),
 
             // 영양성분 표시 box
-            if (!_isFocused) ...<Widget>[
-              const SizedBox(width: 8.0),
+            if (!_isCookNameFocused) ...<Widget>[
               Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -124,26 +130,47 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
       ),
 
       // 페이지 내용
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             // 검색 필드
             TextField(
+              controller: _searchIngridientController,
               decoration: InputDecoration(
                 hintText: '냉장고에 있는 음식 재료를 추가해보세요',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isSearchFieldEmpty ? Icons.search : Icons.close,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    if (!_isSearchFieldEmpty) {
+                      _searchIngridientController.clear();
+                      setState(() {
+                        _isSearchFieldEmpty = true;
+                      });
+                    }
+                  },
+                ),
               ),
+              onChanged: (String value) {
+                // 입력값이 변경될 때 상태 업데이트
+                setState(() {
+                  _isSearchFieldEmpty = value.isEmpty;
+                });
+              },
             ),
-            SizedBox(height: 200),
-            Text("재료를 추가해주세요."),
+            const SizedBox(height: 200),
+            const Text("재료를 추가해주세요."),
           ],
         ),
       ),
 
-      // 바텀 시트
+      // 바텀 시트 - 키보드 등장 시 숨김 관리 위해 visibility 위젯 사용
       bottomSheet: Visibility(
-        visible: !_isFocused,
+        visible: !_isCookNameFocused,
         child: Container(
           color: Colors.amber,
           padding: const EdgeInsets.all(16.0),
@@ -166,10 +193,10 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
               ElevatedButton(
                 onPressed: () {
                   // 입력값 가져오기
-                  final String recipeName = _recipeNameController.text;
-                  final String ingredients = _ingredientsController.text;
+                  final String cookName = _cookNameController.text;
+                  final String ingredients = _searchIngridientController.text;
 
-                  ref.read(recipeNameProvider.notifier).state = recipeName;
+                  ref.read(recipeNameProvider.notifier).state = cookName;
                   ref.read(ingredientsProvider.notifier).state = ingredients;
                   Navigator.pop(context); // cook view로 돌아감
                 },
