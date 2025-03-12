@@ -438,7 +438,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ),
               ],
             ),
-            nutritionInputRow(
+            nutritionTextField(
               label: '열량',
               controller: caloriesController,
               hintText: 'ex) 150',
@@ -448,7 +448,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     .updateCalories(caloriesController.text);
               },
             ),
-            nutritionInputRow(
+            nutritionTextField(
               label: '탄수화물',
               controller: carbsController,
               hintText: 'ex) 50',
@@ -458,7 +458,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     .updateCarbs(carbsController.text);
               },
             ),
-            nutritionInputRow(
+            nutritionTextField(
               label: '단백질',
               controller: proteinController,
               hintText: 'ex) 150',
@@ -468,7 +468,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     .updateProtein(proteinController.text);
               },
             ),
-            nutritionInputRow(
+            nutritionTextField(
               label: '지방',
               controller: fatController,
               hintText: 'ex) 150',
@@ -552,7 +552,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     );
   }
 
-  Widget nutritionInputRow({
+  Widget nutritionTextField({
     required String label,
     required TextEditingController controller,
     required String hintText,
