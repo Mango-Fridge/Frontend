@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/view/cook/cook_view.dart';
 import 'package:mango/view/home/home_view.dart';
@@ -30,7 +31,10 @@ final GoRouter goRouter = GoRouter(
     ),
     GoRoute(
       path: '/addContent',
-      builder: (context, state) => const AddContentView(),
+      builder: (context, state) {
+        final item = state.extra as RefrigeratorItem?;
+        return AddContentView(item: item);
+      },
     ),
     // 요리 화면
     GoRoute(path: '/cook', builder: (context, state) => const CookView()),
