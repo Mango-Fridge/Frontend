@@ -2,11 +2,15 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.0.3 (2025-03-03)
- - Hot Reload 이슈로 go_router 로직 변경
- - 메인화면 연결 (TabBarView & BottomNavigationBar)
- - (임시) 설정 View 구현
- - 일부 코드 개선 (메인화면 Appbar, 요리 View 등)
+## VERSION 1.0.5 (2025-03-11)
+ - 메인화면
+   - 물품 추가 검색필드
+   - 물품 추가 상세정보 로직
+   - View 전환시, state 초기화
+ - 그룹
+   - 생성하기에서 타이머 제거 
+   - 코드 리팩토링 (Guard clause)
+ - Toast Message 패키지 적용 (fluttertoast)
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
@@ -22,3 +26,4 @@
 | `shared_preferences`      | 로컬 저장소 패키지       | `2.5.2` |
 | `sign_in_with_apple`      | Apple 로그인 패키지       | `2.6.1` |
 | `kakao_flutter_sdk`      | Kakao 로그인 패키지       | `1.9.6` |
+| `fluttertoast`      | Toast Message 패키지       | `8.2.12` |

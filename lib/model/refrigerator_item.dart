@@ -1,7 +1,9 @@
-class Content {
-  final String contentId;
-  final String contentName;
+class RefrigeratorItem {
+  final String groupId;
+  final bool isOpenItem;
+  final String itemName;
   final String category;
+  final String brandName;
   final int count;
   final DateTime regDate;
   final DateTime expDate;
@@ -14,10 +16,12 @@ class Content {
   final int nutriProtein;
   final int nutriFat;
 
-  Content({
-    this.contentId = '',
-    required this.contentName,
+  RefrigeratorItem({
+    required this.groupId,
+    required this.isOpenItem,
+    required this.itemName,
     required this.category,
+    required this.brandName,
     required this.count,
     required this.regDate,
     required this.expDate,
@@ -31,10 +35,12 @@ class Content {
     required this.nutriFat,
   });
 
-  Content copyWith({
-    String? contentId,
-    String? contentName,
+  RefrigeratorItem copyWith({
+    String? groupId,
+    bool? isOpenItem,
+    String? itemName,
     String? category,
+    String? brandName,
     int? count,
     DateTime? regDate,
     DateTime? expDate,
@@ -47,10 +53,12 @@ class Content {
     int? nutriProtein,
     int? nutriFat,
   }) {
-    return Content(
-      contentId: contentId ?? this.contentId,
-      contentName: contentName ?? this.contentName,
+    return RefrigeratorItem(
+      groupId: groupId ?? this.groupId,
+      isOpenItem: isOpenItem ?? this.isOpenItem,
+      itemName: itemName ?? this.itemName,
       category: category ?? this.category,
+      brandName: brandName ?? this.brandName,
       count: count ?? this.count,
       regDate: regDate ?? this.regDate,
       expDate: expDate ?? this.expDate,
