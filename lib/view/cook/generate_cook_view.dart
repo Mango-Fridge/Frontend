@@ -28,13 +28,33 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
   // 검색어 입력값을 초기화할 때 사용되는 변수
   bool _isSearchFieldEmpty = true;
 
+  // 영양성분 박스 표시 여부
+  bool _showNutritionBox = true;
+
+  // 애니메이션 완료 후 영양성분 박스 표시
+  void _scheduleShowNutritionBox() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _showNutritionBox = true;
+        });
+      }
+    });
+  }
+
   @override
+  // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
     super.initState();
-    // 포커스 상태 변경 리스너
     _cookNameFocusNode.addListener(() {
       setState(() {
         _isCookNameFocused = _cookNameFocusNode.hasFocus;
+        if (_isCookNameFocused) {
+          _showNutritionBox = false;
+        } else {
+          // 포커스 해제 후 영양성분 박스 표시
+          _scheduleShowNutritionBox();
+        }
       });
     });
 
@@ -53,7 +73,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
             AnimatedContainer(
@@ -61,8 +81,8 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
               curve: Curves.fastOutSlowIn,
               width:
                   _isCookNameFocused
-                      ? design.screenWidth * 0.75
-                      : design.screenWidth * 0.4, // 포커스 시 확장
+                      ? design.screenWidth * 0.76
+                      : design.screenWidth * 0.45, // 포커스 시 확장
 
               child: TextField(
                 // controller 를 텍스트필드에 연결
@@ -86,7 +106,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
             const SizedBox(width: 8.0),
 
             // 영양성분 표시 box
-            if (!_isCookNameFocused) ...<Widget>[
+            if (!_isCookNameFocused && _showNutritionBox) ...<Widget>[
               Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -97,12 +117,11 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                   spacing: 15.0,
                   children: <Widget>[
                     Column(
-                      children: [
+                      children: <Widget>[
                         Text('열량', style: TextStyle(fontSize: 12)),
                         Text('300', style: TextStyle(fontSize: 12)),
                       ],
                     ),
-
                     Column(
                       children: <Widget>[
                         Text('탄', style: TextStyle(fontSize: 12)),
@@ -170,7 +189,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
       // 바텀 시트 - 키보드 등장 시 숨김 관리 위해 visibility 위젯 사용
       bottomSheet: Visibility(
-        visible: !_isCookNameFocused,
+        visible: !_isSearchIngredientFocused && !_isCookNameFocused,
         child: Container(
           color: Colors.amber,
           padding: const EdgeInsets.all(16.0),
