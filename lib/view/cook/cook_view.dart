@@ -1,56 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 import 'package:mango/providers/cook_provider.dart';
-import 'second_page.dart';
+import 'generate_cook_view.dart';
 
-// Riverpod 상태를 구독하기 위해 ConsumerWidget 사용
+// 요리 리스트를 보여주는 view
 class CookView extends ConsumerWidget {
   const CookView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Riverpod Provider에서 요리 이름과 재료를 실시간으로 읽음
-    final recipeName = ref.watch(recipeNameProvider);
-    final ingredients = ref.watch(ingredientsProvider);
+    final String recipeName = ref.watch(recipeNameProvider);
+    final String ingredients = ref.watch(ingredientsProvider);
+
+    final Design design = Design(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('요리')),
-      body: Center(
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text('요리', style: TextStyle(color: Colors.black)),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.05),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // + 버튼 (상단 박스 형태)
+            const SizedBox(height: 10),
+
+            // 상단 그룹 선택 박스
             Container(
-              width: 200, // 전체 너비
-              height: 50, // 버튼 높이
-              color: Colors.yellow, // 이미지와 동일한 색상
-              child: IconButton(
-                icon: const Icon(Icons.add, color: Colors.white),
-                onPressed: () {
-                  // + 버튼 클릭 시 두 번째 뷰로 이동
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SecondPage()),
-                  );
-                },
+              width: design.screenWidth * 0.3,
+              height: design.screenHeight * 0.05,
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: design.screenWidth * 0.03,
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.keyboard_arrow_down),
+                  SizedBox(width: 5),
+                  Text('가족 냉장고', style: TextStyle(fontSize: 14)),
+                ],
               ),
             ),
-            // 요리 이름 표시, 값이 없으면 "없음" 출력
-            Text(
-              '현재 요리: ${recipeName.isEmpty ? "없음" : recipeName}',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 10),
-            // 재료 표시, 값이 없으면 "없음" 출력
-            Text(
-              '재료: ${ingredients.isEmpty ? "없음" : ingredients}',
-              style: const TextStyle(fontSize: 16),
-            ),
+
             const SizedBox(height: 20),
-            // 요리 추가를 위한 아이콘 (이미지와 유사)
-            const Icon(Icons.local_dining, size: 50, color: Colors.black),
-            const SizedBox(height: 10),
-            const Text('식사를 추가해보세요', style: TextStyle(fontSize: 16)),
+
+            // + 버튼 -> 클릭 시 generate_cook_view로 이동
+            Center(
+              child: Container(
+                width: design.screenWidth * 0.9,
+                height: design.screenHeight * 0.07,
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.add, color: Colors.black),
+                  onPressed: () {
+                    context.push('/generatecook');
+                  },
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 180),
+
+            // 요리 정보 표시
+            Center(
+              child: Column(
+                children: <Widget>[
+                  if (recipeName.isNotEmpty && ingredients.isNotEmpty) ...[
+                    // 요리 정보가 비워져 있지 않을 때 표시
+                    Text(
+                      '현재 요리: $recipeName',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '재료: $ingredients',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ] else ...<Widget>[
+                    // 요리 정보가 비워져 있을 때 표시
+                    const Icon(
+                      Icons.local_dining,
+                      size: 50,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text('식사를 추가해보세요', style: TextStyle(fontSize: 14)),
+                  ],
+                ],
+              ),
+            ),
           ],
         ),
       ),
