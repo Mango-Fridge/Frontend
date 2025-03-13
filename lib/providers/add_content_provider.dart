@@ -57,22 +57,24 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // name error message 관리 함수
   void updateNameErrorMessage(String contentName) {
-    if (contentName.length > 20) {
-      _addContentState = _addContentState.copyWith(
-        contentNameErrorMessage: '물품 이름의 최대 길이는 20자 입니다.',
-        isNameEmpty: false,
-      );
-    } else {
-      if (contentName.isNotEmpty) {
-        _addContentState = _addContentState.copyWith(
-          contentNameErrorMessage: '',
-          isNameEmpty: true,
-        );
-      } else {
-        _addContentState = _addContentState.copyWith(
-          contentNameErrorMessage: '물품 이름을 입력해 주세요.',
+    if (state != null) {
+      if (contentName.length > 20) {
+        _addContentState = state!.copyWith(
+          contentNameErrorMessage: '물품 이름의 최대 길이는 20자 입니다.',
           isNameEmpty: false,
         );
+      } else {
+        if (contentName.isNotEmpty) {
+          _addContentState = state!.copyWith(
+            contentNameErrorMessage: '',
+            isNameEmpty: true,
+          );
+        } else {
+          _addContentState = state!.copyWith(
+            contentNameErrorMessage: '물품 이름을 입력해 주세요.',
+            isNameEmpty: false,
+          );
+        }
       }
     }
 
@@ -81,21 +83,23 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // count error message 관리 함수
   void updateCount(String contentCount) {
-    if (contentCount.isEmpty) {
-      _addContentState = _addContentState.copyWith(
-        contentCountErrorMessage: '물품의 개수를 입력해 주세요.',
-        isCheckecCount: false,
-      );
-    } else if (int.parse(contentCount) < 1) {
-      _addContentState = _addContentState.copyWith(
-        contentCountErrorMessage: '물품의 개수는 1개 이상이여야 합니다.',
-        isCheckecCount: false,
-      );
-    } else {
-      _addContentState = _addContentState.copyWith(
-        contentCountErrorMessage: '',
-        isCheckecCount: true,
-      );
+    if (state != null) {
+      if (contentCount.isEmpty) {
+        _addContentState = state!.copyWith(
+          contentCountErrorMessage: '물품의 개수를 입력해 주세요.',
+          isCheckecCount: false,
+        );
+      } else if (int.parse(contentCount) < 1) {
+        _addContentState = state!.copyWith(
+          contentCountErrorMessage: '물품의 개수는 1개 이상이여야 합니다.',
+          isCheckecCount: false,
+        );
+      } else {
+        _addContentState = state!.copyWith(
+          contentCountErrorMessage: '',
+          isCheckecCount: true,
+        );
+      }
     }
 
     state = _addContentState;
@@ -103,10 +107,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // capacity의 존재 여부에 따른 상태 처리 함수
   void updateCapacity(String capacity) {
-    if (capacity.isNotEmpty) {
-      _addContentState = _addContentState.copyWith(isCapacityEmpty: true);
-    } else {
-      _addContentState = _addContentState.copyWith(isCapacityEmpty: false);
+    if (state != null) {
+      if (capacity.isNotEmpty) {
+        _addContentState = state!.copyWith(isCapacityEmpty: true);
+      } else {
+        _addContentState = state!.copyWith(isCapacityEmpty: false);
+      }
     }
 
     state = _addContentState;
@@ -114,10 +120,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // calories의 존재 여부에 따른 상태 처리 함수
   void updateCalories(String calories) {
-    if (calories.isNotEmpty) {
-      _addContentState = _addContentState.copyWith(isCaloriesEmpty: true);
-    } else {
-      _addContentState = _addContentState.copyWith(isCaloriesEmpty: false);
+    if (state != null) {
+      if (calories.isNotEmpty) {
+        _addContentState = state!.copyWith(isCaloriesEmpty: true);
+      } else {
+        _addContentState = state!.copyWith(isCaloriesEmpty: false);
+      }
     }
 
     state = _addContentState;
@@ -125,10 +133,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // carbs의 존재 여부에 따른 상태 처리 함수
   void updateCarbs(String carbs) {
-    if (carbs.isNotEmpty) {
-      _addContentState = _addContentState.copyWith(isCarbsEmpty: true);
-    } else {
-      _addContentState = _addContentState.copyWith(isCarbsEmpty: false);
+    if (state != null) {
+      if (carbs.isNotEmpty) {
+        _addContentState = state!.copyWith(isCarbsEmpty: true);
+      } else {
+        _addContentState = state!.copyWith(isCarbsEmpty: false);
+      }
     }
 
     state = _addContentState;
@@ -136,10 +146,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // protein의 존재 여부에 따른 상태 처리 함수
   void updateProtein(String protein) {
-    if (protein.isNotEmpty) {
-      _addContentState = _addContentState.copyWith(isProteinEmpty: true);
-    } else {
-      _addContentState = _addContentState.copyWith(isProteinEmpty: false);
+    if (state != null) {
+      if (protein.isNotEmpty) {
+        _addContentState = state!.copyWith(isProteinEmpty: true);
+      } else {
+        _addContentState = state!.copyWith(isProteinEmpty: false);
+      }
     }
 
     state = _addContentState;
@@ -147,10 +159,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // fat의 존재 여부에 따른 상태 처리 함수
   void updateFat(String fat) {
-    if (fat.isNotEmpty) {
-      _addContentState = _addContentState.copyWith(isFatEmpty: true);
-    } else {
-      _addContentState = _addContentState.copyWith(isFatEmpty: false);
+    if (state != null) {
+      if (fat.isNotEmpty) {
+        _addContentState = state!.copyWith(isFatEmpty: true);
+      } else {
+        _addContentState = state!.copyWith(isFatEmpty: false);
+      }
     }
 
     state = _addContentState;
@@ -158,32 +172,39 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // view에서 선택 된 category 관리 함수
   void setCategory(String category) {
-    _addContentState = _addContentState.copyWith(
-      selectedContentCategory: category,
-    );
+    if (state != null) {
+      _addContentState = state!.copyWith(selectedContentCategory: category);
+    }
+
     state = _addContentState;
   }
 
   // view에서 선택 된 storage 관리 함수
   void setStorage(String storage) {
-    _addContentState = _addContentState.copyWith(
-      selectedContentStorage: storage,
-    );
+    if (state != null) {
+      _addContentState = state!.copyWith(selectedContentStorage: storage);
+    }
+
     state = _addContentState;
   }
 
   // view에서 선택 된 regDate 관리 함수
   void setRegDate(DateTime regDate) {
-    _addContentState = _addContentState.copyWith(selectedRegDate: regDate);
+    if (state != null) {
+      _addContentState = state!.copyWith(selectedRegDate: regDate);
+    }
+
     state = _addContentState;
   }
 
   // view에서 선택 된 expDate 관리 함수
   void setExpDate(DateTime expDate) {
-    _addContentState = _addContentState.copyWith(
-      selectedExpDate: expDate,
-      isRegDateEmpty: true,
-    );
+    if (state != null) {
+      _addContentState = state!.copyWith(
+        selectedExpDate: expDate,
+        isRegDateEmpty: true,
+      );
+    }
 
     state = _addContentState;
   }
