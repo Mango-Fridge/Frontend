@@ -122,11 +122,11 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     final Design design = Design(context);
 
     return PopScope(
-      // canPop: false, // 자동 팝 방지
+      canPop: false, // 백버튼 작동 금지
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) {
         if (!didPop) {
-          _showExitDialog(); // 백버튼 눌렀을 때 알럿 창 표시
+          _showExitDialog(); // 백버튼 눌렀을 때 동작 지정 -> 알럿 창 표시
         }
       },
       child: Scaffold(
@@ -215,6 +215,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
               // 검색 필드
               TextField(
                 controller: _searchIngridientController,
+                focusNode: _searchIngredientFocusNode,
                 decoration: InputDecoration(
                   hintText: '냉장고에 있는 음식 재료를 추가해보세요',
                   border: const OutlineInputBorder(),
