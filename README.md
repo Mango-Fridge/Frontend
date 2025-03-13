@@ -2,15 +2,12 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.0.5 (2025-03-11)
+## VERSION 1.0.6 (2025-03-13)
  - 메인화면
-   - 물품 추가 검색필드
-   - 물품 추가 상세정보 로직
-   - View 전환시, state 초기화
- - 그룹
-   - 생성하기에서 타이머 제거 
-   - 코드 리팩토링 (Guard clause)
- - Toast Message 패키지 적용 (fluttertoast)
+   - 물품 추가 Gesture 적용으로 키보드 내리기
+   - 검색해서 물품 추가 데이터 전달 (Search -> Add)
+ - 요리
+   - 요리 화면 View 및 Focus 적용
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
