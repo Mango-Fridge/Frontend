@@ -69,11 +69,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Design design = Design(context);
 
