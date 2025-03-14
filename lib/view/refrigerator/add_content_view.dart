@@ -34,9 +34,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   TextEditingController proteinController = TextEditingController();
   TextEditingController fatController = TextEditingController();
 
+  late FocusNode _focusNode;
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode(); // FocusNode를 초기화
 
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -66,12 +69,18 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Design design = Design(context);
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -106,6 +115,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextField(
+          //focusNode: _focusNode,
           controller: nameController,
           enabled: widget.item == null,
           style: const TextStyle(
@@ -159,11 +169,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         child: Text(value),
                       );
                     }).toList(),
-                onChanged: (String? newValue) {
-                  ref
-                      .watch(addContentProvider.notifier)
-                      .setCategory(newValue ?? '');
-                },
+                onChanged:
+                    widget.item != null
+                        ? null
+                        : (String? newValue) {
+                          ref
+                              .watch(addContentProvider.notifier)
+                              .setCategory(newValue ?? '');
+                        },
               ),
             ),
           ],
