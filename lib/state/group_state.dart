@@ -6,6 +6,7 @@ class GroupState {
   final int? groupUserCount; // 그룹 인원수
   final String? errorMessage; // 에러메시지
   final bool isButton; // 버튼활성
+  final bool isLoadingButton; // 작업 중, 버튼 로딩
 
   GroupState({
     this.groupId,
@@ -14,6 +15,7 @@ class GroupState {
     this.groupUserCount,
     this.errorMessage,
     required this.isButton,
+    required this.isLoadingButton,
   });
 
   GroupState copyWith({
@@ -23,6 +25,7 @@ class GroupState {
     int? groupUserCount,
     String? errorMessage,
     bool? isButton,
+    bool? isLoadingButton,
   }) {
     return GroupState(
       groupId: groupId,
@@ -31,6 +34,7 @@ class GroupState {
       groupUserCount: groupUserCount,
       errorMessage: errorMessage,
       isButton: isButton ?? this.isButton,
+      isLoadingButton: isLoadingButton ?? this.isLoadingButton,
     );
   }
 }
