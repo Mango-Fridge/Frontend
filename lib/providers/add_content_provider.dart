@@ -84,9 +84,16 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   // count error message 관리 함수
   void updateCount(String contentCount) {
     if (state != null) {
+      final RegExp regex = RegExp(r'^[0-9]+$');
+
       if (contentCount.isEmpty) {
         _addContentState = state!.copyWith(
           contentCountErrorMessage: '물품의 개수를 입력해 주세요.',
+          isCheckecCount: false,
+        );
+      } else if (!regex.hasMatch(contentCount)) {
+        _addContentState = state!.copyWith(
+          contentCountErrorMessage: '숫자만 입력 되어야 합니다.',
           isCheckecCount: false,
         );
       } else if (int.parse(contentCount) < 1) {
