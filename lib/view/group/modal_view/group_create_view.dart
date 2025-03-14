@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_create_provider.dart';
@@ -52,6 +53,17 @@ class GroupCreateView extends ConsumerWidget {
                         // 생성 로직 추가
                         print(groupState.groupName);
                         context.pop(); // Sheet 닫기
+
+                        // 토스트 메시지
+                        Fluttertoast.showToast(
+                          msg: "'${groupState.groupName}' 그룹이 생성되었습니다.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.black,
+                          fontSize: 16.0,
+                        );
                       }
                       : null,
             ),
