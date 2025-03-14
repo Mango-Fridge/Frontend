@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/group.dart';
 import 'package:mango/providers/group_provider.dart';
-import 'package:mango/providers/refrigerator_provider.dart';
 
 class GroupUserListWidget extends ConsumerStatefulWidget {
   const GroupUserListWidget({super.key});
