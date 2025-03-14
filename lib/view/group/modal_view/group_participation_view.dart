@@ -4,8 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_participation_provider.dart';
-import 'package:mango/view/group/subView/group_common_button.dart';
-import 'package:mango/view/group/subView/group_modal_title.dart';
+import 'package:mango/view/group/sub_widget/group_common_button.dart';
+import 'package:mango/view/group/sub_widget/group_modal_title.dart';
 
 // 그룹 참여하기 모달 뷰
 class GroupParticipationView extends ConsumerWidget {

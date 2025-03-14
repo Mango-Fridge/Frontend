@@ -1,59 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/state/group_modal_state.dart';
-import 'package:mango/providers/group_modal_state_provider.dart';
-import 'package:mango/view/group/modal_view/group_modal_state_view.dart';
-import 'package:mango/view/group/subView/group_common_button.dart';
+import 'package:mango/providers/group_provider.dart';
+import 'package:mango/view/group/widget/group_empty_widget.dart';
+import 'package:mango/view/group/widget/group_userList_widget.dart';
 
-class GroupView extends ConsumerWidget {
+class GroupView extends ConsumerStatefulWidget {
   const GroupView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GroupView> createState() => _GroupViewState();
+}
+
+class _GroupViewState extends ConsumerState<GroupView> {
+  @override
+  void initState() { // 테스트용 - 생성하기, 참여하기 한 후, 다른 뷰로 다녀올 시 초기화하기 위함
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(groupBoolProvider.notifier).state = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool groupBool = ref.watch(groupBoolProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("그룹", style: TextStyle(fontSize: 30)),
         centerTitle: false, // 앱바 텍스트 중앙정렬X
       ),
-      body: Stack(
-        children: <Widget>[
-          SizedBox.expand(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                groupGuideText(context), // 안내 문구
-                const SizedBox(height: 40),
-                groupModalStartButton(context, ref), // '그룹' 시작하기 버튼(모달 띄우기)
-              ],
-            ),
-          ),
-        ],
-      ),
+      body:
+          groupBool
+              ? const GroupUserListWidget()
+              : groupEmptyWidget(context, ref), // 참가하기 혹은 생성하기일 때
     );
   }
-}
-
-// 안내 문구 텍스트 글
-Widget groupGuideText(BuildContext context) {
-  return SizedBox(
-    width: MediaQuery.of(context).size.width * 0.9,
-    child: const Text(
-      "그룹이 없습니다.\n그룹을 생성하거나 참여해보세요.",
-      style: TextStyle(fontSize: 22),
-      textAlign: TextAlign.center,
-    ),
-  );
-}
-
-// 시작하기 버튼
-Widget groupModalStartButton(BuildContext context, WidgetRef ref) {
-  return groupCommonButton(
-    context: context,
-    text: "시작하기",
-    onPressed: () {
-      ref.read(groupModalStateProvider.notifier).state =
-          GroupModalState.start; // 시작하기 버튼 클릭 시, 모달 '시작하기' 뷰로 초기화
-      groupModalStateView(context, ref);
-    },
-  );
 }
