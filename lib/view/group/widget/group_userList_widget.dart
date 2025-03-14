@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/group.dart';
 import 'package:mango/providers/group_provider.dart';
+import 'package:mango/providers/refrigerator_provider.dart';
 
 class GroupUserListWidget extends ConsumerStatefulWidget {
   const GroupUserListWidget({super.key});
@@ -14,13 +15,25 @@ class GroupUserListWidget extends ConsumerStatefulWidget {
 
 class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
   List<Group>? get _groupList => ref.watch(groupProvider);
-  String? _selectedGroup; // 선택된 그룹
+  String? _selectedGroupName; // 선택된 그룹
   String? _selectedGroupId; // 선택된 그룹 ID
   String? _selectedOwner; // 선택된 그룹의 그룹장
 
   @override
   Widget build(BuildContext context) {
     final Design design = Design(context);
+    
+    @override
+    void didChangeDependencies() {
+      super.didChangeDependencies();
+
+      // view init 후 데이터 처리를 하기 위함
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.watch(refrigeratorNotifier.notifier).resetState();
+        ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
+        ref.watch(refrigeratorNotifier.notifier).loadContentList('groupId');
+      });
+    }
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -34,7 +47,7 @@ class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
                 onSelected: (String value) {
                   setState(() {
                     _selectedGroupId = value;
-                    _selectedGroup =
+                    _selectedGroupName =
                         _groupList!
                             .firstWhere((Group group) => group.groupId == value)
                             .groupName;
@@ -67,7 +80,7 @@ class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
                     color: Colors.amber[300],
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  child: Text(_selectedGroup ?? '그룹을 선택 해 주세요.'),
+                  child: Text(_selectedGroupName ?? '그룹을 선택 해 주세요.'),
                 ),
               ),
 
