@@ -97,10 +97,9 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                 width:
                     _isCookNameFocused
                         ? design.screenWidth * 0.75
-                        : design.screenWidth * 0.44, // 포커스 시 확장
-
+                        : design.screenWidth * 0.44,
                 child: TextField(
-                  // controller 를 텍스트필드에 연결
+                  // controller와 focusnode 를 텍스트필드에 연결
                   controller: _cookNameController,
                   focusNode: _cookNameFocusNode,
                   decoration: InputDecoration(
@@ -167,49 +166,56 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                             ],
                           ),
                         )
+                        // 요리 이름 작성란에 포커싱이 되면 비우기
                         : Container(),
               ),
             ],
           ),
         ),
 
-        // 페이지 내용
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              // 검색 필드
-              TextField(
-                controller: _searchIngridientController,
-                focusNode: _searchIngredientFocusNode,
-                decoration: InputDecoration(
-                  hintText: '냉장고에 있는 음식 재료를 추가해보세요',
-                  border: const OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isSearchFieldEmpty ? Icons.search : Icons.close,
-                      color: Colors.black,
+        // -------------------- 페이지 내용
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제 및 키보드 내리기
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: <Widget>[
+                // 검색 필드
+                TextField(
+                  controller: _searchIngridientController,
+                  focusNode: _searchIngredientFocusNode,
+                  decoration: InputDecoration(
+                    hintText: '냉장고에 있는 음식 재료를 추가해보세요',
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isSearchFieldEmpty ? Icons.search : Icons.close,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        if (!_isSearchFieldEmpty) {
+                          _searchIngridientController.clear();
+                          setState(() {
+                            _isSearchFieldEmpty = true;
+                          });
+                        }
+                      },
                     ),
-                    onPressed: () {
-                      if (!_isSearchFieldEmpty) {
-                        _searchIngridientController.clear();
-                        setState(() {
-                          _isSearchFieldEmpty = true;
-                        });
-                      }
-                    },
                   ),
+                  onChanged: (String value) {
+                    // 입력값이 변경될 때 상태 업데이트
+                    setState(() {
+                      _isSearchFieldEmpty = value.isEmpty;
+                    });
+                  },
                 ),
-                onChanged: (String value) {
-                  // 입력값이 변경될 때 상태 업데이트
-                  setState(() {
-                    _isSearchFieldEmpty = value.isEmpty;
-                  });
-                },
-              ),
-              SizedBox(height: design.screenHeight * 0.3),
-              const Text("재료를 추가해주세요."),
-            ],
+                SizedBox(height: design.screenHeight * 0.3),
+                const Text("재료를 추가해주세요."),
+              ],
+            ),
           ),
         ),
 
@@ -236,7 +242,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                   keyboardType: TextInputType.multiline, // 여러 줄 입력 가능
                   textInputAction: TextInputAction.newline, // 엔터 키로 줄바꿈
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: design.marginAndPadding),
 
                 // 추가하기 버튼
                 ElevatedButton(
@@ -258,7 +264,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: design.marginAndPadding * 3),
               ],
             ),
           ),
