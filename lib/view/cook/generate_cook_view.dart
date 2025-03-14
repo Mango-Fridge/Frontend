@@ -27,42 +27,6 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
   // 검색어 입력값을 초기화할 때 사용되는 변수
   bool _isSearchFieldEmpty = true;
-  // 영양성분 박스 표시 여부
-  bool _showNutritionBox = true;
-
-  // 애니메이션 완료 후 영양성분 박스 표시
-  void _scheduleShowNutritionBox() {
-    // ignore: always_specify_types
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _showNutritionBox = true;
-        });
-      }
-    });
-  }
-
-  // Future<bool> _showExitDialog() async {
-  //   return await showDialog<bool>(
-  //         context: context,
-  //         builder:
-  //             (context) => AlertDialog(
-  //               title: const Text('요리 나가기'),
-  //               content: const Text('해당 페이지를 나가면 요리가 삭제됩니다.\n진행하시겠습니까?'),
-  //               actions: <Widget>[
-  //                 TextButton(
-  //                   child: const Text('취소'),
-  //                   onPressed: () => Navigator.of(context).pop(false),
-  //                 ),
-  //                 TextButton(
-  //                   child: const Text('확인'),
-  //                   onPressed: () => Navigator.of(context).pop(true),
-  //                 ),
-  //               ],
-  //             ),
-  //       ) ??
-  //       false;
-  // }
 
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
@@ -71,12 +35,6 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     _cookNameFocusNode.addListener(() {
       setState(() {
         _isCookNameFocused = _cookNameFocusNode.hasFocus;
-        if (_isCookNameFocused) {
-          _showNutritionBox = false;
-        } else {
-          // 포커스 해제 후 영양성분 박스 표시
-          _scheduleShowNutritionBox();
-        }
       });
     });
 
@@ -92,19 +50,18 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
+          (BuildContext context) => AlertDialog(
             title: const Text('요리 나가기'),
             content: const Text('해당 페이지를 나가면 요리가 삭제됩니다.\n진행하시겠습니까?'),
             actions: [
               TextButton(
-                onPressed:
-                    () => Navigator.of(context).pop(), // "취소" 버튼: 알럿 창 닫기
+                onPressed: () => context.pop(), // "취소" 버튼: 알럿 창 닫기
                 child: const Text('취소'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // 알럿 창 닫기
-                  if (GoRouter.of(context).canPop()) {
+                  context.pop(); // 알럿 창 닫기
+                  if (context.canPop()) {
                     context.pop(); // 이전 화면으로 돌아가기 (CookView 예상)
                   } else {
                     context.go('/cook'); // 스택이 비었을 경우 /cook로 이동
@@ -123,8 +80,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
     return PopScope(
       canPop: false, // 백버튼 작동 금지
-      // ignore: deprecated_member_use
-      onPopInvoked: (bool didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (!didPop) {
           _showExitDialog(); // 백버튼 눌렀을 때 동작 지정 -> 알럿 창 표시
         }
@@ -162,47 +118,57 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
-              const SizedBox(width: 8.0),
+              SizedBox(width: design.marginAndPadding),
 
               // 영양성분 표시 box
-              if (!_isCookNameFocused && _showNutritionBox) ...<Widget>[
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: const Wrap(
-                    spacing: 15.0,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Text('열량', style: TextStyle(fontSize: 12)),
-                          Text('300', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text('탄', style: TextStyle(fontSize: 12)),
-                          Text('50', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text('단', style: TextStyle(fontSize: 12)),
-                          Text('20', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text('지', style: TextStyle(fontSize: 12)),
-                          Text('10', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.fastOutSlowIn,
+                width:
+                    _isCookNameFocused
+                        ? design.screenWidth * 0
+                        : design.screenWidth * 0.31,
+
+                child:
+                    !_isCookNameFocused
+                        ? Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: const Wrap(
+                            spacing: 15.0,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text('열량', style: TextStyle(fontSize: 12)),
+                                  Text('300', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text('탄', style: TextStyle(fontSize: 12)),
+                                  Text('50', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text('단', style: TextStyle(fontSize: 12)),
+                                  Text('20', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text('지', style: TextStyle(fontSize: 12)),
+                                  Text('10', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                        : Container(),
+              ),
             ],
           ),
         ),
@@ -241,7 +207,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                   });
                 },
               ),
-              const SizedBox(height: 200),
+              SizedBox(height: design.screenHeight * 0.3),
               const Text("재료를 추가해주세요."),
             ],
           ),
@@ -277,7 +243,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
                     ref.read(recipeNameProvider.notifier).state = cookName;
                     ref.read(ingredientsProvider.notifier).state = ingredients;
-                    Navigator.pop(context); // cook view로 돌아감
+                    context.pop(context); // cook view로 돌아감
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
