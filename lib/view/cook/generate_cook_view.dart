@@ -53,7 +53,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
           (BuildContext context) => AlertDialog(
             title: const Text('요리 나가기'),
             content: const Text('해당 페이지를 나가면 요리가 삭제됩니다.\n진행하시겠습니까?'),
-            actions: [
+            actions: <Widget>[
               TextButton(
                 onPressed: () => context.pop(), // "취소" 버튼: 알럿 창 닫기
                 child: const Text('취소'),
@@ -62,9 +62,9 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                 onPressed: () {
                   context.pop(); // 알럿 창 닫기
                   if (context.canPop()) {
-                    context.pop(); // 이전 화면으로 돌아가기 (CookView 예상)
+                    context.pop(); // 이전 화면으로 돌아가기
                   } else {
-                    context.go('/cook'); // 스택이 비었을 경우 /cook로 이동
+                    context.go('/cook');
                   }
                 },
                 child: const Text('확인'),
@@ -96,8 +96,8 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                 curve: Curves.fastOutSlowIn,
                 width:
                     _isCookNameFocused
-                        ? design.screenWidth * 0.76
-                        : design.screenWidth * 0.45, // 포커스 시 확장
+                        ? design.screenWidth * 0.75
+                        : design.screenWidth * 0.44, // 포커스 시 확장
 
                 child: TextField(
                   // controller 를 텍스트필드에 연결
@@ -231,6 +231,10 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                     fillColor: Colors.white,
                   ),
                   maxLength: 90,
+                  minLines: 1,
+                  maxLines: 3, // 최대 3줄까지 높이 늘어남, 이후 스크롤
+                  keyboardType: TextInputType.multiline, // 여러 줄 입력 가능
+                  textInputAction: TextInputAction.newline, // 엔터 키로 줄바꿈
                 ),
                 const SizedBox(height: 10),
 
