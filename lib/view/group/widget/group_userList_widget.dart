@@ -23,17 +23,17 @@ class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
   Widget build(BuildContext context) {
     final Design design = Design(context);
     
-    @override
-    void didChangeDependencies() {
-      super.didChangeDependencies();
+    // @override
+    // void didChangeDependencies() {
+    //   super.didChangeDependencies();
 
-      // view init 후 데이터 처리를 하기 위함
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.watch(refrigeratorNotifier.notifier).resetState();
-        ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
-        ref.watch(refrigeratorNotifier.notifier).loadContentList('groupId');
-      });
-    }
+    //   // view init 후 데이터 처리를 하기 위함
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     ref.watch(refrigeratorNotifier.notifier).resetState();
+    //     ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
+    //     ref.watch(refrigeratorNotifier.notifier).loadContentList('groupId');
+    //   });
+    // }
 
     return Container(
       padding: const EdgeInsets.all(8),
