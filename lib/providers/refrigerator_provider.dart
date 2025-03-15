@@ -25,7 +25,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       _refrigeratorState.refrigeratorContentList = getRefrigeratorContentList(
         contentList,
       );
-      _refrigeratorState.freezerContentList = getRefrigeratorContentList(
+      _refrigeratorState.freezerContentList = getFreezerContentList(
         contentList,
       );
       _refrigeratorState.expContentList = getExpContentList(contentList);
