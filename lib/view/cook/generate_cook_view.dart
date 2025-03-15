@@ -17,6 +17,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
   final TextEditingController _cookNameController = TextEditingController();
   final TextEditingController _searchIngridientController =
       TextEditingController();
+  final TextEditingController _memoController = TextEditingController();
 
   // 포커스 노드: 텍스트 필드의 포커스 상태 관리 -> 키보드 상태 관리 목적
   final FocusNode _cookNameFocusNode = FocusNode();
@@ -24,6 +25,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
   bool _isCookNameFocused = false;
   bool _isSearchIngredientFocused = false;
+  bool _isOpenCookName = false;
 
   // 검색어 입력값을 초기화할 때 사용되는 변수
   bool _isSearchFieldEmpty = true;
@@ -92,6 +94,11 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
             children: <Widget>[
               // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
               AnimatedContainer(
+                onEnd: () {
+                  setState(() {
+                    _isOpenCookName = !_isOpenCookName;
+                  });
+                },
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.fastOutSlowIn,
                 width:
@@ -174,7 +181,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                         : design.screenWidth * 0.31,
 
                 child:
-                    !_isCookNameFocused
+                    !_isCookNameFocused && !_isOpenCookName
                         ? Container(
                           padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
@@ -274,18 +281,33 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 // 메모 입력란
-                const TextField(
+                TextField(
+                  controller: _memoController,
                   decoration: InputDecoration(
                     hintText: '요리에 대한 메모를 입력해보세요',
                     border: OutlineInputBorder(),
                     filled: true,
                     fillColor: Colors.white,
+                    suffixIcon:
+                        _memoController.text.isNotEmpty
+                            ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _memoController.clear();
+                                });
+                              },
+                              icon: Icon(Icons.clear),
+                            )
+                            : null,
                   ),
                   maxLength: 90,
                   minLines: 1,
                   maxLines: 3, // 최대 3줄까지 높이 늘어남, 이후 스크롤
                   keyboardType: TextInputType.multiline, // 여러 줄 입력 가능
                   textInputAction: TextInputAction.newline, // 엔터 키로 줄바꿈
+                  onChanged: (String value) {
+                    setState(() {}); // 화면 업데이트.
+                  },
                 ),
                 SizedBox(height: design.marginAndPadding),
 
