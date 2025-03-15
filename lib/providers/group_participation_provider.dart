@@ -17,6 +17,7 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
       groupUserCount: null,
       errorMessage: null,
       isButton: false,
+      isLoadingButton: false,
     );
   }
 
@@ -26,7 +27,9 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
  
     final String trimmeGroupId = groupId.trim(); // 공백 제거
 
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    if (_debounce?.isActive ?? false) _debounce!.cancel(); // 타이머 실행 확인, 글자 입력할 때마다 타이머 초기화
+    state = state.copyWith(isLoadingButton: true); //  글자 입력 시, 버튼 로딩 표시 (설정한 타이머 기준)
+    
     _debounce = Timer(const Duration(milliseconds: 600), () {
       // 문자가 공백일 때
       if (trimmeGroupId.isEmpty) {
@@ -34,9 +37,17 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
           groupId: null,
           errorMessage: null,
           isButton: false,
+          isLoadingButton: false,
         );
         return;
       }
+
+      // 추후 비동기 작업(Api) 작성할 때 사용할 용도. 
+      // try {
+      //   //밑에 유효성 검사 및 등등 코드 이쪽으로
+      // } catch(e) {
+      //   print(e);
+      // }
 
       // 그룹 ID가 존재하는 지 확인 후, 데이터 담기
       final Map<String, dynamic> selectedGroup = groupRepository.dummyGroups
@@ -49,7 +60,11 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
       if (selectedGroup.isEmpty) {
         state = state.copyWith(
           errorMessage: '냉장고ID가 존재하지 않습니다',
+          groupName: null,
+          gruoupUserKing: null,
+          groupUserCount: null,
           isButton: false,
+          isLoadingButton: false,
         );
         return;
       }
@@ -62,6 +77,7 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
         groupUserCount: selectedGroup['groupUserCount'], // 존재하는 그룹인원 수
         errorMessage: null,
         isButton: true,
+        isLoadingButton: false,
       );
     });
   }
@@ -73,6 +89,7 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
       groupName: null,
       errorMessage: null,
       isButton: false,
+      isLoadingButton: false,
     );
   }
 }

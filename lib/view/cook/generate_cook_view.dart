@@ -17,6 +17,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
   final TextEditingController _cookNameController = TextEditingController();
   final TextEditingController _searchIngridientController =
       TextEditingController();
+  final TextEditingController _memoController = TextEditingController();
 
   // 포커스 노드: 텍스트 필드의 포커스 상태 관리 -> 키보드 상태 관리 목적
   final FocusNode _cookNameFocusNode = FocusNode();
@@ -24,45 +25,10 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
   bool _isCookNameFocused = false;
   bool _isSearchIngredientFocused = false;
+  bool _isOpenCookName = false;
 
   // 검색어 입력값을 초기화할 때 사용되는 변수
   bool _isSearchFieldEmpty = true;
-  // 영양성분 박스 표시 여부
-  bool _showNutritionBox = true;
-
-  // 애니메이션 완료 후 영양성분 박스 표시
-  void _scheduleShowNutritionBox() {
-    // ignore: always_specify_types
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _showNutritionBox = true;
-        });
-      }
-    });
-  }
-
-  // Future<bool> _showExitDialog() async {
-  //   return await showDialog<bool>(
-  //         context: context,
-  //         builder:
-  //             (context) => AlertDialog(
-  //               title: const Text('요리 나가기'),
-  //               content: const Text('해당 페이지를 나가면 요리가 삭제됩니다.\n진행하시겠습니까?'),
-  //               actions: <Widget>[
-  //                 TextButton(
-  //                   child: const Text('취소'),
-  //                   onPressed: () => Navigator.of(context).pop(false),
-  //                 ),
-  //                 TextButton(
-  //                   child: const Text('확인'),
-  //                   onPressed: () => Navigator.of(context).pop(true),
-  //                 ),
-  //               ],
-  //             ),
-  //       ) ??
-  //       false;
-  // }
 
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
@@ -71,12 +37,6 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     _cookNameFocusNode.addListener(() {
       setState(() {
         _isCookNameFocused = _cookNameFocusNode.hasFocus;
-        if (_isCookNameFocused) {
-          _showNutritionBox = false;
-        } else {
-          // 포커스 해제 후 영양성분 박스 표시
-          _scheduleShowNutritionBox();
-        }
       });
     });
 
@@ -92,22 +52,21 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
+          (BuildContext context) => AlertDialog(
             title: const Text('요리 나가기'),
             content: const Text('해당 페이지를 나가면 요리가 삭제됩니다.\n진행하시겠습니까?'),
-            actions: [
+            actions: <Widget>[
               TextButton(
-                onPressed:
-                    () => Navigator.of(context).pop(), // "취소" 버튼: 알럿 창 닫기
+                onPressed: () => context.pop(), // "취소" 버튼: 알럿 창 닫기
                 child: const Text('취소'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // 알럿 창 닫기
-                  if (GoRouter.of(context).canPop()) {
-                    context.pop(); // 이전 화면으로 돌아가기 (CookView 예상)
+                  context.pop(); // 알럿 창 닫기
+                  if (context.canPop()) {
+                    context.pop(); // 이전 화면으로 돌아가기
                   } else {
-                    context.go('/cook'); // 스택이 비었을 경우 /cook로 이동
+                    context.go('/cook');
                   }
                 },
                 child: const Text('확인'),
@@ -123,8 +82,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
     return PopScope(
       canPop: false, // 백버튼 작동 금지
-      // ignore: deprecated_member_use
-      onPopInvoked: (bool didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (!didPop) {
           _showExitDialog(); // 백버튼 눌렀을 때 동작 지정 -> 알럿 창 표시
         }
@@ -136,114 +94,180 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
             children: <Widget>[
               // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
               AnimatedContainer(
+                onEnd: () {
+                  setState(() {
+                    _isOpenCookName = !_isOpenCookName;
+                  });
+                },
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.fastOutSlowIn,
                 width:
                     _isCookNameFocused
-                        ? design.screenWidth * 0.76
-                        : design.screenWidth * 0.45, // 포커스 시 확장
-
-                child: TextField(
-                  // controller 를 텍스트필드에 연결
-                  controller: _cookNameController,
-                  focusNode: _cookNameFocusNode,
-                  decoration: InputDecoration(
-                    hintText: '요리 이름 입력',
-                    suffixIcon: const Icon(Icons.edit, size: 20),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    isDense: true,
-                  ),
-                  style: const TextStyle(fontSize: 16),
-                ),
+                        ? design.screenWidth * 0.75
+                        : design.screenWidth * 0.44,
+                child:
+                    _isCookNameFocused
+                        ? TextField(
+                          // controller와 focusnode 를 텍스트필드에 연결
+                          controller: _cookNameController,
+                          focusNode: _cookNameFocusNode,
+                          decoration: InputDecoration(
+                            hintText: '요리 이름 입력',
+                            suffixIcon: const Icon(Icons.edit, size: 20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 12.0,
+                            ),
+                            isDense: true,
+                          ),
+                          style: const TextStyle(fontSize: 16),
+                        )
+                        // focusing되지 않을 때는 text로 표시
+                        : GestureDetector(
+                          onTap: () {
+                            _cookNameFocusNode.requestFocus();
+                            setState(() {
+                              _isCookNameFocused = true;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 12.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    _cookNameController.text.isEmpty
+                                        ? '요리 이름 입력'
+                                        : _cookNameController.text,
+                                    overflow:
+                                        TextOverflow
+                                            .ellipsis, // 텍스트가 box의 가로 길이를 넘어가면 ... 표시
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      height: 1.5,
+                                      color:
+                                          _cookNameController.text.isEmpty
+                                              ? Colors.grey
+                                              : Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                const Icon(Icons.edit, size: 20),
+                              ],
+                            ),
+                          ),
+                        ),
               ),
-              const SizedBox(width: 8.0),
+              SizedBox(width: design.marginAndPadding),
 
               // 영양성분 표시 box
-              if (!_isCookNameFocused && _showNutritionBox) ...<Widget>[
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: const Wrap(
-                    spacing: 15.0,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Text('열량', style: TextStyle(fontSize: 12)),
-                          Text('300', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text('탄', style: TextStyle(fontSize: 12)),
-                          Text('50', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text('단', style: TextStyle(fontSize: 12)),
-                          Text('20', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text('지', style: TextStyle(fontSize: 12)),
-                          Text('10', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.fastOutSlowIn,
+                width:
+                    _isCookNameFocused
+                        ? design.screenWidth * 0
+                        : design.screenWidth * 0.31,
+
+                child:
+                    !_isCookNameFocused && !_isOpenCookName
+                        ? Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: const Wrap(
+                            spacing: 15.0,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text('열량', style: TextStyle(fontSize: 12)),
+                                  Text('300', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text('탄', style: TextStyle(fontSize: 12)),
+                                  Text('50', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text('단', style: TextStyle(fontSize: 12)),
+                                  Text('20', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text('지', style: TextStyle(fontSize: 12)),
+                                  Text('10', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                        // 요리 이름 작성란에 포커싱이 되면 비우기
+                        : Container(),
+              ),
             ],
           ),
         ),
 
-        // 페이지 내용
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              // 검색 필드
-              TextField(
-                controller: _searchIngridientController,
-                focusNode: _searchIngredientFocusNode,
-                decoration: InputDecoration(
-                  hintText: '냉장고에 있는 음식 재료를 추가해보세요',
-                  border: const OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isSearchFieldEmpty ? Icons.search : Icons.close,
-                      color: Colors.black,
+        // -------------------- 페이지 내용
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제 및 키보드 내리기
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: <Widget>[
+                // 검색 필드
+                TextField(
+                  controller: _searchIngridientController,
+                  focusNode: _searchIngredientFocusNode,
+                  decoration: InputDecoration(
+                    hintText: '냉장고에 있는 음식 재료를 추가해보세요',
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isSearchFieldEmpty ? Icons.search : Icons.close,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        if (!_isSearchFieldEmpty) {
+                          _searchIngridientController.clear();
+                          setState(() {
+                            _isSearchFieldEmpty = true;
+                          });
+                        }
+                      },
                     ),
-                    onPressed: () {
-                      if (!_isSearchFieldEmpty) {
-                        _searchIngridientController.clear();
-                        setState(() {
-                          _isSearchFieldEmpty = true;
-                        });
-                      }
-                    },
                   ),
+                  onChanged: (String value) {
+                    // 입력값이 변경될 때 상태 업데이트
+                    setState(() {
+                      _isSearchFieldEmpty = value.isEmpty;
+                    });
+                  },
                 ),
-                onChanged: (String value) {
-                  // 입력값이 변경될 때 상태 업데이트
-                  setState(() {
-                    _isSearchFieldEmpty = value.isEmpty;
-                  });
-                },
-              ),
-              const SizedBox(height: 200),
-              const Text("재료를 추가해주세요."),
-            ],
+                SizedBox(height: design.screenHeight * 0.3),
+                const Text("재료를 추가해주세요."),
+              ],
+            ),
           ),
         ),
 
@@ -257,16 +281,35 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 // 메모 입력란
-                const TextField(
+                TextField(
+                  controller: _memoController,
                   decoration: InputDecoration(
                     hintText: '요리에 대한 메모를 입력해보세요',
                     border: OutlineInputBorder(),
                     filled: true,
                     fillColor: Colors.white,
+                    suffixIcon:
+                        _memoController.text.isNotEmpty
+                            ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _memoController.clear();
+                                });
+                              },
+                              icon: Icon(Icons.clear),
+                            )
+                            : null,
                   ),
                   maxLength: 90,
+                  minLines: 1,
+                  maxLines: 3, // 최대 3줄까지 높이 늘어남, 이후 스크롤
+                  keyboardType: TextInputType.multiline, // 여러 줄 입력 가능
+                  textInputAction: TextInputAction.newline, // 엔터 키로 줄바꿈
+                  onChanged: (String value) {
+                    setState(() {}); // 화면 업데이트.
+                  },
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: design.marginAndPadding),
 
                 // 추가하기 버튼
                 ElevatedButton(
@@ -277,7 +320,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
                     ref.read(recipeNameProvider.notifier).state = cookName;
                     ref.read(ingredientsProvider.notifier).state = ingredients;
-                    Navigator.pop(context); // cook view로 돌아감
+                    context.pop(context); // cook view로 돌아감
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -288,7 +331,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: design.marginAndPadding * 3),
               ],
             ),
           ),

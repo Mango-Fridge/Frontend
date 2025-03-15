@@ -20,7 +20,7 @@ class LoginView extends ConsumerWidget {
     ref.watch(loginAuthProvider);
 
     // 로그인 상태 변경 시 반응
-    ref.listen(loginAuthProvider, (AuthInfo? previousState, newState) {
+    ref.listen(loginAuthProvider, (AuthInfo? previousState, newState) async {
       if (newState != null) {
         // 로그인 성공 시 홈 화면으로 이동
         context.go('/home'); // 메인화면으로 이동

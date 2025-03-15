@@ -4,8 +4,8 @@ import 'package:mango/state/group_modal_state.dart';
 import 'package:mango/providers/group_modal_state_provider.dart';
 import 'package:mango/providers/group_create_provider.dart';
 import 'package:mango/providers/group_participation_provider.dart';
-import 'package:mango/view/group/subView/group_common_button.dart';
-import 'package:mango/view/group/subView/group_modal_title.dart';
+import 'package:mango/view/group/sub_widget/group_common_button.dart';
+import 'package:mango/view/group/sub_widget/group_modal_title.dart';
 
 // 그룹 시작하기 모달 뷰
 class GroupStartView extends ConsumerWidget {

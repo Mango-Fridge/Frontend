@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_participation_provider.dart';
-import 'package:mango/view/group/subView/group_common_button.dart';
-import 'package:mango/view/group/subView/group_modal_title.dart';
+import 'package:mango/toastMessage.dart';
+import 'package:mango/view/group/sub_widget/group_common_button.dart';
+import 'package:mango/view/group/sub_widget/group_modal_title.dart';
 
 // 그룹 참여하기 모달 뷰
 class GroupParticipationView extends ConsumerWidget {
@@ -88,6 +89,12 @@ class GroupParticipationView extends ConsumerWidget {
                         // 참여 로직 추가
 
                         context.pop(); // Sheet 닫기
+
+                        // 토스트 메시지
+                        toastMessage(
+                          context,
+                          "'${groupState.groupName}' 참여 요청을 보냈습니다.",
+                        );
                       }
                       : null,
             ),

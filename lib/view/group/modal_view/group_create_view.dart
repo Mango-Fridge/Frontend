@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_create_provider.dart';
-import 'package:mango/view/group/subView/group_common_button.dart';
-import 'package:mango/view/group/subView/group_modal_title.dart';
+import 'package:mango/toastMessage.dart';
+import 'package:mango/view/group/sub_widget/group_common_button.dart';
+import 'package:mango/view/group/sub_widget/group_modal_title.dart';
 
 // 그룹 생성하기 모달 뷰
 class GroupCreateView extends ConsumerWidget {
@@ -50,8 +52,14 @@ class GroupCreateView extends ConsumerWidget {
                   groupState.isButton
                       ? () {
                         // 생성 로직 추가
+                        ref.read(groupBoolProvider.notifier).state =
+                            true; // 그룹뷰 전환 테스트용도 - 추후 삭제
                         print(groupState.groupName);
                         context.pop(); // Sheet 닫기
+                        toastMessage(
+                          context,
+                          "'${groupState.groupName}' 그룹이 생성되었습니다.",
+                        );
                       }
                       : null,
             ),

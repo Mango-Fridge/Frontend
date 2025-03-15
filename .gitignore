@@ -152,5 +152,7 @@ app.*.symbols
 .gclient_previous_sync_commits
 
 # .env
-.env.DS_Store
-assets/.env
+*.env
+
+*.DS_Store
+
