@@ -153,3 +153,5 @@ app.*.symbols
 
 # .env
 .env
+
+.DS_Store
