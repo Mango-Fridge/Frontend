@@ -98,24 +98,69 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                     _isCookNameFocused
                         ? design.screenWidth * 0.75
                         : design.screenWidth * 0.44,
-                child: TextField(
-                  // controller와 focusnode 를 텍스트필드에 연결
-                  controller: _cookNameController,
-                  focusNode: _cookNameFocusNode,
-                  decoration: InputDecoration(
-                    hintText: '요리 이름 입력',
-                    suffixIcon: const Icon(Icons.edit, size: 20),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    isDense: true,
-                  ),
-                  style: const TextStyle(fontSize: 16),
-                ),
+                child:
+                    _isCookNameFocused
+                        ? TextField(
+                          // controller와 focusnode 를 텍스트필드에 연결
+                          controller: _cookNameController,
+                          focusNode: _cookNameFocusNode,
+                          decoration: InputDecoration(
+                            hintText: '요리 이름 입력',
+                            suffixIcon: const Icon(Icons.edit, size: 20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 12.0,
+                            ),
+                            isDense: true,
+                          ),
+                          style: const TextStyle(fontSize: 16),
+                        )
+                        // focusing되지 않을 때는 text로 표시
+                        : GestureDetector(
+                          onTap: () {
+                            _cookNameFocusNode.requestFocus();
+                            setState(() {
+                              _isCookNameFocused = true;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 12.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    _cookNameController.text.isEmpty
+                                        ? '요리 이름 입력'
+                                        : _cookNameController.text,
+                                    overflow:
+                                        TextOverflow
+                                            .ellipsis, // 텍스트가 box의 가로 길이를 넘어가면 ... 표시
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      height: 1.5,
+                                      color:
+                                          _cookNameController.text.isEmpty
+                                              ? Colors.grey
+                                              : Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                const Icon(Icons.edit, size: 20),
+                              ],
+                            ),
+                          ),
+                        ),
               ),
               SizedBox(width: design.marginAndPadding),
 
