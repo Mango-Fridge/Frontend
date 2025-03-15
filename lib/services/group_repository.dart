@@ -7,9 +7,9 @@ class GroupRepository {
     await Future.delayed(Duration(seconds: 1));
 
     return <Group>[
-      Group(groupId: 'g000000001', groupName: '본가냉장고', groupOwner: ''),
-      Group(groupId: 'g000000002', groupName: '자취방냉장고', groupOwner: ''),
-      Group(groupId: 'g000000003', groupName: '식당냉장고', groupOwner: ''),
+      Group(groupId: 'g000000001', groupName: '본가냉장고', groupOwner: '나는종혁'),
+      Group(groupId: 'g000000002', groupName: '자취방냉장고', groupOwner: '나는준영'),
+      Group(groupId: 'g000000003', groupName: '식당냉장고', groupOwner: '나는현우'),
     ];
   }
 
