@@ -189,6 +189,30 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       decoration: const BoxDecoration(color: Colors.white),
       child: Column(
         children: <Widget>[
+          _refrigeratorState?.expContentList?.isNotEmpty ?? false
+              ? Column(
+                children: <Widget>[
+                  const Divider(),
+                  ExpansionTile(
+                    backgroundColor: Colors.red[100],
+                    title: const Text(
+                      '마감 임박',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    shape: Border.all(color: Colors.transparent),
+                    children:
+                        _refrigeratorState!.expContentList!
+                            .map((Content content) => _buildContentRow(content))
+                            .toList(),
+                  ),
+                  const Divider(),
+                  Container(height: 10),
+                ],
+              )
+              : Container(),
           const Divider(),
           ExpansionTile(
             title: const Text(
@@ -197,12 +221,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
             shape: Border.all(color: Colors.transparent),
             children:
-                contentList != null
-                    ? contentList
-                            .where(
-                              (Content content) => content.storageArea == '냉장',
-                            )
-                            .isEmpty
+                _refrigeratorState?.refrigeratorContentList != null
+                    ? _refrigeratorState!.refrigeratorContentList!.isEmpty
                         ? <Widget>[
                           const Center(
                             child: Text(
@@ -211,10 +231,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                             ),
                           ),
                         ]
-                        : contentList
-                            .where(
-                              (Content content) => content.storageArea == '냉장',
-                            )
+                        : _refrigeratorState!.refrigeratorContentList!
                             .map((Content content) => _buildContentRow(content))
                             .toList()
                     : <Widget>[],
@@ -229,12 +246,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
             shape: Border.all(color: Colors.transparent),
             children:
-                contentList != null
-                    ? contentList
-                            .where(
-                              (Content content) => content.storageArea == '냉동',
-                            )
-                            .isEmpty
+                _refrigeratorState?.freezerContentList != null
+                    ? _refrigeratorState!.freezerContentList!.isEmpty
                         ? <Widget>[
                           const Center(
                             child: Text(
@@ -243,10 +256,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                             ),
                           ),
                         ]
-                        : contentList
-                            .where(
-                              (Content content) => content.storageArea == '냉동',
-                            )
+                        : _refrigeratorState!.freezerContentList!
                             .map((Content content) => _buildContentRow(content))
                             .toList()
                     : <Widget>[],

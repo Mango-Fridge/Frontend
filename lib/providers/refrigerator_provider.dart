@@ -21,11 +21,52 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     try {
       final List<Content> contentList = await _contentRepository
           .loadContentList(groupId);
+
+      _refrigeratorState.refrigeratorContentList = getRefrigeratorContentList(
+        contentList,
+      );
+      _refrigeratorState.freezerContentList = getRefrigeratorContentList(
+        contentList,
+      );
+      _refrigeratorState.expContentList = getExpContentList(contentList);
       _refrigeratorState.contentList = contentList;
       state = _refrigeratorState;
     } catch (e) {
       state = null;
     }
+  }
+
+  List<Content> getRefrigeratorContentList(List<Content> contentList) {
+    List<Content> refrigeratorContentList =
+        contentList.where((Content content) {
+          bool is24HoursOrMoreLeft =
+              DateTime.now().difference(content.expDate).inHours <= 24;
+          bool isFrozen = content.storageArea == '냉장';
+          return is24HoursOrMoreLeft && isFrozen;
+        }).toList();
+
+    return refrigeratorContentList;
+  }
+
+  List<Content> getFreezerContentList(List<Content> contentList) {
+    List<Content> freezerContentList =
+        contentList.where((Content content) {
+          bool is24HoursOrMoreLeft =
+              DateTime.now().difference(content.expDate).inHours <= -24;
+          bool isFrozen = content.storageArea == '냉동';
+          return is24HoursOrMoreLeft && isFrozen;
+        }).toList();
+
+    return freezerContentList;
+  }
+
+  List<Content> getExpContentList(List<Content> contentList) {
+    List<Content> expContentList =
+        contentList.where((Content content) {
+          return DateTime.now().difference(content.expDate).inHours > -24;
+        }).toList();
+
+    return expContentList;
   }
 
   // count 증가 함수
@@ -79,6 +120,9 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
     state = state?.copyWith(
       contentList: addedList,
+      refrigeratorContentList: getRefrigeratorContentList(addedList!),
+      freezerContentList: getFreezerContentList(addedList),
+      expContentList: getExpContentList(addedList),
       updateContentList: updateList,
       isUpdatedContent: updateList.isNotEmpty,
     );
@@ -135,6 +179,9 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
     state = state?.copyWith(
       contentList: reducedList,
+      refrigeratorContentList: getRefrigeratorContentList(reducedList!),
+      freezerContentList: getFreezerContentList(reducedList),
+      expContentList: getExpContentList(reducedList),
       updateContentList: updateList,
       isUpdatedContent: updateList.isNotEmpty,
     );
@@ -173,6 +220,9 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
       state = state!.copyWith(
         contentList: updatedContentList,
+        refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
+        freezerContentList: getFreezerContentList(updatedContentList),
+        expContentList: getExpContentList(updatedContentList),
         updateContentList: <Content>[],
       );
     }
@@ -205,6 +255,9 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
       state = state?.copyWith(
         contentList: updatedContentList,
+        refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
+        freezerContentList: getFreezerContentList(updatedContentList),
+        expContentList: getExpContentList(updatedContentList),
         updateContentList: updatedUpdateList,
         isUpdatedContent: updatedUpdateList.isNotEmpty,
       );
@@ -217,7 +270,12 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
         state!.contentList!
             .where((Content content) => content.count > 0)
             .toList();
-    state = state?.copyWith(contentList: removedList);
+    state = state?.copyWith(
+      contentList: removedList,
+      refrigeratorContentList: getRefrigeratorContentList(removedList),
+      freezerContentList: getFreezerContentList(removedList),
+      expContentList: getExpContentList(removedList),
+    );
   }
 }
 

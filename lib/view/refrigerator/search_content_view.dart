@@ -19,8 +19,8 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   final TextEditingController _controller = TextEditingController();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -32,45 +32,54 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   Widget build(BuildContext context) {
     Design design = Design(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("물품 추가"),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Column(
-        spacing: 20,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
-            padding: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
-            decoration: BoxDecoration(
-              color: Colors.amber[200],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(
-                hintText: "ex) 초코칩",
-                border: InputBorder.none,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("물품 추가"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: Column(
+          spacing: 20,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
+              padding: EdgeInsets.symmetric(
+                horizontal: design.marginAndPadding,
               ),
-              onChanged: (String value) {
-                ref
-                    .watch(searchContentNotifier.notifier)
-                    .loadItemListByString(value);
-              },
+              decoration: BoxDecoration(
+                color: Colors.amber[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  hintText: "ex) 초코칩",
+                  border: InputBorder.none,
+                ),
+                onChanged: (String value) {
+                  ref
+                      .watch(searchContentNotifier.notifier)
+                      .loadItemListByString(value);
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child:
-                _searchContentState != null &&
-                        _searchContentState?.refrigeratorItemList != null &&
-                        _searchContentState!.refrigeratorItemList!.isNotEmpty &&
-                        _controller.text != ''
-                    ? _buildItem(_searchContentState?.refrigeratorItemList!)
-                    : _noItemView(),
-          ),
-        ],
+            Expanded(
+              child:
+                  _searchContentState != null &&
+                          _searchContentState?.refrigeratorItemList != null &&
+                          _searchContentState!
+                              .refrigeratorItemList!
+                              .isNotEmpty &&
+                          _controller.text != ''
+                      ? _buildItem(_searchContentState?.refrigeratorItemList!)
+                      : _noItemView(),
+            ),
+          ],
+        ),
       ),
     );
   }

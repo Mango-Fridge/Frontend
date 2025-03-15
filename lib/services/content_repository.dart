@@ -19,7 +19,7 @@ class ContentRepository {
         category: '냉장',
         count: 5,
         regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-22 18:55:22'),
+        expDate: DateTime.parse('2025-03-16 18:55:22'),
         storageArea: '냉장',
         memo: '',
         nutriUnit: '',

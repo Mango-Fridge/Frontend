@@ -34,9 +34,19 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   TextEditingController proteinController = TextEditingController();
   TextEditingController fatController = TextEditingController();
 
+  final GlobalKey _countKey = GlobalKey();
+  final GlobalKey _memoKey = GlobalKey();
+  final GlobalKey _capacityKey = GlobalKey();
+  final GlobalKey _caloriesKey = GlobalKey();
+  final GlobalKey _carbsKey = GlobalKey();
+  final GlobalKey _proteinKey = GlobalKey();
+  final GlobalKey _fatKey = GlobalKey();
+
+  final ScrollController _scrollController = ScrollController();
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -71,7 +81,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
 
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -86,6 +96,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             children: <Widget>[
               Expanded(
                 child: SingleChildScrollView(
+                  controller: _scrollController,
                   // Content detail info view
                   child: contentDetailInfoView(),
                 ),
@@ -106,6 +117,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextField(
+          //focusNode: _focusNode,
           controller: nameController,
           enabled: widget.item == null,
           style: const TextStyle(
@@ -159,11 +171,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         child: Text(value),
                       );
                     }).toList(),
-                onChanged: (String? newValue) {
-                  ref
-                      .watch(addContentProvider.notifier)
-                      .setCategory(newValue ?? '');
-                },
+                onChanged:
+                    widget.item != null
+                        ? null
+                        : (String? newValue) {
+                          ref
+                              .watch(addContentProvider.notifier)
+                              .setCategory(newValue ?? '');
+                        },
               ),
             ),
           ],
@@ -191,6 +206,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
             Expanded(
               child: TextField(
+                key: _countKey,
+                onTap: () => _focusTextField(_countKey),
                 controller: countController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -335,6 +352,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextField(
+                    key: _memoKey,
+                    onTap: () => _focusTextField(_memoKey),
                     controller: memoController,
                     maxLines: _memoMaxLine,
                     maxLength: _memoMaxLength,
@@ -387,6 +406,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ),
                 Expanded(
                   child: TextField(
+                    key: _capacityKey,
                     keyboardType: TextInputType.number,
                     controller: capacityController,
                     enabled: widget.item == null,
@@ -400,6 +420,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           .read(addContentProvider.notifier)
                           .updateCapacity(capacityController.text);
                     },
+                    onTap: () => _focusTextField(_capacityKey),
                   ),
                 ),
                 buildElevatedButton(
@@ -439,6 +460,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               ],
             ),
             nutritionTextField(
+              key: _caloriesKey,
               label: '열량',
               controller: caloriesController,
               hintText: 'ex) 150',
@@ -449,6 +471,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               },
             ),
             nutritionTextField(
+              key: _carbsKey,
               label: '탄수화물',
               controller: carbsController,
               hintText: 'ex) 50',
@@ -459,6 +482,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               },
             ),
             nutritionTextField(
+              key: _proteinKey,
               label: '단백질',
               controller: proteinController,
               hintText: 'ex) 150',
@@ -469,6 +493,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               },
             ),
             nutritionTextField(
+              key: _fatKey,
               label: '지방',
               controller: fatController,
               hintText: 'ex) 150',
@@ -553,6 +578,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   }
 
   Widget nutritionTextField({
+    required GlobalKey key,
     required String label,
     required TextEditingController controller,
     required String hintText,
@@ -563,10 +589,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       children: <Widget>[
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.22,
-          child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+          child: Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         Expanded(
           child: TextField(
+            key: key,
             keyboardType: TextInputType.number,
             controller: controller,
             style: const TextStyle(color: Colors.black),
@@ -580,6 +610,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 onChanged();
               }
             },
+            onTap: () => _focusTextField(key),
           ),
         ),
       ],
@@ -649,5 +680,19 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         }
       }
     }
+  }
+
+  void _focusTextField(GlobalKey key) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final BuildContext? context = key.currentContext;
+      if (context != null) {
+        Scrollable.ensureVisible(
+          context, // BuildContext 전달
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          alignment: 0.5, // 중앙 설정
+        );
+      }
+    });
   }
 }
