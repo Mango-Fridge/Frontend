@@ -59,19 +59,19 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           .watch(addContentProvider.notifier)
           .updateNameErrorMessage(nameController.text);
       capacityController = TextEditingController(
-        text: widget.item?.nutriCapacity.toString() ?? '0',
+        text: widget.item?.nutriCapacity.toString() ?? '',
       );
       caloriesController = TextEditingController(
-        text: widget.item?.nutriKcal.toString() ?? '0',
+        text: widget.item?.nutriKcal.toString() ?? '',
       );
       carbsController = TextEditingController(
-        text: widget.item?.nutriCarbohydrate.toString() ?? '0',
+        text: widget.item?.nutriCarbohydrate.toString() ?? '',
       );
       proteinController = TextEditingController(
-        text: widget.item?.nutriProtein.toString() ?? '0',
+        text: widget.item?.nutriProtein.toString() ?? '',
       );
       fatController = TextEditingController(
-        text: widget.item?.nutriFat.toString() ?? '0',
+        text: widget.item?.nutriFat.toString() ?? '',
       );
     });
   }
