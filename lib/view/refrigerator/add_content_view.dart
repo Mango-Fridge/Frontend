@@ -119,7 +119,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         TextField(
           //focusNode: _focusNode,
           controller: nameController,
-          enabled: widget.item == null,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 19.0,
