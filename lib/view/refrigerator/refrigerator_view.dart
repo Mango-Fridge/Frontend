@@ -194,6 +194,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 children: <Widget>[
                   const Divider(),
                   ExpansionTile(
+                    initiallyExpanded: true,
                     backgroundColor: Colors.red[100],
                     title: const Text(
                       '마감 임박',
@@ -215,6 +216,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               : Container(),
           const Divider(),
           ExpansionTile(
+            initiallyExpanded: true,
             title: const Text(
               '냉장',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -240,6 +242,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           Container(height: 10),
           const Divider(),
           ExpansionTile(
+            initiallyExpanded: true,
             title: const Text(
               '냉동',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
