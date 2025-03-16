@@ -7,7 +7,7 @@ class ContentRepository {
   }
 
   // groupId로 content list 불러오는 함수
-  Future<List<Content>> loadContentList(String groupId) async {
+  Future<List<Content>> loadContentList(int groupId) async {
     // groupId 해당하는 content list 불러오는 api 호출
     await Future.delayed(Duration(seconds: 1));
 

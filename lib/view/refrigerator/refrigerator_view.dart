@@ -36,8 +36,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(refrigeratorNotifier.notifier).resetState();
-      ref.watch(groupProvider.notifier).loadGroupList('example@example.com');
-      ref.watch(refrigeratorNotifier.notifier).loadContentList('groupId');
+      ref.watch(groupProvider.notifier).loadGroupList(123456789);
+      ref.watch(refrigeratorNotifier.notifier).loadContentList(123456789);
     });
   }
 
@@ -126,10 +126,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                                 .resetState();
                             ref
                                 .watch(groupProvider.notifier)
-                                .loadGroupList('example@example.com');
+                                .loadGroupList(123456789);
                             ref
                                 .watch(refrigeratorNotifier.notifier)
-                                .loadContentList('groupId');
+                                .loadContentList(123456789);
                             context.push('/searchContent');
                           },
                           style: ElevatedButton.styleFrom(

@@ -17,7 +17,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   // Content list load 함수
-  Future<void> loadContentList(String groupId) async {
+  Future<void> loadContentList(int groupId) async {
     try {
       final List<Content> contentList = await _contentRepository
           .loadContentList(groupId);
