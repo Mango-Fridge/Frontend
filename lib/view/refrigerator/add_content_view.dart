@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_content_provider.dart';
 import 'package:mango/state/add_content_state.dart';
+import 'package:mango/toastMessage.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
@@ -521,7 +522,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               onPressed:
                   widget.item == null && _addContentState!.isNutritionEmpty
                       ? () {
-                        print('test');
+                        toastMessage(
+                          context,
+                          "${nameController.text}(이)가 정상적으로\n공개등록이 되었습니다!",
+                        );
                       }
                       : null,
               backgroundColor: Colors.amber[200]!,
@@ -564,6 +568,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                 ? int.parse(fatController.text)
                                 : 0,
                           );
+                      toastMessage(
+                        context,
+                        "${nameController.text}(이)가 정상적으로\n추가되었습니다!",
+                      );
                       context.pop();
                     }
                     : null,
