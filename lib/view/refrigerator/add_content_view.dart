@@ -520,7 +520,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             child: buildElevatedButton(
               label: '물품 공개 등록',
               onPressed:
-                  widget.item == null && _addContentState!.isNutritionEmpty
+                  widget.item == null &&
+                          _addContentState!.isNutritionEmpty &&
+                          _addContentState!.isDetailInfoEmpty
                       ? () {
                         toastMessage(
                           context,
