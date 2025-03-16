@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/state/group_enum_state.dart';
-import 'package:mango/providers/group_modal_state_provider.dart';
+import 'package:mango/providers/group_%08enum_state_provider.dart';
 
 // 공통적으로 그룹 모달에서 사용할 상단바
 Widget groupModalTitle({
