@@ -4,15 +4,15 @@ import 'package:mango/design.dart';
 import 'package:mango/model/group.dart';
 import 'package:mango/providers/group_provider.dart';
 
-class GroupUserListWidget extends ConsumerStatefulWidget {
-  const GroupUserListWidget({super.key});
+class GrouExistWidget extends ConsumerStatefulWidget {
+  const GrouExistWidget({super.key});
 
   @override
-  ConsumerState<GroupUserListWidget> createState() =>
+  ConsumerState<GrouExistWidget> createState() =>
       _GroupUserListWidgetState();
 }
 
-class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
+class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
   List<Group>? get _groupList => ref.watch(groupProvider);
   String? _selectedGroupName; // 선택된 그룹
   String? _selectedGroupId; // 선택된 그룹 ID

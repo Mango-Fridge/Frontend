@@ -5,10 +5,10 @@ enum GroupModalState {
   participation, // 그룹 - 참여하기 뷰
 }
 
-// 초기화면, 생성하기/참여하기로 인한 뷰
-enum GroupViewlState {
-  start, // 그룹 - 초기 뷰
-  create, // 그룹 - 처음 냉장고 그룹을 생성할 시
-  participation, // 그룹 - 냉장고 그룹이 1개 이상X, 그룹 참여할 시 보이는 뷰
+// 그룹에서 보이는 뷰 관리
+enum GroupViewState {
+  empty, // 그룹 - 그룹이 없을 경우 보이는 뷰
+  exist, // 그룹 - 그룹이 있을 경우 보이는 뷰
+  firstRequest, // 그룹 - 처음 그룹 참여 요청할 시 보이는 뷰
 }
 

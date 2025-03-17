@@ -6,8 +6,12 @@ import 'package:mango/view/group/modal_view/group_modal_state_view.dart';
 import 'package:mango/view/group/sub_widget/group_common_button.dart';
 
 // 그룹이 존재하지 않을 때, 표시되는 위젯
-Widget groupEmptyWidget(BuildContext context, WidgetRef ref) {
-  return SizedBox.expand(
+class GroupEmptyWidget extends ConsumerWidget {
+  const GroupEmptyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SizedBox.expand(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -17,6 +21,7 @@ Widget groupEmptyWidget(BuildContext context, WidgetRef ref) {
               ],
             ),
           );
+  }
 }
 
 // 안내 문구 텍스트 글

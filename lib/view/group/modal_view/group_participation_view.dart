@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/providers/group_%08enum_state_provider.dart';
+import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_participation_provider.dart';
 import 'package:mango/toastMessage.dart';
@@ -86,8 +88,8 @@ class GroupParticipationView extends ConsumerWidget {
               onPressed:
                   groupState.isButton
                       ? () {
-                        // 참여 로직 추가
-
+                        // 만일 그룹이 존재할 시, 추후 로직은 바뀔 예정
+                        ref.read(grouViewStateProvider.notifier).state = GroupViewState.firstRequest; // 그룹 1개이상X, 그룹 참여 요청 시
                         context.pop(); // Sheet 닫기
 
                         // 토스트 메시지
