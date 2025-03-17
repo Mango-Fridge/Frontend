@@ -2,12 +2,22 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.0.6 (2025-03-13)
- - 메인화면
-   - 물품 추가 Gesture 적용으로 키보드 내리기
-   - 검색해서 물품 추가 데이터 전달 (Search -> Add)
+## VERSION 1.0.7 (2025-03-15)
+ - 메인화면 (물품 상세 추가 화면)
+   - 수량 값 입력시, 숫자 이외의 값이 들어가면 예외처리
+   - 검색해서 데이터를 받아오면, "카테고리" 설정을 하지 못하게 처리
+   - 스크롤 추적
+   - 메인화면에 마감 임박 관련 View 추가
+ - 그룹
+   - 유효성 검사를 위한 CircularProgressIndicator()
+   - ToastMessage 적용
  - 요리
-   - 요리 화면 View 및 Focus 적용
+   - 요리 제목 width에 따른 생략 처리 ("과...")
+   - 영양 성분표 overflow 수정
+   - Gesture를 활용한 BottomSheet 처리
+   - 일부 코드 리팩토링
+   - Navigator 제거 및 go_router 변경
+   - Memo 높이 상한선 설정 (최대 줄 수 = 3)
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
