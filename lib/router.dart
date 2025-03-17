@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/view/cook/widget/cook_view.dart';
-import 'package:mango/view/cook/widget/generate_cook_view.dart';
+import 'package:mango/view/cook/widget/add_cook_view.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/refrigerator/add_content_view.dart';
 import 'package:mango/view/refrigerator/search_item_view.dart';
@@ -42,7 +42,7 @@ final GoRouter goRouter = GoRouter(
     // 요리 제작 화면
     GoRoute(
       path: '/generatecook',
-      builder: (context, state) => const GenerateCookView(),
+      builder: (context, state) => const AddCookView(),
     ),
   ],
 );

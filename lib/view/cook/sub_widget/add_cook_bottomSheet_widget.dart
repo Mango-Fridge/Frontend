@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 
-class BottomSheetWidget extends ConsumerWidget {
+class AddCookBottomSheetWidget extends ConsumerWidget {
   final TextEditingController memoController;
   final VoidCallback onAddPressed; // 추가하기 버튼 콜백
 
-  const BottomSheetWidget({
+  const AddCookBottomSheetWidget({
     super.key,
     required this.memoController,
     required this.onAddPressed,

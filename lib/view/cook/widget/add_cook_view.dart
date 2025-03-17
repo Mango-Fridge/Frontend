@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
-import 'package:mango/providers/generate_cook_provider.dart';
-import 'package:mango/view/cook/sub_widget/app_bar_widget.dart';
-import 'package:mango/view/cook/sub_widget/bottom_sheet_widget.dart';
+import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
+import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 
-class GenerateCookView extends ConsumerStatefulWidget {
-  const GenerateCookView({super.key});
+class AddCookView extends ConsumerStatefulWidget {
+  const AddCookView({super.key});
 
   @override
-  ConsumerState<GenerateCookView> createState() => _GenerateCookViewState();
+  ConsumerState<AddCookView> createState() => _AddCookViewState();
 }
 
-class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
+class _AddCookViewState extends ConsumerState<AddCookView> {
   // 텍스트 필드 입력을 관리하기 위한 컨트롤러
   final TextEditingController _cookNameController = TextEditingController();
   final TextEditingController _searchIngridientController =
@@ -82,7 +82,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: AppBarWidget(
+          title: AddCookAppBarWidget(
             cookNameController: _cookNameController,
             cookNameFocusNode: _cookNameFocusNode,
           ),
@@ -140,14 +140,14 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
           child: Container(
             color: Colors.amber,
             padding: const EdgeInsets.all(16.0),
-            child: BottomSheetWidget(
+            child: AddCookBottomSheetWidget(
               memoController: _memoController,
               onAddPressed: () {
                 final String cookName = _cookNameController.text;
                 final String ingredients = _searchIngridientController.text;
                 context.pop(context);
                 ref
-                    .read(generateCookProvider.notifier)
+                    .read(addCookProvider.notifier)
                     .recipeSave(cookName, ingredients);
               },
             ),

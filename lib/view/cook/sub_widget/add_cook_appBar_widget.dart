@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
-import 'package:mango/providers/generate_cook_provider.dart';
+import 'package:mango/providers/add_cook_provider.dart';
 import 'package:mango/view/cook/sub_widget/nutrient_box.dart';
 
-// generate_cook_view의 app bar에 들어갈 위젯
-class AppBarWidget extends ConsumerWidget {
+// add_cook_view의 app bar에 들어갈 위젯
+class AddCookAppBarWidget extends ConsumerWidget {
   final TextEditingController cookNameController;
   final FocusNode cookNameFocusNode;
 
-  const AppBarWidget({
+  const AddCookAppBarWidget({
     super.key,
     required this.cookNameController,
     required this.cookNameFocusNode,
