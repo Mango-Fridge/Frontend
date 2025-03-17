@@ -12,25 +12,27 @@ class GroupEmptyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox.expand(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                groupGuideText(context), // 안내 문구
-                const SizedBox(height: 40),
-                groupModalStartButton(context, ref), // '그룹' 시작하기 버튼(모달 띄우기)
-              ],
-            ),
-          );
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          groupGuideText(context), // 안내 문구
+          const SizedBox(height: 40),
+          groupModalStartButton(context, ref), // '그룹' 시작하기 버튼(모달 띄우기)
+        ],
+      ),
+    );
   }
 }
 
 // 안내 문구 텍스트 글
 Widget groupGuideText(BuildContext context) {
+  final double fontSizeMediaQuery = MediaQuery.of(context).size.width; // 폰트 사이즈
+
   return SizedBox(
     width: MediaQuery.of(context).size.width * 0.9,
-    child: const Text(
+    child: Text(
       "그룹이 없습니다.\n그룹을 생성하거나 참여해보세요.",
-      style: TextStyle(fontSize: 22),
+      style: TextStyle(fontSize: fontSizeMediaQuery * 0.055),
       textAlign: TextAlign.center,
     ),
   );

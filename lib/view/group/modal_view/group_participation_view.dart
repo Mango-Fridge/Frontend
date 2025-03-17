@@ -20,6 +20,8 @@ class GroupParticipationView extends ConsumerWidget {
     final GroupParticipationNotifier groupNotifier = ref.read(
       groupParticipationProvider.notifier,
     );
+    final double fontSizeMediaQuery =
+        MediaQuery.of(context).size.width; // 폰트 사이즈
 
     return SizedBox(
       height:
@@ -48,16 +50,15 @@ class GroupParticipationView extends ConsumerWidget {
               ),
             ),
             const Spacer(),
-            if (groupState.isButton) ...[
-              //g000000001
+            if (groupState.isButton) ...[ // 그룹이 존재하는 경우
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
                   children: [
                     Text(
                       groupState.groupName ?? '',
-                      style: const TextStyle(
-                        fontSize: 24,
+                      style: TextStyle(
+                        fontSize: fontSizeMediaQuery * 0.06,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -72,7 +73,7 @@ class GroupParticipationView extends ConsumerWidget {
                         ),
                         Text(
                           '${groupState.gruoupUserKing ?? ''}외 ${groupState.groupUserCount ?? 0}명',
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
                         ),
                       ],
                     ),
@@ -80,7 +81,10 @@ class GroupParticipationView extends ConsumerWidget {
                 ),
               ),
               const Spacer(),
-              const Text('참여하려는 냉장고가 맞나요?', style: TextStyle(fontSize: 20)),
+              Text(
+                '참여하려는 냉장고가 맞나요?',
+                style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
+              ),
             ],
             const Spacer(),
             groupCommonButton(
@@ -89,9 +93,13 @@ class GroupParticipationView extends ConsumerWidget {
               onPressed:
                   groupState.isButton
                       ? () {
-                        ref.read(groupRequestProvider.notifier).state = '${groupState.groupName}'; // 승인대기 그룹 이름
+                        ref.read(groupRequestProvider.notifier).state =
+                            '${groupState.groupName}'; // 승인대기 그룹 이름
+
                         // 만일 그룹이 존재할 시, 추후 로직은 바뀔 예정
-                        ref.read(grouViewStateProvider.notifier).state = GroupViewState.firstRequest; // 그룹 1개이상X, 그룹 참여 요청 시
+                        ref.read(grouViewStateProvider.notifier).state =
+                            GroupViewState.firstRequest; // 그룹 1개이상X, 그룹 참여 요청 시
+                            
                         context.pop(); // Sheet 닫기
 
                         // 토스트 메시지
