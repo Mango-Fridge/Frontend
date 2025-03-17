@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
-import 'package:mango/providers/cook_provider.dart';
+import 'package:mango/providers/generate_cook_provider.dart';
 import 'generate_cook_view.dart';
 
 // 요리 리스트를 보여주는 view
@@ -11,8 +11,8 @@ class CookView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final String recipeName = ref.watch(recipeNameProvider);
-    final String ingredients = ref.watch(ingredientsProvider);
+    // final String recipeName = ref.watch(recipeNameProvider);
+    // final String ingredients = ref.watch(ingredientsProvider);
 
     final Design design = Design(context);
 
@@ -72,33 +72,33 @@ class CookView extends ConsumerWidget {
             const SizedBox(height: 180),
 
             // 요리 정보 표시
-            Center(
-              child: Column(
-                children: <Widget>[
-                  if (recipeName.isNotEmpty && ingredients.isNotEmpty) ...[
-                    // 요리 정보가 비워져 있지 않을 때 표시
-                    Text(
-                      '현재 요리: $recipeName',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '재료: $ingredients',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ] else ...<Widget>[
-                    // 요리 정보가 비워져 있을 때 표시
-                    const Icon(
-                      Icons.local_dining,
-                      size: 50,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(height: 10),
-                    const Text('식사를 추가해보세요', style: TextStyle(fontSize: 14)),
-                  ],
-                ],
-              ),
-            ),
+            // Center(
+            //   child: Column(
+            //     children: <Widget>[
+            //       if (recipeName.isNotEmpty && ingredients.isNotEmpty) ...[
+            //         // 요리 정보가 비워져 있지 않을 때 표시
+            //         Text(
+            //           '현재 요리: $recipeName',
+            //           style: const TextStyle(fontSize: 18),
+            //         ),
+            //         const SizedBox(height: 10),
+            //         Text(
+            //           '재료: $ingredients',
+            //           style: const TextStyle(fontSize: 14),
+            //         ),
+            //       ] else ...<Widget>[
+            //         // 요리 정보가 비워져 있을 때 표시
+            //         const Icon(
+            //           Icons.local_dining,
+            //           size: 50,
+            //           color: Colors.black,
+            //         ),
+            //         const SizedBox(height: 10),
+            //         const Text('식사를 추가해보세요', style: TextStyle(fontSize: 14)),
+            //       ],
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
