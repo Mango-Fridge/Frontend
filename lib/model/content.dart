@@ -1,5 +1,5 @@
 class Content {
-  final String contentId;
+  final int contentId;
   final String contentName;
   final String category;
   final int count;
@@ -15,7 +15,7 @@ class Content {
   final int nutriFat;
 
   Content({
-    this.contentId = '',
+    this.contentId = 0,
     required this.contentName,
     required this.category,
     required this.count,
@@ -32,7 +32,7 @@ class Content {
   });
 
   Content copyWith({
-    String? contentId,
+    int? contentId,
     String? contentName,
     String? category,
     int? count,

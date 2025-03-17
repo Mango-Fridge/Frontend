@@ -18,7 +18,7 @@ class CookRepository {
         cookingNutriProtein: "15",
         cookingItems: [
           Content(
-            contentId: "1",
+            contentId: 123456766,
             contentName: "스파게티 면",
             category: "면류",
             count: 1,
@@ -34,7 +34,7 @@ class CookRepository {
             nutriFat: 1,
           ),
           Content(
-            contentId: "2",
+            contentId: 123456765,
             contentName: "베이컨",
             category: "육류",
             count: 1,
@@ -61,7 +61,7 @@ class CookRepository {
         cookingNutriProtein: "20",
         cookingItems: [
           Content(
-            contentId: "3",
+            contentId: 123456764,
             contentName: "김치",
             category: "발효식품",
             count: 1,
@@ -77,7 +77,7 @@ class CookRepository {
             nutriFat: 0,
           ),
           Content(
-            contentId: "4",
+            contentId: 123456763,
             contentName: "돼지고기",
             category: "육류",
             count: 1,
@@ -104,7 +104,7 @@ class CookRepository {
         cookingNutriProtein: "25",
         cookingItems: [
           Content(
-            contentId: "5",
+            contentId: 123456762,
             contentName: "밥",
             category: "곡물",
             count: 1,

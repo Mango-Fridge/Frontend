@@ -70,7 +70,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   // count 증가 함수
-  void addContentCount(String contentId) {
+  void addContentCount(int contentId) {
     // list 전체 Content에서 count 증가가 반영 된 list
     final List<Content>? addedList =
         state?.contentList?.map((Content content) {
@@ -129,7 +129,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   // count 감소 함수
-  void reduceContentCount(String contentId) {
+  void reduceContentCount(int contentId) {
     // list 전체 Content에서 count 감소 반영 된 list
     final List<Content>? reducedList =
         state?.contentList?.map((Content content) {
@@ -229,7 +229,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   // update view에서 x_rouded 버튼을 눌렀을 때 count를 되돌려 놓는 함수
-  void removeUpdateContentById(String contentId) {
+  void removeUpdateContentById(int contentId) {
     List<Content> updatedUpdateList = state?.updateContentList ?? <Content>[];
 
     Content? contentToRemove =
