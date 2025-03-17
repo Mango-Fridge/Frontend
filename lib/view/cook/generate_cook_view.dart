@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/providers/generate_cook_provider.dart';
-import 'cook_view.dart';
+import 'package:mango/view/cook/sub_widget/nutrient_box.dart';
 
 class GenerateCookView extends ConsumerStatefulWidget {
   const GenerateCookView({super.key});
@@ -177,33 +177,13 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          child: const Wrap(
+                          child: Wrap(
                             spacing: 15.0,
                             children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text('열량', style: TextStyle(fontSize: 12)),
-                                  Text('300', style: TextStyle(fontSize: 12)),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text('탄', style: TextStyle(fontSize: 12)),
-                                  Text('50', style: TextStyle(fontSize: 12)),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text('단', style: TextStyle(fontSize: 12)),
-                                  Text('20', style: TextStyle(fontSize: 12)),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text('지', style: TextStyle(fontSize: 12)),
-                                  Text('10', style: TextStyle(fontSize: 12)),
-                                ],
-                              ),
+                              nutrientColumn('열량', '300'),
+                              nutrientColumn('탄', '50'),
+                              nutrientColumn('단', '20'),
+                              nutrientColumn('지', '10'),
                             ],
                           ),
                         )
