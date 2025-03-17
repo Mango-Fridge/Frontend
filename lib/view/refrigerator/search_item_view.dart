@@ -36,11 +36,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("물품 추가"),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
+        appBar: AppBar(title: const Text("물품 추가"), scrolledUnderElevation: 0),
         body: Column(
           spacing: 20,
           children: <Widget>[
