@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
-import 'package:mango/providers/cook_provider.dart';
+import 'package:mango/providers/generate_cook_provider.dart';
 import 'cook_view.dart';
 
 class GenerateCookView extends ConsumerStatefulWidget {
@@ -23,31 +23,23 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
   final FocusNode _cookNameFocusNode = FocusNode();
   final FocusNode _searchIngredientFocusNode = FocusNode();
 
-  bool _isCookNameFocused = false;
-  bool _isSearchIngredientFocused = false;
-  bool _isOpenCookName = false;
-
-  // 검색어 입력값을 초기화할 때 사용되는 변수
-  bool _isSearchFieldEmpty = true;
-
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
     super.initState();
     _cookNameFocusNode.addListener(() {
-      setState(() {
-        _isCookNameFocused = _cookNameFocusNode.hasFocus;
-      });
+      ref.read(isCookNameFocused.notifier).state = _cookNameFocusNode.hasFocus;
     });
 
     _searchIngredientFocusNode.addListener(() {
-      setState(() {
-        _isSearchIngredientFocused = _searchIngredientFocusNode.hasFocus;
-        _isSearchFieldEmpty = _searchIngridientController.text.isEmpty;
-      });
+      ref.read(isSearchIngredientFocused.notifier).state =
+          _searchIngredientFocusNode.hasFocus;
+      ref.read(isSearchFieldEmpty.notifier).state =
+          _searchIngridientController.text.isEmpty;
     });
   }
 
+  // 요리 나가기 알럿창 표시
   void _showExitDialog() {
     showDialog(
       context: context,
@@ -78,6 +70,9 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
   @override
   Widget build(BuildContext context) {
+    final cookState = ref.watch(generateCookProvider); // 상태 감시
+    final cookNotifier = ref.read(generateCookProvider.notifier); // 싱태 변경
+
     final Design design = Design(context);
 
     return PopScope(
@@ -95,18 +90,17 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
               // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
               AnimatedContainer(
                 onEnd: () {
-                  setState(() {
-                    _isOpenCookName = !_isOpenCookName;
-                  });
+                  ref.read(isOpenCookName.notifier).state =
+                      !ref.read(isOpenCookName);
                 },
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.fastOutSlowIn,
                 width:
-                    _isCookNameFocused
+                    ref.watch(isCookNameFocused)
                         ? design.screenWidth * 0.75
                         : design.screenWidth * 0.44,
                 child:
-                    _isCookNameFocused
+                    ref.watch(isCookNameFocused)
                         ? TextField(
                           // controller와 focusnode 를 텍스트필드에 연결
                           controller: _cookNameController,
@@ -129,9 +123,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                         : GestureDetector(
                           onTap: () {
                             _cookNameFocusNode.requestFocus();
-                            setState(() {
-                              _isCookNameFocused = true;
-                            });
+                            ref.read(isCookNameFocused.notifier).state = true;
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -176,12 +168,12 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.fastOutSlowIn,
                 width:
-                    _isCookNameFocused
+                    ref.watch(isCookNameFocused)
                         ? design.screenWidth * 0
                         : design.screenWidth * 0.31,
 
                 child:
-                    !_isCookNameFocused && !_isOpenCookName
+                    !ref.watch(isCookNameFocused) && !ref.watch(isOpenCookName)
                         ? Container(
                           padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
@@ -244,24 +236,22 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isSearchFieldEmpty ? Icons.search : Icons.close,
+                        ref.watch(isSearchFieldEmpty)
+                            ? Icons.search
+                            : Icons.close,
                         color: Colors.black,
                       ),
                       onPressed: () {
-                        if (!_isSearchFieldEmpty) {
+                        if (!ref.watch(isSearchFieldEmpty)) {
                           _searchIngridientController.clear();
-                          setState(() {
-                            _isSearchFieldEmpty = true;
-                          });
+                          ref.read(isSearchFieldEmpty.notifier).state = true;
                         }
                       },
                     ),
                   ),
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
-                    setState(() {
-                      _isSearchFieldEmpty = value.isEmpty;
-                    });
+                    ref.read(isSearchFieldEmpty.notifier).state = value.isEmpty;
                   },
                 ),
                 SizedBox(height: design.screenHeight * 0.3),
@@ -273,7 +263,9 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
         // 바텀 시트 - 키보드 등장 시 숨김 관리 위해 visibility 위젯 사용
         bottomSheet: Visibility(
-          visible: !_isSearchIngredientFocused && !_isCookNameFocused,
+          visible:
+              !ref.watch(isSearchIngredientFocused) &&
+              !ref.watch(isSearchIngredientFocused),
           child: Container(
             color: Colors.amber,
             padding: const EdgeInsets.all(16.0),
@@ -285,7 +277,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                   controller: _memoController,
                   decoration: InputDecoration(
                     hintText: '요리에 대한 메모를 입력해보세요',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     filled: true,
                     fillColor: Colors.white,
                     suffixIcon:
@@ -296,7 +288,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                                   _memoController.clear();
                                 });
                               },
-                              icon: Icon(Icons.clear),
+                              icon: const Icon(Icons.clear),
                             )
                             : null,
                   ),
@@ -318,9 +310,10 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                     final String cookName = _cookNameController.text;
                     final String ingredients = _searchIngridientController.text;
 
-                    ref.read(recipeNameProvider.notifier).state = cookName;
-                    ref.read(ingredientsProvider.notifier).state = ingredients;
                     context.pop(context); // cook view로 돌아감
+
+                    // 요리 저장 - GenerateCookNotifier의 recipeSave 호출
+                    cookNotifier.recipeSave(cookName, ingredients);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -340,3 +333,5 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     );
   }
 }
+
+//  generateCookProvider(cookName, ingredients);
