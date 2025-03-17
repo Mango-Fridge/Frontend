@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_content_provider.dart';
 import 'package:mango/state/add_content_state.dart';
+import 'package:mango/toastMessage.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
@@ -58,19 +59,19 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           .watch(addContentProvider.notifier)
           .updateNameErrorMessage(nameController.text);
       capacityController = TextEditingController(
-        text: widget.item?.nutriCapacity.toString() ?? '0',
+        text: widget.item?.nutriCapacity.toString() ?? '',
       );
       caloriesController = TextEditingController(
-        text: widget.item?.nutriKcal.toString() ?? '0',
+        text: widget.item?.nutriKcal.toString() ?? '',
       );
       carbsController = TextEditingController(
-        text: widget.item?.nutriCarbohydrate.toString() ?? '0',
+        text: widget.item?.nutriCarbohydrate.toString() ?? '',
       );
       proteinController = TextEditingController(
-        text: widget.item?.nutriProtein.toString() ?? '0',
+        text: widget.item?.nutriProtein.toString() ?? '',
       );
       fatController = TextEditingController(
-        text: widget.item?.nutriFat.toString() ?? '0',
+        text: widget.item?.nutriFat.toString() ?? '',
       );
     });
   }
@@ -119,7 +120,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         TextField(
           //focusNode: _focusNode,
           controller: nameController,
-          enabled: widget.item == null,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 19.0,
@@ -520,9 +520,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             child: buildElevatedButton(
               label: '물품 공개 등록',
               onPressed:
-                  widget.item == null && _addContentState!.isNutritionEmpty
+                  widget.item == null &&
+                          _addContentState!.isNutritionEmpty &&
+                          _addContentState!.isDetailInfoEmpty
                       ? () {
-                        print('test');
+                        toastMessage(
+                          context,
+                          "${nameController.text}(이)가 정상적으로\n공개등록이 되었습니다!",
+                        );
                       }
                       : null,
               backgroundColor: Colors.amber[200]!,
@@ -565,6 +570,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                 ? int.parse(fatController.text)
                                 : 0,
                           );
+                      toastMessage(
+                        context,
+                        "${nameController.text}(이)가 정상적으로\n추가되었습니다!",
+                      );
                       context.pop();
                     }
                     : null,

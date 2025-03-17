@@ -1,11 +1,11 @@
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
-import 'package:mango/view/cook/cook_view.dart';
-import 'package:mango/view/cook/generate_cook_view.dart';
+import 'package:mango/view/cook/widget/cook_view.dart';
+import 'package:mango/view/cook/widget/generate_cook_view.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/refrigerator/add_content_view.dart';
-import 'package:mango/view/refrigerator/search_content_view.dart';
+import 'package:mango/view/refrigerator/search_item_view.dart';
 import 'package:mango/view/refrigerator/refrigerator_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/splashView.dart';

@@ -1,12 +1,12 @@
 import 'package:mango/model/refrigerator_item.dart';
 
-class SearchContentState {
+class SearchItemState {
   List<RefrigeratorItem>? refrigeratorItemList;
 
-  SearchContentState({this.refrigeratorItemList});
+  SearchItemState({this.refrigeratorItemList});
 
-  SearchContentState copyWith({List<RefrigeratorItem>? refrigeratorItemList}) {
-    return SearchContentState(
+  SearchItemState copyWith({List<RefrigeratorItem>? refrigeratorItemList}) {
+    return SearchItemState(
       refrigeratorItemList: refrigeratorItemList ?? this.refrigeratorItemList,
     );
   }

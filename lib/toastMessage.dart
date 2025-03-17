@@ -7,17 +7,20 @@ void toastMessage(BuildContext context, String text) {
   final fToast = FToast();
   fToast.init(context);
 
-
   // 커스텀 모양
   Widget toast = Container(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(25.0),
-      color: Colors.greenAccent,
+      color: Colors.amber[300],
     ),
     child: Row(
       mainAxisSize: MainAxisSize.min,
-      children: [Icon(Icons.check), SizedBox(width: 12.0), Text(text)],
+      children: [
+        Icon(Icons.check),
+        SizedBox(width: 12.0),
+        Text(text, textAlign: TextAlign.center),
+      ],
     ),
   );
 
@@ -31,14 +34,9 @@ void toastMessage(BuildContext context, String text) {
       ToastGravity? gravity,
     ) {
       return Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              bottom: 100,
-              child: child,
-            ),
-          ],
-        );
+        alignment: Alignment.center,
+        children: <Widget>[Positioned(bottom: 100, child: child)],
+      );
     },
   );
 }

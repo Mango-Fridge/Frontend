@@ -8,9 +8,11 @@ class GroupNotifier extends Notifier<List<Group>> {
   @override
   List<Group> build() => <Group>[];
 
-  Future<void> loadGroupList(String email) async {
+  Future<void> loadGroupList(int userId) async {
     try {
-      final List<Group> groupList = await _groupRepository.loadGroupList(email);
+      final List<Group> groupList = await _groupRepository.loadGroupList(
+        userId,
+      );
       state = groupList;
     } catch (e) {
       state = <Group>[];
@@ -21,12 +23,11 @@ class GroupNotifier extends Notifier<List<Group>> {
 final NotifierProvider<GroupNotifier, List<Group>> groupProvider =
     NotifierProvider<GroupNotifier, List<Group>>(GroupNotifier.new);
 
+// email에 의해 불려온 group List 관리
+// 그룹에 의해 불려온 content List 관리
 
-  // email에 의해 불려온 group List 관리
-  // 그룹에 의해 불려온 content List 관리
+// 물품 + 개수 상태 관리
+// 물품 - 개수 상태 관리
 
-  // 물품 + 개수 상태 관리
-  // 물품 - 개수 상태 관리
-  
-  // 승인대기요청 그룹 이름 프로바이더 - 통신 시작하면 바뀔 수 있음
-  final groupRequestProvider = StateProvider<String>((ref) => '');
+// 승인대기요청 그룹 이름 프로바이더 - 통신 시작하면 바뀔 수 있음
+final groupRequestProvider = StateProvider<String>((ref) => '');

@@ -12,8 +12,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 비동기 작업을 실행하기 전에 위젯 시스템을 초기화
   await initializeDateFormatting('ko', null);
   KakaoSdk.init(nativeAppKey: dotenv.get('KAKAO_API_KEY')); // 카카오 초기화
-  print("--------------");
-  print(await KakaoSdk.origin);
 
   runApp(const ProviderScope(child: MyApp()));
 }
