@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:mango/providers/add_cook_provider.dart';
-import 'package:mango/view/cook/sub_widget/nutrient_box.dart';
 
 // add_cook_view의 app bar에 들어갈 위젯
 class AddCookAppBarWidget extends ConsumerWidget {
@@ -123,4 +122,14 @@ class AddCookAppBarWidget extends ConsumerWidget {
       ],
     );
   }
+}
+
+// 공통적으로 그룹에서 사용할 버튼 - riverpod 사용하지 않는 단순한 코드로, 이와 같이 생성 가능
+Widget nutrientColumn(String label, String value) {
+  return Column(
+    children: <Widget>[
+      Text(label, style: const TextStyle(fontSize: 12)),
+      Text(value, style: const TextStyle(fontSize: 12)),
+    ],
+  );
 }

@@ -137,20 +137,16 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           visible:
               !ref.watch(isSearchIngredientFocused) &&
               !ref.watch(isSearchIngredientFocused),
-          child: Container(
-            color: Colors.amber,
-            padding: const EdgeInsets.all(16.0),
-            child: AddCookBottomSheetWidget(
-              memoController: _memoController,
-              onAddPressed: () {
-                final String cookName = _cookNameController.text;
-                final String ingredients = _searchIngridientController.text;
-                context.pop(context);
-                ref
-                    .read(addCookProvider.notifier)
-                    .recipeSave(cookName, ingredients);
-              },
-            ),
+          child: AddCookBottomSheetWidget(
+            memoController: _memoController,
+            onAddPressed: () {
+              final String cookName = _cookNameController.text;
+              final String ingredients = _searchIngridientController.text;
+              context.pop(context);
+              ref
+                  .read(addCookProvider.notifier)
+                  .recipeSave(cookName, ingredients);
+            },
           ),
         ),
       ),

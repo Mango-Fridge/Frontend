@@ -49,17 +49,19 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
               // 상태 변경은 부모 위젯에서 setState로 처리
             },
           ),
-          SizedBox(height: design.marginAndPadding),
           // 추가하기 버튼
-          ElevatedButton(
-            onPressed: onAddPressed, // 콜백 호출
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 40),
+          Container(
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            child: ElevatedButton(
+              onPressed: onAddPressed, // 콜백 호출
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 40),
+              ),
+              child: const Text('추가하기', style: TextStyle(color: Colors.black)),
             ),
-            child: const Text('추가하기', style: TextStyle(color: Colors.black)),
           ),
-          SizedBox(height: design.marginAndPadding * 3),
+          // SizedBox(height: design.marginAndPadding * 3),
         ],
       ),
     );
