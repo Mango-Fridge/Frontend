@@ -274,9 +274,6 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                   maxLines: 3, // 최대 3줄까지 높이 늘어남, 이후 스크롤
                   keyboardType: TextInputType.multiline, // 여러 줄 입력 가능
                   textInputAction: TextInputAction.newline, // 엔터 키로 줄바꿈
-                  onChanged: (String value) {
-                    setState(() {}); // 화면 업데이트.
-                  },
                 ),
                 SizedBox(height: design.marginAndPadding),
 
