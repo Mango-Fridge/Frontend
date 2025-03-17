@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/providers/group_%08enum_state_provider.dart';
+import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/view/group/modal_view/group_modal_state_view.dart';
 import 'package:mango/view/group/sub_widget/group_common_button.dart';

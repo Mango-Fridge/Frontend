@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/providers/group_%08enum_state_provider.dart';
+import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/view/group/widget/group_empty_widget.dart';
 import 'package:mango/view/group/widget/group_firstRequest_widget.dart';
@@ -35,7 +35,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
       body: switch (groupViewState) {
         GroupViewState.empty => const GroupEmptyWidget(), // 초기 화면 그룹 뷰
         GroupViewState.exist => const GrouExistWidget(), // 그룹이 존재할 경우 보이는 뷰
-        GroupViewState.firstRequest => const GroupFirstrequestWidget(), // 처음 '참여하기' 하였을 때 보이는 뷰
+        GroupViewState.firstRequest => const GroupFirstRequestWidget(), // 처음 '참여하기' 하였을 때 보이는 뷰
       },
     );
   }

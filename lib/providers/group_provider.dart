@@ -28,3 +28,5 @@ final NotifierProvider<GroupNotifier, List<Group>> groupProvider =
   // 물품 + 개수 상태 관리
   // 물품 - 개수 상태 관리
   
+  // 승인대기요청 그룹 이름 프로바이더 - 통신 시작하면 바뀔 수 있음
+  final groupRequestProvider = StateProvider<String>((ref) => '');
