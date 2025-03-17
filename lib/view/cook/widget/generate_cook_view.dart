@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/providers/generate_cook_provider.dart';
 import 'package:mango/view/cook/sub_widget/app_bar_widget.dart';
-import 'package:mango/view/cook/sub_widget/nutrient_box.dart';
 import 'package:mango/view/cook/sub_widget/bottom_sheet_widget.dart';
 
 class GenerateCookView extends ConsumerStatefulWidget {
