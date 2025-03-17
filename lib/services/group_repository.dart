@@ -2,7 +2,7 @@ import 'package:mango/model/group.dart';
 
 class GroupRepository {
   // email로 group list 불러오는 함수
-  Future<List<Group>> loadGroupList(String email) async {
+  Future<List<Group>> loadGroupList(int email) async {
     // email에 해당하는 group list 불러오는 api 호출
     await Future.delayed(Duration(seconds: 1));
 

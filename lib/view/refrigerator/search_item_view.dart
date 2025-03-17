@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/refrigerator_item.dart';
-import 'package:mango/providers/search_content_provider.dart';
-import 'package:mango/state/search_content_state.dart';
+import 'package:mango/providers/search_item_provider.dart';
+import 'package:mango/state/search_item_state.dart';
 
 class SearchContentView extends ConsumerStatefulWidget {
   const SearchContentView({super.key});
@@ -13,8 +13,7 @@ class SearchContentView extends ConsumerStatefulWidget {
 }
 
 class _SearchContentViewState extends ConsumerState<SearchContentView> {
-  SearchContentState? get _searchContentState =>
-      ref.watch(searchContentNotifier);
+  SearchItemState? get _searchContentState => ref.watch(searchContentNotifier);
 
   final TextEditingController _controller = TextEditingController();
 
@@ -91,7 +90,15 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
       child: Column(
         children: <Widget>[
           const Divider(),
-          ...itemList!.map((RefrigeratorItem item) => _buildItemRow(item)),
+          Expanded(
+            child: ListView.builder(
+              itemCount: itemList?.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                final RefrigeratorItem item = itemList![index];
+                return _buildItemRow(item);
+              },
+            ),
+          ),
           const Divider(),
         ],
       ),

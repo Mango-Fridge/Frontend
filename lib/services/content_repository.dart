@@ -7,14 +7,14 @@ class ContentRepository {
   }
 
   // groupId로 content list 불러오는 함수
-  Future<List<Content>> loadContentList(String groupId) async {
+  Future<List<Content>> loadContentList(int groupId) async {
     // groupId 해당하는 content list 불러오는 api 호출
     await Future.delayed(Duration(seconds: 1));
 
     return <Content>[
       // 냉장
       Content(
-        contentId: 'i00000001',
+        contentId: 123456789,
         contentName: '코카콜라',
         category: '냉장',
         count: 5,
@@ -30,7 +30,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000002',
+        contentId: 123456788,
         contentName: '토마토 케찹',
         category: '냉장',
         count: 3,
@@ -46,7 +46,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000003',
+        contentId: 123456787,
         contentName: '냉장보관 하는 과일',
         category: '냉장',
         count: 2,
@@ -62,7 +62,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000004',
+        contentId: 123456786,
         contentName: '치즈',
         category: '냉장',
         count: 4,
@@ -78,7 +78,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000005',
+        contentId: 123456785,
         contentName: '스팸',
         category: '냉장',
         count: 3,
@@ -96,7 +96,7 @@ class ContentRepository {
 
       // 냉동
       Content(
-        contentId: 'i00000006',
+        contentId: 123456784,
         contentName: '냉동 삼겹살',
         category: '냉동',
         count: 5,
@@ -112,7 +112,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000007',
+        contentId: 123456783,
         contentName: '구슬 아이스크림',
         category: '냉동',
         count: 3,
@@ -128,7 +128,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000008',
+        contentId: 123456782,
         contentName: '냉동 오징어',
         category: '냉동',
         count: 4,
@@ -144,7 +144,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000009',
+        contentId: 123456781,
         contentName: '냉동 치킨',
         category: '냉동',
         count: 2,
@@ -160,7 +160,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000010',
+        contentId: 123456780,
         contentName: '냉동 쌀밥',
         category: '냉동',
         count: 5,
@@ -176,7 +176,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000011',
+        contentId: 123456779,
         contentName: '아이스크림',
         category: '냉동',
         count: 3,
@@ -192,7 +192,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000012',
+        contentId: 123456778,
         contentName: '냉동 족발',
         category: '냉동',
         count: 7,
@@ -208,7 +208,7 @@ class ContentRepository {
         nutriFat: 0,
       ),
       Content(
-        contentId: 'i00000013',
+        contentId: 123456776,
         contentName: '냉동 순대',
         category: '냉동',
         count: 5,

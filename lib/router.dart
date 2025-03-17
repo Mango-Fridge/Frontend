@@ -5,7 +5,7 @@ import 'package:mango/view/cook/widget/cook_view.dart';
 import 'package:mango/view/cook/widget/generate_cook_view.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/refrigerator/add_content_view.dart';
-import 'package:mango/view/refrigerator/search_content_view.dart';
+import 'package:mango/view/refrigerator/search_item_view.dart';
 import 'package:mango/view/refrigerator/refrigerator_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/splashView.dart';
