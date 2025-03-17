@@ -27,17 +27,19 @@ class GenerateCookNotifier extends Notifier<Cook> {
 final NotifierProvider<GenerateCookNotifier, Cook> generateCookProvider =
     NotifierProvider<GenerateCookNotifier, Cook>(GenerateCookNotifier.new);
 
-// 사용법
-// final cookState = ref.watch(generateCookProvider); // 상태 감시
-// final cookNotifier = ref.read(generateCookProvider.notifier); // 싱테 변경
-
 ///////////////////////////////////////////////////////////////////
 
 // 각 변수 상태 관리
-final isCookNameFocused = StateProvider<bool>((ref) => false);
+final StateProvider<bool> isCookNameFocused = StateProvider<bool>(
+  (ref) => false,
+);
 
-final isSearchIngredientFocused = StateProvider<bool>((ref) => false);
+final StateProvider<bool> isSearchIngredientFocused = StateProvider<bool>(
+  (ref) => false,
+);
 
-final isOpenCookName = StateProvider<bool>((ref) => false);
+final StateProvider<bool> isOpenCookName = StateProvider<bool>((ref) => false);
 
-final isSearchFieldEmpty = StateProvider<bool>((ref) => false);
+final StateProvider<bool> isSearchFieldEmpty = StateProvider<bool>(
+  (ref) => false,
+);

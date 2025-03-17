@@ -39,7 +39,7 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     });
   }
 
-  // 요리 나가기 알럿창 표시
+  // 요리 나가기 알럿창 표시 호출 함수
   void _showExitDialog() {
     showDialog(
       context: context,
@@ -70,9 +70,6 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
 
   @override
   Widget build(BuildContext context) {
-    final cookState = ref.watch(generateCookProvider); // 상태 감시
-    final cookNotifier = ref.read(generateCookProvider.notifier); // 싱태 변경
-
     final Design design = Design(context);
 
     return PopScope(
@@ -313,7 +310,9 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
                     context.pop(context); // cook view로 돌아감
 
                     // 요리 저장 - GenerateCookNotifier의 recipeSave 호출
-                    cookNotifier.recipeSave(cookName, ingredients);
+                    ref
+                        .read(generateCookProvider.notifier)
+                        .recipeSave(cookName, ingredients);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -333,5 +332,3 @@ class _GenerateCookViewState extends ConsumerState<GenerateCookView> {
     );
   }
 }
-
-//  generateCookProvider(cookName, ingredients);
