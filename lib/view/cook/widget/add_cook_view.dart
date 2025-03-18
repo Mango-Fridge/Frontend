@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
+import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_cook_provider.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
+import 'package:mango/providers/search_item_provider.dart';
+import 'package:mango/state/search_item_state.dart';
 
 class AddCookView extends ConsumerStatefulWidget {
   const AddCookView({super.key});
@@ -24,6 +27,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   final FocusNode _cookNameFocusNode = FocusNode();
   final FocusNode _searchIngredientFocusNode = FocusNode();
 
+  SearchItemState? get _searchContentState => ref.watch(searchContentNotifier);
+
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
@@ -37,6 +42,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           _searchIngredientFocusNode.hasFocus;
       ref.read(isSearchFieldEmpty.notifier).state =
           _searchIngridientController.text.isEmpty;
+    });
+
+    // view init 후 데이터 처리를 하기 위함
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(searchContentNotifier.notifier).resetState();
     });
   }
 
@@ -123,10 +133,27 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
                     ref.read(isSearchFieldEmpty.notifier).state = value.isEmpty;
+
+                    ref
+                        .watch(searchContentNotifier.notifier)
+                        .loadItemListByString(value);
                   },
                 ),
-                SizedBox(height: design.screenHeight * 0.3),
-                const Text("재료를 추가해주세요."),
+
+                Expanded(
+                  child:
+                      _searchContentState != null &&
+                              _searchContentState?.refrigeratorItemList !=
+                                  null &&
+                              _searchContentState!
+                                  .refrigeratorItemList!
+                                  .isNotEmpty &&
+                              _searchIngridientController.text != ''
+                          ? _buildItem(
+                            _searchContentState?.refrigeratorItemList!,
+                          )
+                          : _noItemView(),
+                ),
               ],
             ),
           ),
@@ -150,6 +177,114 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildItem(List<RefrigeratorItem>? itemList) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Column(
+        children: <Widget>[
+          const Divider(),
+          Expanded(
+            child: ListView.builder(
+              itemCount: itemList?.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                final RefrigeratorItem item = itemList![index];
+                return _buildItemRow(item);
+              },
+            ),
+          ),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemRow(RefrigeratorItem item) {
+    Design design = Design(context);
+    return GestureDetector(
+      onTap: () {
+        ref.watch(searchContentNotifier.notifier).resetState();
+        _searchIngridientController.text = '';
+        context.push(
+          '/addContent',
+          extra: RefrigeratorItem(
+            groupId: item.groupId,
+            isOpenItem: item.isOpenItem,
+            itemName: item.itemName,
+            category: item.category,
+            brandName: item.brandName,
+            count: item.count,
+            regDate: item.regDate,
+            expDate: item.expDate,
+            storageArea: item.storageArea,
+            memo: item.memo,
+            nutriUnit: item.nutriUnit,
+            nutriCapacity: item.nutriCapacity,
+            nutriKcal: item.nutriKcal,
+            nutriCarbohydrate: item.nutriCarbohydrate,
+            nutriProtein: item.nutriProtein,
+            nutriFat: item.nutriFat,
+          ),
+        );
+      },
+
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: design.marginAndPadding,
+        ),
+        padding: EdgeInsets.all(design.marginAndPadding),
+        decoration: BoxDecoration(
+          color: Colors.amber[300],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    item.itemName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
+                  style: const TextStyle(fontSize: 12),
+                ),
+                Text(item.brandName, style: const TextStyle(fontSize: 12)),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 검색어에 의한 물품이 없을 시 화면
+  Widget _noItemView() {
+    Design design = Design(context);
+
+    return Column(
+      children: <Widget>[
+        SizedBox(height: design.screenHeight * 0.25),
+        const Text("재료를 추가해주세요."),
+      ],
     );
   }
 }
