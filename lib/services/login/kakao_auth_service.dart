@@ -34,6 +34,7 @@ class KakaoAuthService implements AbstractAuth {
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
         return AuthInfo(
+          userId: 0,
           platform: AuthPlatform.kakao,
           email: user.kakaoAccount?.email,
         );
@@ -74,6 +75,7 @@ class KakaoAuthService implements AbstractAuth {
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
         return AuthInfo(
+          userId: 0,
           platform: AuthPlatform.kakao,
           email: user.kakaoAccount?.email,
         );
@@ -108,6 +110,7 @@ class KakaoAuthService implements AbstractAuth {
           ); // 카카오 platform, email 데이터를 로컬에 저장
 
           return AuthInfo(
+            userId: 0,
             platform: AuthPlatform.kakao,
             email: user.kakaoAccount?.email,
           );
@@ -136,6 +139,7 @@ class KakaoAuthService implements AbstractAuth {
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
         return AuthInfo(
+          userId: 0,
           platform: AuthPlatform.kakao,
           email: user.kakaoAccount?.email,
         );

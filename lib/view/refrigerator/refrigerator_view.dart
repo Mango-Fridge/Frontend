@@ -37,7 +37,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(refrigeratorNotifier.notifier).resetState();
       ref.watch(groupProvider.notifier).loadGroupList(123456789);
-      ref.watch(refrigeratorNotifier.notifier).loadContentList(123456789);
+      ref.watch(refrigeratorNotifier.notifier).loadContentList(6);
     });
   }
 
@@ -339,7 +339,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   if (content.count > 0) {
                     ref
                         .watch(refrigeratorNotifier.notifier)
-                        .reduceContentCount(content.contentId);
+                        .reduceContentCount(content.contentId ?? 0);
                   }
                 }),
                 const SizedBox(width: 5),
@@ -366,7 +366,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                       .openUpdateContentCountView();
                   ref
                       .watch(refrigeratorNotifier.notifier)
-                      .addContentCount(content.contentId);
+                      .addContentCount(content.contentId ?? 0);
                 }),
               ],
             ),
@@ -418,7 +418,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     onPressed: () {
                       ref
                           .watch(refrigeratorNotifier.notifier)
-                          .removeUpdateContentById(content!.contentId);
+                          .removeUpdateContentById(content!.contentId ?? 0);
                     },
                     icon: Container(
                       padding: const EdgeInsets.all(1),

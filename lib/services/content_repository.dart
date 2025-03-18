@@ -1,6 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:mango/model/content.dart';
 
 class ContentRepository {
+  final Dio _dio = Dio();
+  String _baseUrl = '';
+
   // content 저장 함수
   Future<void> saveContent(Content content) async {
     await Future.delayed(Duration(seconds: 1));
@@ -8,221 +12,19 @@ class ContentRepository {
 
   // groupId로 content list 불러오는 함수
   Future<List<Content>> loadContentList(int groupId) async {
-    // groupId 해당하는 content list 불러오는 api 호출
-    await Future.delayed(Duration(seconds: 1));
+    _baseUrl = 'http://127.0.0.1:8080/api/contents/group/$groupId';
+    try {
+      _dio.interceptors.add(LogInterceptor(responseBody: true));
+      final response = await _dio.get(_baseUrl);
 
-    return <Content>[
-      // 냉장
-      Content(
-        contentId: 123456789,
-        contentName: '코카콜라',
-        category: '냉장',
-        count: 5,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-03-16 18:55:22'),
-        storageArea: '냉장',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456788,
-        contentName: '토마토 케찹',
-        category: '냉장',
-        count: 3,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-23 18:55:22'),
-        storageArea: '냉장',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456787,
-        contentName: '냉장보관 하는 과일',
-        category: '냉장',
-        count: 2,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-22 18:55:22'),
-        storageArea: '냉장',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456786,
-        contentName: '치즈',
-        category: '냉장',
-        count: 4,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-24 18:55:22'),
-        storageArea: '냉장',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456785,
-        contentName: '스팸',
-        category: '냉장',
-        count: 3,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-21 18:55:22'),
-        storageArea: '냉장',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-
-      // 냉동
-      Content(
-        contentId: 123456784,
-        contentName: '냉동 삼겹살',
-        category: '냉동',
-        count: 5,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-21 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456783,
-        contentName: '구슬 아이스크림',
-        category: '냉동',
-        count: 3,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-23 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456782,
-        contentName: '냉동 오징어',
-        category: '냉동',
-        count: 4,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-22 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456781,
-        contentName: '냉동 치킨',
-        category: '냉동',
-        count: 2,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-22 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456780,
-        contentName: '냉동 쌀밥',
-        category: '냉동',
-        count: 5,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-21 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456779,
-        contentName: '아이스크림',
-        category: '냉동',
-        count: 3,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-23 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456778,
-        contentName: '냉동 족발',
-        category: '냉동',
-        count: 7,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-22 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-      Content(
-        contentId: 123456776,
-        contentName: '냉동 순대',
-        category: '냉동',
-        count: 5,
-        regDate: DateTime.now(),
-        expDate: DateTime.parse('2025-01-20 18:55:22'),
-        storageArea: '냉동',
-        memo: '',
-        nutriUnit: '',
-        nutriCapacity: 0,
-        nutriKcal: 0,
-        nutriCarbohydrate: 0,
-        nutriProtein: 0,
-        nutriFat: 0,
-      ),
-    ];
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data['data'];
+        return data.map((item) => Content.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to load content');
+      }
+    } catch (e) {
+      throw Exception('Failed to load content: $e');
+    }
   }
 }
