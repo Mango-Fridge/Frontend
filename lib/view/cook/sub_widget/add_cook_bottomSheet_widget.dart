@@ -51,7 +51,7 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
           ),
           // 추가하기 버튼
           Container(
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: ElevatedButton(
               onPressed: onAddPressed, // 콜백 호출
               style: ElevatedButton.styleFrom(

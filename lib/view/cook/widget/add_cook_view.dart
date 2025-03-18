@@ -163,7 +163,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
         bottomSheet: Visibility(
           visible:
               !ref.watch(isSearchIngredientFocused) &&
-              !ref.watch(isSearchIngredientFocused),
+              !ref.watch(isCookNameFocused),
           child: AddCookBottomSheetWidget(
             memoController: _memoController,
             onAddPressed: () {
