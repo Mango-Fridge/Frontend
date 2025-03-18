@@ -29,5 +29,5 @@ final NotifierProvider<GroupNotifier, List<Group>> groupProvider =
 // 물품 + 개수 상태 관리
 // 물품 - 개수 상태 관리
 
-// 테스트 용도 후에 지울것 - 생성하기, 참가하기 눌렀을 때 bool로 화면 바뀜 (통신에서는 ex. 200, 400)
-final groupBoolProvider = StateProvider<bool>((ref) => false);
+// 승인대기요청 그룹 이름 프로바이더 - 통신 시작하면 바뀔 수 있음
+final groupRequestProvider = StateProvider<String>((ref) => '');

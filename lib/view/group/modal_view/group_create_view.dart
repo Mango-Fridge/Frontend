@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mango/providers/group_provider.dart';
+import 'package:mango/providers/group_enum_state_provider.dart';
+import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_create_provider.dart';
 import 'package:mango/toastMessage.dart';
@@ -51,10 +52,8 @@ class GroupCreateView extends ConsumerWidget {
               onPressed:
                   groupState.isButton
                       ? () {
-                        // 생성 로직 추가
-                        ref.read(groupBoolProvider.notifier).state =
-                            true; // 그룹뷰 전환 테스트용도 - 추후 삭제
-                        print(groupState.groupName);
+                        ref.read(grouViewStateProvider.notifier).state =
+                            GroupViewState.exist; // 그룹 생성으로 그룹 존재 뷰로
                         context.pop(); // Sheet 닫기
                         toastMessage(
                           context,

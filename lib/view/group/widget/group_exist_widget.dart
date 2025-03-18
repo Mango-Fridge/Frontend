@@ -4,15 +4,14 @@ import 'package:mango/design.dart';
 import 'package:mango/model/group.dart';
 import 'package:mango/providers/group_provider.dart';
 
-class GroupUserListWidget extends ConsumerStatefulWidget {
-  const GroupUserListWidget({super.key});
+class GrouExistWidget extends ConsumerStatefulWidget {
+  const GrouExistWidget({super.key});
 
   @override
-  ConsumerState<GroupUserListWidget> createState() =>
-      _GroupUserListWidgetState();
+  ConsumerState<GrouExistWidget> createState() => _GroupUserListWidgetState();
 }
 
-class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
+class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
   List<Group>? get _groupList => ref.watch(groupProvider);
   String? _selectedGroupName; // 선택된 그룹
   String? _selectedGroupId; // 선택된 그룹 ID
@@ -21,7 +20,9 @@ class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
   @override
   Widget build(BuildContext context) {
     final Design design = Design(context);
-    
+    final double fontSizeMediaQuery =
+        MediaQuery.of(context).size.width; // 폰트 사이즈
+
     // @override
     // void didChangeDependencies() {
     //   super.didChangeDependencies();
@@ -85,13 +86,16 @@ class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
 
               Text(
                 '냉장고ID: $_selectedGroupId',
-                style: const TextStyle(fontSize: 17),
+                style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
               ),
             ],
           ),
           const SizedBox(height: 30),
           ExpansionTile(
-            title: const Text('그룹원(${1})', style: TextStyle(fontSize: 20)),
+            title: Text(
+              '그룹원(${1})',
+              style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
+            ),
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
@@ -103,7 +107,7 @@ class _GroupUserListWidgetState extends ConsumerState<GroupUserListWidget> {
                       children: <Widget>[
                         Text(
                           '$_selectedOwner',
-                          style: const TextStyle(fontSize: 24),
+                          style: TextStyle(fontSize: fontSizeMediaQuery * 0.06),
                         ),
                         const Icon(
                           Icons.emoji_events,

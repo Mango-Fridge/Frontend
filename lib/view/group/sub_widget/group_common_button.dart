@@ -13,6 +13,8 @@ Widget groupCommonButton({
     builder: (context, ref, child) {
       final currentCreateState = ref.read(groupCreateProvider);
       final currenParticipationtState = ref.read(groupParticipationProvider);
+      final double fontSizeMediaQuery =
+          MediaQuery.of(context).size.width; // 폰트 사이즈
 
       return SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
@@ -34,7 +36,10 @@ Widget groupCommonButton({
               (currentCreateState.isLoadingButton ||
                       currenParticipationtState.isLoadingButton)
                   ? const CircularProgressIndicator(color: Colors.white)
-                  : Text(text, style: const TextStyle(fontSize: 25)),
+                  : Text(
+                    text,
+                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.06),
+                  ),
         ),
       );
     },

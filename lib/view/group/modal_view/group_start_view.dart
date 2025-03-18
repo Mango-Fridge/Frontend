@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/state/group_modal_state.dart';
-import 'package:mango/providers/group_modal_state_provider.dart';
+import 'package:mango/state/group_enum_state.dart';
+import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_create_provider.dart';
 import 'package:mango/providers/group_participation_provider.dart';
 import 'package:mango/view/group/sub_widget/group_common_button.dart';

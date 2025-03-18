@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mango/state/group_modal_state.dart';
-import 'package:mango/providers/group_modal_state_provider.dart';
+import 'package:mango/state/group_enum_state.dart';
+import 'package:mango/providers/group_enum_state_provider.dart';
 
 // 공통적으로 그룹 모달에서 사용할 상단바
 Widget groupModalTitle({
@@ -13,6 +13,8 @@ Widget groupModalTitle({
   return Consumer(
     builder: (context, ref, child) {
       final currentState = ref.read(groupModalStateProvider);
+      final double fontSizeMediaQuery =
+          MediaQuery.of(context).size.width; // 폰트 사이즈
 
       return Padding(
         padding: const EdgeInsets.all(16.0),
@@ -43,15 +45,15 @@ Widget groupModalTitle({
                 children: <Widget>[
                   Text(
                     textTitle,
-                    style: const TextStyle(
-                      fontSize: 25,
+                    style: TextStyle(
+                      fontSize: fontSizeMediaQuery * 0.06,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     textSub,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: fontSizeMediaQuery * 0.045,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
