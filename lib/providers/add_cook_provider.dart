@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
 
-class GenerateCookNotifier extends Notifier<Cook> {
+class AddCookNotifier extends Notifier<Cook> {
   @override
   Cook build() {
     // 초기 상태
@@ -24,8 +24,8 @@ class GenerateCookNotifier extends Notifier<Cook> {
   }
 }
 
-final NotifierProvider<GenerateCookNotifier, Cook> generateCookProvider =
-    NotifierProvider<GenerateCookNotifier, Cook>(GenerateCookNotifier.new);
+final NotifierProvider<AddCookNotifier, Cook> addCookProvider =
+    NotifierProvider<AddCookNotifier, Cook>(AddCookNotifier.new);
 
 ///////////////////////////////////////////////////////////////////
 

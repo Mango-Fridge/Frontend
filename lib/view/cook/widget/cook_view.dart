@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
-import 'package:mango/providers/generate_cook_provider.dart';
-import 'generate_cook_view.dart';
+import 'package:mango/providers/add_cook_provider.dart';
+import 'add_cook_view.dart';
 
 // 요리 리스트를 보여주는 view
 class CookView extends ConsumerWidget {
@@ -51,7 +51,7 @@ class CookView extends ConsumerWidget {
 
             const SizedBox(height: 20),
 
-            // + 버튼 -> 클릭 시 generate_cook_view로 이동
+            // + 버튼 -> 클릭 시 add_cook_view로 이동
             Center(
               child: Container(
                 width: design.screenWidth * 0.9,
@@ -63,7 +63,7 @@ class CookView extends ConsumerWidget {
                 child: IconButton(
                   icon: const Icon(Icons.add, color: Colors.black),
                   onPressed: () {
-                    context.push('/generatecook');
+                    context.push('/addCook');
                   },
                 ),
               ),
@@ -72,6 +72,8 @@ class CookView extends ConsumerWidget {
             const SizedBox(height: 180),
 
             // 요리 정보 표시
+            // - 추후 provider 생성하며 다시 사용할 예정
+            //
             // Center(
             //   child: Column(
             //     children: <Widget>[
