@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
+import 'package:mango/model/rest_client.dart';
 import 'package:mango/services/login/apple_auth_service.dart';
 import 'package:mango/services/login/login_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
@@ -12,6 +14,8 @@ import 'package:mango/services/login/terms_service.dart';
 
 // 상태 관리를 위한 provider와 notifier
 class LoginAuthNotifier extends Notifier<AuthInfo?> {
+  RestClient client = RestClient(dio);
+
   final KakaoAuthService _kakaoAuthService = KakaoAuthService();
   final AppleAuthService _appleAuthService = AppleAuthService();
   final LoginSharePrefs _loginSharePrefs = LoginSharePrefs();
@@ -62,7 +66,17 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     // 저장된 platform & email이 존재한다면,
     if (platform != null && email != null) {
       // 현재 상태 기억하기
+
       await postUserData();
+      OAuthToken? token =
+          await TokenManagerProvider.instance.manager.getToken();
+      print(token?.accessToken);
+
+      final tokens = "Bearer ${token?.accessToken}"; // Authorization 헤더 값
+      final body = {"oauthProvider": "kakao"}; // 요청 바디
+
+      final resp = await client.getAuthUser(tokens, body);
+
       state = AuthInfo(platform: platform, email: email);
       context.go('/home'); // 메인화면으로 이동
     } else {
