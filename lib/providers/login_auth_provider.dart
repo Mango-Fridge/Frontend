@@ -67,15 +67,16 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     if (platform != null && email != null) {
       // 현재 상태 기억하기
 
-      await postUserData();
+      // await postUserData();
       OAuthToken? token =
           await TokenManagerProvider.instance.manager.getToken();
       print(token?.accessToken);
 
       final tokens = "Bearer ${token?.accessToken}"; // Authorization 헤더 값
-      final body = {"oauthProvider": "kakao"}; // 요청 바디
+      final body = {"oauthProvider": "Kakao"}; // 요청 바디
 
       final resp = await client.getAuthUser(tokens, body);
+      print("사용자 정보 : ${resp.data?.toJson()}");
 
       state = AuthInfo(platform: platform, email: email);
       context.go('/home'); // 메인화면으로 이동

@@ -11,10 +11,38 @@ abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @POST('/user/login')
-  Future<Users> getAuthUser(
+  Future<ApiResponse> getAuthUser(
     @Header("Authorization") String token,
     @Body() Map<String, String> body,
   );
+}
+
+@JsonSerializable()
+class ApiResponse {
+  final String? status;
+  final int? code;
+  final Users? data; // data는 Users로 매핑
+  final ApiError? error;
+
+  ApiResponse({this.status, this.code, this.data, this.error});
+
+  factory ApiResponse.fromJson(Map<String, dynamic> json) =>
+      _$ApiResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ApiResponseToJson(this);
+}
+
+@JsonSerializable()
+class ApiError {
+  final String? code;
+  final String? message;
+
+  ApiError({this.code, this.message});
+
+  factory ApiError.fromJson(Map<String, dynamic> json) =>
+      _$ApiErrorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ApiErrorToJson(this);
 }
 
 @JsonSerializable()
