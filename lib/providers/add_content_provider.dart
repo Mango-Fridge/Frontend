@@ -35,6 +35,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     try {
       await _contentRepository.saveContent(
         Content(
+          contentId: null,
           contentName: contentName,
           category: category,
           count: count,

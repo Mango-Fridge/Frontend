@@ -2,6 +2,7 @@ import 'package:mango/model/login/platform_auth.dart';
 
 // 로그인 정보를 담기 위한 모델
 class AuthInfo {
+  // id 추가
   final AuthPlatform platform; // 플랫폼
   final String? email; // 이메일
   final String? nickname; // 닉네임

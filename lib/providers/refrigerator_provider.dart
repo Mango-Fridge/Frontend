@@ -40,7 +40,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     List<Content> refrigeratorContentList =
         contentList.where((Content content) {
           bool is24HoursOrMoreLeft =
-              DateTime.now().difference(content.expDate).inHours <= 24;
+              DateTime.now().difference(content.expDate!).inHours <= 24;
           bool isFrozen = content.storageArea == '냉장';
           return is24HoursOrMoreLeft && isFrozen;
         }).toList();
@@ -52,7 +52,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     List<Content> freezerContentList =
         contentList.where((Content content) {
           bool is24HoursOrMoreLeft =
-              DateTime.now().difference(content.expDate).inHours <= -24;
+              DateTime.now().difference(content.expDate!).inHours <= -24;
           bool isFrozen = content.storageArea == '냉동';
           return is24HoursOrMoreLeft && isFrozen;
         }).toList();
@@ -63,7 +63,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   List<Content> getExpContentList(List<Content> contentList) {
     List<Content> expContentList =
         contentList.where((Content content) {
-          return DateTime.now().difference(content.expDate).inHours > -24;
+          return DateTime.now().difference(content.expDate!).inHours > -24;
         }).toList();
 
     return expContentList;
