@@ -5,6 +5,7 @@ import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/services/login/apple_auth_service.dart';
+import 'package:mango/services/login/login_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 import '../services/login/kakao_auth_service.dart';
 import 'package:mango/services/login/terms_service.dart';
@@ -61,6 +62,7 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     // 저장된 platform & email이 존재한다면,
     if (platform != null && email != null) {
       // 현재 상태 기억하기
+      await postUserData();
       state = AuthInfo(platform: platform, email: email);
       context.go('/home'); // 메인화면으로 이동
     } else {

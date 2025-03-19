@@ -4,6 +4,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/login/abstract_auth.dart';
+import 'package:mango/services/login/login_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 
 // Kakao Login viewModel
@@ -138,6 +139,7 @@ class KakaoAuthService implements AbstractAuth {
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
+        await postUserData();
         return AuthInfo(
           userId: 0,
           platform: AuthPlatform.kakao,
