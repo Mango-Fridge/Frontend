@@ -51,9 +51,9 @@ class AppleAuthService implements AbstractAuth {
       }
 
       // 이메일 저장
-      await _LoginSharePrefs.saveAuth(AuthPlatform.apple.name, email);
+      await _LoginSharePrefs.saveAuth(AuthPlatform.APPLE.name, email);
 
-      return AuthInfo(platform: AuthPlatform.apple, email: email);
+      return AuthInfo(oauthProvider: AuthPlatform.APPLE, email: email);
     } catch (error) {
       if (kDebugMode) print("[Apple] 애플 로그인 오류: $error");
       return null;

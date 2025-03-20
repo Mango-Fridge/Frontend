@@ -1,0 +1,17 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:dio/dio.dart';
+import 'package:mango/model/api_response.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'rest_client.g.dart';
+
+@RestApi(baseUrl: "http://localhost:8080")
+abstract class RestClient {
+  factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+
+  @POST('/user/login')
+  Future<ApiResponse> getAuthUser(
+    @Header("Authorization") String token,
+    @Body() Map<String, String> body,
+  );
+}

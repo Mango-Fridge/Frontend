@@ -4,12 +4,15 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/login/abstract_auth.dart';
+import 'package:mango/model/rest_client.dart';
+import 'package:mango/services/login/login_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 
 // Kakao Login viewModel
 class KakaoAuthService implements AbstractAuth {
   final LoginSharePrefs _LoginSharePrefs =
       LoginSharePrefs(); // shared_preferences 뷰모델
+  final LoginService _loginService = LoginService(); // 서버 로그인
 
   // 카카오 로그인
   @override
@@ -29,13 +32,14 @@ class KakaoAuthService implements AbstractAuth {
         // 카카오에서 사용자 정보 가져오기(email)
         User user = await UserApi.instance.me();
         _LoginSharePrefs.saveAuth(
-          AuthPlatform.kakao.name,
+          AuthPlatform.KAKAO.name,
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
+        await _loginService.postLogin();
         return AuthInfo(
-          userId: 0,
-          platform: AuthPlatform.kakao,
+          usrId: 0,
+          oauthProvider: AuthPlatform.KAKAO,
           email: user.kakaoAccount?.email,
         );
       } catch (error) {
@@ -70,13 +74,14 @@ class KakaoAuthService implements AbstractAuth {
 
         User user = await UserApi.instance.me();
         _LoginSharePrefs.saveAuth(
-          AuthPlatform.kakao.name,
+          AuthPlatform.KAKAO.name,
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
+        await _loginService.postLogin();
         return AuthInfo(
-          userId: 0,
-          platform: AuthPlatform.kakao,
+          usrId: 0,
+          oauthProvider: AuthPlatform.KAKAO,
           email: user.kakaoAccount?.email,
         );
       } catch (error) {
@@ -105,13 +110,14 @@ class KakaoAuthService implements AbstractAuth {
 
           User user = await UserApi.instance.me();
           _LoginSharePrefs.saveAuth(
-            AuthPlatform.kakao.name,
+            AuthPlatform.KAKAO.name,
             '${user.kakaoAccount?.email}',
           ); // 카카오 platform, email 데이터를 로컬에 저장
 
+          await _loginService.postLogin();
           return AuthInfo(
-            userId: 0,
-            platform: AuthPlatform.kakao,
+            usrId: 0,
+            oauthProvider: AuthPlatform.KAKAO,
             email: user.kakaoAccount?.email,
           );
         } catch (error) {
@@ -134,13 +140,14 @@ class KakaoAuthService implements AbstractAuth {
 
         User user = await UserApi.instance.me();
         _LoginSharePrefs.saveAuth(
-          AuthPlatform.kakao.name,
+          AuthPlatform.KAKAO.name,
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
+        await _loginService.postLogin();
         return AuthInfo(
-          userId: 0,
-          platform: AuthPlatform.kakao,
+          usrId: 0,
+          oauthProvider: AuthPlatform.KAKAO,
           email: user.kakaoAccount?.email,
         );
       } catch (error) {

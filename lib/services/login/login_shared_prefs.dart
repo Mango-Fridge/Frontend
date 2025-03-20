@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // shared_preferences를 활용하기 위한 뷰모델
@@ -8,19 +9,23 @@ class LoginSharePrefs {
     await prefs.setString('platform', platform);
 
     switch (platform) {
-      case 'Kakao':
+      case 'KAKAO':
         await prefs.setString('KakaoEmail', email);
-        print(
+        debugPrint(
           '[shared_preferences] KakaoEmail: ${prefs.getString('KakaoEmail')}',
         );
-        print('[shared_preferences] platform: ${prefs.getString('platform')}');
+        debugPrint(
+          '[shared_preferences] platform: ${prefs.getString('platform')}',
+        );
         break;
-      case 'Apple':
+      case 'APPLE':
         await prefs.setString('AppleEmail', email);
-        print(
+        debugPrint(
           '[shared_preferences] AppleEmail: ${prefs.getString('AppleEmail')}',
         );
-        print('[shared_preferences] platform: ${prefs.getString('platform')}');
+        debugPrint(
+          '[shared_preferences] platform: ${prefs.getString('platform')}',
+        );
         break;
     }
   }
@@ -30,9 +35,9 @@ class LoginSharePrefs {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     switch (platform) {
-      case 'Kakao':
+      case 'KAKAO':
         return prefs.getString('KakaoEmail');
-      case 'Apple':
+      case 'APPLE':
         return prefs.getString('AppleEmail');
     }
 
