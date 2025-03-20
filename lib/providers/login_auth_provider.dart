@@ -14,8 +14,6 @@ import 'package:mango/services/login/terms_service.dart';
 
 // 상태 관리를 위한 provider와 notifier
 class LoginAuthNotifier extends Notifier<AuthInfo?> {
-  RestClient client = RestClient(dio);
-
   final KakaoAuthService _kakaoAuthService = KakaoAuthService();
   final AppleAuthService _appleAuthService = AppleAuthService();
   final LoginSharePrefs _loginSharePrefs = LoginSharePrefs();
@@ -27,8 +25,8 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
   // 약관 동의 여부 업데이트
   Future<void> checkForTerms(String termsType) async {
     final Map<String, AuthInfo?> termsMap = <String, AuthInfo?>{
-      'privacy policy': state?.copyWith(isPrivacyPolicyAccepted: true),
-      'terms': state?.copyWith(isTermsAccepted: true),
+      'privacy policy': state?.copyWith(agreePrivacyPolicy: true),
+      'terms': state?.copyWith(agreeTermsOfService: true),
     };
 
     state = termsMap[termsType] ?? state;
@@ -67,18 +65,9 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     if (platform != null && email != null) {
       // 현재 상태 기억하기
 
-      // await postUserData();
-      OAuthToken? token =
-          await TokenManagerProvider.instance.manager.getToken();
-      print(token?.accessToken);
+      login(platform);
 
-      final tokens = "Bearer ${token?.accessToken}"; // Authorization 헤더 값
-      final body = {"oauthProvider": "Kakao"}; // 요청 바디
-
-      final resp = await client.getAuthUser(tokens, body);
-      print("사용자 정보 : ${resp.data?.toJson()}");
-
-      state = AuthInfo(platform: platform, email: email);
+      state = AuthInfo(oauthProvider: platform, email: email);
       context.go('/home'); // 메인화면으로 이동
     } else {
       context.go('/login'); // 로그인 화면으로 이동
@@ -88,8 +77,8 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
   // 문자열을 AuthPlatform Enum으로 변환
   AuthPlatform? _getPlatformFromString(String? platformStr) {
     const Map<String, AuthPlatform> platformMap = <String, AuthPlatform>{
-      'Kakao': AuthPlatform.kakao,
-      'Apple': AuthPlatform.apple,
+      'KAKAO': AuthPlatform.KAKAO,
+      'APPLE': AuthPlatform.APPLE,
     };
     return platformMap[platformStr];
   }
@@ -97,8 +86,8 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
   // AuthPlatform에 따른 로그인/로그아웃 서비스 반환
   dynamic _getAuthService(AuthPlatform platform) {
     return <AuthPlatform, AbstractAuth>{
-      AuthPlatform.kakao: _kakaoAuthService,
-      AuthPlatform.apple: _appleAuthService,
+      AuthPlatform.KAKAO: _kakaoAuthService,
+      AuthPlatform.APPLE: _appleAuthService,
     }[platform];
   }
 }

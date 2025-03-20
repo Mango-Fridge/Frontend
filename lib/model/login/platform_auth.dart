@@ -1,15 +1,12 @@
-enum AuthPlatform {
-  kakao,
-  apple,
-}
+enum AuthPlatform { KAKAO, APPLE }
 
 extension AuthPlatformExtension on AuthPlatform {
   String get name {
     switch (this) {
-      case AuthPlatform.kakao:
-        return "Kakao";
-      case AuthPlatform.apple:
-        return "Apple";
+      case AuthPlatform.KAKAO:
+        return "KAKAO";
+      case AuthPlatform.APPLE:
+        return "APPLE";
     }
   }
 }

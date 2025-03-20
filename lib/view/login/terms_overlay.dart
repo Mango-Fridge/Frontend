@@ -19,8 +19,8 @@ class TermsOverlay extends ConsumerWidget {
     void onAccept() {
       // 모든 약관이 동의 될때까지,
       if (user != null &&
-          (user.isPrivacyPolicyAccepted != true ||
-              user.isTermsAccepted != true)) {
+          (user.agreePrivacyPolicy != true ||
+              user.agreeTermsOfService != true)) {
         ref.watch(loginAuthProvider.notifier).checkForTerms(termsType);
       }
     }

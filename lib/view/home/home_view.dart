@@ -87,14 +87,14 @@ class _HomeViewState extends ConsumerState<HomeView>
     if (user == null) return const SizedBox.shrink();
 
     // 유저가 동의를 하지 않았을 때,
-    if (!user!.isPrivacyPolicyAccepted) {
+    if (!user!.agreePrivacyPolicy!) {
       return const TermsOverlay(
         key: ValueKey('privacyPolicy'),
         termsType: 'privacy policy',
       );
     }
     // 유저가 동의를 하지 않았을 때,
-    if (!user!.isTermsAccepted) {
+    if (!user!.agreeTermsOfService!) {
       return const TermsOverlay(key: ValueKey('terms'), termsType: 'terms');
     }
 

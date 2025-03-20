@@ -1,24 +1,33 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
+import 'package:mango/model/rest_client.dart';
+import 'package:mango/services/login/login_shared_prefs.dart';
 
-var dio = Dio();
-String? userData;
+// 서버와 로그인
+class LoginService {
+  var dio = Dio();
 
-Future<void> postUserData() async {
-  OAuthToken? token = await TokenManagerProvider.instance.manager.getToken();
-  print(token?.accessToken);
+  Future<void> postLogin() async {
+    final LoginSharePrefs _loginSharePrefs = LoginSharePrefs();
+    RestClient client = RestClient(dio);
+    String? snsToken;
 
-  try {
-    final response = await dio.post(
-      'http://localhost:8080/user/login',
-      data: {"oauthProvider": "Kakao"},
-      options: Options(
-        headers: {"Authorization": "Bearer ${token?.accessToken}"},
-      ),
-    );
-    userData = response.data.toString(); // JSON 데이터를 문자열로 변환
-    print(userData);
-  } catch (e) {
-    print("데이터를 불러오지 못했습니다: $e");
+    final String? platformStr =
+        await _loginSharePrefs.getPlatform(); // 로컬에 저장된 platform 가져오기
+
+    if (platformStr == "KAKAO") {
+      OAuthToken? token =
+          await TokenManagerProvider.instance.manager.getToken();
+
+      snsToken = token!.accessToken;
+    } else if (platformStr == "APPLE") {
+      // 애플 로그인 로직 처리
+    }
+
+    final tokens = "Bearer $snsToken"; // Authorization 헤더 값
+    final body = {"oauthProvider": "$platformStr"}; // 요청 바디
+    final resp = await client.getAuthUser(tokens, body);
+    debugPrint("사용자 정보 : ${resp.data}");
   }
 }

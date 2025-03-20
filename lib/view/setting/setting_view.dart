@@ -23,7 +23,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
           onPressed: () async {
             final authNotifier = ref.read(loginAuthProvider.notifier);
             if (user != null) {
-              await authNotifier.logout(user!.platform);
+              await authNotifier.logout(user!.oauthProvider!);
               context.go('/login'); // 로그인 화면
             }
           },

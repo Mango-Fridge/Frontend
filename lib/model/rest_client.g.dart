@@ -3,57 +3,6 @@
 part of 'rest_client.dart';
 
 // **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
-ApiResponse _$ApiResponseFromJson(Map<String, dynamic> json) => ApiResponse(
-  status: json['status'] as String?,
-  code: (json['code'] as num?)?.toInt(),
-  data:
-      json['data'] == null
-          ? null
-          : Users.fromJson(json['data'] as Map<String, dynamic>),
-  error:
-      json['error'] == null
-          ? null
-          : ApiError.fromJson(json['error'] as Map<String, dynamic>),
-);
-
-Map<String, dynamic> _$ApiResponseToJson(ApiResponse instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'code': instance.code,
-      'data': instance.data,
-      'error': instance.error,
-    };
-
-ApiError _$ApiErrorFromJson(Map<String, dynamic> json) => ApiError(
-  code: json['code'] as String?,
-  message: json['message'] as String?,
-);
-
-Map<String, dynamic> _$ApiErrorToJson(ApiError instance) => <String, dynamic>{
-  'code': instance.code,
-  'message': instance.message,
-};
-
-Users _$UsersFromJson(Map<String, dynamic> json) => Users(
-  email: json['email'] as String?,
-  usrId: (json['usrId'] as num?)?.toInt(),
-  oauthProvider: json['oauthProvider'] as String?,
-  agreePrivacyPolicy: json['agreePrivacyPolicy'] as bool?,
-  agreeTermsOfService: json['agreeTermsOfService'] as bool?,
-);
-
-Map<String, dynamic> _$UsersToJson(Users instance) => <String, dynamic>{
-  'email': instance.email,
-  'usrId': instance.usrId,
-  'oauthProvider': instance.oauthProvider,
-  'agreePrivacyPolicy': instance.agreePrivacyPolicy,
-  'agreeTermsOfService': instance.agreeTermsOfService,
-};
-
-// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
@@ -71,7 +20,7 @@ class _RestClient implements RestClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ApiResponse> getAuthUser(
+  Future<ApiResponse<dynamic>> getAuthUser(
     String token,
     Map<String, String> body,
   ) async {
@@ -81,7 +30,7 @@ class _RestClient implements RestClient {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponse>(
+    final _options = _setStreamType<ApiResponse<dynamic>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -92,9 +41,12 @@ class _RestClient implements RestClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse _value;
+    late ApiResponse<dynamic> _value;
     try {
-      _value = ApiResponse.fromJson(_result.data!);
+      _value = ApiResponse<dynamic>.fromJson(
+        _result.data!,
+        (json) => json as dynamic,
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
