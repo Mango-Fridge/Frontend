@@ -14,4 +14,7 @@ abstract class RestClient {
     @Header("Authorization") String token,
     @Body() Map<String, String> body,
   );
+
+  @GET('/api/contents/group/{groupId}')
+  Future<ApiResponse> getContentList(@Path('groupId') int groupId);
 }
