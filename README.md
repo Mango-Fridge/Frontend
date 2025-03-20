@@ -30,6 +30,6 @@
 | `sign_in_with_apple`      | Apple 로그인 패키지       | `2.6.1` |
 | `kakao_flutter_sdk`      | Kakao 로그인 패키지       | `1.9.6` |
 | `fluttertoast`      | Toast Message 패키지       | `8.2.12` |
-| `Freezed`      | 데이터 모델 정의 패키지       | `8.2.12` |
-| `Retrofit`      | Rest api를 위한 Http 클라이언트 생성 패키지       | `8.2.12` |
-| `json_serializable`      | Json 데이터 직렬화 패키지     | `8.2.12` |
+| `Freezed`      | 데이터 모델 정의 패키지       | `3.0.0` |
+| `Retrofit`      | Rest api를 위한 Http 클라이언트 생성 패키지       | `4.4.2` |
+| `json_serializable`      | Json 데이터 직렬화 패키지     | `6.9.4` |
