@@ -183,7 +183,6 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   Widget _buildItem(List<RefrigeratorItem>? itemList) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: const BoxDecoration(color: Colors.white),
       child: Column(
         children: <Widget>[
           const Divider(),
