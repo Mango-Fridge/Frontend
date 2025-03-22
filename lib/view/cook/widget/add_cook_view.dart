@@ -9,6 +9,7 @@ import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
+import 'package:mango/view/cook/widget/result_cook_view.dart';
 
 class AddCookView extends ConsumerStatefulWidget {
   const AddCookView({super.key});
@@ -209,7 +210,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
         ref.watch(searchContentNotifier.notifier).resetState();
         _searchIngridientController.text = '';
         // CookContentDetailView(context);
-        showCookDetailModal(context);
+        // showCookDetailModal(context);
+        context.push('/resultCook');
         // context.push(
         //   '/cookContentDetail',
         //   extra: RefrigeratorItem(
