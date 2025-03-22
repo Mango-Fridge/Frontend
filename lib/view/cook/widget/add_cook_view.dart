@@ -208,7 +208,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
         ref.watch(searchContentNotifier.notifier).resetState();
         _searchIngridientController.text = '';
         context.push(
-          '/addContent',
+          '/cookContentDetail',
           extra: RefrigeratorItem(
             groupId: item.groupId,
             isOpenItem: item.isOpenItem,
