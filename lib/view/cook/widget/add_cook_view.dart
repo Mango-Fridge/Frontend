@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/view/cook/modal_view/cook_content_detail_view.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
@@ -207,27 +208,29 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
       onTap: () {
         ref.watch(searchContentNotifier.notifier).resetState();
         _searchIngridientController.text = '';
-        context.push(
-          '/cookContentDetail',
-          extra: RefrigeratorItem(
-            groupId: item.groupId,
-            isOpenItem: item.isOpenItem,
-            itemName: item.itemName,
-            category: item.category,
-            brandName: item.brandName,
-            count: item.count,
-            regDate: item.regDate,
-            expDate: item.expDate,
-            storageArea: item.storageArea,
-            memo: item.memo,
-            nutriUnit: item.nutriUnit,
-            nutriCapacity: item.nutriCapacity,
-            nutriKcal: item.nutriKcal,
-            nutriCarbohydrate: item.nutriCarbohydrate,
-            nutriProtein: item.nutriProtein,
-            nutriFat: item.nutriFat,
-          ),
-        );
+        // CookContentDetailView(context);
+        showCookDetailModal(context);
+        // context.push(
+        //   '/cookContentDetail',
+        //   extra: RefrigeratorItem(
+        //     groupId: item.groupId,
+        //     isOpenItem: item.isOpenItem,
+        //     itemName: item.itemName,
+        //     category: item.category,
+        //     brandName: item.brandName,
+        //     count: item.count,
+        //     regDate: item.regDate,
+        //     expDate: item.expDate,
+        //     storageArea: item.storageArea,
+        //     memo: item.memo,
+        //     nutriUnit: item.nutriUnit,
+        //     nutriCapacity: item.nutriCapacity,
+        //     nutriKcal: item.nutriKcal,
+        //     nutriCarbohydrate: item.nutriCarbohydrate,
+        //     nutriProtein: item.nutriProtein,
+        //     nutriFat: item.nutriFat,
+        //   ),
+        // );
       },
 
       child: Container(

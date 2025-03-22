@@ -43,9 +43,9 @@ final GoRouter goRouter = GoRouter(
     // 요리 제작 화면
     GoRoute(path: '/addCook', builder: (context, state) => const AddCookView()),
     // 요리 재 상세 화면
-    GoRoute(
-      path: '/cookContentDetail',
-      builder: (context, state) => const CookContentDetailView(),
-    ),
+    // GoRoute(
+    //   path: '/cookContentDetail',
+    //   builder: (context, state) => const CookContentDetailView(),
+    // ),
   ],
 );

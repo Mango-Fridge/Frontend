@@ -26,9 +26,8 @@ class CookView extends ConsumerWidget {
         padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.05),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 20,
           children: [
-            const SizedBox(height: 10),
-
             // 상단 그룹 선택 박스
             Container(
               width: design.screenWidth * 0.3,
@@ -49,8 +48,6 @@ class CookView extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
-
             // + 버튼 -> 클릭 시 add_cook_view로 이동
             Center(
               child: Container(
@@ -69,7 +66,9 @@ class CookView extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 180),
+            SizedBox(height: design.screenHeight * 0.25),
+
+            // Text('레시를 추가해주세요.'),
 
             // 요리 정보 표시
             // - 추후 provider 생성하며 다시 사용할 예정
