@@ -31,29 +31,26 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
             children: [
-              // Memo
+              // Memo box
               Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      'cookDetail.memo',
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
+                    Text('cookDetail.memo', style: TextStyle(fontSize: 14)),
                   ],
                 ),
               ),
 
-              // kcal
+              // kcal box
               Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: const Row(
@@ -70,23 +67,26 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                 ),
               ),
 
-              // 영양성분
+              // 영양성분 box
               Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           // ${cookDetail.nutrients.split(' ')[1]}
                           "탄",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text("0g", style: TextStyle(fontSize: 14)),
                       ],
@@ -94,21 +94,37 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          // ${cookDetail.nutrients.split(' ')[1]}
-                          "단",
-                          style: TextStyle(fontSize: 14),
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: const BoxDecoration(
+                            color: Colors.amber, // 노란색 배경
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              // ${cookDetail.nutrients.split(' ')[1]}
+                              "단",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                        Text("0g", style: TextStyle(fontSize: 14)),
+                        const Text("0g", style: TextStyle(fontSize: 14)),
                       ],
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           // ${cookDetail.nutrients.split(' ')[1]}
                           "지",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text("0g", style: TextStyle(fontSize: 14)),
                       ],
@@ -117,7 +133,7 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                 ),
               ),
 
-              // 요리 재료들
+              // 레시피 재료 list
               const Text(
                 "요리 재료",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -142,7 +158,7 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
               //   );
               // }).toList(),
 
-              // 일치하는 물품
+              // 일치하는 물품 list
               const Text(
                 "일치하는 물품",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -167,16 +183,27 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
               //   );
               // }).toList(),
 
-              // 하단 박스 (instruction)
+              // 필요한 물품 알려주는 하단 박스
               Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.amber[100],
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: const Text(
-                  "해당 음식을 만들기 위해서는 00, 00이 필요로 합니다.",
-                  style: TextStyle(fontSize: 14),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "해당 음식을 만들기 위해 필요한 재료는",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text("00 00 입니다.", style: TextStyle(fontSize: 14)),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
