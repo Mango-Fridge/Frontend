@@ -39,9 +39,9 @@ class _CookViewState extends ConsumerState<CookView> {
         padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.00),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 20,
           children: [
             const SizedBox(height: 10),
-
             // + 버튼 -> 클릭 시 add_cook_view로 이동
             Padding(
               padding: EdgeInsets.all(design.marginAndPadding),
@@ -68,6 +68,8 @@ class _CookViewState extends ConsumerState<CookView> {
                       ? _buildCook(_cookState?.cookList!)
                       : _noCookView(),
             ),
+
+            SizedBox(height: design.screenHeight * 0.25),
           ],
         ),
       ),
