@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_cook_provider.dart';
-import 'package:mango/view/cook/modal_view/cook_content_detail_view.dart';
+import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
@@ -106,12 +106,12 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제 및 키보드 내리기
           },
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                // 검색 필드
-                TextField(
+          child: Column(
+            children: <Widget>[
+              // 검색 필드
+              Padding(
+                padding: EdgeInsets.all(design.marginAndPadding),
+                child: TextField(
                   controller: _searchIngridientController,
                   focusNode: _searchIngredientFocusNode,
                   decoration: InputDecoration(
@@ -141,23 +141,19 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                         .loadItemListByString(value);
                   },
                 ),
-
-                Expanded(
-                  child:
-                      _searchContentState != null &&
-                              _searchContentState?.refrigeratorItemList !=
-                                  null &&
-                              _searchContentState!
-                                  .refrigeratorItemList!
-                                  .isNotEmpty &&
-                              _searchIngridientController.text != ''
-                          ? _buildItem(
-                            _searchContentState?.refrigeratorItemList!,
-                          )
-                          : _noItemView(),
-                ),
-              ],
-            ),
+              ),
+              Expanded(
+                child:
+                    _searchContentState != null &&
+                            _searchContentState?.refrigeratorItemList != null &&
+                            _searchContentState!
+                                .refrigeratorItemList!
+                                .isNotEmpty &&
+                            _searchIngridientController.text != ''
+                        ? _buildItem(_searchContentState?.refrigeratorItemList!)
+                        : _noItemView(),
+              ),
+            ],
           ),
         ),
 
@@ -215,18 +211,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              content: CookContentDetailView(),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  child: const Text(
-                    '닫기',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ],
+              content: AddCookContentView(item: item),
             );
           },
         );
