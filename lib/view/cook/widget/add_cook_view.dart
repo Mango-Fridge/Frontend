@@ -120,7 +120,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   controller: _searchIngridientController,
                   focusNode: _searchIngredientFocusNode,
                   decoration: InputDecoration(
-                    hintText: '요리 재료를 추가해보세요',
+                    hintText: '요리 재료를 검색해보세요',
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -152,14 +152,19 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               ),
               Expanded(
                 child:
-                    _searchContentState != null &&
-                            _searchContentState?.refrigeratorItemList != null &&
-                            _searchContentState!
-                                .refrigeratorItemList!
-                                .isNotEmpty &&
-                            _searchIngridientController.text != ''
-                        ? _buildItem(_searchContentState?.refrigeratorItemList!)
-                        : _noItemView(),
+                    _addCookState?.isSearchIngredientFocused ?? false
+                        ? _searchContentState != null &&
+                                _searchContentState?.refrigeratorItemList !=
+                                    null &&
+                                _searchContentState!
+                                    .refrigeratorItemList!
+                                    .isNotEmpty &&
+                                _searchIngridientController.text != ''
+                            ? _buildItem(
+                              _searchContentState?.refrigeratorItemList!,
+                            )
+                            : _noItemView()
+                        : Text('1234'), // ToDo: 추후 요리 재료 리스트 들어갈 부분
               ),
             ],
           ),
@@ -174,7 +179,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               final String cookName = _cookNameController.text;
               final String ingredients = _searchIngridientController.text;
               context.pop(context);
-              ref.read(addCookProvider.notifier).addItem(cookName, ingredients);
+              ref.read(addCookProvider.notifier).addCook(cookName, ingredients);
             },
           ),
         ),
@@ -272,7 +277,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     return Column(
       children: <Widget>[
         SizedBox(height: design.screenHeight * 0.25),
-        const Text("재료를 추가해주세요."),
+        const Text("요리 재료를 추가해주세요."),
       ],
     );
   }

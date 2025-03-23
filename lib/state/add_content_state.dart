@@ -18,7 +18,7 @@ class AddContentState {
   // 영양 성분 정보 체크
   bool isUnitEmpty;
   bool isCapacityEmpty;
-  bool isCaloriesEmpty;
+  bool isKcalEmpty;
   bool isCarbsEmpty;
   bool isProteinEmpty;
   bool isFatEmpty;
@@ -26,7 +26,7 @@ class AddContentState {
   bool get isNutritionEmpty {
     return isUnitEmpty &&
         isCapacityEmpty &&
-        isCaloriesEmpty &&
+        isKcalEmpty &&
         isCarbsEmpty &&
         isProteinEmpty &&
         isFatEmpty;
@@ -49,7 +49,7 @@ class AddContentState {
     this.isCheckedCount = true,
     this.isRegDateEmpty = false,
     this.isCapacityEmpty = false,
-    this.isCaloriesEmpty = false,
+    this.isKcalEmpty = false,
     this.isCarbsEmpty = false,
     this.isProteinEmpty = false,
     this.isFatEmpty = false,
@@ -70,7 +70,7 @@ class AddContentState {
 
     bool? isUnitEmpty,
     bool? isCapacityEmpty,
-    bool? isCaloriesEmpty,
+    bool? isKcalEmpty,
     bool? isCarbsEmpty,
     bool? isProteinEmpty,
     bool? isFatEmpty,
@@ -94,7 +94,7 @@ class AddContentState {
 
       isUnitEmpty: isUnitEmpty ?? this.isUnitEmpty,
       isCapacityEmpty: isCapacityEmpty ?? this.isCapacityEmpty,
-      isCaloriesEmpty: isCaloriesEmpty ?? this.isCaloriesEmpty,
+      isKcalEmpty: isKcalEmpty ?? this.isKcalEmpty,
       isCarbsEmpty: isCarbsEmpty ?? this.isCarbsEmpty,
       isProteinEmpty: isProteinEmpty ?? this.isProteinEmpty,
       isFatEmpty: isFatEmpty ?? this.isFatEmpty,
