@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
-import 'package:mango/model/group.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/providers/group_provider.dart';
 
 class GrouExistWidget extends ConsumerStatefulWidget {
@@ -43,46 +43,46 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               // 그룹 콤보 박스
-              PopupMenuButton<String>(
-                onSelected: (String value) {
-                  setState(() {
-                    _selectedGroupId = value;
-                    _selectedGroupName =
-                        _groupList!
-                            .firstWhere((Group group) => group.groupId == value)
-                            .groupName;
-                    _selectedOwner =
-                        _groupList!
-                            .firstWhere((Group group) => group.groupId == value)
-                            .groupOwner;
-                  });
-                },
-                itemBuilder: (BuildContext context) {
-                  return _groupList!.map<PopupMenuEntry<String>>((Group group) {
-                    return PopupMenuItem<String>(
-                      value: group.groupId,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: design.marginAndPadding,
-                        ),
-                        child: Text(group.groupName),
-                      ),
-                    );
-                  }).toList();
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: design.marginAndPadding,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.amber[300],
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Text(_selectedGroupName ?? '그룹을 선택 해 주세요.'),
-                ),
-              ),
+              // PopupMenuButton<String>(
+              //   onSelected: (String value) {
+              //     setState(() {
+              //       _selectedGroupId = value;
+              //       _selectedGroupName =
+              //           _groupList!
+              //               .firstWhere((Group group) => group.groupId == value)
+              //               .groupName;
+              //       _selectedOwner =
+              //           _groupList!
+              //               .firstWhere((Group group) => group.groupId == value)
+              //               .groupOwner;
+              //     });
+              //   },
+              //   itemBuilder: (BuildContext context) {
+              //     return _groupList!.map<PopupMenuEntry<String>>((Group group) {
+              //       return PopupMenuItem<String>(
+              //         value: group.groupId,
+              //         child: Padding(
+              //           padding: EdgeInsets.symmetric(
+              //             vertical: 12.0,
+              //             horizontal: design.marginAndPadding,
+              //           ),
+              //           child: Text(group.groupName),
+              //         ),
+              //       );
+              //     }).toList();
+              //   },
+              //   child: Container(
+              //     padding: EdgeInsets.symmetric(
+              //       vertical: 10.0,
+              //       horizontal: design.marginAndPadding,
+              //     ),
+              //     decoration: BoxDecoration(
+              //       color: Colors.amber[300],
+              //       borderRadius: BorderRadius.circular(12.0),
+              //     ),
+              //     child: Text(_selectedGroupName ?? '그룹을 선택 해 주세요.'),
+              //   ),
+              // ),
 
               Text(
                 '냉장고ID: $_selectedGroupId',
