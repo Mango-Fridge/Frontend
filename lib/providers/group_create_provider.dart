@@ -32,7 +32,7 @@ class GroupCreateNotifier extends Notifier<GroupState> {
     } catch (e) {
       state = state.copyWith(errorMessage: "오류 발생: ${e.toString()}");
     } finally {
-      state = state.copyWith(isLoadingButton: false); // 로딩 종료
+      print('${groupName}: 그룹이 생성되었습니다.');
     }
   }
 

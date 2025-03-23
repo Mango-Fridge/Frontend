@@ -52,7 +52,7 @@ class GroupCreateView extends ConsumerWidget {
               onPressed:
                   groupState.isButton
                       ? () {
-                        groupNotifier.createGroup(123456, '${groupState.groupName}'); // Group Create API: 그룹 생성
+                        groupNotifier.createGroup(1, '${groupState.groupName}'); // Group Create API: 그룹 생성
                         ref.read(grouViewStateProvider.notifier).state = GroupViewState.exist; // 그룹 생성으로 그룹 존재 뷰로
                         context.pop(); // Sheet 닫기
                         toastMessage(
