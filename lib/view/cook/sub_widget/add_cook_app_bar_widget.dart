@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:mango/providers/add_cook_provider.dart';
 
-// add_cook_view의 app bar에 들어갈 위젯
-class AddCookAppBarWidget extends ConsumerWidget {
+class AddCookAppBarWidget extends ConsumerStatefulWidget {
   final TextEditingController cookNameController;
   final FocusNode cookNameFocusNode;
 
@@ -15,28 +14,32 @@ class AddCookAppBarWidget extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Design design = Design(context);
+  ConsumerState<ConsumerStatefulWidget> createState() => _AddCookAppBarState();
+}
 
+class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
+  AddCookState? get _addCookState => ref.watch(addCookProvider);
+
+  @override
+  Widget build(BuildContext context) {
+    final Design design = Design(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
         AnimatedContainer(
-          onEnd: () {
-            ref.read(isOpenCookName.notifier).state = !ref.read(isOpenCookName);
-          },
+          onEnd: () {},
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
           width:
-              ref.watch(isCookNameFocused)
+              _addCookState?.isCookNameFocused ?? false
                   ? design.screenWidth * 0.75
                   : design.screenWidth * 0.44,
           child:
-              ref.watch(isCookNameFocused)
+              _addCookState?.isCookNameFocused ?? false
                   ? TextField(
-                    controller: cookNameController,
-                    focusNode: cookNameFocusNode,
+                    controller: widget.cookNameController,
+                    focusNode: widget.cookNameFocusNode,
                     decoration: InputDecoration(
                       hintText: '요리 이름 입력',
                       suffixIcon: const Icon(Icons.edit, size: 20),
@@ -53,8 +56,10 @@ class AddCookAppBarWidget extends ConsumerWidget {
                   )
                   : GestureDetector(
                     onTap: () {
-                      cookNameFocusNode.requestFocus();
-                      ref.read(isCookNameFocused.notifier).state = true;
+                      widget.cookNameFocusNode.requestFocus();
+                      ref
+                          .read(addCookProvider.notifier)
+                          .updateCookNameFocused(true);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -69,15 +74,15 @@ class AddCookAppBarWidget extends ConsumerWidget {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              cookNameController.text.isEmpty
+                              widget.cookNameController.text.isEmpty
                                   ? '요리 이름 입력'
-                                  : cookNameController.text,
+                                  : widget.cookNameController.text,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 16,
                                 height: 1.5,
                                 color:
-                                    cookNameController.text.isEmpty
+                                    widget.cookNameController.text.isEmpty
                                         ? Colors.grey
                                         : Colors.black,
                               ),
@@ -96,11 +101,11 @@ class AddCookAppBarWidget extends ConsumerWidget {
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
           width:
-              ref.watch(isCookNameFocused)
+              _addCookState?.isCookNameFocused ?? false
                   ? design.screenWidth * 0
                   : design.screenWidth * 0.31,
           child:
-              !ref.watch(isCookNameFocused) && !ref.watch(isOpenCookName)
+              !(_addCookState?.isCookNameFocused ?? false)
                   ? Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(

@@ -13,7 +13,7 @@ class SearchContentView extends ConsumerStatefulWidget {
 }
 
 class _SearchContentViewState extends ConsumerState<SearchContentView> {
-  SearchItemState? get _searchContentState => ref.watch(searchContentNotifier);
+  SearchItemState? get _searchContentState => ref.watch(searchContentProvider);
 
   final TextEditingController _controller = TextEditingController();
 
@@ -23,7 +23,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
 
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(searchContentNotifier.notifier).resetState();
+      ref.watch(searchContentProvider.notifier).resetState();
     });
   }
 
@@ -57,7 +57,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 ),
                 onChanged: (String value) {
                   ref
-                      .watch(searchContentNotifier.notifier)
+                      .watch(searchContentProvider.notifier)
                       .loadItemListByString(value);
                 },
               ),
@@ -105,7 +105,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
     Design design = Design(context);
     return GestureDetector(
       onTap: () {
-        ref.watch(searchContentNotifier.notifier).resetState();
+        ref.watch(searchContentProvider.notifier).resetState();
         _controller.text = '';
         context.push('/addContent', extra: item);
       },

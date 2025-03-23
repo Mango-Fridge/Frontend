@@ -8,7 +8,7 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
   SearchItemState _searchContentState = SearchItemState();
 
   @override
-  SearchItemState? build() => null;
+  SearchItemState? build() => SearchItemState();
 
   // 초기화 함수
   void resetState() {
@@ -29,6 +29,6 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
 }
 
 final NotifierProvider<SearchItemNotifier, SearchItemState?>
-searchContentNotifier = NotifierProvider<SearchItemNotifier, SearchItemState?>(
+searchContentProvider = NotifierProvider<SearchItemNotifier, SearchItemState?>(
   SearchItemNotifier.new,
 );

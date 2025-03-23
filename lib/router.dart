@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
-import 'package:mango/view/cook/modal_view/cook_content_detail_view.dart';
+import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
 import 'package:mango/view/cook/widget/cook_view.dart';
 import 'package:mango/view/cook/widget/add_cook_view.dart';
 import 'package:mango/view/cook/widget/cook_detail_view.dart';

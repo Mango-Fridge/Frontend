@@ -9,7 +9,6 @@ import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
-import 'package:mango/view/cook/widget/cook_detail_view.dart';
 
 class AddCookView extends ConsumerStatefulWidget {
   const AddCookView({super.key});
@@ -29,26 +28,30 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   final FocusNode _cookNameFocusNode = FocusNode();
   final FocusNode _searchIngredientFocusNode = FocusNode();
 
-  SearchItemState? get _searchContentState => ref.watch(searchContentNotifier);
+  SearchItemState? get _searchContentState => ref.watch(searchContentProvider);
+  AddCookState? get _addCookState => ref.watch(addCookProvider);
 
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
     super.initState();
+    // view init 후 데이터 처리를 하기 위함
     _cookNameFocusNode.addListener(() {
-      ref.read(isCookNameFocused.notifier).state = _cookNameFocusNode.hasFocus;
+      ref
+          .read(addCookProvider.notifier)
+          .updateCookNameFocused(_cookNameFocusNode.hasFocus);
     });
 
     _searchIngredientFocusNode.addListener(() {
-      ref.read(isSearchIngredientFocused.notifier).state =
-          _searchIngredientFocusNode.hasFocus;
-      ref.read(isSearchFieldEmpty.notifier).state =
-          _searchIngridientController.text.isEmpty;
+      ref
+          .read(addCookProvider.notifier)
+          .updateSearchIngredientFocused(_searchIngredientFocusNode.hasFocus);
+      ref
+          .read(addCookProvider.notifier)
+          .updateSearchFieldEmpty(_searchIngridientController.text.isEmpty);
     });
-
-    // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(searchContentNotifier.notifier).resetState();
+      ref.watch(addCookProvider.notifier).resetState();
     });
   }
 
@@ -119,25 +122,28 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        ref.watch(isSearchFieldEmpty)
+                        _addCookState?.isSearchFieldEmpty ?? false
                             ? Icons.search
                             : Icons.close,
                         color: Colors.black,
                       ),
                       onPressed: () {
-                        if (!ref.watch(isSearchFieldEmpty)) {
+                        if (!(_addCookState?.isSearchFieldEmpty ?? false)) {
                           _searchIngridientController.clear();
-                          ref.read(isSearchFieldEmpty.notifier).state = true;
+                          ref
+                              .read(addCookProvider.notifier)
+                              .updateSearchFieldEmpty(true);
                         }
                       },
                     ),
                   ),
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
-                    ref.read(isSearchFieldEmpty.notifier).state = value.isEmpty;
-
                     ref
-                        .watch(searchContentNotifier.notifier)
+                        .watch(addCookProvider.notifier)
+                        .updateSearchFieldEmpty(value.isEmpty);
+                    ref
+                        .watch(searchContentProvider.notifier)
                         .loadItemListByString(value);
                   },
                 ),
@@ -160,17 +166,15 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
         // 바텀 시트 - 키보드 등장 시 숨김 관리 위해 visibility 위젯 사용
         bottomSheet: Visibility(
           visible:
-              !ref.watch(isSearchIngredientFocused) &&
-              !ref.watch(isCookNameFocused),
+              !(_addCookState?.isSearchIngredientFocused ?? false) &&
+              !(_addCookState?.isCookNameFocused ?? false),
           child: AddCookBottomSheetWidget(
             memoController: _memoController,
             onAddPressed: () {
               final String cookName = _cookNameController.text;
               final String ingredients = _searchIngridientController.text;
               context.pop(context);
-              ref
-                  .read(addCookProvider.notifier)
-                  .recipeSave(cookName, ingredients);
+              ref.read(addCookProvider.notifier).addItem(cookName, ingredients);
             },
           ),
         ),
@@ -216,7 +220,6 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           },
         );
       },
-
       child: Container(
         margin: EdgeInsets.symmetric(
           vertical: 4,
