@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ResultCookView extends ConsumerStatefulWidget {
-  // final CookDetail cookDetail;
-
-  //, required this.cookDetail
   const ResultCookView({super.key});
   @override
   ConsumerState<ResultCookView> createState() => _ContentDetailViewState();
@@ -77,20 +74,7 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          // ${cookDetail.nutrients.split(' ')[1]}
-                          "탄",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text("0g", style: TextStyle(fontSize: 14)),
-                      ],
-                    ),
+                    NutrientLabel(nutriLabel: '지', nutriCapacity: '0g'),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -115,18 +99,28 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                         const Text("0g", style: TextStyle(fontSize: 14)),
                       ],
                     ),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          // ${cookDetail.nutrients.split(' ')[1]}
-                          "지",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: const BoxDecoration(
+                            color: Colors.amber, // 노란색 배경
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              // ${cookDetail.nutrients.split(' ')[1]}
+                              "지",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                        Text("0g", style: TextStyle(fontSize: 14)),
+                        const Text("0g", style: TextStyle(fontSize: 14)),
                       ],
                     ),
                   ],
@@ -210,6 +204,33 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget NutrientLabel({
+    required String nutriLabel,
+    required String nutriCapacity,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: const BoxDecoration(
+            color: Colors.amber, // 노란색 배경
+            shape: BoxShape.circle,
+          ),
+          child: const Center(
+            child: Text(
+              // ${cookDetail.nutrients.split(' ')[1]}
+              "단",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+        const Text("0g", style: TextStyle(fontSize: 14)),
+      ],
     );
   }
 }
