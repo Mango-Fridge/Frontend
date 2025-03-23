@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
 
 class CookDetailView extends ConsumerStatefulWidget {
@@ -11,6 +12,8 @@ class CookDetailView extends ConsumerStatefulWidget {
 }
 
 class _CookDetailViewState extends ConsumerState<CookDetailView> {
+  // String? get ingredient => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,50 +104,56 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 "요리 재료",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
-              // ...cookDetail.ingredients.map((ingredient) {
-              //   return Padding(
-              //     padding: const EdgeInsets.symmetric(vertical: 4.0),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: [
-              //         Text(
-              //           ingredient,
-              //           style: const TextStyle(fontSize: 14),
-              //         ),
-              //         const Text(
-              //           "4개 / 245 kcal",
-              //           style: TextStyle(fontSize: 14, color: Colors.grey),
-              //         ),
-              //       ],
-              //     ),
-              //   );
-              // }).toList(),
+              ...widget.cook!.cookingItems.map((Content cookingItem) {
+                return Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        cookingItem.contentName,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      const Text(
+                        "4개 / 245 kcal",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
 
               // 일치하는 물품 list
               const Text(
                 "일치하는 물품",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
-              // ...cookDetail.matchingItems.map((item) {
-              //   return Padding(
-              //     padding: const EdgeInsets.symmetric(vertical: 4.0),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: [
-              //         Text(
-              //           item,
-              //           style: const TextStyle(fontSize: 14),
-              //         ),
-              //         const Text(
-              //           "12개 / 3,000 kcal",
-              //           style: TextStyle(fontSize: 14, color: Colors.grey),
-              //         ),
-              //       ],
-              //     ),
-              //   );
-              // }).toList(),
+              ...widget.cook!.cookingItems.map((Content item) {
+                return Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        item.contentName,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      const Text(
+                        "12개 / 3,000 kcal",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
 
               // 필요한 물품 알려주는 하단 박스
               Container(
