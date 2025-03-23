@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/model/cook.dart';
 
-class ResultCookView extends ConsumerStatefulWidget {
-  const ResultCookView({super.key});
+class CookDetailView extends ConsumerStatefulWidget {
+  final Cook? cook;
+  const CookDetailView({super.key, required this.cook});
   @override
-  ConsumerState<ResultCookView> createState() => _ContentDetailViewState();
+  ConsumerState<CookDetailView> createState() => _CookDetailViewState();
 }
 
-class _ContentDetailViewState extends ConsumerState<ResultCookView> {
+class _CookDetailViewState extends ConsumerState<CookDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
-        title: const Text("recipe.name"),
+        title: Text(widget.cook?.cookingName ?? '음식 명 없음'),
         centerTitle: true,
       ),
 
@@ -27,7 +29,7 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
-            children: [
+            children: <Widget>[
               // Memo box
               Container(
                 padding: const EdgeInsets.all(16.0),
@@ -35,10 +37,13 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text('cookDetail.memo', style: TextStyle(fontSize: 14)),
+                  children: <Widget>[
+                    Text(
+                      widget.cook?.cookingMemo ?? '',
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   ],
                 ),
               ),
@@ -50,12 +55,12 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: <Widget>[
                     Text(
-                      'cookDetail.kcal',
-                      style: TextStyle(
+                      '${widget.cook?.cookingNutriKcal}kcal',
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -73,55 +78,19 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    NutrientLabel(nutriLabel: '지', nutriCapacity: '0g'),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: const BoxDecoration(
-                            color: Colors.amber, // 노란색 배경
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              // ${cookDetail.nutrients.split(' ')[1]}
-                              "단",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Text("0g", style: TextStyle(fontSize: 14)),
-                      ],
+                  children: <Widget>[
+                    nutrientLabel(
+                      nutriLabel: '탄',
+                      nutriCapacity:
+                          '${widget.cook?.cookingNutriCarbohydrate}g',
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: const BoxDecoration(
-                            color: Colors.amber, // 노란색 배경
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              // ${cookDetail.nutrients.split(' ')[1]}
-                              "지",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Text("0g", style: TextStyle(fontSize: 14)),
-                      ],
+                    nutrientLabel(
+                      nutriLabel: '단',
+                      nutriCapacity: '${widget.cook?.cookingNutriProtein}g',
+                    ),
+                    nutrientLabel(
+                      nutriLabel: '지',
+                      nutriCapacity: '${widget.cook?.cookingNutriFat}g',
                     ),
                   ],
                 ),
@@ -186,10 +155,10 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: <Widget>[
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                      children: <Widget>[
                         Text(
                           "해당 음식을 만들기 위해 필요한 재료는",
                           style: TextStyle(fontSize: 14),
@@ -207,13 +176,13 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
     );
   }
 
-  Widget NutrientLabel({
+  Widget nutrientLabel({
     required String nutriLabel,
     required String nutriCapacity,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Container(
           width: 24,
           height: 24,
@@ -221,15 +190,14 @@ class _ContentDetailViewState extends ConsumerState<ResultCookView> {
             color: Colors.amber, // 노란색 배경
             shape: BoxShape.circle,
           ),
-          child: const Center(
+          child: Center(
             child: Text(
-              // ${cookDetail.nutrients.split(' ')[1]}
-              "단",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              nutriLabel,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
           ),
         ),
-        const Text("0g", style: TextStyle(fontSize: 14)),
+        Text(nutriCapacity, style: const TextStyle(fontSize: 14)),
       ],
     );
   }

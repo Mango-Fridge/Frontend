@@ -107,27 +107,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
       onTap: () {
         ref.watch(searchContentNotifier.notifier).resetState();
         _controller.text = '';
-        context.push(
-          '/addContent',
-          extra: RefrigeratorItem(
-            groupId: item.groupId,
-            isOpenItem: item.isOpenItem,
-            itemName: item.itemName,
-            category: item.category,
-            brandName: item.brandName,
-            count: item.count,
-            regDate: item.regDate,
-            expDate: item.expDate,
-            storageArea: item.storageArea,
-            memo: item.memo,
-            nutriUnit: item.nutriUnit,
-            nutriCapacity: item.nutriCapacity,
-            nutriKcal: item.nutriKcal,
-            nutriCarbohydrate: item.nutriCarbohydrate,
-            nutriProtein: item.nutriProtein,
-            nutriFat: item.nutriFat,
-          ),
-        );
+        context.push('/addContent', extra: item);
       },
       child: Container(
         margin: EdgeInsets.symmetric(

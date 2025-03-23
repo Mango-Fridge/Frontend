@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/providers/cook_provider.dart';
+import 'package:mango/view/cook/widget/cook_detail_view.dart';
 
 // 요리 리스트를 보여주는 view
 class CookView extends ConsumerStatefulWidget {
@@ -102,10 +103,7 @@ class _CookViewState extends ConsumerState<CookView> {
     Design design = Design(context);
     return GestureDetector(
       onTap: () {
-        // 요리 상세 화면
-        // context.push(
-
-        // )
+        context.push('/cookDetail', extra: cook);
       },
       child: Container(
         margin: EdgeInsets.symmetric(

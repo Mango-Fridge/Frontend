@@ -9,7 +9,7 @@ import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
-import 'package:mango/view/cook/widget/result_cook_view.dart';
+import 'package:mango/view/cook/widget/cook_detail_view.dart';
 
 class AddCookView extends ConsumerStatefulWidget {
   const AddCookView({super.key});
@@ -207,32 +207,29 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     Design design = Design(context);
     return GestureDetector(
       onTap: () {
-        ref.watch(searchContentNotifier.notifier).resetState();
-        _searchIngridientController.text = '';
-        // CookContentDetailView(context);
-        // showCookDetailModal(context);
-        context.push('/resultCook');
-        // context.push(
-        //   '/cookContentDetail',
-        //   extra: RefrigeratorItem(
-        //     groupId: item.groupId,
-        //     isOpenItem: item.isOpenItem,
-        //     itemName: item.itemName,
-        //     category: item.category,
-        //     brandName: item.brandName,
-        //     count: item.count,
-        //     regDate: item.regDate,
-        //     expDate: item.expDate,
-        //     storageArea: item.storageArea,
-        //     memo: item.memo,
-        //     nutriUnit: item.nutriUnit,
-        //     nutriCapacity: item.nutriCapacity,
-        //     nutriKcal: item.nutriKcal,
-        //     nutriCarbohydrate: item.nutriCarbohydrate,
-        //     nutriProtein: item.nutriProtein,
-        //     nutriFat: item.nutriFat,
-        //   ),
-        // );
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              content: CookContentDetailView(),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  child: const Text(
+                    '닫기',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
       },
 
       child: Container(
