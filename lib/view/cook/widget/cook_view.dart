@@ -67,39 +67,7 @@ class _CookViewState extends ConsumerState<CookView> {
                           _cookState!.cookList!.isNotEmpty
                       ? _buildCook(_cookState?.cookList!)
                       : _noCookView(),
-              // : _noCookView(),
             ),
-
-            // 요리 정보 표시
-            // - 추후 provider 생성하며 다시 사용할 예정
-            //
-            // Center(
-            //   child: Column(
-            //     children: <Widget>[
-            //       if (recipeName.isNotEmpty && ingredients.isNotEmpty) ...[
-            //         // 요리 정보가 비워져 있지 않을 때 표시
-            //         Text(
-            //           '현재 요리: $recipeName',
-            //           style: const TextStyle(fontSize: 18),
-            //         ),
-            //         const SizedBox(height: 10),
-            //         Text(
-            //           '재료: $ingredients',
-            //           style: const TextStyle(fontSize: 14),
-            //         ),
-            //       ] else ...<Widget>[
-            //         // 요리 정보가 비워져 있을 때 표시
-            //         const Icon(
-            //           Icons.local_dining,
-            //           size: 50,
-            //           color: Colors.black,
-            //         ),
-            //         const SizedBox(height: 10),
-            //         const Text('식사를 추가해보세요', style: TextStyle(fontSize: 14)),
-            //       ],
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -189,8 +157,6 @@ class _CookViewState extends ConsumerState<CookView> {
   }
 
   Widget _noCookView() {
-    Design design = Design(context);
-
     return const Center(
       child: Column(
         children: <Widget>[
@@ -201,19 +167,6 @@ class _CookViewState extends ConsumerState<CookView> {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     context.push('/addContent');
-          //   },
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.amber[300],
-          //     foregroundColor: Colors.black,
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(8),
-          //     ),
-          //   ),
-          //   child: const Text("직접 물품 추가"),
-          // ),
           Spacer(),
         ],
       ),
