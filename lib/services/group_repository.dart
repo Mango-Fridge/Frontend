@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mango/model/group/group.dart';
 
 class GroupRepository {
@@ -34,4 +35,31 @@ class GroupRepository {
       "groupUserCount": 5,
     },
   ];
+
+
+  final Dio _dio = Dio();
+  String _baseUrl = '';
+
+   // 그룹 생성 API 요청
+  Future<Group?> createGroup(int userId, String groupName) async {
+    _baseUrl = 'http://localhost:8080/api/groups/create';
+    try {
+      final response = await _dio.post(
+        _baseUrl,
+        data: {
+          "userId": userId,
+          "groupName": groupName
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return Group.fromJson(response.data);
+      } else {
+        throw Exception('Failed to create group');
+      }
+    } catch (e) {
+      print("Error creating group: $e");
+      return null;
+    }
+  }
 }
