@@ -25,10 +25,11 @@ class AddCookState {
   }) {
     return AddCookState(
       itemListForCook: itemListForCook,
-      isCookNameFocused: isCookNameFocused,
-      isSearchFieldEmpty: isSearchIngredientFocused,
-      isOpenCookName: isOpenCookName,
-      isSearchIngredientFocused: isSearchFieldEmpty,
+      isSearchIngredientFocused:
+          isSearchIngredientFocused ?? this.isSearchIngredientFocused,
+      isSearchFieldEmpty: isSearchFieldEmpty ?? this.isSearchFieldEmpty,
+      isOpenCookName: isOpenCookName ?? isOpenCookName,
+      isCookNameFocused: isCookNameFocused ?? isCookNameFocused,
     );
   }
 }
