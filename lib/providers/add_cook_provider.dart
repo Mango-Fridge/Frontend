@@ -7,7 +7,7 @@ class AddCookNotifier extends Notifier<Cook> {
   Cook build() {
     // 초기 상태
     return Cook(
-      groupID: '',
+      groupID: 0,
       cookingName: '',
       cookingMemo: '',
       cookingNutriKcal: '',
