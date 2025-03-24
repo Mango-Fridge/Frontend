@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
-import 'package:mango/model/group.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/providers/group_provider.dart';
@@ -22,11 +22,8 @@ class RefrigeratorView extends ConsumerStatefulWidget {
 class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 상태관리 관련 선언부
   AuthInfo? get user => ref.watch(loginAuthProvider);
-  List<Group>? get _groupList => ref.watch(groupProvider);
+  Group? get _group => ref.watch(groupProvider);
   RefrigeratorState? get _refrigeratorState => ref.watch(refrigeratorNotifier);
-
-  String? _selectedGroup; // 선택 된 그룹
-  String? _selectedGroupId; // 선택 된 그룹 Id
 
   // initState()로 watch하니까 자꾸 에러나서 찾아보니 initState 후에 호출되는 함수라고 하여 사용.
   @override
@@ -36,7 +33,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(refrigeratorNotifier.notifier).resetState();
-      ref.watch(groupProvider.notifier).loadGroupList(123456789);
+      ref.watch(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
       ref.watch(refrigeratorNotifier.notifier).loadContentList(6);
     });
   }
@@ -69,47 +66,6 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // 그룹 콤보 박스
-                    PopupMenuButton<String>(
-                      onSelected: (String value) {
-                        setState(() {
-                          _selectedGroupId = value;
-                          _selectedGroup =
-                              _groupList!
-                                  .firstWhere(
-                                    (Group group) => group.groupId == value,
-                                  )
-                                  .groupName;
-                        });
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return _groupList!.map<PopupMenuEntry<String>>((
-                          Group group,
-                        ) {
-                          return PopupMenuItem<String>(
-                            value: group.groupId,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 12.0,
-                                horizontal: design.marginAndPadding,
-                              ),
-                              child: Text(group.groupName),
-                            ),
-                          );
-                        }).toList();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: design.marginAndPadding,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.amber[300],
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Text(_selectedGroup ?? '그룹을 선택 해 주세요.'),
-                      ),
-                    ),
                     const SizedBox(height: 20),
                     Row(
                       children: <Widget>[
@@ -124,9 +80,6 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                             ref
                                 .watch(refrigeratorNotifier.notifier)
                                 .resetState();
-                            ref
-                                .watch(groupProvider.notifier)
-                                .loadGroupList(123456789);
                             ref
                                 .watch(refrigeratorNotifier.notifier)
                                 .loadContentList(123456789);
@@ -149,7 +102,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               // 물품 List
               Expanded(
                 child:
-                    _groupList!.isEmpty
+                    (_group?.groupName ?? '').isEmpty
                         ? const Center(
                           child: Text(
                             "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
