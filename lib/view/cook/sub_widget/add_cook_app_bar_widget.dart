@@ -114,12 +114,12 @@ class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Wrap(
-                      spacing: 15.0,
+                      spacing: 5.0,
                       children: <Widget>[
-                        nutrientColumn('열량', '300'),
-                        nutrientColumn('탄', '50'),
-                        nutrientColumn('단', '20'),
-                        nutrientColumn('지', '10'),
+                        nutrientColumn('열량', "${_addCookState?.totalKcal}"),
+                        nutrientColumn('탄', "${_addCookState?.totalCarb}"),
+                        nutrientColumn('단', "${_addCookState?.totalProtein}"),
+                        nutrientColumn('지', "${_addCookState?.totalFat}"),
                       ],
                     ),
                   )

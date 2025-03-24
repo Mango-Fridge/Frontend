@@ -39,6 +39,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(addCookProvider.notifier).resetState();
+      ref.watch(addCookProvider.notifier).sumKcal();
     });
     // view init 후 데이터 처리를 하기 위함
 
@@ -163,9 +164,13 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                 _searchIngridientController.text != ''
                             ? _buildItem(
                               _searchContentState?.refrigeratorItemList!,
+                              _itemRow,
                             )
                             : _noItemView()
-                        : Text('1234'), // ToDo: 추후 요리 재료 리스트 들어갈 부분
+                        : _buildItem(
+                          _addCookState?.itemListForCook,
+                          _cookItemRow,
+                        ),
               ),
             ],
           ),
@@ -188,7 +193,10 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     );
   }
 
-  Widget _buildItem(List<RefrigeratorItem>? itemList) {
+  Widget _buildItem(
+    List<RefrigeratorItem>? itemList,
+    Function(RefrigeratorItem item) content,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
@@ -199,7 +207,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               itemCount: itemList?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 final RefrigeratorItem item = itemList![index];
-                return _buildItemRow(item);
+                return _buildItemRow(item, content(item));
               },
             ),
           ),
@@ -209,7 +217,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     );
   }
 
-  Widget _buildItemRow(RefrigeratorItem item) {
+  Widget _buildItemRow(RefrigeratorItem item, Widget content) {
     Design design = Design(context);
     return GestureDetector(
       onTap: () {
@@ -236,38 +244,73 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           color: Colors.amber[300],
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    item.itemName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
-                  style: const TextStyle(fontSize: 12),
+        child: content,
+      ),
+    );
+  }
+
+  Widget _itemRow(RefrigeratorItem item) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                item.itemName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(item.brandName, style: const TextStyle(fontSize: 12)),
-              ],
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(
+              '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
+              style: const TextStyle(fontSize: 12),
             ),
+            Text(item.brandName, style: const TextStyle(fontSize: 12)),
           ],
         ),
-      ),
+      ],
+    );
+  }
+
+  Widget _cookItemRow(RefrigeratorItem item) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                item.itemName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                "${item.count}개 / ${item.nutriKcal * item.count}Kcal",
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/refrigerator_item.dart';
+import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/state/add_cook_state.dart';
 
 class AddCookContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
@@ -13,7 +15,7 @@ class AddCookContentView extends ConsumerStatefulWidget {
 }
 
 class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
-  int contentNumber = 0;
+  AddCookState? get _addCookState => ref.watch(addCookProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +98,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    setState(() {
-                      if (contentNumber > 0) {
-                        contentNumber--;
-                      }
-                    });
+                    ref.watch(addCookProvider.notifier).reduceItemCount();
                   },
                   icon: const Icon(Icons.remove, size: 20),
                   padding: const EdgeInsets.all(8.0),
@@ -116,7 +114,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: Text(
-                  '$contentNumber',
+                  '${_addCookState?.itemCount}',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -127,11 +125,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    setState(() {
-                      if (contentNumber > 0) {
-                        contentNumber++;
-                      }
-                    });
+                    ref.watch(addCookProvider.notifier).addItemCount();
                   },
                   icon: const Icon(Icons.add, size: 20),
                   padding: const EdgeInsets.all(8.0),
@@ -154,6 +148,11 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 text: '추가',
                 backgroundColor: Colors.amber,
                 onPressed: () {
+                  ref.watch(addCookProvider.notifier).addItem(widget.item!);
+                  ref.watch(addCookProvider.notifier).sumKcal();
+                  ref.watch(addCookProvider.notifier).sumCarb();
+                  ref.watch(addCookProvider.notifier).sumProtein();
+                  ref.watch(addCookProvider.notifier).sumFat();
                   context.pop();
                 },
               ),

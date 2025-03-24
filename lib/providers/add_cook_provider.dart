@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/state/add_cook_state.dart';
 
 class AddCookNotifier extends Notifier<AddCookState> {
@@ -30,20 +33,97 @@ class AddCookNotifier extends Notifier<AddCookState> {
     state = state.copyWith(isSearchIngredientFocused: hasFocus);
   }
 
-  // ToDo: item list에 집어넣는 함수
-  void addItem() {}
+  void addItem(RefrigeratorItem item) {
+    List<RefrigeratorItem> cookItemList =
+        state.itemListForCook ?? <RefrigeratorItem>[];
 
-  // ToDo: item list 열량 합계 함수
-  void sumKcal() {}
+    bool exists = cookItemList.any(
+      (RefrigeratorItem cookItem) => cookItem.itemId == item.itemId,
+    );
 
-  // ToDo: item list 탄수화물 합계 함수
-  void sumCarb() {}
+    if (!exists) {
+      cookItemList.add(item.copyWith(count: state.itemCount));
+    } else {
+      cookItemList =
+          cookItemList.map((RefrigeratorItem cookItem) {
+            if (cookItem.itemId == item.itemId) {
+              return cookItem.copyWith(count: cookItem.count + state.itemCount);
+            }
+            return cookItem;
+          }).toList();
+    }
+
+    state = state.copyWith(itemListForCook: cookItemList);
+  }
+
+  // item list 열량 합계 함수
+  void sumKcal() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) => sum + item.count * item.nutriKcal,
+      );
+    }
+
+    state = state.copyWith(totalKcal: result);
+  }
+
+  // item list 탄수화물 합계 함수
+  void sumCarb() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) =>
+            sum + item.count * item.nutriCarbohydrate,
+      );
+    }
+
+    state = state.copyWith(totalCarb: result);
+  }
 
   // ToDo: item list 단백질 합계 함수
-  void sumProtein() {}
+  void sumProtein() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) =>
+            sum + item.count * item.nutriProtein,
+      );
+    }
+
+    state = state.copyWith(totalProtein: result);
+  }
 
   // ToDo: item list 지방 합계 함수
-  void sumFat() {}
+  void sumFat() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) => sum + item.count * item.nutriFat,
+      );
+    }
+
+    state = state.copyWith(totalFat: result);
+  }
+
+  void addItemCount() {
+    int test = state.itemCount + 1;
+    state = state.copyWith(itemCount: test);
+  }
+
+  void reduceItemCount() {
+    if (state.itemCount > 0) {
+      state = state.copyWith(itemCount: state.itemCount - 1);
+    }
+  }
 }
 
 final NotifierProvider<AddCookNotifier, AddCookState> addCookProvider =
