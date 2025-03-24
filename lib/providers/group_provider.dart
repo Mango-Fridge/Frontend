@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/group.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/services/group_repository.dart';
 
 class GroupNotifier extends Notifier<List<Group>> {
