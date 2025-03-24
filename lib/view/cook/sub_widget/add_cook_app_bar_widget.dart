@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/state/add_cook_state.dart';
 
 class AddCookAppBarWidget extends ConsumerStatefulWidget {
   final TextEditingController cookNameController;
