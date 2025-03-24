@@ -12,8 +12,6 @@ class CookDetailView extends ConsumerStatefulWidget {
 }
 
 class _CookDetailViewState extends ConsumerState<CookDetailView> {
-  // String? get ingredient => null;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,7 +123,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
 
               // 일치하는 물품 list
               const Text(
@@ -141,7 +139,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: <Widget>[
                       Text(
                         item.contentName,
                         style: const TextStyle(fontSize: 14),
@@ -153,7 +151,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
 
               // 필요한 물품 알려주는 하단 박스
               Container(
@@ -185,6 +183,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     );
   }
 
+  // 탄단지 라벨
   Widget nutrientLabel({
     required String nutriLabel,
     required String nutriCapacity,
