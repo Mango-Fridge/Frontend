@@ -1,16 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/cook.dart';
 import 'package:mango/services/cook_repository.dart';
-
-class CookState {
-  List<Cook>? cookList;
-
-  CookState({this.cookList});
-
-  CookState copyWith({List<Cook>? cookList}) {
-    return CookState(cookList: cookList ?? this.cookList);
-  }
-}
+import 'package:mango/state/cook_state.dart';
 
 class CookNotifier extends Notifier<CookState?> {
   CookRepository _cookRepository = CookRepository();

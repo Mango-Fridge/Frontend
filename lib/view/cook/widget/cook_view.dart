@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/providers/cook_provider.dart';
-import 'package:mango/view/cook/widget/cook_detail_view.dart';
+import 'package:mango/state/cook_state.dart';
 
 // 요리 리스트를 보여주는 view
 class CookView extends ConsumerStatefulWidget {
