@@ -34,8 +34,8 @@ class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
           curve: Curves.fastOutSlowIn,
           width:
               _addCookState?.isCookNameFocused ?? false
-                  ? design.screenWidth * 0.75
-                  : design.screenWidth * 0.44,
+                  ? design.screenWidth * 0.70
+                  : design.screenWidth * 0.40,
           child:
               _addCookState?.isCookNameFocused ?? false
                   ? TextField(
@@ -44,9 +44,6 @@ class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
                     decoration: InputDecoration(
                       hintText: '요리 이름 입력',
                       suffixIcon: const Icon(Icons.edit, size: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 8.0,
                         horizontal: 12.0,
@@ -66,10 +63,6 @@ class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
                       padding: const EdgeInsets.symmetric(
                         vertical: 8.0,
                         horizontal: 12.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Row(
                         children: <Widget>[
@@ -96,7 +89,6 @@ class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
                     ),
                   ),
         ),
-        SizedBox(width: design.marginAndPadding),
         // 영양성분 표시 box
         AnimatedContainer(
           duration: const Duration(milliseconds: 500),
@@ -104,7 +96,7 @@ class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
           width:
               _addCookState?.isCookNameFocused ?? false
                   ? design.screenWidth * 0
-                  : design.screenWidth * 0.31,
+                  : design.screenWidth * 0.335,
           child:
               !(_addCookState?.isCookNameFocused ?? false)
                   ? Container(
@@ -113,13 +105,33 @@ class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Wrap(
-                      spacing: 5.0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        nutrientColumn('열량', "${_addCookState?.totalKcal}"),
-                        nutrientColumn('탄', "${_addCookState?.totalCarb}"),
-                        nutrientColumn('단', "${_addCookState?.totalProtein}"),
-                        nutrientColumn('지', "${_addCookState?.totalFat}"),
+                        Expanded(
+                          child: nutrientColumn(
+                            '열량',
+                            "${_addCookState?.totalKcal}",
+                          ),
+                        ),
+                        Expanded(
+                          child: nutrientColumn(
+                            '탄',
+                            "${_addCookState?.totalCarb}",
+                          ),
+                        ),
+                        Expanded(
+                          child: nutrientColumn(
+                            '단',
+                            "${_addCookState?.totalProtein}",
+                          ),
+                        ),
+                        Expanded(
+                          child: nutrientColumn(
+                            '지',
+                            "${_addCookState?.totalFat}",
+                          ),
+                        ),
                       ],
                     ),
                   )
