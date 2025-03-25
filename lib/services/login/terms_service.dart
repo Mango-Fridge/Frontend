@@ -1,11 +1,24 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:mango/model/login/auth_model.dart';
+import 'package:mango/model/rest_client.dart';
+
 class TermsService {
-  // 서버 단에 약관 관련 정보 갱신 함수
-  void updateTerms(String termsType) {
-    switch (termsType) {
-      case 'privacy policy':
-      // terms로 페이지 전환
-      case 'terms':
-      // 2개의 약관 동의 완료 및 API 호출
+  Dio dio = Dio();
+
+  Future<void> updateTerms(AuthInfo authInfo) async {
+    RestClient client = RestClient(dio);
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "usrId": authInfo.usrId,
+      "agreePrivacyPolicy": authInfo.agreePrivacyPolicy,
+      "agreeTermsOfService": authInfo.agreeTermsOfService,
+    };
+
+    try {
+      client.updateTerms(body);
+    } catch (e) {
+      debugPrint("오류 발생: $e");
     }
   }
 }

@@ -30,7 +30,10 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     };
 
     state = termsMap[termsType] ?? state;
-    _termsService.updateTerms(termsType);
+
+    if (termsType == 'terms' && state != null) {
+      _termsService.updateTerms(state!);
+    }
   }
 
   // 로그인
@@ -65,9 +68,10 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     if (platform != null && email != null) {
       // 현재 상태 기억하기
 
-      login(platform);
+      final authService = _getAuthService(platform); // platform에 따른 서비스 반환
+      if (authService == null) return;
 
-      state = AuthInfo(oauthProvider: platform, email: email);
+      state = await authService.login();
       context.go('/home'); // 메인화면으로 이동
     } else {
       context.go('/login'); // 로그인 화면으로 이동
