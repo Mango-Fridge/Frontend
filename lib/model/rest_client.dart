@@ -1,4 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:dio/dio.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:retrofit/retrofit.dart';
@@ -14,6 +13,9 @@ abstract class RestClient {
     @Header("Authorization") String token,
     @Body() Map<String, String> body,
   );
+
+  @POST('/agreement/agree')
+  Future<ApiResponse> updateTerms(@Body() Map<String, Object?> body);
 
   @GET('/api/contents/group/{groupId}')
   Future<ApiResponse> getContentList(@Path('groupId') int groupId);

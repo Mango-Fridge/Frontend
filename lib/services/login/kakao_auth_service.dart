@@ -36,12 +36,7 @@ class KakaoAuthService implements AbstractAuth {
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        await _loginService.postLogin();
-        return AuthInfo(
-          usrId: 0,
-          oauthProvider: AuthPlatform.KAKAO,
-          email: user.kakaoAccount?.email,
-        );
+        return await _loginService.postLogin();
       } catch (error) {
         if (error is KakaoException && error.isInvalidTokenError()) {
           if (kDebugMode) {
@@ -78,12 +73,7 @@ class KakaoAuthService implements AbstractAuth {
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        await _loginService.postLogin();
-        return AuthInfo(
-          usrId: 0,
-          oauthProvider: AuthPlatform.KAKAO,
-          email: user.kakaoAccount?.email,
-        );
+        return await _loginService.postLogin();
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오톡으로 로그인 실패 $error');
@@ -114,12 +104,7 @@ class KakaoAuthService implements AbstractAuth {
             '${user.kakaoAccount?.email}',
           ); // 카카오 platform, email 데이터를 로컬에 저장
 
-          await _loginService.postLogin();
-          return AuthInfo(
-            usrId: 0,
-            oauthProvider: AuthPlatform.KAKAO,
-            email: user.kakaoAccount?.email,
-          );
+          return await _loginService.postLogin();
         } catch (error) {
           if (kDebugMode) {
             print('[Kakao] 카카오계정으로 로그인 실패 $error');
@@ -144,12 +129,7 @@ class KakaoAuthService implements AbstractAuth {
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        await _loginService.postLogin();
-        return AuthInfo(
-          usrId: 0,
-          oauthProvider: AuthPlatform.KAKAO,
-          email: user.kakaoAccount?.email,
-        );
+        return await _loginService.postLogin();
       } catch (error) {
         if (kDebugMode) {
           print('[Kakao] 카카오계정으로 로그인 실패 $error');
