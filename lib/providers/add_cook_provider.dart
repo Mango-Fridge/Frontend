@@ -1,45 +1,130 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/content.dart';
-import 'package:mango/model/cook.dart';
+import 'dart:io';
 
-class AddCookNotifier extends Notifier<Cook> {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/refrigerator_item.dart';
+import 'package:mango/state/add_cook_state.dart';
+
+class AddCookNotifier extends Notifier<AddCookState> {
   @override
-  Cook build() {
-    // 초기 상태
-    return Cook(
-      groupID: '',
-      cookingName: '',
-      cookingMemo: '',
-      cookingNutriKcal: '',
-      cookingNutriCarbohydrate: '',
-      cookingNutriFat: '',
-      cookingNutriProtein: '',
-      cookingItems: <Content>[],
-    );
+  AddCookState build() => AddCookState();
+
+  void resetState() {
+    state = AddCookState();
   }
 
   // 요리 추가
-  void recipeSave(String name, String text) {
-    state = state.copyWith(cookingName: name); // 요리 네임
+  void addCook(String name, String text) {
+    return;
+  }
+
+  void updateCookNameFocused(bool hasFocus) {
+    state = state.copyWith(isCookNameFocused: hasFocus);
+  }
+
+  void updateSearchFieldEmpty(bool isEmpty) {
+    state = state.copyWith(isSearchFieldEmpty: isEmpty);
+  }
+
+  void updateOpenCookName(bool isEmpty) {
+    state = state.copyWith(isOpenCookName: isEmpty);
+  }
+
+  void updateSearchIngredientFocused(bool hasFocus) {
+    state = state.copyWith(isSearchIngredientFocused: hasFocus);
+  }
+
+  void addItem(RefrigeratorItem item) {
+    List<RefrigeratorItem> cookItemList =
+        state.itemListForCook ?? <RefrigeratorItem>[];
+
+    bool exists = cookItemList.any(
+      (RefrigeratorItem cookItem) => cookItem.itemId == item.itemId,
+    );
+
+    if (!exists) {
+      cookItemList.add(item.copyWith(count: state.itemCount));
+    } else {
+      cookItemList =
+          cookItemList.map((RefrigeratorItem cookItem) {
+            if (cookItem.itemId == item.itemId) {
+              return cookItem.copyWith(count: cookItem.count + state.itemCount);
+            }
+            return cookItem;
+          }).toList();
+    }
+
+    state = state.copyWith(itemListForCook: cookItemList);
+  }
+
+  // item list 열량 합계 함수
+  void sumKcal() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) => sum + item.count * item.nutriKcal,
+      );
+    }
+
+    state = state.copyWith(totalKcal: result);
+  }
+
+  // item list 탄수화물 합계 함수
+  void sumCarb() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) =>
+            sum + item.count * item.nutriCarbohydrate,
+      );
+    }
+
+    state = state.copyWith(totalCarb: result);
+  }
+
+  // ToDo: item list 단백질 합계 함수
+  void sumProtein() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) =>
+            sum + item.count * item.nutriProtein,
+      );
+    }
+
+    state = state.copyWith(totalProtein: result);
+  }
+
+  // ToDo: item list 지방 합계 함수
+  void sumFat() {
+    int result = 0;
+
+    if (state.itemListForCook != null) {
+      result = state.itemListForCook!.fold(
+        0,
+        (int sum, RefrigeratorItem item) => sum + item.count * item.nutriFat,
+      );
+    }
+
+    state = state.copyWith(totalFat: result);
+  }
+
+  void addItemCount() {
+    int test = state.itemCount + 1;
+    state = state.copyWith(itemCount: test);
+  }
+
+  void reduceItemCount() {
+    if (state.itemCount > 0) {
+      state = state.copyWith(itemCount: state.itemCount - 1);
+    }
   }
 }
 
-final NotifierProvider<AddCookNotifier, Cook> addCookProvider =
-    NotifierProvider<AddCookNotifier, Cook>(AddCookNotifier.new);
-
-///////////////////////////////////////////////////////////////////
-
-// 각 변수 상태 관리
-final StateProvider<bool> isCookNameFocused = StateProvider<bool>(
-  (ref) => false,
-);
-
-final StateProvider<bool> isSearchIngredientFocused = StateProvider<bool>(
-  (ref) => false,
-);
-
-final StateProvider<bool> isOpenCookName = StateProvider<bool>((ref) => false);
-
-final StateProvider<bool> isSearchFieldEmpty = StateProvider<bool>(
-  (ref) => false,
-);
+final NotifierProvider<AddCookNotifier, AddCookState> addCookProvider =
+    NotifierProvider<AddCookNotifier, AddCookState>(AddCookNotifier.new);

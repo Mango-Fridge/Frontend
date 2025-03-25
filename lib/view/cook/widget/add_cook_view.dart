@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_cook_provider.dart';
-import 'package:mango/view/cook/sub_widget/add_cook_appBar_widget.dart';
+import 'package:mango/state/add_cook_state.dart';
+import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
+import 'package:mango/view/cook/sub_widget/add_cook_app_bar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
@@ -27,26 +29,33 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   final FocusNode _cookNameFocusNode = FocusNode();
   final FocusNode _searchIngredientFocusNode = FocusNode();
 
-  SearchItemState? get _searchContentState => ref.watch(searchContentNotifier);
+  SearchItemState? get _searchContentState => ref.watch(searchContentProvider);
+  AddCookState? get _addCookState => ref.watch(addCookProvider);
 
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(addCookProvider.notifier).resetState();
+      ref.watch(addCookProvider.notifier).sumKcal();
+    });
+    // view init 후 데이터 처리를 하기 위함
+
     _cookNameFocusNode.addListener(() {
-      ref.read(isCookNameFocused.notifier).state = _cookNameFocusNode.hasFocus;
+      ref
+          .read(addCookProvider.notifier)
+          .updateCookNameFocused(_cookNameFocusNode.hasFocus);
     });
 
     _searchIngredientFocusNode.addListener(() {
-      ref.read(isSearchIngredientFocused.notifier).state =
-          _searchIngredientFocusNode.hasFocus;
-      ref.read(isSearchFieldEmpty.notifier).state =
-          _searchIngridientController.text.isEmpty;
-    });
-
-    // view init 후 데이터 처리를 하기 위함
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(searchContentNotifier.notifier).resetState();
+      ref
+          .read(addCookProvider.notifier)
+          .updateSearchIngredientFocused(_searchIngredientFocusNode.hasFocus);
+      ref
+          .read(addCookProvider.notifier)
+          .updateSearchFieldEmpty(_searchIngridientController.text.isEmpty);
     });
   }
 
@@ -104,75 +113,79 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제 및 키보드 내리기
           },
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                // 검색 필드
-                TextField(
+          child: Column(
+            children: <Widget>[
+              // 검색 필드
+              Padding(
+                padding: EdgeInsets.all(design.marginAndPadding),
+                child: TextField(
                   controller: _searchIngridientController,
                   focusNode: _searchIngredientFocusNode,
                   decoration: InputDecoration(
-                    hintText: '냉장고에 있는 음식 재료를 추가해보세요',
+                    hintText: '요리 재료를 검색해보세요',
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        ref.watch(isSearchFieldEmpty)
+                        _addCookState?.isSearchFieldEmpty ?? false
                             ? Icons.search
                             : Icons.close,
                         color: Colors.black,
                       ),
                       onPressed: () {
-                        if (!ref.watch(isSearchFieldEmpty)) {
+                        if (!(_addCookState?.isSearchFieldEmpty ?? false)) {
                           _searchIngridientController.clear();
-                          ref.read(isSearchFieldEmpty.notifier).state = true;
+                          ref
+                              .read(addCookProvider.notifier)
+                              .updateSearchFieldEmpty(true);
                         }
                       },
                     ),
                   ),
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
-                    ref.read(isSearchFieldEmpty.notifier).state = value.isEmpty;
-
                     ref
-                        .watch(searchContentNotifier.notifier)
+                        .watch(addCookProvider.notifier)
+                        .updateSearchFieldEmpty(value.isEmpty);
+                    ref
+                        .watch(searchContentProvider.notifier)
                         .loadItemListByString(value);
                   },
                 ),
-
-                Expanded(
-                  child:
-                      _searchContentState != null &&
-                              _searchContentState?.refrigeratorItemList !=
-                                  null &&
-                              _searchContentState!
-                                  .refrigeratorItemList!
-                                  .isNotEmpty &&
-                              _searchIngridientController.text != ''
-                          ? _buildItem(
-                            _searchContentState?.refrigeratorItemList!,
-                          )
-                          : _noItemView(),
-                ),
-              ],
-            ),
+              ),
+              Expanded(
+                child:
+                    _addCookState?.isSearchIngredientFocused ?? false
+                        ? _searchContentState != null &&
+                                _searchContentState?.refrigeratorItemList !=
+                                    null &&
+                                _searchContentState!
+                                    .refrigeratorItemList!
+                                    .isNotEmpty &&
+                                _searchIngridientController.text != ''
+                            ? _buildItem(
+                              _searchContentState?.refrigeratorItemList!,
+                              _itemRow,
+                            )
+                            : _noItemView()
+                        : _buildItem(
+                          _addCookState?.itemListForCook,
+                          _cookItemRow,
+                        ),
+              ),
+            ],
           ),
         ),
 
         // 바텀 시트 - 키보드 등장 시 숨김 관리 위해 visibility 위젯 사용
         bottomSheet: Visibility(
-          visible:
-              !ref.watch(isSearchIngredientFocused) &&
-              !ref.watch(isCookNameFocused),
+          visible: !(_addCookState?.isSearchIngredientFocused ?? false),
           child: AddCookBottomSheetWidget(
             memoController: _memoController,
             onAddPressed: () {
               final String cookName = _cookNameController.text;
               final String ingredients = _searchIngridientController.text;
               context.pop(context);
-              ref
-                  .read(addCookProvider.notifier)
-                  .recipeSave(cookName, ingredients);
+              ref.read(addCookProvider.notifier).addCook(cookName, ingredients);
             },
           ),
         ),
@@ -180,10 +193,12 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     );
   }
 
-  Widget _buildItem(List<RefrigeratorItem>? itemList) {
+  Widget _buildItem(
+    List<RefrigeratorItem>? itemList,
+    Function(RefrigeratorItem item) content,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: const BoxDecoration(color: Colors.white),
       child: Column(
         children: <Widget>[
           const Divider(),
@@ -192,7 +207,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               itemCount: itemList?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 final RefrigeratorItem item = itemList![index];
-                return _buildItemRow(item);
+                return _buildItemRow(item, content(item));
               },
             ),
           ),
@@ -202,35 +217,23 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     );
   }
 
-  Widget _buildItemRow(RefrigeratorItem item) {
+  Widget _buildItemRow(RefrigeratorItem item, Widget content) {
     Design design = Design(context);
     return GestureDetector(
       onTap: () {
-        ref.watch(searchContentNotifier.notifier).resetState();
-        _searchIngridientController.text = '';
-        context.push(
-          '/addContent',
-          extra: RefrigeratorItem(
-            groupId: item.groupId,
-            isOpenItem: item.isOpenItem,
-            itemName: item.itemName,
-            category: item.category,
-            brandName: item.brandName,
-            count: item.count,
-            regDate: item.regDate,
-            expDate: item.expDate,
-            storageArea: item.storageArea,
-            memo: item.memo,
-            nutriUnit: item.nutriUnit,
-            nutriCapacity: item.nutriCapacity,
-            nutriKcal: item.nutriKcal,
-            nutriCarbohydrate: item.nutriCarbohydrate,
-            nutriProtein: item.nutriProtein,
-            nutriFat: item.nutriFat,
-          ),
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              content: AddCookContentView(item: item),
+            );
+          },
         );
       },
-
       child: Container(
         margin: EdgeInsets.symmetric(
           vertical: 4,
@@ -241,38 +244,73 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           color: Colors.amber[300],
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    item.itemName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
-                  style: const TextStyle(fontSize: 12),
+        child: content,
+      ),
+    );
+  }
+
+  Widget _itemRow(RefrigeratorItem item) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                item.itemName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(item.brandName, style: const TextStyle(fontSize: 12)),
-              ],
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(
+              '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
+              style: const TextStyle(fontSize: 12),
             ),
+            Text(item.brandName, style: const TextStyle(fontSize: 12)),
           ],
         ),
-      ),
+      ],
+    );
+  }
+
+  Widget _cookItemRow(RefrigeratorItem item) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                item.itemName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                "${item.count}개 / ${item.nutriKcal * item.count}Kcal",
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -283,7 +321,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     return Column(
       children: <Widget>[
         SizedBox(height: design.screenHeight * 0.25),
-        const Text("재료를 추가해주세요."),
+        const Text("요리 재료를 추가해주세요."),
       ],
     );
   }

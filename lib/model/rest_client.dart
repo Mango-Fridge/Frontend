@@ -16,4 +16,7 @@ abstract class RestClient {
 
   @POST('/agreement/agree')
   Future<ApiResponse> updateTerms(@Body() Map<String, Object?> body);
+
+  @GET('/api/contents/group/{groupId}')
+  Future<ApiResponse> getContentList(@Path('groupId') int groupId);
 }

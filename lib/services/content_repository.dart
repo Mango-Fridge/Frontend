@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:mango/model/api_response.dart';
 import 'package:mango/model/content.dart';
+import 'package:mango/model/rest_client.dart';
 
 class ContentRepository {
-  final Dio _dio = Dio();
-  String _baseUrl = '';
+  final Dio dio = Dio();
 
   // content 저장 함수
   Future<void> saveContent(Content content) async {
@@ -12,19 +13,18 @@ class ContentRepository {
 
   // groupId로 content list 불러오는 함수
   Future<List<Content>> loadContentList(int groupId) async {
-    _baseUrl = 'http://127.0.0.1:8080/api/contents/group/$groupId';
+    RestClient client = RestClient(dio);
     try {
-      _dio.interceptors.add(LogInterceptor(responseBody: true));
-      final response = await _dio.get(_baseUrl);
+      ApiResponse response = await client.getContentList(groupId);
 
-      if (response.statusCode == 200) {
-        List<dynamic> data = response.data['data'];
+      if (response.code == 200) {
+        List<dynamic> data = response.data;
         return data.map((item) => Content.fromJson(item)).toList();
       } else {
-        throw Exception('Failed to load content');
+        throw Exception('Json 변환 과정 오류');
       }
     } catch (e) {
-      throw Exception('Failed to load content: $e');
+      throw Exception('loadContentList 오류: $e');
     }
   }
 }

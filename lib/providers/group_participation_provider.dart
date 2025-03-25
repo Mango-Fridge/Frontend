@@ -42,43 +42,29 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
         return;
       }
 
-      // 추후 비동기 작업(Api) 작성할 때 사용할 용도. 
-      // try {
-      //   //밑에 유효성 검사 및 등등 코드 이쪽으로
-      // } catch(e) {
-      //   print(e);
+      // // 냉장고ID가 존재하지 않을 때
+      // if (selectedGroup.isEmpty) {
+      //   state = state.copyWith(
+      //     errorMessage: '냉장고ID가 존재하지 않습니다',
+      //     groupName: null,
+      //     gruoupUserKing: null,
+      //     groupUserCount: null,
+      //     isButton: false,
+      //     isLoadingButton: false,
+      //   );
+      //   return;
       // }
 
-      // 그룹 ID가 존재하는 지 확인 후, 데이터 담기
-      final Map<String, dynamic> selectedGroup = groupRepository.dummyGroups
-          .firstWhere(
-            (Map<String, dynamic> group) => group['groupId'] == trimmeGroupId,
-            orElse: () => <String, dynamic>{}, // 없다면 빈값으로 반환
-          );
-
-      // 냉장고ID가 존재하지 않을 때
-      if (selectedGroup.isEmpty) {
-        state = state.copyWith(
-          errorMessage: '냉장고ID가 존재하지 않습니다',
-          groupName: null,
-          gruoupUserKing: null,
-          groupUserCount: null,
-          isButton: false,
-          isLoadingButton: false,
-        );
-        return;
-      }
-
-      // 그룹 참여 정상적 입력
-      state = state.copyWith(
-        groupId: trimmeGroupId, // 존재하는 그룹ID
-        groupName: selectedGroup['groupName'], // 존재하는 그룹이름
-        gruoupUserKing: selectedGroup['groupUserKing'], // 존재하는 그룹장
-        groupUserCount: selectedGroup['groupUserCount'], // 존재하는 그룹인원 수
-        errorMessage: null,
-        isButton: true,
-        isLoadingButton: false,
-      );
+      // // 그룹 참여 정상적 입력
+      // state = state.copyWith(
+      //   groupId: trimmeGroupId, // 존재하는 그룹ID
+      //   groupName: selectedGroup['groupName'], // 존재하는 그룹이름
+      //   gruoupUserKing: selectedGroup['groupUserKing'], // 존재하는 그룹장
+      //   groupUserCount: selectedGroup['groupUserCount'], // 존재하는 그룹인원 수
+      //   errorMessage: null,
+      //   isButton: true,
+      //   isLoadingButton: false,
+      // );
     });
   }
 

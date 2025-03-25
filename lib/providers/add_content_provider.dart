@@ -127,12 +127,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   }
 
   // calories의 존재 여부에 따른 상태 처리 함수
-  void updateCalories(String calories) {
+  void updateKcal(String kcal) {
     if (state != null) {
-      if (calories.isNotEmpty) {
-        _addContentState = state!.copyWith(isCaloriesEmpty: true);
+      if (kcal.isNotEmpty) {
+        _addContentState = state!.copyWith(isKcalEmpty: true);
       } else {
-        _addContentState = state!.copyWith(isCaloriesEmpty: false);
+        _addContentState = state!.copyWith(isKcalEmpty: false);
       }
     }
 

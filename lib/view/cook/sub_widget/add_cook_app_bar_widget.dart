@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
 import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/state/add_cook_state.dart';
 
-// add_cook_view의 app bar에 들어갈 위젯
-class AddCookAppBarWidget extends ConsumerWidget {
+class AddCookAppBarWidget extends ConsumerStatefulWidget {
   final TextEditingController cookNameController;
   final FocusNode cookNameFocusNode;
 
@@ -15,34 +15,35 @@ class AddCookAppBarWidget extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Design design = Design(context);
+  ConsumerState<ConsumerStatefulWidget> createState() => _AddCookAppBarState();
+}
 
+class _AddCookAppBarState extends ConsumerState<AddCookAppBarWidget> {
+  AddCookState? get _addCookState => ref.watch(addCookProvider);
+
+  @override
+  Widget build(BuildContext context) {
+    final Design design = Design(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         // 포커스 상태에 따른 사이즈 변화 시 애니메이션을 위함
         AnimatedContainer(
-          onEnd: () {
-            ref.read(isOpenCookName.notifier).state = !ref.read(isOpenCookName);
-          },
+          onEnd: () {},
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
           width:
-              ref.watch(isCookNameFocused)
-                  ? design.screenWidth * 0.75
-                  : design.screenWidth * 0.44,
+              _addCookState?.isCookNameFocused ?? false
+                  ? design.screenWidth * 0.70
+                  : design.screenWidth * 0.40,
           child:
-              ref.watch(isCookNameFocused)
+              _addCookState?.isCookNameFocused ?? false
                   ? TextField(
-                    controller: cookNameController,
-                    focusNode: cookNameFocusNode,
+                    controller: widget.cookNameController,
+                    focusNode: widget.cookNameFocusNode,
                     decoration: InputDecoration(
                       hintText: '요리 이름 입력',
                       suffixIcon: const Icon(Icons.edit, size: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 8.0,
                         horizontal: 12.0,
@@ -53,31 +54,29 @@ class AddCookAppBarWidget extends ConsumerWidget {
                   )
                   : GestureDetector(
                     onTap: () {
-                      cookNameFocusNode.requestFocus();
-                      ref.read(isCookNameFocused.notifier).state = true;
+                      widget.cookNameFocusNode.requestFocus();
+                      ref
+                          .read(addCookProvider.notifier)
+                          .updateCookNameFocused(true);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 8.0,
                         horizontal: 12.0,
                       ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              cookNameController.text.isEmpty
+                              widget.cookNameController.text.isEmpty
                                   ? '요리 이름 입력'
-                                  : cookNameController.text,
+                                  : widget.cookNameController.text,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 16,
                                 height: 1.5,
                                 color:
-                                    cookNameController.text.isEmpty
+                                    widget.cookNameController.text.isEmpty
                                         ? Colors.grey
                                         : Colors.black,
                               ),
@@ -90,30 +89,49 @@ class AddCookAppBarWidget extends ConsumerWidget {
                     ),
                   ),
         ),
-        SizedBox(width: design.marginAndPadding),
         // 영양성분 표시 box
         AnimatedContainer(
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
           width:
-              ref.watch(isCookNameFocused)
+              _addCookState?.isCookNameFocused ?? false
                   ? design.screenWidth * 0
-                  : design.screenWidth * 0.31,
+                  : design.screenWidth * 0.335,
           child:
-              !ref.watch(isCookNameFocused) && !ref.watch(isOpenCookName)
+              !(_addCookState?.isCookNameFocused ?? false)
                   ? Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Wrap(
-                      spacing: 15.0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        nutrientColumn('열량', '300'),
-                        nutrientColumn('탄', '50'),
-                        nutrientColumn('단', '20'),
-                        nutrientColumn('지', '10'),
+                        Expanded(
+                          child: nutrientColumn(
+                            '열량',
+                            "${_addCookState?.totalKcal}",
+                          ),
+                        ),
+                        Expanded(
+                          child: nutrientColumn(
+                            '탄',
+                            "${_addCookState?.totalCarb}",
+                          ),
+                        ),
+                        Expanded(
+                          child: nutrientColumn(
+                            '단',
+                            "${_addCookState?.totalProtein}",
+                          ),
+                        ),
+                        Expanded(
+                          child: nutrientColumn(
+                            '지',
+                            "${_addCookState?.totalFat}",
+                          ),
+                        ),
                       ],
                     ),
                   )

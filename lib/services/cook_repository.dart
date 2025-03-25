@@ -3,7 +3,7 @@ import 'package:mango/model/content.dart';
 
 class CookRepository {
   /// 'groupID'로 cook list 불러오는 함수
-  Future<List<Cook>> loadCookList(String groupID) async {
+  Future<List<Cook>> loadCookList(int groupID) async {
     // groupId 해당하는 cook list 불러오는 api 호출
     await Future.delayed(const Duration(seconds: 1));
 

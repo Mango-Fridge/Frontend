@@ -1,7 +1,7 @@
 import 'content.dart';
 
 class Cook {
-  final String groupID;
+  final int groupID;
   final String cookingName;
   final String cookingMemo;
   final String cookingNutriKcal;
@@ -23,7 +23,7 @@ class Cook {
 
   // 변경 불가능한 final property를 변경 가능하게 함
   Cook copyWith({
-    String? groupID,
+    int? groupID,
     String? cookingName,
     String? cookingMemo,
     String? cookingNutriKcal,

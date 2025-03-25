@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/services/group_repository.dart';
 import 'package:mango/state/group_state.dart';
 
-// 그룹(냉장고) 유효성 상태관리를 위해 사용
+// 그룹(냉장고) 생성 상태관리를 위해 사용
 class GroupCreateNotifier extends Notifier<GroupState> {
+  final GroupRepository groupRepository = GroupRepository();
   Timer? _debounce; // 타이머 선언
 
   @override
@@ -21,13 +23,29 @@ class GroupCreateNotifier extends Notifier<GroupState> {
     );
   }
 
+  // 그룹 생성 API 호출
+  Future<void> createGroup(int userId, String groupName) async {
+    state = state.copyWith(isLoadingButton: true);
+
+    try {
+      await groupRepository.createGroup(userId, groupName);
+    } catch (e) {
+      state = state.copyWith(errorMessage: "오류 발생: ${e.toString()}");
+    } finally {
+      print('${groupName}: 그룹이 생성되었습니다.');
+    }
+  }
+
   // 그룹 생성 유효성 검사 및 업데이트
   void checkGroupName(String groupName) {
     final String trimmedName = groupName.trim(); // 공백 제거
 
-    if (_debounce?.isActive ?? false) _debounce!.cancel(); // 타이머 실행 확인, 글자 입력할 때마다 타이머 초기화
-    state = state.copyWith(isLoadingButton: true); //  글자 입력 시, 버튼 로딩 표시 (설정한 타이머 기준)
-    
+    if (_debounce?.isActive ?? false)
+      _debounce!.cancel(); // 타이머 실행 확인, 글자 입력할 때마다 타이머 초기화
+    state = state.copyWith(
+      isLoadingButton: true,
+    ); //  글자 입력 시, 버튼 로딩 표시 (설정한 타이머 기준)
+
     _debounce = Timer(const Duration(milliseconds: 600), () {
       // 문자가 공백일 때
       if (trimmedName.isEmpty) {

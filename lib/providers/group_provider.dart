@@ -1,27 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/group.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/services/group_repository.dart';
 
-class GroupNotifier extends Notifier<List<Group>> {
+class GroupNotifier extends Notifier<Group?> {
   final _groupRepository = GroupRepository();
 
   @override
-  List<Group> build() => <Group>[];
+  Group? build() => null;
 
-  Future<void> loadGroupList(int userId) async {
+  Future<void> loadGroup(int userId) async {
     try {
-      final List<Group> groupList = await _groupRepository.loadGroupList(
-        userId,
-      );
-      state = groupList;
+      final Group group = await _groupRepository.loadGroup(userId);
+      state = group;
     } catch (e) {
-      state = <Group>[];
+      state = null;
     }
   }
 }
 
-final NotifierProvider<GroupNotifier, List<Group>> groupProvider =
-    NotifierProvider<GroupNotifier, List<Group>>(GroupNotifier.new);
+final NotifierProvider<GroupNotifier, Group?> groupProvider =
+    NotifierProvider<GroupNotifier, Group?>(GroupNotifier.new);
 
 // email에 의해 불려온 group List 관리
 // 그룹에 의해 불려온 content List 관리

@@ -1,5 +1,5 @@
 class RefrigeratorItem {
-  final String groupId;
+  final int itemId;
   final bool isOpenItem;
   final String itemName;
   final String category;
@@ -17,7 +17,7 @@ class RefrigeratorItem {
   final int nutriFat;
 
   RefrigeratorItem({
-    required this.groupId,
+    required this.itemId,
     required this.isOpenItem,
     required this.itemName,
     required this.category,
@@ -36,7 +36,7 @@ class RefrigeratorItem {
   });
 
   RefrigeratorItem copyWith({
-    String? groupId,
+    int? itemId,
     bool? isOpenItem,
     String? itemName,
     String? category,
@@ -54,7 +54,7 @@ class RefrigeratorItem {
     int? nutriFat,
   }) {
     return RefrigeratorItem(
-      groupId: groupId ?? this.groupId,
+      itemId: itemId ?? this.itemId,
       isOpenItem: isOpenItem ?? this.isOpenItem,
       itemName: itemName ?? this.itemName,
       category: category ?? this.category,

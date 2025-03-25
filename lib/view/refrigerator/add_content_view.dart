@@ -30,7 +30,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   );
   final TextEditingController memoController = TextEditingController();
   TextEditingController capacityController = TextEditingController();
-  TextEditingController caloriesController = TextEditingController();
+  TextEditingController kcalController = TextEditingController();
   TextEditingController carbsController = TextEditingController();
   TextEditingController proteinController = TextEditingController();
   TextEditingController fatController = TextEditingController();
@@ -38,7 +38,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   final GlobalKey _countKey = GlobalKey();
   final GlobalKey _memoKey = GlobalKey();
   final GlobalKey _capacityKey = GlobalKey();
-  final GlobalKey _caloriesKey = GlobalKey();
+  final GlobalKey _kcalKey = GlobalKey();
   final GlobalKey _carbsKey = GlobalKey();
   final GlobalKey _proteinKey = GlobalKey();
   final GlobalKey _fatKey = GlobalKey();
@@ -61,7 +61,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       capacityController = TextEditingController(
         text: widget.item?.nutriCapacity.toString() ?? '',
       );
-      caloriesController = TextEditingController(
+      kcalController = TextEditingController(
         text: widget.item?.nutriKcal.toString() ?? '',
       );
       carbsController = TextEditingController(
@@ -460,14 +460,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               ],
             ),
             nutritionTextField(
-              key: _caloriesKey,
+              key: _kcalKey,
               label: '열량',
-              controller: caloriesController,
+              controller: kcalController,
               hintText: 'ex) 150',
               onChanged: () {
                 ref
                     .read(addContentProvider.notifier)
-                    .updateCalories(caloriesController.text);
+                    .updateKcal(kcalController.text);
               },
             ),
             nutritionTextField(
@@ -557,8 +557,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             capacityController.text.isNotEmpty
                                 ? int.parse(capacityController.text)
                                 : 0,
-                            caloriesController.text.isNotEmpty
-                                ? int.parse(caloriesController.text)
+                            kcalController.text.isNotEmpty
+                                ? int.parse(kcalController.text)
                                 : 0,
                             carbsController.text.isNotEmpty
                                 ? int.parse(carbsController.text)
