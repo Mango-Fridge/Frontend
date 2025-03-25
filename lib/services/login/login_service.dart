@@ -1,14 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
+import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/rest_client.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 
 // 서버와 로그인
 class LoginService {
-  var dio = Dio();
+  Dio dio = Dio();
 
-  Future<void> postLogin() async {
+  Future<AuthInfo> postLogin() async {
     final LoginSharePrefs _loginSharePrefs = LoginSharePrefs();
     RestClient client = RestClient(dio);
     String? snsToken;
@@ -29,5 +30,7 @@ class LoginService {
     final body = {"oauthProvider": "$platformStr"}; // 요청 바디
     final resp = await client.getAuthUser(tokens, body);
     debugPrint("사용자 정보 : ${resp.data}");
+
+    return AuthInfo.fromJson(resp.data);
   }
 }
