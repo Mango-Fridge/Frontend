@@ -12,6 +12,17 @@ class CookDetailView extends ConsumerStatefulWidget {
 }
 
 class _CookDetailViewState extends ConsumerState<CookDetailView> {
+  final List<String> cookIngredientNames = [
+    '양파',
+    '당근',
+    '감자',
+    '마늘',
+    '고추',
+    '돼지고기',
+    '소금',
+    '간장',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,17 +171,29 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   color: Colors.amber[100],
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "해당 음식을 만들기 위해 필요한 재료는",
                           style: TextStyle(fontSize: 14),
                         ),
-                        Text("00 00 입니다.", style: TextStyle(fontSize: 14)),
+                        Text(
+                          getMissingCookIngredients(
+                            widget.cook!.cookingItems
+                                .map((item) => item.contentName)
+                                .toList(),
+                            cookIngredientNames,
+                          ).join(', '),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Text('입니다.', style: TextStyle(fontSize: 14)),
                       ],
                     ),
                   ],
@@ -207,6 +230,15 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
         ),
         Text(nutriCapacity, style: const TextStyle(fontSize: 14)),
       ],
+    );
+  }
+
+  Iterable<String> getMissingCookIngredients(
+    List<String> cookIngredientNames,
+    List<String> refrigerIngredientNames,
+  ) {
+    return cookIngredientNames.where(
+      (name) => !refrigerIngredientNames.contains(name),
     );
   }
 }
