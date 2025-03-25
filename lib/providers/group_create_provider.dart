@@ -25,8 +25,6 @@ class GroupCreateNotifier extends Notifier<GroupState> {
 
   // 그룹 생성 API 호출
   Future<void> createGroup(int userId, String groupName) async {
-    state = state.copyWith(isLoadingButton: true);
-
     try {
       await groupRepository.createGroup(userId, groupName);
     } catch (e) {
