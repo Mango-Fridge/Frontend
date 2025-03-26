@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mango/model/content.dart';
+import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/services/content_repository.dart';
 import 'package:mango/state/add_content_state.dart';
 
@@ -17,9 +17,12 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   }
 
   // Content 저장 함수
-  Future<void> saveContent(
+  Future<void> saveItem(
     String contentName,
+    bool isOpen,
     String category,
+    String subCategory,
+    String brandName,
     int count,
     DateTime regDate,
     DateTime expDate,
@@ -34,10 +37,13 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   ) async {
     try {
       await _contentRepository.saveContent(
-        Content(
-          contentId: null,
-          contentName: contentName,
+        RefrigeratorItem(
+          itemId: null,
+          isOpenItem: isOpen,
+          itemName: contentName,
           category: category,
+          subCategory: subCategory,
+          brandName: brandName,
           count: count,
           regDate: regDate,
           expDate: expDate,
@@ -221,6 +227,15 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   void setUnit(String unit) {
     if (state != null) {
       _addContentState = state!.copyWith(selectedUnit: unit, isUnitEmpty: true);
+    }
+
+    state = _addContentState;
+  }
+
+  // 물품 공개 등록 관리 함수
+  void setIsOpen() {
+    if (state != null) {
+      _addContentState = state!.copyWith(isOpen: true);
     }
 
     state = _addContentState;

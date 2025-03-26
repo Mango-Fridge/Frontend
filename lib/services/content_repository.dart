@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:mango/model/content.dart';
+import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/model/rest_client.dart';
 
 class ContentRepository {
   final Dio dio = Dio();
 
   // content 저장 함수
-  Future<void> saveContent(Content content) async {
+  Future<void> saveContent(RefrigeratorItem content) async {
     await Future.delayed(Duration(seconds: 1));
   }
 

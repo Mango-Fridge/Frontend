@@ -127,7 +127,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.itemName,
+                    item.itemName ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -145,7 +145,10 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                   '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
                   style: const TextStyle(fontSize: 12),
                 ),
-                Text(item.brandName, style: const TextStyle(fontSize: 12)),
+                Text(
+                  item.brandName ?? '',
+                  style: const TextStyle(fontSize: 12),
+                ),
               ],
             ),
           ],
