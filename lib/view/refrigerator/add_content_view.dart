@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:intl/intl.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_content_provider.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/add_content_state.dart';
 import 'package:mango/toastMessage.dart';
 
@@ -604,6 +606,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       ref
                           .watch(addContentProvider.notifier)
                           .saveItem(
+                            7,
                             nameController.text,
                             _addContentState?.isOpen ?? false,
                             _addContentState?.selectedContentCategory ??
@@ -612,11 +615,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             '',
                             int.parse(countController.text),
                             _addContentState?.selectedRegDate ?? DateTime.now(),
-                            _addContentState?.selectedRegDate ?? DateTime.now(),
+                            _addContentState?.selectedExpDate ?? DateTime.now(),
                             _addContentState?.selectedContentStorage ??
                                 contentStorage[0],
                             memoController.text,
-                            '',
+                            _addContentState?.selectedUnit ?? '',
                             capacityController.text.isNotEmpty
                                 ? int.parse(capacityController.text)
                                 : 0,

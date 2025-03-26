@@ -7,7 +7,6 @@ part 'refrigerator_item.g.dart';
 abstract class RefrigeratorItem with _$RefrigeratorItem {
   const factory RefrigeratorItem({
     required int? itemId,
-    required bool? isOpenItem,
     required String? itemName,
     required String? category,
     required String? subCategory,
@@ -23,6 +22,7 @@ abstract class RefrigeratorItem with _$RefrigeratorItem {
     required int? nutriCarbohydrate,
     required int? nutriProtein,
     required int? nutriFat,
+    required bool? openItem,
   }) = Refrigerator;
 
   factory RefrigeratorItem.fromJson(Map<String, dynamic> json) =>

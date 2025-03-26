@@ -25,4 +25,7 @@ abstract class RestClient {
 
   @GET('/api/items/search')
   Future<ApiResponse> getItemList(@Query('keyword') String keyword);
+
+  @POST('/api/items')
+  Future<ApiResponse> addItem(@Body() Map<String, Object?> body);
 }

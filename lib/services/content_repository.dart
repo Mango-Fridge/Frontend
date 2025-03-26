@@ -7,9 +7,35 @@ import 'package:mango/model/rest_client.dart';
 class ContentRepository {
   final Dio dio = Dio();
 
-  // content 저장 함수
-  Future<void> saveContent(RefrigeratorItem content) async {
-    await Future.delayed(Duration(seconds: 1));
+  // item 및 content 저장 함수
+  Future<void> saveContent(RefrigeratorItem item) async {
+    RestClient client = RestClient(dio);
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "groupId": item.itemId,
+      "itemName": item.itemName,
+      "category": item.category,
+      "subCategory": item.subCategory,
+      "brandName": item.brandName,
+      "count": item.count,
+      "regDate": item.regDate?.toIso8601String(),
+      "expDate": item.expDate?.toIso8601String(),
+      "storageArea": item.storageArea,
+      "memo": item.memo,
+      "nutriUnit": item.nutriUnit,
+      "nutriCapacity": item.nutriCapacity,
+      "nutriKcal": item.nutriKcal,
+      "nutriCarbohydrate": item.nutriCarbohydrate,
+      "nutriProtein": item.nutriProtein,
+      "nutriFat": item.nutriFat,
+      "openItem": item.openItem,
+    };
+
+    try {
+      client.addItem(body);
+    } catch (e) {
+      throw Exception("content_repository/saveContent Error: $e");
+    }
   }
 
   // groupId로 content list 불러오는 함수

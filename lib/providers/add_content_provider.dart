@@ -18,6 +18,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
   // Content 저장 함수
   Future<void> saveItem(
+    int groupId,
     String contentName,
     bool isOpen,
     String category,
@@ -38,8 +39,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     try {
       await _contentRepository.saveContent(
         RefrigeratorItem(
-          itemId: null,
-          isOpenItem: isOpen,
+          itemId: groupId,
           itemName: contentName,
           category: category,
           subCategory: subCategory,
@@ -55,6 +55,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
           nutriCarbohydrate: nutriCarbohydrate,
           nutriProtein: nutriProtein,
           nutriFat: nutriFat,
+          openItem: isOpen,
         ),
       );
     } catch (e) {

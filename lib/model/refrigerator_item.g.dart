@@ -8,7 +8,6 @@ part of 'refrigerator_item.dart';
 
 Refrigerator _$RefrigeratorFromJson(Map<String, dynamic> json) => Refrigerator(
   itemId: (json['itemId'] as num?)?.toInt(),
-  isOpenItem: json['isOpenItem'] as bool?,
   itemName: json['itemName'] as String?,
   category: json['category'] as String?,
   subCategory: json['subCategory'] as String?,
@@ -30,12 +29,12 @@ Refrigerator _$RefrigeratorFromJson(Map<String, dynamic> json) => Refrigerator(
   nutriCarbohydrate: (json['nutriCarbohydrate'] as num?)?.toInt(),
   nutriProtein: (json['nutriProtein'] as num?)?.toInt(),
   nutriFat: (json['nutriFat'] as num?)?.toInt(),
+  openItem: json['openItem'] as bool?,
 );
 
 Map<String, dynamic> _$RefrigeratorToJson(Refrigerator instance) =>
     <String, dynamic>{
       'itemId': instance.itemId,
-      'isOpenItem': instance.isOpenItem,
       'itemName': instance.itemName,
       'category': instance.category,
       'subCategory': instance.subCategory,
@@ -51,4 +50,5 @@ Map<String, dynamic> _$RefrigeratorToJson(Refrigerator instance) =>
       'nutriCarbohydrate': instance.nutriCarbohydrate,
       'nutriProtein': instance.nutriProtein,
       'nutriFat': instance.nutriFat,
+      'openItem': instance.openItem,
     };
