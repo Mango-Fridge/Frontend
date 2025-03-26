@@ -6,9 +6,9 @@ part 'group.g.dart';
 abstract class Group with _$Group {
   const factory Group({
     required int groupId,
-    required String groupCode,
+    final String? groupCode,
     required String groupName,
-    required int groupOwnerId,
+    final int? groupOwnerId,
     final List<GroupUser>? groupUsers,
     final List<GroupHopeUser>? groupHopeUser,
   }) = _Group;
