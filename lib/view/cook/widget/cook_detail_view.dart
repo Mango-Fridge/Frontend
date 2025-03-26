@@ -125,7 +125,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     children: [
                       Text(
                         cookingItem.contentName,
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -133,7 +136,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           vertical: 2.0,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey[300], // 노란색 배경
+                          color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Center(
@@ -158,10 +161,19 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               ...filteredItems.map((Content item) {
+                int cookingListCount = widget.cook!.cookingItems
+                    .where(
+                      (cookingItem) => cookingItem.category == item.category,
+                    )
+                    .fold(0, (sum, cookingItem) => sum + (cookingItem.count));
+
                 return Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color:
+                        (item.count < cookingListCount)
+                            ? Colors.red[100]
+                            : Colors.white, // 조건에 따라 색상 변경
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Row(
@@ -169,7 +181,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     children: <Widget>[
                       Text(
                         item.contentName,
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -177,7 +192,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           vertical: 2.0,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey[300], // 노란색 배경
+                          color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Center(

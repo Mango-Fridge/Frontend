@@ -21,7 +21,7 @@ List<Content> sampleContentList = [
     contentId: 2,
     contentName: "닭가슴살",
     category: "육류",
-    count: 5,
+    count: 0,
     regDate: DateTime(2025, 3, 2),
     expDate: DateTime(2025, 3, 20),
     storageArea: "냉동",
