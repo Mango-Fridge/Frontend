@@ -128,9 +128,12 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         style: const TextStyle(fontSize: 14),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6.0,
+                          vertical: 2.0,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.amber[100], // 노란색 배경
+                          color: Colors.grey[300], // 노란색 배경
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Center(
@@ -169,9 +172,12 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         style: const TextStyle(fontSize: 14),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6.0,
+                          vertical: 2.0,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.amber[100], // 노란색 배경
+                          color: Colors.grey[300], // 노란색 배경
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Center(
@@ -191,7 +197,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
               }),
 
               // 필요한 물품 알려주는 하단 박스
-              // 냉장고에 재료가 부족할 경우 해당 박스 표시
+              // 냉장고에 재료가 부족할 경우에만 -> 해당 박스 표시
               missingIngredients.isNotEmpty
                   ? Container(
                     padding: const EdgeInsets.all(16.0),
