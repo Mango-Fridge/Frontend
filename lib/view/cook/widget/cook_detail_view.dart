@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
+import 'package:mango/services/sample_content_repository.dart';
 
 class CookDetailView extends ConsumerStatefulWidget {
   final Cook? cook;
@@ -12,19 +13,12 @@ class CookDetailView extends ConsumerStatefulWidget {
 }
 
 class _CookDetailViewState extends ConsumerState<CookDetailView> {
-  final List<String> cookIngredientNames = [
-    '양파',
-    '당근',
-    '감자',
-    '마늘',
-    '고추',
-    '돼지고기',
-    '소금',
-    '간장',
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final filteredItems = filterContentsByCategory(
+      widget.cook!.cookingItems.toList(),
+      sampleContentList.toList(),
+    );
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -141,7 +135,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 "일치하는 물품",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              ...widget.cook!.cookingItems.map((Content item) {
+              ...filteredItems.map((Content item) {
                 return Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
@@ -186,7 +180,9 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                             widget.cook!.cookingItems
                                 .map((item) => item.contentName)
                                 .toList(),
-                            cookIngredientNames,
+                            sampleContentList
+                                .map((item) => item.contentName)
+                                .toList(),
                           ).join(', '),
                           style: const TextStyle(
                             fontSize: 14,
@@ -240,5 +236,18 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     return cookIngredientNames.where(
       (name) => !refrigerIngredientNames.contains(name),
     );
+  }
+
+  List<Content> filterContentsByCategory(
+    List<Content> RefrigeratorList,
+    List<Content> CookingList,
+  ) {
+    // CookingList의 category 값을 Set으로 변환 (중복 제거)
+    final categorySet = CookingList.map((content) => content.category).toSet();
+
+    // RefrigeratorList에서 category 값이 두 번째 리스트에 포함된 항목만 필터링
+    return RefrigeratorList.where(
+      (content) => categorySet.contains(content.category),
+    ).toList();
   }
 }
