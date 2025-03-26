@@ -33,7 +33,11 @@ class ContentRepository {
     };
 
     try {
-      client.addItem(body);
+      ApiResponse response = await client.addItem(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[content_repository/saveContent]: Item 정상 저장 완료.");
+      }
     } catch (e) {
       AppLogger.logger.e("[content_repository/saveContent]: $e");
     }
@@ -46,7 +50,12 @@ class ContentRepository {
       ApiResponse response = await client.getContentList(groupId);
 
       if (response.code == 200) {
+        AppLogger.logger.i(
+          "[content_repository/loadContentList]: Content list load 완료.",
+        );
+
         List<dynamic> data = response.data;
+
         return data.map((item) => Content.fromJson(item)).toList();
       } else {
         throw Exception(
@@ -67,7 +76,12 @@ class ContentRepository {
       ApiResponse response = await client.getContent(contentId);
 
       if (response.code == 200) {
+        AppLogger.logger.i(
+          "[content_repository/loadContent]: Content load 완료.",
+        );
+
         Map<String, dynamic> data = response.data;
+
         return Content.fromJson(data);
       } else {
         throw Exception("[content_repository/loadContent]: Json Parse Error");
@@ -95,11 +109,7 @@ class ContentRepository {
       ApiResponse response = await client.setCount(body);
 
       if (response.code == 200) {
-        AppLogger.logger.i(
-          "[content_repository/setCount]: content list 개수 반영 정상 처리 완료.",
-        );
-      } else {
-        throw Exception("[content_repository/setCount]: Json Parse Error");
+        AppLogger.logger.i("[content_repository/setCount]: 물품 개수 반영 완료.");
       }
     } catch (e) {
       AppLogger.logger.e("[content_repository/setCount]: $e");

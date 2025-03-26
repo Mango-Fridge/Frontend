@@ -13,7 +13,12 @@ class ItemRepository {
       ApiResponse response = await client.getItemList(keyword);
 
       if (response.code == 200) {
+        AppLogger.logger.i(
+          "[item_repository/loadItemListByString]: Item list load 완료.",
+        );
+
         List<dynamic> data = response.data['items'];
+
         return data.map((item) => RefrigeratorItem.fromJson(item)).toList();
       } else {
         throw Exception(
