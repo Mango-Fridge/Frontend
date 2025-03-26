@@ -80,7 +80,11 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
         context.go('/home'); // 메인화면으로 이동
       } else {
         debugPrint("[Server] 서버와 통신하지 못했습니다");
-        toastMessage(context, "서버와 통신하지 못했습니다");
+        toastMessage(
+          context,
+          "서버와 통신하지 못했습니다",
+          type: ToastmessageType.errorType,
+        );
         context.go('/login'); // 로그인 화면으로 이동
       }
     } else {

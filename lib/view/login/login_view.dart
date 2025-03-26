@@ -83,7 +83,11 @@ class _LoginButton extends StatelessWidget {
           await ref.read(loginAuthProvider.notifier).login(AuthPlatform.APPLE);
         } catch (e) {
           debugPrint("$e");
-          toastMessage(context, "서버와 통신하지 못했습니다");
+          toastMessage(
+            context,
+            "서버와 통신하지 못했습니다",
+            type: ToastmessageType.errorType,
+          );
         }
       },
     );
@@ -102,7 +106,11 @@ class _LoginButton extends StatelessWidget {
           await ref.read(loginAuthProvider.notifier).login(AuthPlatform.KAKAO);
         } catch (e) {
           debugPrint("$e");
-          toastMessage(context, "서버와 통신하지 못했습니다");
+          toastMessage(
+            context,
+            "서버와 통신하지 못했습니다",
+            type: ToastmessageType.errorType,
+          );
         }
       },
       child: const Text("카카오로그인"),
