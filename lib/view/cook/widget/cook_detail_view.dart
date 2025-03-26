@@ -134,8 +134,8 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           ),
                         ),
                       ),
-                      const Text(
-                        "4개 / 245 kcal",
+                      Text(
+                        "${cookingItem.count} 개 / ${cookingItem.nutriKcal}kcal",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
@@ -175,8 +175,8 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           ),
                         ),
                       ),
-                      const Text(
-                        "12개 / 3,000 kcal",
+                      Text(
+                        "${item.count} 개 / ${item.nutriKcal}kcal",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
