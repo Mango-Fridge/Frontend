@@ -28,4 +28,7 @@ abstract class RestClient {
 
   @POST('/api/items')
   Future<ApiResponse> addItem(@Body() Map<String, Object?> body);
+
+  @PATCH('/api/contents/quantity')
+  Future<ApiResponse> setCount(@Body() Map<String, Object?> body);
 }

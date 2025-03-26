@@ -463,6 +463,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               onPressed: () {
                 ref
                     .watch(refrigeratorNotifier.notifier)
+                    .setCount(
+                      7,
+                      _refrigeratorState?.updateContentList ?? <Content>[],
+                    );
+                ref
+                    .watch(refrigeratorNotifier.notifier)
                     .clearUpdateContentList();
                 ref
                     .watch(refrigeratorNotifier.notifier)

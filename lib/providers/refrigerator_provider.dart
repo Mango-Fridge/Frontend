@@ -47,6 +47,14 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     }
   }
 
+  Future<void> setCount(int groupId, List<Content> contentList) async {
+    try {
+      await _contentRepository.setCount(groupId, contentList);
+    } catch (e) {
+      AppLogger.logger.e('[refrigerator_provider/setCount]: $e');
+    }
+  }
+
   List<Content> getRefrigeratorContentList(List<Content> contentList) {
     List<Content> refrigeratorContentList =
         contentList.where((Content content) {

@@ -76,4 +76,33 @@ class ContentRepository {
       AppLogger.logger.e("[content_repository/loadContent]: $e");
     }
   }
+
+  Future<void> setCount(int groupId, List<Content> contentsList) async {
+    RestClient client = RestClient(dio);
+
+    final Map<String, Object?> body = <String, Object?>{
+      "contents":
+          contentsList.map((Content content) {
+            return <String, int?>{
+              "groupId": groupId,
+              "contentId": content.contentId,
+              "count": content.count,
+            };
+          }).toList(),
+    };
+
+    try {
+      ApiResponse response = await client.setCount(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i(
+          "[content_repository/setCount]: content list 개수 반영 정상 처리 완료.",
+        );
+      } else {
+        throw Exception("[content_repository/setCount]: Json Parse Error");
+      }
+    } catch (e) {
+      AppLogger.logger.e("[content_repository/setCount]: $e");
+    }
+  }
 }
