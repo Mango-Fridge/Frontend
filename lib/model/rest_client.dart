@@ -22,4 +22,7 @@ abstract class RestClient {
 
   @GET('/api/contents/{contentId}')
   Future<ApiResponse> getContent(@Path('contentId') int contentId);
+
+  @GET('/api/items/search')
+  Future<ApiResponse> getItemList(@Query('keyword') String keyword);
 }

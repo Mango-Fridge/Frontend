@@ -17,9 +17,9 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
   }
 
   // 검색어로 부터 Item list load 함수
-  Future<void> loadItemListByString(String searchTerm) async {
+  Future<void> loadItemListByString(String keyword) async {
     final List<RefrigeratorItem> refrigeratorList = await _itemRepository
-        .loadItemListByString(searchTerm);
+        .loadItemListByString(keyword);
     try {
       state = state?.copyWith(refrigeratorItemList: refrigeratorList);
     } catch (e) {
