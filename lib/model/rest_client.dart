@@ -19,4 +19,7 @@ abstract class RestClient {
 
   @GET('/api/contents/group/{groupId}')
   Future<ApiResponse> getContentList(@Path('groupId') int groupId);
+
+  @GET('/api/contents/{contentId}')
+  Future<ApiResponse> getContent(@Path('contentId') int contentId);
 }

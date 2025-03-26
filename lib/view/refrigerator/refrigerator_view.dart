@@ -232,23 +232,42 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              content: ContentDetailView(content: content),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  child: const Text(
-                    '닫기',
-                    style: TextStyle(color: Colors.black),
+            return FutureBuilder(
+              future: ref
+                  .watch(refrigeratorNotifier.notifier)
+                  .loadContent(content.contentId ?? 0),
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<Content?> snapshot,
+              ) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError || snapshot.data == null) {
+                  return const AlertDialog(
+                    title: Text('데이터를 불러 오는 도중 에러가 발생하였습니다.'),
+                  );
+                }
+                final Content loadContent = snapshot.data!;
+
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
-                ),
-              ],
+                  content: ContentDetailView(content: loadContent),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      child: const Text(
+                        '닫기',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                );
+              },
             );
           },
         );

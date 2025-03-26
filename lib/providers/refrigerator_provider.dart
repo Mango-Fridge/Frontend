@@ -36,6 +36,17 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     }
   }
 
+  Future<Content?> loadContent(int contentId) async {
+    try {
+      final Content content = await _contentRepository.loadContent(contentId);
+      return content;
+    } catch (e) {
+      print('refrigerator_provider/loadContent Error: ${e}');
+
+      return null;
+    }
+  }
+
   List<Content> getRefrigeratorContentList(List<Content> contentList) {
     List<Content> refrigeratorContentList =
         contentList.where((Content content) {

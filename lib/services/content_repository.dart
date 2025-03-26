@@ -28,4 +28,20 @@ class ContentRepository {
       throw Exception('loadContentList 오류: $e');
     }
   }
+
+  Future<Content> loadContent(int contentId) async {
+    RestClient client = RestClient(dio);
+    try {
+      ApiResponse response = await client.getContent(contentId);
+
+      if (response.code == 200) {
+        Map<String, dynamic> data = response.data;
+        return Content.fromJson(data);
+      } else {
+        throw Exception('Json 변환 과정 오류');
+      }
+    } catch (e) {
+      throw Exception('loadContent 오류: $e');
+    }
+  }
 }
