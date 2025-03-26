@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:mango/model/api_response.dart';
 import 'package:mango/model/group/group.dart';
+import 'package:mango/model/rest_client.dart';
 
 class GroupRepository {
   // email로 group 불러오는 함수
@@ -37,19 +39,22 @@ class GroupRepository {
     },
   ];
 
-  final Dio _dio = Dio();
-  String _baseUrl = '';
+  final Dio dio = Dio();
 
   // 그룹 생성 API 요청
   Future<Group?> createGroup(int userId, String groupName) async {
-    _baseUrl = 'http://localhost:8080/api/groups/create';
-    try {
-      final response = await _dio.post(
-        _baseUrl,
-        data: {"userId": userId, "groupName": groupName},
-      );
+    RestClient client = RestClient(dio);
 
-      if (response.statusCode == 200) {
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "userId": userId,
+      "groupName": groupName,
+    };
+
+    try {
+      ApiResponse response = await client.postCreateGroup(body);
+
+      if (response.code == 200) {
         return Group.fromJson(response.data);
       } else {
         throw Exception('그룹 생성 실패');

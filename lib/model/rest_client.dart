@@ -19,4 +19,7 @@ abstract class RestClient {
 
   @GET('/api/contents/group/{groupId}')
   Future<ApiResponse> getContentList(@Path('groupId') int groupId);
+
+  @POST('/api/groups/create')
+  Future<ApiResponse> postCreateGroup(@Body() Map<String, Object?> body);
 }

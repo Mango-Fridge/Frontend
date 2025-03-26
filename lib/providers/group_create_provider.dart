@@ -27,9 +27,9 @@ class GroupCreateNotifier extends Notifier<GroupState> {
   Future<bool> createGroup(int userId, String groupName) async {
     try {
       await groupRepository.createGroup(userId, groupName);
-      return false;
+      return true;
     } catch (e) {
-      state = state.copyWith(errorMessage: '$e', isButton: false);
+      state = state.copyWith(errorMessage: '$e', isButton: false, isLoadingButton: false);
       return false;
     } 
   }
