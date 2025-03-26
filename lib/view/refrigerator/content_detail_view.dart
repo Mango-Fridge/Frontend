@@ -31,7 +31,7 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
               Text(
                 widget.content.contentName,
                 style: const TextStyle(
-                  fontSize: 22,
+                  fontSize: Design.itemNameFontSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),

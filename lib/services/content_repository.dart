@@ -19,7 +19,7 @@ class ContentRepository {
       ApiResponse response = await client.getContentList(groupId);
 
       if (response.code == 200) {
-        List<dynamic> data = response.data['items'];
+        List<dynamic> data = response.data;
         return data.map((item) => Content.fromJson(item)).toList();
       } else {
         throw Exception('Json 변환 과정 오류');

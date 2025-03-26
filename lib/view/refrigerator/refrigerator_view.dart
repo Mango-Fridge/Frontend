@@ -34,7 +34,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(refrigeratorNotifier.notifier).resetState();
       ref.watch(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
-      ref.watch(refrigeratorNotifier.notifier).loadContentList(6);
+      ref.watch(refrigeratorNotifier.notifier).loadContentList(7);
     });
   }
 
@@ -289,7 +289,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   Text(
                     content.contentName,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: Design.normalFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -326,7 +326,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   child: Text(
                     '${content.count}',
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: Design.normalFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -120,11 +120,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextField(
-          //focusNode: _focusNode,
           controller: nameController,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 19.0,
+            fontSize: Design.itemNameFontSize,
             fontWeight: FontWeight.bold,
           ),
           decoration: InputDecoration(
@@ -388,7 +387,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           children: <Widget>[
             Text(
               '선택 사항',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: Design.normalFontSize,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Tooltip(
               triggerMode: TooltipTriggerMode.tap,
@@ -431,7 +433,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           children: <Widget>[
             Text(
               '영양 성분',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: Design.normalFontSize,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Tooltip(
               triggerMode: TooltipTriggerMode.tap,

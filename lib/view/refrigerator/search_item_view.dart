@@ -129,7 +129,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                   Text(
                     item.itemName ?? '',
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: Design.normalFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -172,7 +172,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         const Text(
           "찾고 싶은 물품을 검색하거나,\n원하는 물품이 없다면 직접 추가해 보세요!",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: Design.normalFontSize),
         ),
         ElevatedButton(
           onPressed: () {

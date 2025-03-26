@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 class Design {
+  static const double normalFontSize = 16;
+  static const double itemNameFontSize = 22;
   final double screenWidth; // 시스템 가로
   final double screenHeight; // 시스템 세로
   final double marginAndPadding; // 기본 마진 및 패딩
