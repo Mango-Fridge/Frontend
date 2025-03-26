@@ -52,11 +52,24 @@ class GroupRepository {
       if (response.statusCode == 200) {
         return Group.fromJson(response.data);
       } else {
-        throw Exception('Failed to create group');
+        throw Exception('그룹 생성 실패');
       }
-    } catch (e) {
-      print("Error creating group: $e");
-      return null;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final errorData = e.response!.data;
+
+        // 'error' 안에 'message'가 있을 경우
+        if (errorData is Map<String, dynamic> &&
+            errorData.containsKey("error") &&
+            errorData["error"] is Map<String, dynamic> &&
+            errorData["error"].containsKey("message")) {
+          throw Exception('${errorData["error"]["message"]}');
+        } else {
+          throw Exception('서버 응답 오류: ${e.response!.statusCode}');
+        }
+      } else {
+        throw Exception('네트워크 오류 발생: ${e.message}');
+      }
     }
   }
 }

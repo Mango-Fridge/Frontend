@@ -53,14 +53,20 @@ class GroupCreateView extends ConsumerWidget {
               text: "생성하기",
               onPressed:
                   groupState.isButton
-                      ? () {
-                        groupNotifier.createGroup(authInfo.usrId ?? 0, '${groupState.groupName}'); // Group Create API: 그룹 생성
-                        ref.read(grouViewStateProvider.notifier).state = GroupViewState.exist; // 그룹 생성으로 그룹 존재 뷰로
-                        context.pop(); // Sheet 닫기
-                        toastMessage(
-                          context,
-                          "'${groupState.groupName}' 그룹이 생성되었습니다.",
-                        );
+                      ? () async {
+                        // Group Create API: 그룹 생성
+                        if (await groupNotifier.createGroup(
+                          authInfo.usrId ?? 0,
+                          '${groupState.groupName}',
+                        )) {
+                          ref.read(grouViewStateProvider.notifier).state =
+                              GroupViewState.exist; // 그룹 생성으로 그룹 존재 뷰로
+                          context.pop(); // Sheet 닫기
+                          toastMessage(
+                            context,
+                            "'${groupState.groupName}' 그룹이 생성되었습니다.",
+                          );
+                        }
                       }
                       : null,
             ),
