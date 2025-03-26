@@ -210,59 +210,78 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   ),
                 );
               }),
-
-              // 필요한 물품 알려주는 하단 박스
-              // 냉장고에 재료가 부족할 경우에만 -> 해당 박스 표시
-              missingIngredients.isNotEmpty
-                  ? Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.amber[100],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const Text(
-                              "해당 음식을 만들기 위해 필요한 재료는",
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            Text(
-                              "${getMissingCookIngredients(widget.cook!.cookingItems, sampleContentList).join(', ')} 입니다.",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                  : Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.green[100], // 배경색 변경 (선택 사항)
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "현재 냉장고 재료로 ${widget.cook?.cookingName}을(를) 만들 수 있습니다!",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
             ],
           ),
         ),
       ),
+
+      bottomSheet:
+          // 필요한 물품 알려주는 하단 박스
+          // 냉장고에 재료가 부족할 경우에만 -> 해당 박스 표시
+          missingIngredients.isNotEmpty
+              ? Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(25.0),
+                child: Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.amber[100],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            "해당 음식을 만들기 위해 필요한 재료는",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            "${getMissingCookIngredients(widget.cook!.cookingItems, sampleContentList).join(', ')} 입니다.",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              : Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(25.0),
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "현재 냉장고 재료로 ${widget.cook?.cookingName}을(를) 만들 수 있습니다!",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
     );
   }
 
