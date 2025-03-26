@@ -16,6 +16,16 @@ class GroupNotifier extends Notifier<Group?> {
       state = null;
     }
   }
+
+  Future<void> groupUserList(int userId, int groupId) async {
+    try {
+      final Group group = await _groupRepository.groupUserList(userId, groupId);
+      state = group;
+    } catch (e) {
+      print(e);
+      state = null;
+    }
+  }
 }
 
 final NotifierProvider<GroupNotifier, Group?> groupProvider =

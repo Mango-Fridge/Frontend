@@ -14,7 +14,6 @@ class GroupRepository {
 
     try {
       ApiResponse response = await client.getGroupInfo(userId);
-      print(response.code);
 
       // 통신이 성공하고, 데이터 값이 비어있지 않을 경우
       if (response.code == 200 && response.data != null) {
@@ -46,6 +45,42 @@ class GroupRepository {
     try {
       ApiResponse response = await client.postCreateGroup(body);
 
+      if (response.code == 200) {
+        return Group.fromJson(response.data);
+      } else {
+        throw Exception('그룹 생성 실패');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final errorData = e.response!.data;
+
+        // 'error' 안에 'message'가 있을 경우
+        if (errorData is Map<String, dynamic> &&
+            errorData.containsKey("error") &&
+            errorData["error"] is Map<String, dynamic> &&
+            errorData["error"].containsKey("message")) {
+          throw Exception('${errorData["error"]["message"]}');
+        } else {
+          throw Exception('서버 응답 오류: ${e.response!.statusCode}');
+        }
+      } else {
+        throw Exception('네트워크 오류 발생: ${e.message}');
+      }
+    }
+  }
+  
+  Future<Group> groupUserList(int userId, int groupId) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "userId": userId,
+      "groupId": groupId,
+    };
+
+    try {
+      ApiResponse response = await client.postGroupUserList(body);
+      print('안녕');
       if (response.code == 200) {
         return Group.fromJson(response.data);
       } else {
