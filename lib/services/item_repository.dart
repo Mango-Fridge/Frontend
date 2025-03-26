@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/model/rest_client.dart';
@@ -15,10 +16,14 @@ class ItemRepository {
         List<dynamic> data = response.data['items'];
         return data.map((item) => RefrigeratorItem.fromJson(item)).toList();
       } else {
-        throw Exception('Json 변환 과정 오류');
+        throw Exception(
+          "[item_repository/loadItemListByString]: Json Parse Error",
+        );
       }
     } catch (e) {
-      throw Exception('loadContentList 오류: $e');
+      AppLogger.logger.e("[item_repository/loadItemListByString]: $e");
+
+      return <RefrigeratorItem>[];
     }
     // await Future.delayed(Duration(seconds: 1));
     // return <RefrigeratorItem>[

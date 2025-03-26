@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/services/item_repository.dart';
 import 'package:mango/state/search_item_state.dart';
@@ -23,6 +24,7 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
     try {
       state = state?.copyWith(refrigeratorItemList: refrigeratorList);
     } catch (e) {
+      AppLogger.logger.e("[search_item_provider/loadItemListByString]: $e");
       state = null;
     }
   }

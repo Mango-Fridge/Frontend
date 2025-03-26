@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/refrigerator_item.dart';
@@ -34,7 +35,7 @@ class ContentRepository {
     try {
       client.addItem(body);
     } catch (e) {
-      throw Exception("content_repository/saveContent Error: $e");
+      AppLogger.logger.e("[content_repository/saveContent]: $e");
     }
   }
 
@@ -48,14 +49,19 @@ class ContentRepository {
         List<dynamic> data = response.data;
         return data.map((item) => Content.fromJson(item)).toList();
       } else {
-        throw Exception('Json 변환 과정 오류');
+        throw Exception(
+          '[content_repository/loadContentList]: Json Parse Error',
+        );
       }
     } catch (e) {
-      throw Exception('loadContentList 오류: $e');
+      AppLogger.logger.e("[content_repository/loadContentList]: $e");
+
+      return <Content>[];
     }
   }
 
-  Future<Content> loadContent(int contentId) async {
+  // contentId로 개별 content 불러오는 함수
+  Future<Content?> loadContent(int contentId) async {
     RestClient client = RestClient(dio);
     try {
       ApiResponse response = await client.getContent(contentId);
@@ -64,10 +70,10 @@ class ContentRepository {
         Map<String, dynamic> data = response.data;
         return Content.fromJson(data);
       } else {
-        throw Exception('Json 변환 과정 오류');
+        throw Exception("[content_repository/loadContent]: Json Parse Error");
       }
     } catch (e) {
-      throw Exception('loadContent 오류: $e');
+      AppLogger.logger.e("[content_repository/loadContent]: $e");
     }
   }
 }

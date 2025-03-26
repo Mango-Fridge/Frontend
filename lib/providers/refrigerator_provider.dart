@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/services/content_repository.dart';
 import 'package:mango/state/refrigerator_state.dart';
@@ -32,18 +33,17 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       _refrigeratorState.contentList = contentList;
       state = _refrigeratorState;
     } catch (e) {
-      state = null;
+      AppLogger.logger.e('[refrigerator_provider/loadContentList]: $e');
     }
   }
 
   Future<Content?> loadContent(int contentId) async {
     try {
-      final Content content = await _contentRepository.loadContent(contentId);
+      final Content? content = await _contentRepository.loadContent(contentId);
+
       return content;
     } catch (e) {
-      print('refrigerator_provider/loadContent Error: ${e}');
-
-      return null;
+      AppLogger.logger.e('[refrigerator_provider/loadContent]: $e');
     }
   }
 
