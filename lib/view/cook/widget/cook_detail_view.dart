@@ -16,8 +16,8 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
   @override
   Widget build(BuildContext context) {
     final filteredItems = filterContentsByCategory(
-      widget.cook!.cookingItems.toList(),
       sampleContentList.toList(),
+      widget.cook!.cookingItems.toList(),
     );
     return Scaffold(
       appBar: AppBar(
@@ -121,6 +121,19 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         cookingItem.contentName,
                         style: const TextStyle(fontSize: 14),
                       ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.amber[100], // 노란색 배경
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            cookingItem.category ?? '',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
                       const Text(
                         "4개 / 245 kcal",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -148,6 +161,19 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                       Text(
                         item.contentName,
                         style: const TextStyle(fontSize: 14),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.amber[100], // 노란색 배경
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            item.category ?? '',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
                       ),
                       const Text(
                         "12개 / 3,000 kcal",
