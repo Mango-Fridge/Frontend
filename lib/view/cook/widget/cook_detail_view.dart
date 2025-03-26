@@ -215,7 +215,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
         ),
       ),
 
-      bottomSheet:
+      bottomNavigationBar:
           // 필요한 물품 알려주는 하단 박스
           // 냉장고에 재료가 부족할 경우에만 -> 해당 박스 표시
           missingIngredients.isNotEmpty
