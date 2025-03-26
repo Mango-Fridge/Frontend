@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
+import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/providers/group_create_provider.dart';
@@ -20,7 +21,7 @@ class GroupCreateView extends ConsumerWidget {
     final GroupCreateNotifier groupNotifier = ref.read(
       groupCreateProvider.notifier,
     );
-    AuthInfo authInfo = const AuthInfo();
+    final AuthInfo? user = ref.watch(loginAuthProvider);
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
@@ -56,7 +57,7 @@ class GroupCreateView extends ConsumerWidget {
                       ? () async {
                         // Group Create API: 그룹 생성
                         if (await groupNotifier.createGroup(
-                          authInfo.usrId ?? 0,
+                          user?.usrId ?? 0,
                           '${groupState.groupName}',
                         )) {
                           ref.read(grouViewStateProvider.notifier).state =
