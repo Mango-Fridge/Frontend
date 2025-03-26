@@ -11,7 +11,6 @@ class GroupRepository {
     RestClient client = RestClient(dio);
 
     await Future.delayed(Duration(seconds: 1));
-    // 전송할 데이터
 
     try {
       ApiResponse response = await client.getGroupInfo(userId);
