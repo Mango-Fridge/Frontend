@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
+import 'package:mango/services/sample_content_repository.dart';
 
 class CookDetailView extends ConsumerStatefulWidget {
   final Cook? cook;
@@ -12,19 +13,18 @@ class CookDetailView extends ConsumerStatefulWidget {
 }
 
 class _CookDetailViewState extends ConsumerState<CookDetailView> {
-  final List<String> cookIngredientNames = [
-    '양파',
-    '당근',
-    '감자',
-    '마늘',
-    '고추',
-    '돼지고기',
-    '소금',
-    '간장',
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final filteredItems = filterContentsByCategory(
+      sampleContentList.toList(),
+      widget.cook!.cookingItems.toList(),
+    );
+
+    final missingIngredients = getMissingCookIngredients(
+      widget.cook!.cookingItems,
+      sampleContentList,
+    );
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -125,10 +125,29 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     children: [
                       Text(
                         cookingItem.contentName,
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      const Text(
-                        "4개 / 245 kcal",
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6.0,
+                          vertical: 2.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            cookingItem.category ?? '',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "${cookingItem.count} 개 / ${cookingItem.nutriKcal}kcal",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
@@ -141,11 +160,20 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 "일치하는 물품",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              ...widget.cook!.cookingItems.map((Content item) {
+              ...filteredItems.map((Content item) {
+                int cookingListCount = widget.cook!.cookingItems
+                    .where(
+                      (cookingItem) => cookingItem.category == item.category,
+                    )
+                    .fold(0, (sum, cookingItem) => sum + (cookingItem.count));
+
                 return Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color:
+                        (item.count < cookingListCount)
+                            ? Colors.red[100]
+                            : Colors.white, // 조건에 따라 색상 변경
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Row(
@@ -153,56 +181,107 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     children: <Widget>[
                       Text(
                         item.contentName,
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      const Text(
-                        "12개 / 3,000 kcal",
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6.0,
+                          vertical: 2.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            item.category ?? '',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "${item.count} 개 / ${item.nutriKcal}kcal",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
                   ),
                 );
               }),
-
-              // 필요한 물품 알려주는 하단 박스
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.amber[100],
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        const Text(
-                          "해당 음식을 만들기 위해 필요한 재료는",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Text(
-                          getMissingCookIngredients(
-                            widget.cook!.cookingItems
-                                .map((item) => item.contentName)
-                                .toList(),
-                            cookIngredientNames,
-                          ).join(', '),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Text('입니다.', style: TextStyle(fontSize: 14)),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
       ),
+
+      bottomNavigationBar:
+          // 필요한 물품 알려주는 하단 박스
+          // 냉장고에 재료가 부족할 경우에만 -> 해당 박스 표시
+          missingIngredients.isNotEmpty
+              ? Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(25.0),
+                child: Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.amber[100],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            "해당 음식을 만들기 위해 필요한 재료는",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            "${getMissingCookIngredients(widget.cook!.cookingItems, sampleContentList).join(', ')} 입니다.",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              : Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(25.0),
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "현재 냉장고 재료로 ${widget.cook?.cookingName}을(를) 만들 수 있습니다!",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
     );
   }
 
@@ -233,12 +312,40 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     );
   }
 
-  Iterable<String> getMissingCookIngredients(
-    List<String> cookIngredientNames,
-    List<String> refrigerIngredientNames,
+  // 냉장고에 존재하지 않는 요리 재료 표시 함수
+  List<String> getMissingCookIngredients(
+    List<Content> cookIngredients,
+    List<Content> refrigerIngredients,
   ) {
-    return cookIngredientNames.where(
-      (name) => !refrigerIngredientNames.contains(name),
-    );
+    // refrigerIngredients에서 카테고리 리스트 추출
+    final refrigerCategories =
+        refrigerIngredients
+            .map((item) => item.category)
+            .where((category) => category != null)
+            .toSet(); // 중복 제거
+
+    // cookIngredients에서 refrigerCategories에 없는 항목 필터링
+    return cookIngredients
+        .where(
+          (item) =>
+              item.category != null &&
+              !refrigerCategories.contains(item.category),
+        )
+        .map((item) => item.contentName)
+        .toList();
+  }
+
+  // 일치하는 물품 반환하는 함수
+  List<Content> filterContentsByCategory(
+    List<Content> RefrigeratorList,
+    List<Content> CookingList,
+  ) {
+    // CookingList의 category 값을 Set으로 변환 (중복 제거)
+    final categorySet = CookingList.map((content) => content.category).toSet();
+
+    // RefrigeratorList에서 category 값이 두 번째 리스트에 포함된 항목만 필터링
+    return RefrigeratorList.where(
+      (content) => categorySet.contains(content.category),
+    ).toList();
   }
 }
