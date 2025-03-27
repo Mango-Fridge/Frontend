@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/services/item_repository.dart';
 import 'package:mango/state/search_item_state.dart';
@@ -17,12 +18,13 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
   }
 
   // 검색어로 부터 Item list load 함수
-  Future<void> loadItemListByString(String searchTerm) async {
+  Future<void> loadItemListByString(String keyword) async {
     final List<RefrigeratorItem> refrigeratorList = await _itemRepository
-        .loadItemListByString(searchTerm);
+        .loadItemListByString(keyword);
     try {
       state = state?.copyWith(refrigeratorItemList: refrigeratorList);
     } catch (e) {
+      AppLogger.logger.e("[search_item_provider/loadItemListByString]: $e");
       state = null;
     }
   }

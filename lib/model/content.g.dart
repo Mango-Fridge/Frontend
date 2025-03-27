@@ -10,6 +10,8 @@ _Content _$ContentFromJson(Map<String, dynamic> json) => _Content(
   contentId: (json['contentId'] as num?)?.toInt(),
   contentName: json['contentName'] as String,
   category: json['category'] as String?,
+  subCategory: json['subCategory'] as String?,
+  brandName: json['brandName'] as String?,
   count: (json['count'] as num).toInt(),
   regDate:
       json['regDate'] == null
@@ -33,6 +35,8 @@ Map<String, dynamic> _$ContentToJson(_Content instance) => <String, dynamic>{
   'contentId': instance.contentId,
   'contentName': instance.contentName,
   'category': instance.category,
+  'subCategory': instance.subCategory,
+  'brandName': instance.brandName,
   'count': instance.count,
   'regDate': instance.regDate?.toIso8601String(),
   'expDate': instance.expDate?.toIso8601String(),

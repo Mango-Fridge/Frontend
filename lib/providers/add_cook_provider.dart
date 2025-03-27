@@ -47,7 +47,9 @@ class AddCookNotifier extends Notifier<AddCookState> {
       cookItemList =
           cookItemList.map((RefrigeratorItem cookItem) {
             if (cookItem.itemId == item.itemId) {
-              return cookItem.copyWith(count: cookItem.count + state.itemCount);
+              return cookItem.copyWith(
+                count: (cookItem.count ?? 0) + state.itemCount,
+              );
             }
             return cookItem;
           }).toList();
@@ -63,7 +65,8 @@ class AddCookNotifier extends Notifier<AddCookState> {
     if (state.itemListForCook != null) {
       result = state.itemListForCook!.fold(
         0,
-        (int sum, RefrigeratorItem item) => sum + item.count * item.nutriKcal,
+        (int sum, RefrigeratorItem item) =>
+            sum + (item.count ?? 0) * (item.nutriKcal ?? 0),
       );
     }
 
@@ -78,7 +81,7 @@ class AddCookNotifier extends Notifier<AddCookState> {
       result = state.itemListForCook!.fold(
         0,
         (int sum, RefrigeratorItem item) =>
-            sum + item.count * item.nutriCarbohydrate,
+            sum + (item.count ?? 0) * (item.nutriCarbohydrate ?? 0),
       );
     }
 
@@ -93,7 +96,7 @@ class AddCookNotifier extends Notifier<AddCookState> {
       result = state.itemListForCook!.fold(
         0,
         (int sum, RefrigeratorItem item) =>
-            sum + item.count * item.nutriProtein,
+            sum + (item.count ?? 0) * (item.nutriProtein ?? 0),
       );
     }
 
@@ -107,7 +110,8 @@ class AddCookNotifier extends Notifier<AddCookState> {
     if (state.itemListForCook != null) {
       result = state.itemListForCook!.fold(
         0,
-        (int sum, RefrigeratorItem item) => sum + item.count * item.nutriFat,
+        (int sum, RefrigeratorItem item) =>
+            sum + (item.count ?? 0) * (item.nutriFat ?? 0),
       );
     }
 

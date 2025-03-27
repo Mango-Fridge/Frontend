@@ -258,7 +258,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
-                item.itemName,
+                item.itemName ?? '',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -276,7 +276,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
               style: const TextStyle(fontSize: 12),
             ),
-            Text(item.brandName, style: const TextStyle(fontSize: 12)),
+            Text(item.brandName ?? '', style: const TextStyle(fontSize: 12)),
           ],
         ),
       ],
@@ -292,7 +292,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                item.itemName,
+                item.itemName ?? '',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -300,7 +300,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                "${item.count}개 / ${item.nutriKcal * item.count}Kcal",
+                "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

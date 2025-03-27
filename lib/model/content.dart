@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'content.freezed.dart';
 part 'content.g.dart';
 
@@ -8,6 +9,8 @@ abstract class Content with _$Content {
     required int? contentId,
     required String contentName,
     required String? category,
+    required String? subCategory,
+    required String? brandName,
     required int count,
     required DateTime? regDate,
     required DateTime? expDate,

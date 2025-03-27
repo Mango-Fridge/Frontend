@@ -34,7 +34,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(refrigeratorNotifier.notifier).resetState();
       ref.watch(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
-      ref.watch(refrigeratorNotifier.notifier).loadContentList(6);
+      ref.watch(refrigeratorNotifier.notifier).loadContentList(7);
     });
   }
 
@@ -232,23 +232,42 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              content: ContentDetailView(content: content),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  child: const Text(
-                    '닫기',
-                    style: TextStyle(color: Colors.black),
+            return FutureBuilder(
+              future: ref
+                  .watch(refrigeratorNotifier.notifier)
+                  .loadContent(content.contentId ?? 0),
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<Content?> snapshot,
+              ) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError || snapshot.data == null) {
+                  return const AlertDialog(
+                    title: Text('데이터를 불러 오는 도중 에러가 발생하였습니다.'),
+                  );
+                }
+                final Content loadContent = snapshot.data!;
+
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
-                ),
-              ],
+                  content: ContentDetailView(content: loadContent),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      child: const Text(
+                        '닫기',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                );
+              },
             );
           },
         );
@@ -270,7 +289,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   Text(
                     content.contentName,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: Design.normalFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -307,7 +326,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   child: Text(
                     '${content.count}',
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: Design.normalFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -442,6 +461,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
+                ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .setCount(
+                      7,
+                      _refrigeratorState?.updateContentList ?? <Content>[],
+                    );
                 ref
                     .watch(refrigeratorNotifier.notifier)
                     .clearUpdateContentList();

@@ -10,6 +10,9 @@ class AddContentState {
   DateTime? selectedExpDate;
   String? selectedUnit;
 
+  // 중분류 값 관리
+  String? subCategory;
+
   // 기본 세부 정보 체크
   bool isNameEmpty;
   bool isCheckedCount;
@@ -22,6 +25,9 @@ class AddContentState {
   bool isCarbsEmpty;
   bool isProteinEmpty;
   bool isFatEmpty;
+
+  // 물품 공개 등록 관리
+  bool isOpen;
 
   bool get isNutritionEmpty {
     return isUnitEmpty &&
@@ -40,6 +46,7 @@ class AddContentState {
     this.contentNameErrorMessage,
     this.contentCountErrorMessage,
     this.selectedContentCategory,
+    this.subCategory,
     this.selectedContentStorage,
     this.selectedRegDate,
     this.selectedExpDate,
@@ -53,12 +60,14 @@ class AddContentState {
     this.isCarbsEmpty = false,
     this.isProteinEmpty = false,
     this.isFatEmpty = false,
+    this.isOpen = false,
   });
 
   AddContentState copyWith({
     String? contentNameErrorMessage,
     String? contentCountErrorMessage,
     String? selectedContentCategory,
+    String? subCategory,
     String? selectedContentStorage,
     DateTime? selectedRegDate,
     DateTime? selectedExpDate,
@@ -74,6 +83,8 @@ class AddContentState {
     bool? isCarbsEmpty,
     bool? isProteinEmpty,
     bool? isFatEmpty,
+
+    bool? isOpen,
   }) {
     return AddContentState(
       contentNameErrorMessage:
@@ -82,6 +93,7 @@ class AddContentState {
           contentCountErrorMessage ?? this.contentCountErrorMessage,
       selectedContentCategory:
           selectedContentCategory ?? this.selectedContentCategory,
+      subCategory: subCategory ?? this.subCategory,
       selectedContentStorage:
           selectedContentStorage ?? this.selectedContentStorage,
       selectedRegDate: selectedRegDate ?? this.selectedRegDate,
@@ -98,6 +110,8 @@ class AddContentState {
       isCarbsEmpty: isCarbsEmpty ?? this.isCarbsEmpty,
       isProteinEmpty: isProteinEmpty ?? this.isProteinEmpty,
       isFatEmpty: isFatEmpty ?? this.isFatEmpty,
+
+      isOpen: isOpen ?? this.isOpen,
     );
   }
 }
