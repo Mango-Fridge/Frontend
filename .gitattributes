@@ -1,0 +1,9 @@
+*.html linguist-vendored
+*.css linguist-vendored
+*.scss linguist-vendored
+*.styl linguist-vendored
+*.php linguist-vendored
+*.less linguist-vendored
+*.java linguist-vendored=false
+*.dart linguist-vendored=false
+*.swift linguist-vendored=false
