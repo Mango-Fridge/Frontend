@@ -7,6 +7,7 @@ import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_content_provider.dart';
 import 'package:mango/providers/group_provider.dart';
+import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_content_state.dart';
 import 'package:mango/toastMessage.dart';
 
@@ -21,6 +22,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   List<String> contentCategory = <String>['육류', '음료류', '채소류', '과자류', '아이스크림류'];
   List<String> contentStorage = <String>['냉장', '냉동'];
 
+  Group? get _group => ref.watch(groupProvider);
   AddContentState? get _addContentState => ref.watch(addContentProvider);
 
   static const int _memoMaxLine = 3;
@@ -602,11 +604,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             label: '물품 등록',
             onPressed:
                 _addContentState?.isDetailInfoEmpty ?? false
-                    ? () {
-                      ref
+                    ? () async {
+                      await ref
                           .watch(addContentProvider.notifier)
                           .saveItem(
-                            7,
+                            _group?.groupId ?? 0,
                             nameController.text,
                             _addContentState?.isOpen ?? false,
                             _addContentState?.selectedContentCategory ??
@@ -640,6 +642,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         context,
                         "${nameController.text}(이)가 정상적으로\n추가되었습니다!",
                       );
+                      await ref
+                          .read(refrigeratorNotifier.notifier)
+                          .loadContentList(_group?.groupId ?? 0);
                       context.pop();
                     }
                     : null,

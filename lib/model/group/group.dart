@@ -13,16 +13,13 @@ abstract class Group with _$Group {
     final List<GroupHopeUser>? groupHopeUser,
   }) = _Group;
 
-  factory Group.fromJson(Map<String, dynamic> json) =>
-      _$GroupFromJson(json);
+  factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 }
 
 @freezed
 abstract class GroupUser with _$GroupUser {
-  const factory GroupUser({
-    required int userId,
-    required String username,
-  }) = _GroupUser;
+  const factory GroupUser({required int userId, required String username}) =
+      _GroupUser;
 
   factory GroupUser.fromJson(Map<String, dynamic> json) =>
       _$GroupUserFromJson(json);
@@ -30,10 +27,8 @@ abstract class GroupUser with _$GroupUser {
 
 @freezed
 abstract class GroupHopeUser with _$GroupHopeUser {
-  const factory GroupHopeUser({
-    required int userId,
-    required String username,
-  }) = _GroupHopeUser;
+  const factory GroupHopeUser({required int userId, required String username}) =
+      _GroupHopeUser;
 
   factory GroupHopeUser.fromJson(Map<String, dynamic> json) =>
       _$GroupHopeUserFromJson(json);

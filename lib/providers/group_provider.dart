@@ -6,7 +6,7 @@ class GroupNotifier extends Notifier<Group?> {
   final _groupRepository = GroupRepository();
 
   @override
-  Group? build() => null;
+  Group? build() => const Group(groupId: 0, groupName: '');
 
   Future<void> loadGroup(int userId) async {
     try {

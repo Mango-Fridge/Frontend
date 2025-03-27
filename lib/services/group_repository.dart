@@ -10,8 +10,6 @@ class GroupRepository {
   Future<Group> loadGroup(int userId) async {
     RestClient client = RestClient(dio);
 
-    await Future.delayed(Duration(seconds: 1));
-
     try {
       ApiResponse response = await client.getGroupInfo(userId);
 
@@ -68,7 +66,7 @@ class GroupRepository {
       }
     }
   }
-  
+
   Future<Group> groupUserList(int userId, int groupId) async {
     RestClient client = RestClient(dio);
 

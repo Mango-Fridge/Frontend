@@ -31,7 +31,12 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       );
       _refrigeratorState.expContentList = getExpContentList(contentList);
       _refrigeratorState.contentList = contentList;
-      state = _refrigeratorState;
+      state = state?.copyWith(
+        refrigeratorContentList: _refrigeratorState.refrigeratorContentList,
+        freezerContentList: _refrigeratorState.freezerContentList,
+        expContentList: _refrigeratorState.expContentList,
+        contentList: _refrigeratorState.contentList,
+      );
     } catch (e) {
       AppLogger.logger.e('[refrigerator_provider/loadContentList]: $e');
     }

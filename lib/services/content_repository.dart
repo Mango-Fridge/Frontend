@@ -46,6 +46,7 @@ class ContentRepository {
   // groupId로 content list 불러오는 함수
   Future<List<Content>> loadContentList(int groupId) async {
     RestClient client = RestClient(dio);
+
     try {
       ApiResponse response = await client.getContentList(groupId);
 

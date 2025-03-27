@@ -25,16 +25,17 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Group? get _group => ref.watch(groupProvider);
   RefrigeratorState? get _refrigeratorState => ref.watch(refrigeratorNotifier);
 
-  // initState()로 watch하니까 자꾸 에러나서 찾아보니 initState 후에 호출되는 함수라고 하여 사용.
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
     // view init 후 데이터 처리를 하기 위함
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(refrigeratorNotifier.notifier).resetState();
-      ref.watch(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
-      ref.watch(refrigeratorNotifier.notifier).loadContentList(7);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(refrigeratorNotifier.notifier).resetState();
+      await ref.read(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
+      await ref
+          .read(refrigeratorNotifier.notifier)
+          .loadContentList(_group?.groupId ?? 0);
     });
   }
 
@@ -57,70 +58,64 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Stack(
+      body: Column(
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const SizedBox(height: 20),
+                Row(
                   children: <Widget>[
-                    const SizedBox(height: 20),
-                    Row(
-                      children: <Widget>[
-                        // 새로고침 버튼
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.refresh),
+                    // 새로고침 버튼
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.refresh),
+                    ),
+                    // 물품 추가 버튼
+                    ElevatedButton(
+                      onPressed: () {
+                        ref.watch(refrigeratorNotifier.notifier).resetState();
+                        ref
+                            .watch(refrigeratorNotifier.notifier)
+                            .loadContentList(_group?.groupId ?? 0);
+                        context.push('/searchContent');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
                         ),
-                        // 물품 추가 버튼
-                        ElevatedButton(
-                          onPressed: () {
-                            ref
-                                .watch(refrigeratorNotifier.notifier)
-                                .resetState();
-                            ref
-                                .watch(refrigeratorNotifier.notifier)
-                                .loadContentList(123456789);
-                            context.push('/searchContent');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            backgroundColor: Colors.amber[300],
-                            foregroundColor: Colors.black,
-                          ),
-                          child: const Text('물품 추가'),
-                        ),
-                      ],
+                        backgroundColor: Colors.amber[300],
+                        foregroundColor: Colors.black,
+                      ),
+                      child: const Text('물품 추가'),
                     ),
                   ],
                 ),
-              ),
-              // 물품 List
-              Expanded(
-                child:
-                    (_group?.groupName ?? '').isEmpty
-                        ? const Center(
-                          child: Text(
-                            "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                        : ListView(
-                          padding: EdgeInsets.zero,
-                          children: <Widget>[
-                            _buildContent(_refrigeratorState?.contentList),
-                          ],
-                        ),
-              ),
-
-              if (_refrigeratorState?.isUpdatedContent ?? false)
-                _contentUpdateView(),
-            ],
+              ],
+            ),
           ),
+          // 물품 List
+          Expanded(
+            child:
+                (_group?.groupName ?? '').isEmpty
+                    ? const Center(
+                      child: Text(
+                        "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                    : ListView(
+                      padding: EdgeInsets.zero,
+                      children: <Widget>[
+                        _buildContent(_refrigeratorState?.contentList),
+                      ],
+                    ),
+          ),
+
+          if (_refrigeratorState?.isUpdatedContent ?? false)
+            _contentUpdateView(),
         ],
       ),
 
