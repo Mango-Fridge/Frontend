@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Group {
 
- int get groupId; String get groupCode; String get groupName; int get groupOwnerId; List<GroupUser>? get groupUsers; List<GroupHopeUser>? get groupHopeUser;
+ int get groupId; String? get groupCode; String get groupName; int? get groupOwnerId; List<GroupUser>? get groupUsers; List<GroupHopeUser>? get groupHopeUser;
 /// Create a copy of Group
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $GroupCopyWith<$Res>  {
   factory $GroupCopyWith(Group value, $Res Function(Group) _then) = _$GroupCopyWithImpl;
 @useResult
 $Res call({
- int groupId, String groupCode, String groupName, int groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUser
+ int groupId, String? groupCode, String groupName, int? groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUser
 });
 
 
@@ -66,13 +66,13 @@ class _$GroupCopyWithImpl<$Res>
 
 /// Create a copy of Group
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? groupId = null,Object? groupCode = null,Object? groupName = null,Object? groupOwnerId = null,Object? groupUsers = freezed,Object? groupHopeUser = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? groupId = null,Object? groupCode = freezed,Object? groupName = null,Object? groupOwnerId = freezed,Object? groupUsers = freezed,Object? groupHopeUser = freezed,}) {
   return _then(_self.copyWith(
 groupId: null == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
-as int,groupCode: null == groupCode ? _self.groupCode : groupCode // ignore: cast_nullable_to_non_nullable
-as String,groupName: null == groupName ? _self.groupName : groupName // ignore: cast_nullable_to_non_nullable
-as String,groupOwnerId: null == groupOwnerId ? _self.groupOwnerId : groupOwnerId // ignore: cast_nullable_to_non_nullable
-as int,groupUsers: freezed == groupUsers ? _self.groupUsers : groupUsers // ignore: cast_nullable_to_non_nullable
+as int,groupCode: freezed == groupCode ? _self.groupCode : groupCode // ignore: cast_nullable_to_non_nullable
+as String?,groupName: null == groupName ? _self.groupName : groupName // ignore: cast_nullable_to_non_nullable
+as String,groupOwnerId: freezed == groupOwnerId ? _self.groupOwnerId : groupOwnerId // ignore: cast_nullable_to_non_nullable
+as int?,groupUsers: freezed == groupUsers ? _self.groupUsers : groupUsers // ignore: cast_nullable_to_non_nullable
 as List<GroupUser>?,groupHopeUser: freezed == groupHopeUser ? _self.groupHopeUser : groupHopeUser // ignore: cast_nullable_to_non_nullable
 as List<GroupHopeUser>?,
   ));
@@ -85,13 +85,13 @@ as List<GroupHopeUser>?,
 @JsonSerializable()
 
 class _Group implements Group {
-  const _Group({required this.groupId, required this.groupCode, required this.groupName, required this.groupOwnerId, final  List<GroupUser>? groupUsers, final  List<GroupHopeUser>? groupHopeUser}): _groupUsers = groupUsers,_groupHopeUser = groupHopeUser;
+  const _Group({required this.groupId, this.groupCode, required this.groupName, this.groupOwnerId, final  List<GroupUser>? groupUsers, final  List<GroupHopeUser>? groupHopeUser}): _groupUsers = groupUsers,_groupHopeUser = groupHopeUser;
   factory _Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
 @override final  int groupId;
-@override final  String groupCode;
+@override final  String? groupCode;
 @override final  String groupName;
-@override final  int groupOwnerId;
+@override final  int? groupOwnerId;
  final  List<GroupUser>? _groupUsers;
 @override List<GroupUser>? get groupUsers {
   final value = _groupUsers;
@@ -144,7 +144,7 @@ abstract mixin class _$GroupCopyWith<$Res> implements $GroupCopyWith<$Res> {
   factory _$GroupCopyWith(_Group value, $Res Function(_Group) _then) = __$GroupCopyWithImpl;
 @override @useResult
 $Res call({
- int groupId, String groupCode, String groupName, int groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUser
+ int groupId, String? groupCode, String groupName, int? groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUser
 });
 
 
@@ -161,13 +161,13 @@ class __$GroupCopyWithImpl<$Res>
 
 /// Create a copy of Group
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? groupId = null,Object? groupCode = null,Object? groupName = null,Object? groupOwnerId = null,Object? groupUsers = freezed,Object? groupHopeUser = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? groupId = null,Object? groupCode = freezed,Object? groupName = null,Object? groupOwnerId = freezed,Object? groupUsers = freezed,Object? groupHopeUser = freezed,}) {
   return _then(_Group(
 groupId: null == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
-as int,groupCode: null == groupCode ? _self.groupCode : groupCode // ignore: cast_nullable_to_non_nullable
-as String,groupName: null == groupName ? _self.groupName : groupName // ignore: cast_nullable_to_non_nullable
-as String,groupOwnerId: null == groupOwnerId ? _self.groupOwnerId : groupOwnerId // ignore: cast_nullable_to_non_nullable
-as int,groupUsers: freezed == groupUsers ? _self._groupUsers : groupUsers // ignore: cast_nullable_to_non_nullable
+as int,groupCode: freezed == groupCode ? _self.groupCode : groupCode // ignore: cast_nullable_to_non_nullable
+as String?,groupName: null == groupName ? _self.groupName : groupName // ignore: cast_nullable_to_non_nullable
+as String,groupOwnerId: freezed == groupOwnerId ? _self.groupOwnerId : groupOwnerId // ignore: cast_nullable_to_non_nullable
+as int?,groupUsers: freezed == groupUsers ? _self._groupUsers : groupUsers // ignore: cast_nullable_to_non_nullable
 as List<GroupUser>?,groupHopeUser: freezed == groupHopeUser ? _self._groupHopeUser : groupHopeUser // ignore: cast_nullable_to_non_nullable
 as List<GroupHopeUser>?,
   ));

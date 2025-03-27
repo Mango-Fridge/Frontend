@@ -24,14 +24,14 @@ class GroupCreateNotifier extends Notifier<GroupState> {
   }
 
   // 그룹 생성 API 호출
-  Future<void> createGroup(int userId, String groupName) async {
+  Future<bool> createGroup(int userId, String groupName) async {
     try {
       await groupRepository.createGroup(userId, groupName);
+      return true;
     } catch (e) {
-      state = state.copyWith(errorMessage: "오류 발생: ${e.toString()}");
-    } finally {
-      print('${groupName}: 그룹이 생성되었습니다.');
-    }
+      state = state.copyWith(errorMessage: '$e', isButton: false, isLoadingButton: false);
+      return false;
+    } 
   }
 
   // 그룹 생성 유효성 검사 및 업데이트

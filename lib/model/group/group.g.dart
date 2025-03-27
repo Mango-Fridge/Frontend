@@ -8,9 +8,9 @@ part of 'group.dart';
 
 _Group _$GroupFromJson(Map<String, dynamic> json) => _Group(
   groupId: (json['groupId'] as num).toInt(),
-  groupCode: json['groupCode'] as String,
+  groupCode: json['groupCode'] as String?,
   groupName: json['groupName'] as String,
-  groupOwnerId: (json['groupOwnerId'] as num).toInt(),
+  groupOwnerId: (json['groupOwnerId'] as num?)?.toInt(),
   groupUsers:
       (json['groupUsers'] as List<dynamic>?)
           ?.map((e) => GroupUser.fromJson(e as Map<String, dynamic>))
