@@ -16,6 +16,8 @@ List<Content> sampleContentList = [
     nutriCarbohydrate: 14,
     nutriProtein: 0,
     nutriFat: 0,
+    subCategory: '',
+    brandName: '',
   ),
   Content(
     contentId: 2,
@@ -32,6 +34,8 @@ List<Content> sampleContentList = [
     nutriCarbohydrate: 0,
     nutriProtein: 31,
     nutriFat: 3,
+    subCategory: '',
+    brandName: '',
   ),
   Content(
     contentId: 3,
@@ -48,6 +52,8 @@ List<Content> sampleContentList = [
     nutriCarbohydrate: 9,
     nutriProtein: 1,
     nutriFat: 0,
+    subCategory: '',
+    brandName: '',
   ),
   Content(
     contentId: 4,
@@ -64,6 +70,8 @@ List<Content> sampleContentList = [
     nutriCarbohydrate: 28,
     nutriProtein: 2,
     nutriFat: 0,
+    subCategory: '',
+    brandName: '',
   ),
   Content(
     contentId: 5,
@@ -80,5 +88,7 @@ List<Content> sampleContentList = [
     nutriCarbohydrate: 12,
     nutriProtein: 8,
     nutriFat: 5,
+    subCategory: '',
+    brandName: '',
   ),
 ];
