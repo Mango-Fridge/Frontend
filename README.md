@@ -11,6 +11,8 @@
    - 그룹 관련 API 연결
  - 요리
    - 요리 DetailView 관련 로직 구현
+ - 그 외
+   - ToastMessage Type 추가 (기본, 에러)
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
