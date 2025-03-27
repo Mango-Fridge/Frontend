@@ -6,6 +6,7 @@ import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/toastMessage.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 // 로그인 View
@@ -78,7 +79,16 @@ class _LoginButton extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       height: 40,
       onPressed: () async {
-        await ref.read(loginAuthProvider.notifier).login(AuthPlatform.APPLE);
+        try {
+          await ref.read(loginAuthProvider.notifier).login(AuthPlatform.APPLE);
+        } catch (e) {
+          debugPrint("$e");
+          toastMessage(
+            context,
+            "서버와 통신하지 못했습니다",
+            type: ToastmessageType.errorType,
+          );
+        }
       },
     );
   }
@@ -92,7 +102,16 @@ class _LoginButton extends StatelessWidget {
         minimumSize: const Size.fromHeight(40),
       ),
       onPressed: () async {
-        await ref.read(loginAuthProvider.notifier).login(AuthPlatform.KAKAO);
+        try {
+          await ref.read(loginAuthProvider.notifier).login(AuthPlatform.KAKAO);
+        } catch (e) {
+          debugPrint("$e");
+          toastMessage(
+            context,
+            "서버와 통신하지 못했습니다",
+            type: ToastmessageType.errorType,
+          );
+        }
       },
       child: const Text("카카오로그인"),
     );
