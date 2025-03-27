@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
@@ -7,6 +8,7 @@ import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/model/rest_client.dart';
 import 'package:mango/services/login/login_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
+import 'package:mango/toastMessage.dart';
 
 // Kakao Login viewModel
 class KakaoAuthService implements AbstractAuth {
@@ -36,12 +38,15 @@ class KakaoAuthService implements AbstractAuth {
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        return await _loginService.postLogin();
+        return await _loginService.postLogin(); // 서버와 로그인 처리
       } catch (error) {
         if (error is KakaoException && error.isInvalidTokenError()) {
           if (kDebugMode) {
             print('[Kakao] 토큰 만료 $error');
           }
+        } else if (error is DioException) {
+          // 서버와 통신이 되지 않으면,
+          return null;
         } else {
           if (kDebugMode) {
             print('[Kakao] 토큰 정보 조회 실패 $error');
@@ -73,10 +78,13 @@ class KakaoAuthService implements AbstractAuth {
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        return await _loginService.postLogin();
+        return await _loginService.postLogin(); // 서버와 로그인 처리
       } catch (error) {
-        if (kDebugMode) {
-          print('[Kakao] 카카오톡으로 로그인 실패 $error');
+        if (error is DioException) {
+          // 서버와 통신이 되지 않으면,
+          return null;
+        } else {
+          debugPrint('[Kakao] 카카오톡으로 로그인 실패 $error');
         }
 
         // 사용자가 로그인을 취소했을경우,
@@ -104,10 +112,13 @@ class KakaoAuthService implements AbstractAuth {
             '${user.kakaoAccount?.email}',
           ); // 카카오 platform, email 데이터를 로컬에 저장
 
-          return await _loginService.postLogin();
+          return await _loginService.postLogin(); // 서버와 로그인 처리
         } catch (error) {
-          if (kDebugMode) {
-            print('[Kakao] 카카오계정으로 로그인 실패 $error');
+          if (error is DioException) {
+            // 서버와 통신이 되지 않으면,
+            return null;
+          } else {
+            debugPrint('[Kakao] 카카오톡으로 로그인 실패 $error');
           }
         }
       }
@@ -129,10 +140,13 @@ class KakaoAuthService implements AbstractAuth {
           '${user.kakaoAccount?.email}',
         ); // 카카오 platform, email 데이터를 로컬에 저장
 
-        return await _loginService.postLogin();
+        return await _loginService.postLogin(); // 서버와 로그인 처리
       } catch (error) {
-        if (kDebugMode) {
-          print('[Kakao] 카카오계정으로 로그인 실패 $error');
+        if (error is DioException) {
+          // 서버와 통신이 되지 않으면,
+          return const AuthInfo(); // 일부러 값을 null로 던짐
+        } else {
+          debugPrint('[Kakao] 카카오톡으로 로그인 실패 $error');
         }
       }
     }

@@ -9,6 +9,7 @@ import 'package:mango/model/rest_client.dart';
 import 'package:mango/services/login/apple_auth_service.dart';
 import 'package:mango/services/login/login_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
+import 'package:mango/toastMessage.dart';
 import '../services/login/kakao_auth_service.dart';
 import 'package:mango/services/login/terms_service.dart';
 
@@ -42,6 +43,8 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     if (authService == null) return;
 
     state = await authService.login();
+
+    if (state == null) throw Exception("서버와 통신하지 못했습니다");
   }
 
   // 로그아웃
@@ -72,8 +75,20 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
       if (authService == null) return;
 
       state = await authService.login();
-      context.go('/home'); // 메인화면으로 이동
+      if (state != null) {
+        // 서버에서 받아온 데이터가 있을 때,
+        context.go('/home'); // 메인화면으로 이동
+      } else {
+        debugPrint("[Server] 서버와 통신하지 못했습니다");
+        toastMessage(
+          context,
+          "서버와 통신하지 못했습니다",
+          type: ToastmessageType.errorType,
+        );
+        context.go('/login'); // 로그인 화면으로 이동
+      }
     } else {
+      debugPrint("[shared_preferences] 저장된 정보가 없어서 로그인 하지 못했습니다");
       context.go('/login'); // 로그인 화면으로 이동
     }
   }
