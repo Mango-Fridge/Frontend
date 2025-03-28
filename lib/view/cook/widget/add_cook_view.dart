@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
+import 'package:mango/model/content.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
 import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_app_bar_widget.dart';
@@ -31,6 +34,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
   SearchItemState? get _searchContentState => ref.watch(searchContentProvider);
   AddCookState? get _addCookState => ref.watch(addCookProvider);
+  // group 정보 받아옴
+  Group? get _group => ref.watch(groupProvider);
 
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
@@ -39,6 +44,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(addCookProvider.notifier).resetState();
+      ref.watch(addCookProvider.notifier).sumCarb();
+      ref.watch(addCookProvider.notifier).sumFat();
+      ref.watch(addCookProvider.notifier).sumProtein();
       ref.watch(addCookProvider.notifier).sumKcal();
     });
     // view init 후 데이터 처리를 하기 위함
@@ -183,9 +191,21 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             memoController: _memoController,
             onAddPressed: () {
               final String cookName = _cookNameController.text;
+              final String memo = _memoController.text;
               final String ingredients = _searchIngridientController.text;
               context.pop(context);
-              ref.read(addCookProvider.notifier).addCook(cookName, ingredients);
+              ref
+                  .read(addCookProvider.notifier)
+                  .addCook(
+                    _group?.groupId ?? 0,
+                    cookName,
+                    memo,
+                    _addCookState?.totalKcal as String,
+                    _addCookState?.totalCarb as String,
+                    _addCookState?.totalFat as String,
+                    _addCookState?.totalProtein as String,
+                    ingredients as List<Content>,
+                  );
             },
           ),
         ),
