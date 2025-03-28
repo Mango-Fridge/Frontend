@@ -20,6 +20,7 @@ class CookRepository {
         AppLogger.logger.i(
           "[cook_repository/loadCookList]: Cook list load 완료.",
         );
+        print("[cook_repository/loadCookList]: Cook list load 완료.");
 
         List<dynamic> data = response.data;
 
