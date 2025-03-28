@@ -20,25 +20,27 @@ class AddCookNotifier extends Notifier<AddCookState> {
   // Cook 저장 함수
   Future<void> addCook(
     int groupID,
-    String cookingName,
-    String cookingMemo,
-    String cookingNutriKcal,
-    String cookingNutriCarbohydrate,
+    int cookID,
+    String cookName,
+    String cookMemo,
+    String cookNutriKcal,
+    String cookNutriCarbohydrate,
     String cookingNutriFat,
-    String cookingNutriProtein,
-    List<Content> cookingItems,
+    String cookNutriProtein,
+    List<Content> cookItems,
   ) async {
     try {
       await _cookRepository.addCook(
         Cook(
           groupID: groupID,
-          cookingName: cookingName,
-          cookingMemo: cookingMemo,
-          cookingNutriKcal: cookingNutriKcal,
-          cookingNutriCarbohydrate: cookingNutriCarbohydrate,
+          cookID: cookID,
+          cookName: cookName,
+          cookMemo: cookMemo,
+          cookNutriKcal: cookNutriKcal,
+          cookNutriCarbohydrate: cookNutriCarbohydrate,
           cookingNutriFat: cookingNutriFat,
-          cookingNutriProtein: cookingNutriProtein,
-          cookingItems: cookingItems,
+          cookNutriProtein: cookNutriProtein,
+          cookItems: cookItems,
         ),
       );
     } catch (e) {

@@ -194,18 +194,18 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               final String memo = _memoController.text;
               final String ingredients = _searchIngridientController.text;
               context.pop(context);
-              ref
-                  .read(addCookProvider.notifier)
-                  .addCook(
-                    _group?.groupId ?? 0,
-                    cookName,
-                    memo,
-                    _addCookState?.totalKcal as String,
-                    _addCookState?.totalCarb as String,
-                    _addCookState?.totalFat as String,
-                    _addCookState?.totalProtein as String,
-                    ingredients as List<Content>,
-                  );
+              ref.read(addCookProvider.notifier);
+              // .addCook(
+              //   _group?.groupId ?? 0,
+
+              //   cookName,
+              //   memo,
+              //   _addCookState?.totalKcal as String,
+              //   _addCookState?.totalCarb as String,
+              //   _addCookState?.totalFat as String,
+              //   _addCookState?.totalProtein as String,
+              //   ingredients as List<Content>,
+              // );
             },
           ),
         ),

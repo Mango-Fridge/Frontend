@@ -128,7 +128,7 @@ class _CookViewState extends ConsumerState<CookView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        cook.cookingName,
+                        cook.cookName,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -141,7 +141,7 @@ class _CookViewState extends ConsumerState<CookView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '${cook.cookingItems![0].contentName} 외 ${cook.cookingItems.length}종',
+                        '${cook.cookItems![0].contentName} 외 ${cook.cookItems.length}종',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

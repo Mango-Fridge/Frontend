@@ -23,12 +23,12 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     // filterContentsBySubCategory 호출
     final filteredItems = cookDetailNotifier.filterContentsBySubCategory(
       sampleContentList.toList(),
-      widget.cook!.cookingItems.toList(),
+      widget.cook!.cookItems.toList(),
     );
 
     // getMissingCookIngredients 호출
     final missingIngredients = cookDetailNotifier.getMissingCookIngredients(
-      widget.cook!.cookingItems,
+      widget.cook!.cookItems,
       sampleContentList,
     );
 
@@ -38,7 +38,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
-        title: Text(widget.cook?.cookingName ?? '음식 명 없음'),
+        title: Text(widget.cook?.cookName ?? '음식 명 없음'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -59,7 +59,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Text(
-                      widget.cook?.cookingMemo ?? '',
+                      widget.cook?.cookMemo ?? '',
                       style: const TextStyle(fontSize: 14),
                     ),
                   ],
@@ -77,7 +77,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Text(
-                      '${widget.cook?.cookingNutriKcal}kcal',
+                      '${widget.cook?.cookNutriKcal}kcal',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -99,12 +99,11 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   children: <Widget>[
                     nutrientLabel(
                       nutriLabel: '탄',
-                      nutriCapacity:
-                          '${widget.cook?.cookingNutriCarbohydrate}g',
+                      nutriCapacity: '${widget.cook?.cookNutriCarbohydrate}g',
                     ),
                     nutrientLabel(
                       nutriLabel: '단',
-                      nutriCapacity: '${widget.cook?.cookingNutriProtein}g',
+                      nutriCapacity: '${widget.cook?.cookNutriProtein}g',
                     ),
                     nutrientLabel(
                       nutriLabel: '지',
@@ -120,7 +119,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 "요리 재료",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              ...widget.cook!.cookingItems.map((Content cookingItem) {
+              ...widget.cook!.cookItems.map((Content cookingItem) {
                 return Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
@@ -172,7 +171,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               ...filteredItems.map((Content item) {
-                int cookingListCount = widget.cook!.cookingItems
+                int cookingListCount = widget.cook!.cookItems
                     .where(
                       (cookingItem) =>
                           cookingItem.subCategory == item.subCategory,
@@ -284,7 +283,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "현재 냉장고 재료로 ${widget.cook?.cookingName}을(를) 만들 수 있습니다!",
+                            "현재 냉장고 재료로 ${widget.cook?.cookName}을(를) 만들 수 있습니다!",
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,

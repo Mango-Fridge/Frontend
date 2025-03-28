@@ -53,13 +53,14 @@ class CookRepository {
     // 전송할 데이터
     final Map<String, Object?> body = <String, Object?>{
       "groupId": cook.groupID,
-      "cookingName": cook.cookingName,
-      "cookingMemo": cook.cookingMemo,
-      "cookingNutriKcal": cook.cookingNutriKcal,
-      "cookingNutriCarbohydrate": cook.cookingNutriCarbohydrate,
-      "cookingNutriFat": cook.cookingNutriFat,
-      "cookingNutriProtein": cook.cookingNutriProtein,
-      "cookingItems": cook.cookingItems,
+      "cookID": cook.cookID,
+      "cookName": cook.cookName,
+      "cookMemo": cook.cookMemo,
+      "cookNutriKcal": cook.cookNutriKcal,
+      "cookNutriCarbohydrate": cook.cookNutriCarbohydrate,
+      "cookNutriFat": cook.cookingNutriFat,
+      "cookNutriProtein": cook.cookNutriProtein,
+      "cookItems": cook.cookItems,
     };
 
     try {
