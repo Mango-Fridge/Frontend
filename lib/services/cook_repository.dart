@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:mango/app_logger.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:mango/model/cook.dart';
-import 'package:mango/model/content.dart';
-import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/model/rest_client.dart';
 
 class CookRepository {
@@ -20,7 +18,6 @@ class CookRepository {
         AppLogger.logger.i(
           "[cook_repository/loadCookList]: Cook list load 완료.",
         );
-        print("[cook_repository/loadCookList]: Cook list load 완료.");
 
         List<dynamic> data = response.data;
 
