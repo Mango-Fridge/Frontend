@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/services/sample_content_repository.dart';
+import 'package:mango/providers/cook_detail_provider.dart';
 
 class CookDetailView extends ConsumerStatefulWidget {
   final Cook? cook;
   const CookDetailView({super.key, required this.cook});
+
   @override
   ConsumerState<CookDetailView> createState() => _CookDetailViewState();
 }
@@ -15,12 +17,17 @@ class CookDetailView extends ConsumerStatefulWidget {
 class _CookDetailViewState extends ConsumerState<CookDetailView> {
   @override
   Widget build(BuildContext context) {
-    final filteredItems = filterContentsByCategory(
+    // CookDetailNotifier에서 함수 호출
+    final cookDetailNotifier = ref.read(CookDetailProvider.notifier);
+
+    // filterContentsByCategory 호출
+    final filteredItems = cookDetailNotifier.filterContentsByCategory(
       sampleContentList.toList(),
       widget.cook!.cookingItems.toList(),
     );
 
-    final missingIngredients = getMissingCookIngredients(
+    // getMissingCookIngredients 호출
+    final missingIngredients = cookDetailNotifier.getMissingCookIngredients(
       widget.cook!.cookingItems,
       sampleContentList,
     );
@@ -34,7 +41,6 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
         title: Text(widget.cook?.cookingName ?? '음식 명 없음'),
         centerTitle: true,
       ),
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -107,6 +113,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   ],
                 ),
               ),
+              const SizedBox(height: 16),
 
               // 레시피 재료 list
               const Text(
@@ -148,12 +155,16 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                       ),
                       Text(
                         "${cookingItem.count} 개 / ${cookingItem.nutriKcal}kcal",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
                 );
               }),
+              const SizedBox(height: 16),
 
               // 일치하는 물품 list
               const Text(
@@ -204,7 +215,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                       ),
                       Text(
                         "${item.count} 개 / ${item.nutriKcal}kcal",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -240,7 +254,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
-                            "${getMissingCookIngredients(widget.cook!.cookingItems, sampleContentList).join(', ')} 입니다.",
+                            "${missingIngredients.join(', ')} 입니다.",
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -310,42 +324,5 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
         Text(nutriCapacity, style: const TextStyle(fontSize: 14)),
       ],
     );
-  }
-
-  // 냉장고에 존재하지 않는 요리 재료 표시 함수
-  List<String> getMissingCookIngredients(
-    List<Content> cookIngredients,
-    List<Content> refrigerIngredients,
-  ) {
-    // refrigerIngredients에서 카테고리 리스트 추출
-    final refrigerCategories =
-        refrigerIngredients
-            .map((item) => item.category)
-            .where((category) => category != null)
-            .toSet(); // 중복 제거
-
-    // cookIngredients에서 refrigerCategories에 없는 항목 필터링
-    return cookIngredients
-        .where(
-          (item) =>
-              item.category != null &&
-              !refrigerCategories.contains(item.category),
-        )
-        .map((item) => item.contentName)
-        .toList();
-  }
-
-  // 일치하는 물품 반환하는 함수
-  List<Content> filterContentsByCategory(
-    List<Content> RefrigeratorList,
-    List<Content> CookingList,
-  ) {
-    // CookingList의 category 값을 Set으로 변환 (중복 제거)
-    final categorySet = CookingList.map((content) => content.category).toSet();
-
-    // RefrigeratorList에서 category 값이 두 번째 리스트에 포함된 항목만 필터링
-    return RefrigeratorList.where(
-      (content) => categorySet.contains(content.category),
-    ).toList();
   }
 }
