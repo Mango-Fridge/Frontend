@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:mango/app_logger.dart';
 import 'package:mango/model/api_response.dart';
@@ -6,30 +8,44 @@ import 'package:mango/model/rest_client.dart';
 
 class ItemRepository {
   final Dio dio = Dio();
+  Timer? _debounceTimer;
+
   // 검색어를 받아오면 해당 검색어에 해당하는 결과 리스트 받아오는 api 함수
   Future<List<RefrigeratorItem>> loadItemListByString(String keyword) async {
-    RestClient client = RestClient(dio);
-    try {
-      ApiResponse response = await client.getItemList(keyword);
+    final Completer<List<RefrigeratorItem>> completer =
+        Completer<List<RefrigeratorItem>>();
 
-      if (response.code == 200) {
-        AppLogger.logger.i(
-          "[item_repository/loadItemListByString]: Item list load 완료.",
-        );
+    _debounceTimer?.cancel();
 
-        List<dynamic> data = response.data['items'];
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      RestClient client = RestClient(dio);
 
-        return data.map((item) => RefrigeratorItem.fromJson(item)).toList();
-      } else {
-        throw Exception(
-          "[item_repository/loadItemListByString]: Json Parse Error",
-        );
+      try {
+        ApiResponse response = await client.getItemList(keyword);
+
+        if (response.code == 200) {
+          AppLogger.logger.i(
+            "[item_repository/loadItemListByString]: Item list load 완료.",
+          );
+
+          List<dynamic> data = response.data['items'];
+
+          completer.complete(
+            data.map((item) => RefrigeratorItem.fromJson(item)).toList(),
+          );
+        } else {
+          throw Exception(
+            "[item_repository/loadItemListByString]: Json Parse Error",
+          );
+        }
+      } catch (e) {
+        AppLogger.logger.e("[item_repository/loadItemListByString]: $e");
+
+        completer.complete(<RefrigeratorItem>[]);
       }
-    } catch (e) {
-      AppLogger.logger.e("[item_repository/loadItemListByString]: $e");
+    });
+    return completer.future;
 
-      return <RefrigeratorItem>[];
-    }
     // await Future.delayed(Duration(seconds: 1));
     // return <RefrigeratorItem>[
     //   RefrigeratorItem(
