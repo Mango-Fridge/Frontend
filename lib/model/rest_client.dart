@@ -38,6 +38,9 @@ abstract class RestClient {
   @GET('/api/groups/user/{userId}') // 그룹Id, Name 불러오기
   Future<ApiResponse> getGroupInfo(@Path('userId') int userId);
 
-  @POST('/api/groups/id') // 그룹 생성
+  @POST('/api/groups/id') // 해당 그룹 인원 리스트
   Future<ApiResponse> postGroupUserList(@Body() Map<String, Object?> body);
+
+  @DELETE('/api/groups/user') // 그룹 나가기
+  Future<ApiResponse> exitGroup(@Body() Map<String, Object?> body);
 }

@@ -7,7 +7,7 @@ import 'package:mango/model/rest_client.dart';
 class GroupRepository {
   final Dio dio = Dio();
 
-  // userId로 group id, name 불러오는 함수
+  // userId로 group id, name 불러오기
   Future<Group> loadGroup(int userId) async {
     RestClient client = RestClient(dio);
 
@@ -32,7 +32,7 @@ class GroupRepository {
   }
 
   // 그룹 생성 API 요청
-  Future<Group?> createGroup(int userId, String groupName) async {
+  Future<void> createGroup(int userId, String groupName) async {
     RestClient client = RestClient(dio);
 
     // 전송할 데이터
@@ -68,6 +68,7 @@ class GroupRepository {
     }
   }
 
+  // 해당 그룹 인원 불러오기
   Future<Group> groupUserList(int userId, int groupId) async {
     RestClient client = RestClient(dio);
 
@@ -79,11 +80,11 @@ class GroupRepository {
 
     try {
       ApiResponse response = await client.postGroupUserList(body);
-      print('안녕');
+      
       if (response.code == 200) {
         return Group.fromJson(response.data);
       } else {
-        throw Exception('그룹 생성 실패');
+        throw Exception('그룹 인원 불러오기 실패');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -101,6 +102,29 @@ class GroupRepository {
       } else {
         throw Exception('네트워크 오류 발생: ${e.message}');
       }
+    }
+  }
+
+  // 해당 그룹 나가기
+  Future<void> exitCurrentGroup(int userId, int groupId) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "userId": userId,
+      "groupId": groupId,
+    };
+
+    try {
+      ApiResponse response = await client.exitGroup(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[group_repository/exitCurrentGroup]: 그룹 나가기 성공");
+      } else {
+        throw Exception('[group_repository/exitCurrentGroup]: Json Parse Error');
+      }
+    } catch (e) {
+      AppLogger.logger.e("[group_repository/exitCurrentGroup]: $e");
     }
   }
 }
