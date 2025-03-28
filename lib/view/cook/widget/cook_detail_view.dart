@@ -20,7 +20,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     // CookDetailNotifier에서 함수 호출
     final cookDetailNotifier = ref.read(CookDetailProvider.notifier);
 
-    // filterContentsByCategory 호출
+    // filterContentsBySubCategory 호출
     final filteredItems = cookDetailNotifier.filterContentsBySubCategory(
       sampleContentList.toList(),
       widget.cook!.cookingItems.toList(),
