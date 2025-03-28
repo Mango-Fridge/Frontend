@@ -412,6 +412,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '중분류',
                 controller: subCategoryController,
                 hintText: 'ex) 밥',
+                textInputType: TextInputType.text,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -525,6 +526,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '열량',
                 controller: kcalController,
                 hintText: 'ex) 150',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -536,6 +538,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '탄수화물',
                 controller: carbsController,
                 hintText: 'ex) 50',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -547,6 +550,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '단백질',
                 controller: proteinController,
                 hintText: 'ex) 150',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -558,6 +562,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '지방',
                 controller: fatController,
                 hintText: 'ex) 150',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -702,6 +707,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required TextEditingController controller,
     required String hintText,
     required VoidCallback onChanged,
+    required TextInputType textInputType,
   }) {
     return Row(
       spacing: 10,
@@ -716,7 +722,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         Expanded(
           child: TextField(
             key: key,
-            keyboardType: TextInputType.number,
+            keyboardType: textInputType,
             controller: controller,
             style: const TextStyle(color: Colors.black),
             enabled: widget.item == null,
