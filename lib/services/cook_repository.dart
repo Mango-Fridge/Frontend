@@ -45,4 +45,33 @@ class CookRepository {
       return <Cook>[];
     }
   }
+
+  // cook 추가 함수
+  Future<void> addCook(Cook cook) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "groupId": cook.groupID,
+      "cookingName": cook.cookingName,
+      "cookingMemo": cook.cookingMemo,
+      "cookingNutriKcal": cook.cookingNutriKcal,
+      "cookingNutriCarbohydrate": cook.cookingNutriCarbohydrate,
+      "cookingNutriFat": cook.cookingNutriFat,
+      "cookingNutriProtein": cook.cookingNutriProtein,
+      "cookingItems": cook.cookingItems,
+    };
+
+    try {
+      ApiResponse response = await client.addCook(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[cook_repository/addCook]: Cook add 완료.");
+      } else {
+        throw Exception('[cook_repository/addCook]: Json Parse Error');
+      }
+    } catch (e) {
+      AppLogger.logger.e("[cook_repository/addCook]: $e");
+    }
+  }
 }
