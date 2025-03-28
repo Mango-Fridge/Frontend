@@ -23,6 +23,8 @@ class CookRepository {
   Future<List<Cook>> loadCookList(int groupId) async {
     RestClient client = RestClient(dio);
 
+    AppLogger.logger.i("Requesting cook list with groupId: $groupId");
+
     try {
       ApiResponse response = await client.getCookList(groupId);
 

@@ -23,7 +23,7 @@ class _CookViewState extends ConsumerState<CookView> {
 
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(cookProvider.notifier).loadCookList(6);
+      ref.watch(cookProvider.notifier).loadCookList(1);
     });
   }
 
