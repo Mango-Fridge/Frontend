@@ -7,6 +7,18 @@ import 'package:mango/model/rest_client.dart';
 class CookRepository {
   final Dio dio = Dio();
 
+  CookRepository() {
+    dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true,
+      ),
+    );
+  }
+
   // groupId로 cook list 불러오는 함수
   Future<List<Cook>> loadCookList(int groupId) async {
     RestClient client = RestClient(dio);

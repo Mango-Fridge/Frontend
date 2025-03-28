@@ -5,11 +5,17 @@ import 'package:mango/state/cook_state.dart';
 import 'package:mango/model/cook.dart';
 
 class CookNotifier extends Notifier<CookState?> {
-  CookRepository _cookRepository = CookRepository();
+  final CookRepository _cookRepository = CookRepository();
   CookState _cookState = CookState();
 
   @override
   CookState? build() => CookState();
+
+  // 초기화 함수
+  void resetState() {
+    _cookState = CookState();
+    state = _cookState;
+  }
 
   // Cook list load 함수
   Future<void> loadCookList(int groupId) async {
