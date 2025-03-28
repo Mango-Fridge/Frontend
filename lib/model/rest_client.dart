@@ -43,4 +43,7 @@ abstract class RestClient {
 
   @GET('/cooks/list/{groupId}') // cook list 호출
   Future<ApiResponse> getCookList(@Path('groupId') int groupId);
+
+  @POST('/cooks/add') // cook 추가
+  Future<ApiResponse> addCook(@Body() Map<String, Object?> body);
 }

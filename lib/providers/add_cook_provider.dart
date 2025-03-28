@@ -1,10 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/content.dart';
+import 'package:mango/model/cook.dart';
 import 'package:mango/model/refrigerator_item.dart';
+import 'package:mango/services/cook_repository.dart';
 import 'package:mango/state/add_cook_state.dart';
 
 class AddCookNotifier extends Notifier<AddCookState> {
+  final CookRepository _cookRepository = CookRepository();
+
   @override
   AddCookState build() => AddCookState();
 
@@ -12,9 +17,33 @@ class AddCookNotifier extends Notifier<AddCookState> {
     state = AddCookState();
   }
 
-  // 요리 추가
-  void addCook(String name, String text) {
-    return;
+  // Cook 저장 함수
+  Future<void> addCook(
+    int groupID,
+    String cookingName,
+    String cookingMemo,
+    String cookingNutriKcal,
+    String cookingNutriCarbohydrate,
+    String cookingNutriFat,
+    String cookingNutriProtein,
+    List<Content> cookingItems,
+  ) async {
+    try {
+      await _cookRepository.addCook(
+        Cook(
+          groupID: groupID,
+          cookingName: cookingName,
+          cookingMemo: cookingMemo,
+          cookingNutriKcal: cookingNutriKcal,
+          cookingNutriCarbohydrate: cookingNutriCarbohydrate,
+          cookingNutriFat: cookingNutriFat,
+          cookingNutriProtein: cookingNutriProtein,
+          cookingItems: cookingItems,
+        ),
+      );
+    } catch (e) {
+      // 에러 처리
+    }
   }
 
   void updateCookNameFocused(bool hasFocus) {
