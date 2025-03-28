@@ -243,14 +243,14 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     title: Text('데이터를 불러 오는 도중 에러가 발생하였습니다.'),
                   );
                 }
-                final Content loadContent = snapshot.data!;
+                final Content loadedContent = snapshot.data!;
 
                 return AlertDialog(
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  content: ContentDetailView(content: loadContent),
+                  content: ContentDetailView(content: loadedContent),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {

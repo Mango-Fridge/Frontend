@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
@@ -108,10 +109,18 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   Widget _buildItemRow(RefrigeratorItem item) {
     Design design = Design(context);
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        try {
+          RefrigeratorItem? loadedItem = await ref
+              .read(searchContentProvider.notifier)
+              .loadItem(item.itemId ?? 0);
+          context.push('/addContent', extra: loadedItem);
+        } catch (e) {
+          AppLogger.logger.e('[search_item_view/_buildItemRow]: $e');
+        }
+
         ref.watch(searchContentProvider.notifier).resetState();
         _controller.text = '';
-        context.push('/addContent', extra: item);
       },
       child: Container(
         margin: EdgeInsets.symmetric(
