@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:mango/model/group/group.dart';
 import 'package:mango/model/rest_client.dart';
@@ -44,7 +45,7 @@ class GroupRepository {
       ApiResponse response = await client.postCreateGroup(body);
 
       if (response.code == 200) {
-        return Group.fromJson(response.data);
+        AppLogger.logger.i("[group_repository/createGroup]: 그룹 생성 완료.");
       } else {
         throw Exception('그룹 생성 실패');
       }
