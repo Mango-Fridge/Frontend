@@ -24,7 +24,7 @@ class ItemRepository {
         ApiResponse response = await client.getItemList(keyword);
 
         if (response.code == 200) {
-          AppLogger.logger.i(
+          AppLogger.logger.d(
             "[item_repository/loadItemListByString]: Item list load 완료.",
           );
 
