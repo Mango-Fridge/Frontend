@@ -30,6 +30,7 @@ class LoginService {
     final body = {"oauthProvider": "$platformStr"}; // 요청 바디
     final resp = await client.getAuthUser(tokens, body);
     debugPrint("사용자 정보 : ${resp.data}");
+    print('Bearer $tokens');
 
     return AuthInfo.fromJson(resp.data);
   }

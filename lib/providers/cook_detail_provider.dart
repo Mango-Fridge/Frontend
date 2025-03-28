@@ -33,7 +33,7 @@ class CookDetailNotifier extends Notifier<AddCookState> {
   }
 
   // 일치하는 물품 반환하는 함수
-  List<Content> filterContentsByCategory(
+  List<Content> filterContentsBySubCategory(
     List<Content> RefrigeratorList,
     List<Content> CookingList,
   ) {

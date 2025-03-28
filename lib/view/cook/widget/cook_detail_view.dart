@@ -21,7 +21,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     final cookDetailNotifier = ref.read(CookDetailProvider.notifier);
 
     // filterContentsByCategory 호출
-    final filteredItems = cookDetailNotifier.filterContentsByCategory(
+    final filteredItems = cookDetailNotifier.filterContentsBySubCategory(
       sampleContentList.toList(),
       widget.cook!.cookingItems.toList(),
     );
@@ -148,7 +148,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         ),
                         child: Center(
                           child: Text(
-                            cookingItem.category ?? '',
+                            cookingItem.subCategory ?? '',
                             style: const TextStyle(fontSize: 14),
                           ),
                         ),
@@ -174,7 +174,8 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
               ...filteredItems.map((Content item) {
                 int cookingListCount = widget.cook!.cookingItems
                     .where(
-                      (cookingItem) => cookingItem.category == item.category,
+                      (cookingItem) =>
+                          cookingItem.subCategory == item.subCategory,
                     )
                     .fold(0, (sum, cookingItem) => sum + (cookingItem.count));
 
@@ -208,7 +209,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         ),
                         child: Center(
                           child: Text(
-                            item.category ?? '',
+                            item.subCategory ?? '',
                             style: const TextStyle(fontSize: 14),
                           ),
                         ),
