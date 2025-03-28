@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/view/group/widget/group_empty_widget.dart';
 import 'package:mango/view/group/widget/group_firstRequest_widget.dart';
@@ -14,13 +16,18 @@ class GroupView extends ConsumerStatefulWidget {
 }
 
 class _GroupViewState extends ConsumerState<GroupView> {
+  Group? get _group => ref.watch(groupProvider);
+
   @override
   void initState() {
     super.initState();
-    // 추후 그룹이 있는지 없는지 확인하여 초기 뷰 구성할 코드
+    // 그룹이 있다면 존재하는 뷰로 아니라면 생성하기 뷰
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(grouViewStateProvider.notifier).state =
-          GroupViewState.empty; // 테스트: 다른 뷰 이동한 후, 다시 그룹 뷰 오면 초기화면으로 초기화
+      if (_group?.groupId != null) {
+        ref.read(grouViewStateProvider.notifier).state = GroupViewState.exist;
+      } else {
+        ref.read(grouViewStateProvider.notifier).state = GroupViewState.empty;
+      }
     });
   }
 
