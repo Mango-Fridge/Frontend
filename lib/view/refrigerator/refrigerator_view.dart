@@ -9,6 +9,7 @@ import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/state/refrigerator_state.dart';
+import 'package:mango/toastMessage.dart';
 import 'package:mango/view/refrigerator/content_detail_view.dart';
 
 // 냉장고 화면
@@ -462,6 +463,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                       7,
                       _refrigeratorState?.updateContentList ?? <Content>[],
                     );
+
+                toastMessage(
+                  context,
+                  _refrigeratorState?.setCountMessage ?? '',
+                );
+
                 ref
                     .watch(refrigeratorNotifier.notifier)
                     .clearUpdateContentList();

@@ -7,6 +7,7 @@ class RefrigeratorState {
   List<Content>? updateContentList;
   List<Content>? expContentList;
   bool isUpdatedContent = false;
+  String? setCountMessage;
 
   RefrigeratorState({
     this.contentList,
@@ -15,6 +16,7 @@ class RefrigeratorState {
     this.updateContentList,
     this.expContentList,
     this.isUpdatedContent = false,
+    this.setCountMessage,
   });
 
   RefrigeratorState copyWith({
@@ -24,6 +26,7 @@ class RefrigeratorState {
     List<Content>? updateContentList,
     List<Content>? expContentList,
     bool? isUpdatedContent,
+    String? setCountMessage,
   }) {
     return RefrigeratorState(
       contentList: contentList ?? this.contentList,
@@ -33,6 +36,7 @@ class RefrigeratorState {
       updateContentList: updateContentList ?? this.updateContentList,
       expContentList: expContentList ?? this.expContentList,
       isUpdatedContent: isUpdatedContent ?? this.isUpdatedContent,
+      setCountMessage: setCountMessage ?? this.setCountMessage,
     );
   }
 }

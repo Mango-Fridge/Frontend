@@ -53,11 +53,15 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   Future<void> setCount(int groupId, List<Content> contentList) async {
+    String setCountMessage = '';
+
     try {
-      await _contentRepository.setCount(groupId, contentList);
+      setCountMessage = await _contentRepository.setCount(groupId, contentList);
     } catch (e) {
       AppLogger.logger.e('[refrigerator_provider/setCount]: $e');
     }
+
+    state = state?.copyWith(setCountMessage: setCountMessage);
   }
 
   List<Content> getRefrigeratorContentList(List<Content> contentList) {
