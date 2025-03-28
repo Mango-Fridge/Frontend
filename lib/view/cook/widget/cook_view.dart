@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/cook.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/providers/cook_provider.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/cook_state.dart';
 
 // 요리 리스트를 보여주는 view
@@ -16,6 +18,7 @@ class CookView extends ConsumerStatefulWidget {
 
 class _CookViewState extends ConsumerState<CookView> {
   CookState? get _cookState => ref.watch(cookProvider);
+  Group? get _group => ref.watch(groupProvider);
 
   @override
   void initState() {
@@ -23,7 +26,7 @@ class _CookViewState extends ConsumerState<CookView> {
 
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(cookProvider.notifier).loadCookList(1);
+      ref.watch(cookProvider.notifier).loadCookList(_group?.groupId ?? 0);
     });
   }
 
