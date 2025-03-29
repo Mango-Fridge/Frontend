@@ -69,7 +69,11 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               // 새로고침 버튼
               IconButton(
                 onPressed: () {
-                  (_group?.groupName ?? '').isEmpty ? null : null;
+                  (_group?.groupName ?? '').isEmpty
+                      ? null
+                      : ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .loadContentList(_group?.groupId ?? 0);
                 },
                 icon: const Icon(Icons.refresh),
               ),
