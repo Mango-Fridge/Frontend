@@ -1,7 +1,12 @@
 import 'package:flutter/widgets.dart';
 
 class Design {
+  static const double appTitleFontSize = 25;
   static const double normalFontSize = 16;
+  static const double contentRowNameFontSize = 13;
+  static const double contentRowExpFontSize = 12;
+  static const double countButtonFontSize = 20;
+  static const double setCountViewFontSize = 13;
   static const double itemNameFontSize = 22;
   final double screenWidth; // 시스템 가로
   final double screenHeight; // 시스템 세로
