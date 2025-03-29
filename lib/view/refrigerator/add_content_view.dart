@@ -412,6 +412,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '중분류',
                 controller: subCategoryController,
                 hintText: 'ex) 밥',
+                textInputType: TextInputType.text,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -525,6 +526,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '열량',
                 controller: kcalController,
                 hintText: 'ex) 150',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -536,6 +538,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '탄수화물',
                 controller: carbsController,
                 hintText: 'ex) 50',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -547,6 +550,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '단백질',
                 controller: proteinController,
                 hintText: 'ex) 150',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -558,6 +562,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 label: '지방',
                 controller: fatController,
                 hintText: 'ex) 150',
+                textInputType: TextInputType.number,
                 onChanged: () {
                   ref
                       .read(addContentProvider.notifier)
@@ -585,13 +590,52 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   widget.item == null &&
                           _addContentState!.isNutritionEmpty &&
                           _addContentState!.isDetailInfoEmpty
-                      ? () {
-                        ref.read(addContentProvider.notifier).setIsOpen();
+                      ? () async {
+                        await ref
+                            .watch(addContentProvider.notifier)
+                            .saveItem(
+                              _group?.groupId ?? 0,
+                              nameController.text,
+                              true,
+                              _addContentState?.selectedContentCategory ??
+                                  contentCategory[0],
+                              subCategoryController.text,
+                              '',
+                              int.parse(countController.text),
+                              _addContentState?.selectedRegDate ??
+                                  DateTime.now(),
+                              _addContentState?.selectedExpDate ??
+                                  DateTime.now(),
+                              _addContentState?.selectedContentStorage ??
+                                  contentStorage[0],
+                              memoController.text,
+                              _addContentState?.selectedUnit ?? '',
+                              capacityController.text.isNotEmpty
+                                  ? int.parse(capacityController.text)
+                                  : 0,
+                              kcalController.text.isNotEmpty
+                                  ? int.parse(kcalController.text)
+                                  : 0,
+                              carbsController.text.isNotEmpty
+                                  ? int.parse(carbsController.text)
+                                  : 0,
+                              proteinController.text.isNotEmpty
+                                  ? int.parse(proteinController.text)
+                                  : 0,
+                              fatController.text.isNotEmpty
+                                  ? int.parse(fatController.text)
+                                  : 0,
+                            );
 
                         toastMessage(
                           context,
                           "${nameController.text}(이)가 정상적으로\n공개등록이 되었습니다!",
                         );
+
+                        await ref
+                            .read(refrigeratorNotifier.notifier)
+                            .loadContentList(_group?.groupId ?? 0);
+                        context.pop();
                       }
                       : null,
               backgroundColor: Colors.amber[200]!,
@@ -610,7 +654,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           .saveItem(
                             _group?.groupId ?? 0,
                             nameController.text,
-                            _addContentState?.isOpen ?? false,
+                            false,
                             _addContentState?.selectedContentCategory ??
                                 contentCategory[0],
                             subCategoryController.text,
@@ -663,6 +707,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required TextEditingController controller,
     required String hintText,
     required VoidCallback onChanged,
+    required TextInputType textInputType,
   }) {
     return Row(
       spacing: 10,
@@ -677,7 +722,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         Expanded(
           child: TextField(
             key: key,
-            keyboardType: TextInputType.number,
+            keyboardType: textInputType,
             controller: controller,
             style: const TextStyle(color: Colors.black),
             enabled: widget.item == null,

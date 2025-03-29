@@ -53,18 +53,22 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   Future<void> setCount(int groupId, List<Content> contentList) async {
+    String setCountMessage = '';
+
     try {
-      await _contentRepository.setCount(groupId, contentList);
+      setCountMessage = await _contentRepository.setCount(groupId, contentList);
     } catch (e) {
       AppLogger.logger.e('[refrigerator_provider/setCount]: $e');
     }
+
+    state = state?.copyWith(setCountMessage: setCountMessage);
   }
 
   List<Content> getRefrigeratorContentList(List<Content> contentList) {
     List<Content> refrigeratorContentList =
         contentList.where((Content content) {
           bool is24HoursOrMoreLeft =
-              DateTime.now().difference(content.expDate!).inHours <= 24;
+              DateTime.now().difference(content.expDate!).inHours <= -24;
           bool isFrozen = content.storageArea == '냉장';
           return is24HoursOrMoreLeft && isFrozen;
         }).toList();
