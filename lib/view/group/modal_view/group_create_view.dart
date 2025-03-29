@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/state/group_state.dart';
@@ -14,6 +16,7 @@ import 'package:mango/view/group/sub_widget/group_modal_title.dart';
 // 그룹 생성하기 모달 뷰
 class GroupCreateView extends ConsumerWidget {
   const GroupCreateView({super.key});
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,6 +63,7 @@ class GroupCreateView extends ConsumerWidget {
                           user?.usrId ?? 0,
                           '${groupState.groupName}',
                         )) {
+                          ref.read(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
                           ref.read(grouViewStateProvider.notifier).state =
                               GroupViewState.exist; // 그룹 생성으로 그룹 존재 뷰로
                           context.pop(); // Sheet 닫기
