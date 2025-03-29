@@ -801,7 +801,16 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         if (isRegisterDate) {
           ref.watch(addContentProvider.notifier).setRegDate(combinedDateTime);
         } else {
-          ref.watch(addContentProvider.notifier).setExpDate(combinedDateTime);
+          bool isAfter = ref
+              .watch(addContentProvider.notifier)
+              .setExpDate(combinedDateTime);
+          if (!isAfter) {
+            toastMessage(
+              context,
+              '소비 기한은 등록 날짜 보다 이전일 수 없습니다.',
+              type: ToastmessageType.errorType,
+            );
+          }
         }
       }
     }
