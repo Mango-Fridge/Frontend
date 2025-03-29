@@ -50,6 +50,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
         leadingWidth: double.infinity,
+        toolbarHeight: design.screenHeight * 0.08,
         leading: Padding(
           padding: EdgeInsets.all(design.marginAndPadding),
           child: Row(
