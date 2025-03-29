@@ -67,11 +67,18 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               ),
               const Spacer(),
               // 새로고침 버튼
-              IconButton(onPressed: () {}, icon: const Icon(Icons.refresh)),
+              IconButton(
+                onPressed: () {
+                  (_group?.groupName ?? '').isEmpty ? null : null;
+                },
+                icon: const Icon(Icons.refresh),
+              ),
               // 물품 추가 버튼
               ElevatedButton(
                 onPressed: () {
-                  ref.watch(refrigeratorNotifier.notifier).resetState();
+                  (_group?.groupName ?? '').isEmpty
+                      ? null
+                      : ref.watch(refrigeratorNotifier.notifier).resetState();
                   ref
                       .watch(refrigeratorNotifier.notifier)
                       .loadContentList(_group?.groupId ?? 0);
@@ -132,7 +139,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               ? null
               : FloatingActionButton(
                 onPressed: () {
-                  context.push('/cook');
+                  (_group?.groupName ?? '').isEmpty
+                      ? null
+                      : context.push('/cook');
                 },
               ),
     );
