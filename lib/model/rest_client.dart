@@ -29,9 +29,12 @@ abstract class RestClient {
   @POST('/api/items')
   Future<ApiResponse> addItem(@Body() Map<String, Object?> body);
 
+  @GET('/api/items/{itemId}')
+  Future<ApiResponse> getItem(@Path('itemId') int itemId);
+
   @PATCH('/api/contents/quantity')
   Future<ApiResponse> setCount(@Body() Map<String, Object?> body);
-  
+
   @POST('/api/groups/create') // 그룹 생성
   Future<ApiResponse> postCreateGroup(@Body() Map<String, Object?> body);
 
