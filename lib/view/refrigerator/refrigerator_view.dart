@@ -456,11 +456,11 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           ),
           Expanded(
             child: ElevatedButton(
-              onPressed: () {
-                ref
+              onPressed: () async {
+                await ref
                     .watch(refrigeratorNotifier.notifier)
                     .setCount(
-                      7,
+                      _group?.groupId ?? 0,
                       _refrigeratorState?.updateContentList ?? <Content>[],
                     );
 
