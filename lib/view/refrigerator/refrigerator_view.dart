@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group/group.dart';
@@ -296,7 +297,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '소비기한 ${content.expDate}',
+                    '소비기한: ${DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(content.expDate ?? DateTime.now())}',
                     style: const TextStyle(
                       fontSize: Design.contentRowExpFontSize,
                     ),
