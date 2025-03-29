@@ -114,7 +114,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 labelStyle: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: Design.normalFontSize,
+                  fontSize: Design.tabBarFontSize,
                 ),
                 indicatorWeight: 3,
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -175,14 +175,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return ListView.builder(
       itemCount: _refrigeratorState?.refrigeratorContentList?.length,
       itemBuilder: (BuildContext context, int index) {
-        if (_refrigeratorState != null &&
-            _refrigeratorState?.refrigeratorContentList != null) {
-          final Content content =
-              _refrigeratorState!.refrigeratorContentList![index];
-          return _buildContentRow(content);
-        } else {
-          return _noContentView('냉장고에 보관중인 물품이 없어요.');
-        }
+        final Content content =
+            _refrigeratorState!.refrigeratorContentList![index];
+        return _buildContentRow(content);
       },
     );
   }
@@ -192,14 +187,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return ListView.builder(
       itemCount: _refrigeratorState?.freezerContentList?.length,
       itemBuilder: (BuildContext context, int index) {
-        if (_refrigeratorState != null &&
-            _refrigeratorState?.freezerContentList != null) {
-          final Content content =
-              _refrigeratorState!.freezerContentList![index];
-          return _buildContentRow(content);
-        } else {
-          return _noContentView('냉동실에 보관중인 물품이 없어요.');
-        }
+        final Content content = _refrigeratorState!.freezerContentList![index];
+        return _buildContentRow(content);
       },
     );
   }
@@ -209,20 +198,31 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return ListView.builder(
       itemCount: _refrigeratorState?.expContentList?.length,
       itemBuilder: (BuildContext context, int index) {
-        if (_refrigeratorState != null &&
-            _refrigeratorState?.expContentList != null) {
-          final Content content = _refrigeratorState!.expContentList![index];
-          return _buildContentRow(content);
-        } else {
-          return _noContentView('기한 임박 물품이 없어요.');
-        }
+        final Content content = _refrigeratorState!.expContentList![index];
+        return _buildContentRow(content);
       },
     );
   }
 
   // 보관장소 별 UI 구성
   List<Widget> _buildContent() {
-    return <Widget>[_expContent(), _refrigeratorContent(), _freezerContent()];
+    return <Widget>[
+      _refrigeratorState != null &&
+              _refrigeratorState?.expContentList != null &&
+              _refrigeratorState!.expContentList!.isNotEmpty
+          ? _expContent()
+          : _noContentView('유통 기한 임박 물품이 없어요.'),
+      _refrigeratorState != null &&
+              _refrigeratorState?.refrigeratorContentList != null &&
+              _refrigeratorState!.refrigeratorContentList!.isNotEmpty
+          ? _refrigeratorContent()
+          : _noContentView('냉장고에 보관중인 물품이 없어요.'),
+      _refrigeratorState != null &&
+              _refrigeratorState?.freezerContentList != null &&
+              _refrigeratorState!.freezerContentList!.isNotEmpty
+          ? _freezerContent()
+          : _noContentView('냉동실에 보관중인 물품이 없어요.'),
+    ];
   }
 
   // 물품 별 UI 구성
@@ -252,11 +252,16 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 final Content loadedContent = snapshot.data!;
 
                 return AlertDialog(
+                  insetPadding: EdgeInsets.zero,
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  content: ContentDetailView(content: loadedContent),
+                  content: SizedBox(
+                    width: design.termsOverlayWidth * 0.85,
+                    height: design.termsOverlayHeight * 0.90,
+                    child: ContentDetailView(content: loadedContent),
+                  ),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
@@ -297,7 +302,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '소비기한: ${DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(content.expDate ?? DateTime.now())}',
+                    '소비기한: ${DateFormat('yyyy-M-d a h:m:s', 'ko').format(content.expDate ?? DateTime.now())}',
                     style: const TextStyle(
                       fontSize: Design.contentRowExpFontSize,
                     ),
@@ -321,7 +326,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 const SizedBox(width: 5),
                 Container(
                   width: design.screenWidth * 0.17,
-                  height: design.screenHeight * 0.035,
+                  height: design.screenWidth * 0.080,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -359,8 +364,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: design.screenHeight * 0.035,
-        height: design.screenHeight * 0.035,
+        width: design.screenWidth * 0.080,
+        height: design.screenWidth * 0.080,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Colors.white,
