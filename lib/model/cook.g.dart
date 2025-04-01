@@ -7,28 +7,39 @@ part of 'cook.dart';
 // **************************************************************************
 
 _Cook _$CookFromJson(Map<String, dynamic> json) => _Cook(
-  groupID: (json['groupID'] as num).toInt(),
-  cookID: (json['cookID'] as num).toInt(),
+  cookId: (json['cookId'] as num?)?.toInt(),
   cookName: json['cookName'] as String,
   cookMemo: json['cookMemo'] as String,
   cookNutriKcal: json['cookNutriKcal'] as String,
   cookNutriCarbohydrate: json['cookNutriCarbohydrate'] as String,
-  cookingNutriFat: json['cookingNutriFat'] as String,
   cookNutriProtein: json['cookNutriProtein'] as String,
+  cookingNutriFat: json['cookingNutriFat'] as String,
   cookItems:
-      (json['cookItems'] as List<dynamic>)
-          .map((e) => Content.fromJson(e as Map<String, dynamic>))
+      (json['cookItems'] as List<dynamic>?)
+          ?.map((e) => CookItems.fromJson(e as Map<String, dynamic>))
           .toList(),
+  groupId: (json['groupId'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$CookToJson(_Cook instance) => <String, dynamic>{
-  'groupID': instance.groupID,
-  'cookID': instance.cookID,
+  'cookId': instance.cookId,
   'cookName': instance.cookName,
   'cookMemo': instance.cookMemo,
   'cookNutriKcal': instance.cookNutriKcal,
   'cookNutriCarbohydrate': instance.cookNutriCarbohydrate,
-  'cookingNutriFat': instance.cookingNutriFat,
   'cookNutriProtein': instance.cookNutriProtein,
+  'cookingNutriFat': instance.cookingNutriFat,
   'cookItems': instance.cookItems,
+  'groupId': instance.groupId,
 };
+
+_CookItems _$CookItemsFromJson(Map<String, dynamic> json) => _CookItems(
+  cookItemId: (json['cookItemId'] as num).toInt(),
+  cookItemName: json['cookItemName'] as String,
+);
+
+Map<String, dynamic> _$CookItemsToJson(_CookItems instance) =>
+    <String, dynamic>{
+      'cookItemId': instance.cookItemId,
+      'cookItemName': instance.cookItemName,
+    };

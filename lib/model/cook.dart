@@ -6,16 +6,27 @@ part 'cook.g.dart';
 @freezed
 abstract class Cook with _$Cook {
   const factory Cook({
-    required int groupID,
-    required int cookID,
+    final int? cookId,
     required String cookName,
     required String cookMemo,
     required String cookNutriKcal,
     required String cookNutriCarbohydrate,
-    required String cookingNutriFat,
     required String cookNutriProtein,
-    required List<Content> cookItems,
+    required String cookingNutriFat,
+    final List<CookItems>? cookItems,
+    final int? groupId,
   }) = _Cook;
 
   factory Cook.fromJson(Map<String, dynamic> json) => _$CookFromJson(json);
+}
+
+@freezed
+abstract class CookItems with _$CookItems {
+  const factory CookItems({
+    required int cookItemId,
+    required String cookItemName,
+  }) = _CookItems;
+
+  factory CookItems.fromJson(Map<String, dynamic> json) =>
+      _$CookItemsFromJson(json);
 }

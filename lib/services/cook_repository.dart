@@ -52,8 +52,6 @@ class CookRepository {
 
     // 전송할 데이터
     final Map<String, Object?> body = <String, Object?>{
-      "groupId": cook.groupID,
-      "cookID": cook.cookID,
       "cookName": cook.cookName,
       "cookMemo": cook.cookMemo,
       "cookNutriKcal": cook.cookNutriKcal,
@@ -61,6 +59,7 @@ class CookRepository {
       "cookNutriFat": cook.cookingNutriFat,
       "cookNutriProtein": cook.cookNutriProtein,
       "cookItems": cook.cookItems,
+      "groupId": cook.groupId,
     };
 
     try {

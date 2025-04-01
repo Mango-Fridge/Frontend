@@ -23,12 +23,12 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     // filterContentsBySubCategory 호출
     final filteredItems = cookDetailNotifier.filterContentsBySubCategory(
       sampleContentList.toList(),
-      widget.cook!.cookItems.toList(),
+      widget.cook!.cookItems!,
     );
 
     // getMissingCookIngredients 호출
     final missingIngredients = cookDetailNotifier.getMissingCookIngredients(
-      widget.cook!.cookItems,
+      widget.cook!.cookItems!,
       sampleContentList,
     );
 
@@ -115,187 +115,187 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
               const SizedBox(height: 16),
 
               // 레시피 재료 list
-              const Text(
-                "요리 재료",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              ...widget.cook!.cookItems.map((Content cookingItem) {
-                return Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        cookingItem.contentName,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0,
-                          vertical: 2.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            cookingItem.subCategory ?? '',
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "${cookingItem.count} 개 / ${cookingItem.nutriKcal}kcal",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-              const SizedBox(height: 16),
+              //           const Text(
+              //             "요리 재료",
+              //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              //           ),
+              //           ...widget.cook!.cookItems.map((Content cookingItem) {
+              //             return Container(
+              //               padding: const EdgeInsets.all(16.0),
+              //               decoration: BoxDecoration(
+              //                 color: Colors.white,
+              //                 borderRadius: BorderRadius.circular(8.0),
+              //               ),
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //                 children: [
+              //                   Text(
+              //                     cookingItem.contentName,
+              //                     style: const TextStyle(
+              //                       fontSize: 14,
+              //                       fontWeight: FontWeight.bold,
+              //                     ),
+              //                   ),
+              //                   Container(
+              //                     padding: const EdgeInsets.symmetric(
+              //                       horizontal: 6.0,
+              //                       vertical: 2.0,
+              //                     ),
+              //                     decoration: BoxDecoration(
+              //                       color: Colors.grey[300],
+              //                       borderRadius: BorderRadius.circular(12.0),
+              //                     ),
+              //                     child: Center(
+              //                       child: Text(
+              //                         cookingItem.subCategory ?? '',
+              //                         style: const TextStyle(fontSize: 14),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   Text(
+              //                     "${cookingItem.count} 개 / ${cookingItem.nutriKcal}kcal",
+              //                     style: const TextStyle(
+              //                       fontSize: 14,
+              //                       color: Colors.grey,
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             );
+              //           } as Widget Function(Map<String, dynamic> e)),
+              //           const SizedBox(height: 16),
 
-              // 일치하는 물품 list
-              const Text(
-                "일치하는 물품",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              ...filteredItems.map((Content item) {
-                int cookingListCount = widget.cook!.cookItems
-                    .where(
-                      (cookingItem) =>
-                          cookingItem.subCategory == item.subCategory,
-                    )
-                    .fold(0, (sum, cookingItem) => sum + (cookingItem.count));
+              //           // 일치하는 물품 list
+              //           const Text(
+              //             "일치하는 물품",
+              //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              //           ),
+              //           ...filteredItems.map((Content item) {
+              //             int cookingListCount = widget.cook!.cookItems
+              //                 .where(
+              //                   (cookingItem) =>
+              //                       cookingItem.subCategory == item.subCategory,
+              //                 )
+              //                 .fold(0, (sum, cookingItem) => sum + (cookingItem.count));
 
-                return Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color:
-                        (item.count < cookingListCount)
-                            ? Colors.red[100]
-                            : Colors.white, // 조건에 따라 색상 변경
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        item.contentName,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0,
-                          vertical: 2.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            item.subCategory ?? '',
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "${item.count} 개 / ${item.nutriKcal}kcal",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+              //             return Container(
+              //               padding: const EdgeInsets.all(16.0),
+              //               decoration: BoxDecoration(
+              //                 color:
+              //                     (item.count < cookingListCount)
+              //                         ? Colors.red[100]
+              //                         : Colors.white, // 조건에 따라 색상 변경
+              //                 borderRadius: BorderRadius.circular(8.0),
+              //               ),
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //                 children: <Widget>[
+              //                   Text(
+              //                     item.contentName,
+              //                     style: const TextStyle(
+              //                       fontSize: 14,
+              //                       fontWeight: FontWeight.bold,
+              //                     ),
+              //                   ),
+              //                   Container(
+              //                     padding: const EdgeInsets.symmetric(
+              //                       horizontal: 6.0,
+              //                       vertical: 2.0,
+              //                     ),
+              //                     decoration: BoxDecoration(
+              //                       color: Colors.grey[300],
+              //                       borderRadius: BorderRadius.circular(12.0),
+              //                     ),
+              //                     child: Center(
+              //                       child: Text(
+              //                         item.subCategory ?? '',
+              //                         style: const TextStyle(fontSize: 14),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   Text(
+              //                     "${item.count} 개 / ${item.nutriKcal}kcal",
+              //                     style: const TextStyle(
+              //                       fontSize: 14,
+              //                       color: Colors.grey,
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             );
+              //           }),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+
+              //   bottomNavigationBar:
+              //       // 필요한 물품 알려주는 하단 박스
+              //       // 냉장고에 재료가 부족할 경우에만 -> 해당 박스 표시
+              //       missingIngredients.isNotEmpty
+              //           ? Container(
+              //             color: Colors.white,
+              //             padding: const EdgeInsets.all(25.0),
+              //             child: Container(
+              //               padding: const EdgeInsets.all(10.0),
+              //               decoration: BoxDecoration(
+              //                 color: Colors.amber[100],
+              //                 borderRadius: BorderRadius.circular(8.0),
+              //               ),
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //                 children: [
+              //                   Column(
+              //                     mainAxisSize: MainAxisSize.min,
+              //                     crossAxisAlignment: CrossAxisAlignment.center,
+              //                     children: <Widget>[
+              //                       const Text(
+              //                         "해당 음식을 만들기 위해 필요한 재료는",
+              //                         style: TextStyle(fontSize: 14),
+              //                       ),
+              //                       Text(
+              //                         "${missingIngredients.join(', ')} 입니다.",
+              //                         style: const TextStyle(
+              //                           fontSize: 14,
+              //                           fontWeight: FontWeight.bold,
+              //                         ),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           )
+              //           : Container(
+              //             color: Colors.white,
+              //             padding: const EdgeInsets.all(25.0),
+              //             child: Container(
+              //               padding: const EdgeInsets.all(16.0),
+              //               decoration: BoxDecoration(
+              //                 color: Colors.green[100],
+              //                 borderRadius: BorderRadius.circular(8.0),
+              //               ),
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //                 children: [
+              //                   Column(
+              //                     mainAxisSize: MainAxisSize.min,
+              //                     crossAxisAlignment: CrossAxisAlignment.center,
+              //                     children: [
+              //                       Text(
+              //                         "현재 냉장고 재료로 ${widget.cook?.cookName}을(를) 만들 수 있습니다!",
+              //                         style: const TextStyle(
+              //                           fontSize: 14,
+              //                           fontWeight: FontWeight.bold,
+              //                         ),
+              //                         textAlign: TextAlign.center,
+              //                       ),
+              //                     ],
+              //                   ),
             ],
           ),
         ),
       ),
-
-      bottomNavigationBar:
-          // 필요한 물품 알려주는 하단 박스
-          // 냉장고에 재료가 부족할 경우에만 -> 해당 박스 표시
-          missingIngredients.isNotEmpty
-              ? Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(25.0),
-                child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.amber[100],
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            "해당 음식을 만들기 위해 필요한 재료는",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          Text(
-                            "${missingIngredients.join(', ')} 입니다.",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              )
-              : Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(25.0),
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.green[100],
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "현재 냉장고 재료로 ${widget.cook?.cookName}을(를) 만들 수 있습니다!",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
     );
   }
 

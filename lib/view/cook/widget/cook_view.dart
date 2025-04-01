@@ -137,19 +137,19 @@ class _CookViewState extends ConsumerState<CookView> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '${cook.cookItems![0].contentName} 외 ${cook.cookItems.length}종',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Text(
+                  //       '${cook.cookItems[0].contentName} 외 ${cook.cookItems.length}종',
+                  //       style: const TextStyle(
+                  //         fontSize: 14,
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //       overflow: TextOverflow.ellipsis,
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

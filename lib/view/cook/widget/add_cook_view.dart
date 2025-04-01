@@ -13,6 +13,7 @@ import 'package:mango/view/cook/sub_widget/add_cook_app_bar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
+import 'package:mango/model/cook.dart'; // CookItems를 사용하기 위해 추가
 
 class AddCookView extends ConsumerStatefulWidget {
   const AddCookView({super.key});
@@ -43,13 +44,12 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(addCookProvider.notifier).resetState();
-      ref.watch(addCookProvider.notifier).sumCarb();
-      ref.watch(addCookProvider.notifier).sumFat();
-      ref.watch(addCookProvider.notifier).sumProtein();
-      ref.watch(addCookProvider.notifier).sumKcal();
+      ref.read(addCookProvider.notifier).resetState();
+      ref.read(addCookProvider.notifier).sumCarb();
+      ref.read(addCookProvider.notifier).sumFat();
+      ref.read(addCookProvider.notifier).sumProtein();
+      ref.read(addCookProvider.notifier).sumKcal();
     });
-    // view init 후 데이터 처리를 하기 위함
 
     _cookNameFocusNode.addListener(() {
       ref
@@ -152,10 +152,10 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
                     ref
-                        .watch(addCookProvider.notifier)
+                        .read(addCookProvider.notifier)
                         .updateSearchFieldEmpty(value.isEmpty);
                     ref
-                        .watch(searchContentProvider.notifier)
+                        .read(searchContentProvider.notifier)
                         .loadItemListByString(value);
                   },
                 ),
@@ -189,23 +189,42 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           visible: !(_addCookState?.isSearchIngredientFocused ?? false),
           child: AddCookBottomSheetWidget(
             memoController: _memoController,
-            onAddPressed: () {
+            onAddPressed: () async {
               final String cookName = _cookNameController.text;
               final String memo = _memoController.text;
-              final String ingredients = _searchIngridientController.text;
-              context.pop(context);
-              ref.read(addCookProvider.notifier);
-              // .addCook(
-              //   _group?.groupId ?? 0,
 
-              //   cookName,
-              //   memo,
-              //   _addCookState?.totalKcal as String,
-              //   _addCookState?.totalCarb as String,
-              //   _addCookState?.totalFat as String,
-              //   _addCookState?.totalProtein as String,
-              //   ingredients as List<Content>,
-              // );
+              // 테스트용 CookItems 리스트 생성
+              final List<CookItems> testIngredients = [
+                const CookItems(
+                  cookItemId: 9007199254740991,
+                  cookItemName: "Flour",
+                ),
+                const CookItems(
+                  cookItemId: 9007199254740992,
+                  cookItemName: "Sugar",
+                ),
+              ];
+
+              // 비동기적으로 addCook 호출
+              try {
+                await ref
+                    .read(addCookProvider.notifier)
+                    .addCook(
+                      cookName,
+                      memo,
+                      _addCookState?.totalKcal.toString() ?? '0',
+                      _addCookState?.totalCarb.toString() ?? '0',
+                      _addCookState?.totalProtein.toString() ?? '0',
+                      _addCookState?.totalFat.toString() ?? '0',
+                      _group?.groupId ?? 0,
+                    );
+                context.pop(context); // 성공적으로 추가 후 화면 닫기
+              } catch (e) {
+                // 에러 처리
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('요리 추가 실패: $e')));
+              }
             },
           ),
         ),

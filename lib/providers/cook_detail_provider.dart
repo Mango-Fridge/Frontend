@@ -1,48 +1,65 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/model/cook.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/state/add_cook_state.dart';
 import 'package:mango/model/content.dart';
+import 'package:mango/services/content_repository.dart';
 
 class CookDetailNotifier extends Notifier<AddCookState> {
+  final ContentRepository _contentRepository = ContentRepository();
+
   @override
   AddCookState build() => AddCookState();
 
+  // cookItemId로 Content를 조회하는 함수
+  Future<Content?> _getContentByCookItemId(int cookItemId) async {
+    return await _contentRepository.loadContent(cookItemId);
+  }
+
   // 냉장고에 존재하지 않는 요리 재료 표시 함수
-  List<String> getMissingCookIngredients(
-    List<Content> cookIngredients,
+  Future<List<String>> getMissingCookIngredients(
+    List<CookItems> cookIngredients,
     List<Content> refrigerIngredients,
-  ) {
-    // refrigerIngredients에서 카테고리 리스트 추출
-    final refrigerCategories =
+  ) async {
+    // refrigerIngredients에서 sub 카테고리 리스트 추출
+    final refrigerSubCategories =
         refrigerIngredients
-            .map((item) => item.category)
-            .where((category) => category != null)
+            .map((item) => item.subCategory)
+            .where((subCategory) => subCategory != null)
             .toSet(); // 중복 제거
 
     // cookIngredients에서 refrigerCategories에 없는 항목 필터링
-    return cookIngredients
-        .where(
-          (item) =>
-              item.category != null &&
-              !refrigerCategories.contains(item.category),
-        )
-        .map((item) => item.contentName)
-        .toList();
+    List<String> missingIngredients = [];
+    for (var item in cookIngredients) {
+      final content = await _getContentByCookItemId(item.cookItemId);
+      if (content != null &&
+          content.subCategory != null &&
+          !refrigerSubCategories.contains(content.subCategory)) {
+        missingIngredients.add(item.cookItemName);
+      }
+    }
+    return missingIngredients;
   }
 
   // 일치하는 물품 반환하는 함수
-  List<Content> filterContentsBySubCategory(
+  Future<List<Content>> filterContentsBySubCategory(
     List<Content> RefrigeratorList,
-    List<Content> CookingList,
-  ) {
-    // CookingList의 category 값을 Set으로 변환 (중복 제거)
-    final categorySet = CookingList.map((content) => content.category).toSet();
+    List<CookItems> cookItems,
+  ) async {
+    // cookItems의 subCategory 값을 Set으로 변환 (중복 제거)
+    final subCategorySet = <String?>{};
+    for (var item in cookItems) {
+      final content = await _getContentByCookItemId(item.cookItemId);
+      if (content?.subCategory != null) {
+        subCategorySet.add(content!.subCategory);
+      }
+    }
 
-    // RefrigeratorList에서 category 값이 두 번째 리스트에 포함된 항목만 필터링
+    // RefrigeratorList에서 subCategory 값이 두 번째 리스트에 포함된 항목만 필터링
     return RefrigeratorList.where(
-      (content) => categorySet.contains(content.category),
+      (content) => subCategorySet.contains(content.subCategory),
     ).toList();
   }
 }
