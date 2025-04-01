@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/group/group.dart';
 import 'package:mango/model/login/auth_model.dart';
@@ -48,7 +49,7 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
           ),
           const SizedBox(height: 5),
           ExpansionTile(
-            initiallyExpanded: true,  // 처음부터 펼쳐지게
+            initiallyExpanded: true, // 처음부터 펼쳐지게
             title: Text(
               '그룹원(${1})',
               style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
@@ -88,13 +89,37 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
               ),
             ),
             onPressed: () async {
-              groupNotifier.exitCurrentGroup(user?.usrId ?? 0, _group?.groupId ?? 0);
-              ref.read(grouViewStateProvider.notifier).state = GroupViewState.empty;
+              showDialog(
+                context: context,
+                builder:
+                    (BuildContext context) => AlertDialog(
+                      title: const Text('그룹 나가기'),
+                      content: const Text('해당 그룹을 나가면 되돌릴 수 없습니다.\n그룹을 나가겠습니까?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => context.pop(), // "취소" 버튼: 알럿 창 닫기
+                          child: const Text('취소'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            context.pop(); // 알럿 창 닫기
+                            groupNotifier.exitCurrentGroup(
+                              user?.usrId ?? 0,
+                              _group?.groupId ?? 0,
+                            );
+                            ref.read(grouViewStateProvider.notifier).state =
+                                GroupViewState.empty;
+                          },
+                          child: const Text('확인'),
+                        ),
+                      ],
+                    ),
+              );
             },
-            child:  Text(
-                    "그룹 나가기",
-                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
-                  ),
+            child: Text(
+              "그룹 나가기",
+              style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
+            ),
           ),
         ],
       ),
