@@ -6,15 +6,15 @@ part 'cook.g.dart';
 @freezed
 abstract class Cook with _$Cook {
   const factory Cook({
-    final int? cookId,
-    required String cookName,
-    required String cookMemo,
-    required String cookNutriKcal,
-    required String cookNutriCarbohydrate,
-    required String cookNutriProtein,
-    required String cookingNutriFat,
-    final List<CookItems>? cookItems,
-    final int? groupId,
+    required int? cookId,
+    required String? cookName,
+    required String? cookMemo,
+    required String? cookNutriKcal,
+    required String? cookNutriCarbohydrate,
+    required String? cookNutriProtein,
+    required String? cookingNutriFat,
+    required List<CookItems>? cookItems,
+    required int? groupId,
   }) = _Cook;
 
   factory Cook.fromJson(Map<String, dynamic> json) => _$CookFromJson(json);
@@ -23,8 +23,8 @@ abstract class Cook with _$Cook {
 @freezed
 abstract class CookItems with _$CookItems {
   const factory CookItems({
-    required int cookItemId,
-    required String cookItemName,
+    required int? cookItemId,
+    required String? cookItemName,
   }) = _CookItems;
 
   factory CookItems.fromJson(Map<String, dynamic> json) =>

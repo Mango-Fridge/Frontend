@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Cook {
 
- int? get cookId; String get cookName; String get cookMemo; String get cookNutriKcal; String get cookNutriCarbohydrate; String get cookNutriProtein; String get cookingNutriFat; List<CookItems>? get cookItems; int? get groupId;
+ int? get cookId; String? get cookName; String? get cookMemo; String? get cookNutriKcal; String? get cookNutriCarbohydrate; String? get cookNutriProtein; String? get cookingNutriFat; List<CookItems>? get cookItems; int? get groupId;
 /// Create a copy of Cook
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $CookCopyWith<$Res>  {
   factory $CookCopyWith(Cook value, $Res Function(Cook) _then) = _$CookCopyWithImpl;
 @useResult
 $Res call({
- int? cookId, String cookName, String cookMemo, String cookNutriKcal, String cookNutriCarbohydrate, String cookNutriProtein, String cookingNutriFat, List<CookItems>? cookItems, int? groupId
+ int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookingNutriFat, List<CookItems>? cookItems, int? groupId
 });
 
 
@@ -66,16 +66,16 @@ class _$CookCopyWithImpl<$Res>
 
 /// Create a copy of Cook
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cookId = freezed,Object? cookName = null,Object? cookMemo = null,Object? cookNutriKcal = null,Object? cookNutriCarbohydrate = null,Object? cookNutriProtein = null,Object? cookingNutriFat = null,Object? cookItems = freezed,Object? groupId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cookId = freezed,Object? cookName = freezed,Object? cookMemo = freezed,Object? cookNutriKcal = freezed,Object? cookNutriCarbohydrate = freezed,Object? cookNutriProtein = freezed,Object? cookingNutriFat = freezed,Object? cookItems = freezed,Object? groupId = freezed,}) {
   return _then(_self.copyWith(
 cookId: freezed == cookId ? _self.cookId : cookId // ignore: cast_nullable_to_non_nullable
-as int?,cookName: null == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
-as String,cookMemo: null == cookMemo ? _self.cookMemo : cookMemo // ignore: cast_nullable_to_non_nullable
-as String,cookNutriKcal: null == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
-as String,cookNutriCarbohydrate: null == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
-as String,cookNutriProtein: null == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
-as String,cookingNutriFat: null == cookingNutriFat ? _self.cookingNutriFat : cookingNutriFat // ignore: cast_nullable_to_non_nullable
-as String,cookItems: freezed == cookItems ? _self.cookItems : cookItems // ignore: cast_nullable_to_non_nullable
+as int?,cookName: freezed == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
+as String?,cookMemo: freezed == cookMemo ? _self.cookMemo : cookMemo // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriKcal: freezed == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
+as String?,cookingNutriFat: freezed == cookingNutriFat ? _self.cookingNutriFat : cookingNutriFat // ignore: cast_nullable_to_non_nullable
+as String?,cookItems: freezed == cookItems ? _self.cookItems : cookItems // ignore: cast_nullable_to_non_nullable
 as List<CookItems>?,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
@@ -88,16 +88,16 @@ as int?,
 @JsonSerializable()
 
 class _Cook implements Cook {
-  const _Cook({this.cookId, required this.cookName, required this.cookMemo, required this.cookNutriKcal, required this.cookNutriCarbohydrate, required this.cookNutriProtein, required this.cookingNutriFat, final  List<CookItems>? cookItems, this.groupId}): _cookItems = cookItems;
+  const _Cook({required this.cookId, required this.cookName, required this.cookMemo, required this.cookNutriKcal, required this.cookNutriCarbohydrate, required this.cookNutriProtein, required this.cookingNutriFat, required final  List<CookItems>? cookItems, required this.groupId}): _cookItems = cookItems;
   factory _Cook.fromJson(Map<String, dynamic> json) => _$CookFromJson(json);
 
 @override final  int? cookId;
-@override final  String cookName;
-@override final  String cookMemo;
-@override final  String cookNutriKcal;
-@override final  String cookNutriCarbohydrate;
-@override final  String cookNutriProtein;
-@override final  String cookingNutriFat;
+@override final  String? cookName;
+@override final  String? cookMemo;
+@override final  String? cookNutriKcal;
+@override final  String? cookNutriCarbohydrate;
+@override final  String? cookNutriProtein;
+@override final  String? cookingNutriFat;
  final  List<CookItems>? _cookItems;
 @override List<CookItems>? get cookItems {
   final value = _cookItems;
@@ -142,7 +142,7 @@ abstract mixin class _$CookCopyWith<$Res> implements $CookCopyWith<$Res> {
   factory _$CookCopyWith(_Cook value, $Res Function(_Cook) _then) = __$CookCopyWithImpl;
 @override @useResult
 $Res call({
- int? cookId, String cookName, String cookMemo, String cookNutriKcal, String cookNutriCarbohydrate, String cookNutriProtein, String cookingNutriFat, List<CookItems>? cookItems, int? groupId
+ int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookingNutriFat, List<CookItems>? cookItems, int? groupId
 });
 
 
@@ -159,16 +159,16 @@ class __$CookCopyWithImpl<$Res>
 
 /// Create a copy of Cook
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cookId = freezed,Object? cookName = null,Object? cookMemo = null,Object? cookNutriKcal = null,Object? cookNutriCarbohydrate = null,Object? cookNutriProtein = null,Object? cookingNutriFat = null,Object? cookItems = freezed,Object? groupId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cookId = freezed,Object? cookName = freezed,Object? cookMemo = freezed,Object? cookNutriKcal = freezed,Object? cookNutriCarbohydrate = freezed,Object? cookNutriProtein = freezed,Object? cookingNutriFat = freezed,Object? cookItems = freezed,Object? groupId = freezed,}) {
   return _then(_Cook(
 cookId: freezed == cookId ? _self.cookId : cookId // ignore: cast_nullable_to_non_nullable
-as int?,cookName: null == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
-as String,cookMemo: null == cookMemo ? _self.cookMemo : cookMemo // ignore: cast_nullable_to_non_nullable
-as String,cookNutriKcal: null == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
-as String,cookNutriCarbohydrate: null == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
-as String,cookNutriProtein: null == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
-as String,cookingNutriFat: null == cookingNutriFat ? _self.cookingNutriFat : cookingNutriFat // ignore: cast_nullable_to_non_nullable
-as String,cookItems: freezed == cookItems ? _self._cookItems : cookItems // ignore: cast_nullable_to_non_nullable
+as int?,cookName: freezed == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
+as String?,cookMemo: freezed == cookMemo ? _self.cookMemo : cookMemo // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriKcal: freezed == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
+as String?,cookingNutriFat: freezed == cookingNutriFat ? _self.cookingNutriFat : cookingNutriFat // ignore: cast_nullable_to_non_nullable
+as String?,cookItems: freezed == cookItems ? _self._cookItems : cookItems // ignore: cast_nullable_to_non_nullable
 as List<CookItems>?,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
@@ -181,7 +181,7 @@ as int?,
 /// @nodoc
 mixin _$CookItems {
 
- int get cookItemId; String get cookItemName;
+ int? get cookItemId; String? get cookItemName;
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -214,7 +214,7 @@ abstract mixin class $CookItemsCopyWith<$Res>  {
   factory $CookItemsCopyWith(CookItems value, $Res Function(CookItems) _then) = _$CookItemsCopyWithImpl;
 @useResult
 $Res call({
- int cookItemId, String cookItemName
+ int? cookItemId, String? cookItemName
 });
 
 
@@ -231,11 +231,11 @@ class _$CookItemsCopyWithImpl<$Res>
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cookItemId = null,Object? cookItemName = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,}) {
   return _then(_self.copyWith(
-cookItemId: null == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
-as int,cookItemName: null == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
-as String,
+cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
+as int?,cookItemName: freezed == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -249,8 +249,8 @@ class _CookItems implements CookItems {
   const _CookItems({required this.cookItemId, required this.cookItemName});
   factory _CookItems.fromJson(Map<String, dynamic> json) => _$CookItemsFromJson(json);
 
-@override final  int cookItemId;
-@override final  String cookItemName;
+@override final  int? cookItemId;
+@override final  String? cookItemName;
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
@@ -285,7 +285,7 @@ abstract mixin class _$CookItemsCopyWith<$Res> implements $CookItemsCopyWith<$Re
   factory _$CookItemsCopyWith(_CookItems value, $Res Function(_CookItems) _then) = __$CookItemsCopyWithImpl;
 @override @useResult
 $Res call({
- int cookItemId, String cookItemName
+ int? cookItemId, String? cookItemName
 });
 
 
@@ -302,11 +302,11 @@ class __$CookItemsCopyWithImpl<$Res>
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cookItemId = null,Object? cookItemName = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,}) {
   return _then(_CookItems(
-cookItemId: null == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
-as int,cookItemName: null == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
-as String,
+cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
+as int?,cookItemName: freezed == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

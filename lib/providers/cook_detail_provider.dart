@@ -33,11 +33,11 @@ class CookDetailNotifier extends Notifier<AddCookState> {
     // cookIngredients에서 refrigerCategories에 없는 항목 필터링
     List<String> missingIngredients = [];
     for (var item in cookIngredients) {
-      final content = await _getContentByCookItemId(item.cookItemId);
+      final content = await _getContentByCookItemId(item.cookItemId ?? 0);
       if (content != null &&
           content.subCategory != null &&
           !refrigerSubCategories.contains(content.subCategory)) {
-        missingIngredients.add(item.cookItemName);
+        missingIngredients.add(item.cookItemName ?? "");
       }
     }
     return missingIngredients;
@@ -51,7 +51,7 @@ class CookDetailNotifier extends Notifier<AddCookState> {
     // cookItems의 subCategory 값을 Set으로 변환 (중복 제거)
     final subCategorySet = <String?>{};
     for (var item in cookItems) {
-      final content = await _getContentByCookItemId(item.cookItemId);
+      final content = await _getContentByCookItemId(item.cookItemId ?? 0);
       if (content?.subCategory != null) {
         subCategorySet.add(content!.subCategory);
       }

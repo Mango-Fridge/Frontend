@@ -128,7 +128,7 @@ class _CookViewState extends ConsumerState<CookView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        cook.cookName,
+                        cook.cookName ?? "",
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
