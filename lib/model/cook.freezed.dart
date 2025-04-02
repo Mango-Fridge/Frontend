@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Cook {
 
- int? get cookId; String? get cookName; String? get cookMemo; String? get cookNutriKcal; String? get cookNutriCarbohydrate; String? get cookNutriProtein; String? get cookingNutriFat; List<CookItems>? get cookItems; int? get groupId;
+ int? get cookId; String? get cookName; String? get cookMemo; String? get cookNutriKcal; String? get cookNutriCarbohydrate; String? get cookNutriProtein; String? get cookNutriFat; List<CookItems>? get cookItems; int? get groupId;
 /// Create a copy of Cook
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $CookCopyWith<Cook> get copyWith => _$CookCopyWithImpl<Cook>(this as Cook, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Cook&&(identical(other.cookId, cookId) || other.cookId == cookId)&&(identical(other.cookName, cookName) || other.cookName == cookName)&&(identical(other.cookMemo, cookMemo) || other.cookMemo == cookMemo)&&(identical(other.cookNutriKcal, cookNutriKcal) || other.cookNutriKcal == cookNutriKcal)&&(identical(other.cookNutriCarbohydrate, cookNutriCarbohydrate) || other.cookNutriCarbohydrate == cookNutriCarbohydrate)&&(identical(other.cookNutriProtein, cookNutriProtein) || other.cookNutriProtein == cookNutriProtein)&&(identical(other.cookingNutriFat, cookingNutriFat) || other.cookingNutriFat == cookingNutriFat)&&const DeepCollectionEquality().equals(other.cookItems, cookItems)&&(identical(other.groupId, groupId) || other.groupId == groupId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Cook&&(identical(other.cookId, cookId) || other.cookId == cookId)&&(identical(other.cookName, cookName) || other.cookName == cookName)&&(identical(other.cookMemo, cookMemo) || other.cookMemo == cookMemo)&&(identical(other.cookNutriKcal, cookNutriKcal) || other.cookNutriKcal == cookNutriKcal)&&(identical(other.cookNutriCarbohydrate, cookNutriCarbohydrate) || other.cookNutriCarbohydrate == cookNutriCarbohydrate)&&(identical(other.cookNutriProtein, cookNutriProtein) || other.cookNutriProtein == cookNutriProtein)&&(identical(other.cookNutriFat, cookNutriFat) || other.cookNutriFat == cookNutriFat)&&const DeepCollectionEquality().equals(other.cookItems, cookItems)&&(identical(other.groupId, groupId) || other.groupId == groupId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cookId,cookName,cookMemo,cookNutriKcal,cookNutriCarbohydrate,cookNutriProtein,cookingNutriFat,const DeepCollectionEquality().hash(cookItems),groupId);
+int get hashCode => Object.hash(runtimeType,cookId,cookName,cookMemo,cookNutriKcal,cookNutriCarbohydrate,cookNutriProtein,cookNutriFat,const DeepCollectionEquality().hash(cookItems),groupId);
 
 @override
 String toString() {
-  return 'Cook(cookId: $cookId, cookName: $cookName, cookMemo: $cookMemo, cookNutriKcal: $cookNutriKcal, cookNutriCarbohydrate: $cookNutriCarbohydrate, cookNutriProtein: $cookNutriProtein, cookingNutriFat: $cookingNutriFat, cookItems: $cookItems, groupId: $groupId)';
+  return 'Cook(cookId: $cookId, cookName: $cookName, cookMemo: $cookMemo, cookNutriKcal: $cookNutriKcal, cookNutriCarbohydrate: $cookNutriCarbohydrate, cookNutriProtein: $cookNutriProtein, cookNutriFat: $cookNutriFat, cookItems: $cookItems, groupId: $groupId)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $CookCopyWith<$Res>  {
   factory $CookCopyWith(Cook value, $Res Function(Cook) _then) = _$CookCopyWithImpl;
 @useResult
 $Res call({
- int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookingNutriFat, List<CookItems>? cookItems, int? groupId
+ int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookNutriFat, List<CookItems>? cookItems, int? groupId
 });
 
 
@@ -66,7 +66,7 @@ class _$CookCopyWithImpl<$Res>
 
 /// Create a copy of Cook
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cookId = freezed,Object? cookName = freezed,Object? cookMemo = freezed,Object? cookNutriKcal = freezed,Object? cookNutriCarbohydrate = freezed,Object? cookNutriProtein = freezed,Object? cookingNutriFat = freezed,Object? cookItems = freezed,Object? groupId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cookId = freezed,Object? cookName = freezed,Object? cookMemo = freezed,Object? cookNutriKcal = freezed,Object? cookNutriCarbohydrate = freezed,Object? cookNutriProtein = freezed,Object? cookNutriFat = freezed,Object? cookItems = freezed,Object? groupId = freezed,}) {
   return _then(_self.copyWith(
 cookId: freezed == cookId ? _self.cookId : cookId // ignore: cast_nullable_to_non_nullable
 as int?,cookName: freezed == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,7 @@ as String?,cookMemo: freezed == cookMemo ? _self.cookMemo : cookMemo // ignore: 
 as String?,cookNutriKcal: freezed == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
 as String?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
 as String?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
-as String?,cookingNutriFat: freezed == cookingNutriFat ? _self.cookingNutriFat : cookingNutriFat // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriFat: freezed == cookNutriFat ? _self.cookNutriFat : cookNutriFat // ignore: cast_nullable_to_non_nullable
 as String?,cookItems: freezed == cookItems ? _self.cookItems : cookItems // ignore: cast_nullable_to_non_nullable
 as List<CookItems>?,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int?,
@@ -88,7 +88,7 @@ as int?,
 @JsonSerializable()
 
 class _Cook implements Cook {
-  const _Cook({required this.cookId, required this.cookName, required this.cookMemo, required this.cookNutriKcal, required this.cookNutriCarbohydrate, required this.cookNutriProtein, required this.cookingNutriFat, required final  List<CookItems>? cookItems, required this.groupId}): _cookItems = cookItems;
+  const _Cook({this.cookId, required this.cookName, required this.cookMemo, required this.cookNutriKcal, required this.cookNutriCarbohydrate, required this.cookNutriProtein, required this.cookNutriFat, final  List<CookItems>? cookItems, required this.groupId}): _cookItems = cookItems;
   factory _Cook.fromJson(Map<String, dynamic> json) => _$CookFromJson(json);
 
 @override final  int? cookId;
@@ -97,7 +97,7 @@ class _Cook implements Cook {
 @override final  String? cookNutriKcal;
 @override final  String? cookNutriCarbohydrate;
 @override final  String? cookNutriProtein;
-@override final  String? cookingNutriFat;
+@override final  String? cookNutriFat;
  final  List<CookItems>? _cookItems;
 @override List<CookItems>? get cookItems {
   final value = _cookItems;
@@ -122,16 +122,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Cook&&(identical(other.cookId, cookId) || other.cookId == cookId)&&(identical(other.cookName, cookName) || other.cookName == cookName)&&(identical(other.cookMemo, cookMemo) || other.cookMemo == cookMemo)&&(identical(other.cookNutriKcal, cookNutriKcal) || other.cookNutriKcal == cookNutriKcal)&&(identical(other.cookNutriCarbohydrate, cookNutriCarbohydrate) || other.cookNutriCarbohydrate == cookNutriCarbohydrate)&&(identical(other.cookNutriProtein, cookNutriProtein) || other.cookNutriProtein == cookNutriProtein)&&(identical(other.cookingNutriFat, cookingNutriFat) || other.cookingNutriFat == cookingNutriFat)&&const DeepCollectionEquality().equals(other._cookItems, _cookItems)&&(identical(other.groupId, groupId) || other.groupId == groupId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Cook&&(identical(other.cookId, cookId) || other.cookId == cookId)&&(identical(other.cookName, cookName) || other.cookName == cookName)&&(identical(other.cookMemo, cookMemo) || other.cookMemo == cookMemo)&&(identical(other.cookNutriKcal, cookNutriKcal) || other.cookNutriKcal == cookNutriKcal)&&(identical(other.cookNutriCarbohydrate, cookNutriCarbohydrate) || other.cookNutriCarbohydrate == cookNutriCarbohydrate)&&(identical(other.cookNutriProtein, cookNutriProtein) || other.cookNutriProtein == cookNutriProtein)&&(identical(other.cookNutriFat, cookNutriFat) || other.cookNutriFat == cookNutriFat)&&const DeepCollectionEquality().equals(other._cookItems, _cookItems)&&(identical(other.groupId, groupId) || other.groupId == groupId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cookId,cookName,cookMemo,cookNutriKcal,cookNutriCarbohydrate,cookNutriProtein,cookingNutriFat,const DeepCollectionEquality().hash(_cookItems),groupId);
+int get hashCode => Object.hash(runtimeType,cookId,cookName,cookMemo,cookNutriKcal,cookNutriCarbohydrate,cookNutriProtein,cookNutriFat,const DeepCollectionEquality().hash(_cookItems),groupId);
 
 @override
 String toString() {
-  return 'Cook(cookId: $cookId, cookName: $cookName, cookMemo: $cookMemo, cookNutriKcal: $cookNutriKcal, cookNutriCarbohydrate: $cookNutriCarbohydrate, cookNutriProtein: $cookNutriProtein, cookingNutriFat: $cookingNutriFat, cookItems: $cookItems, groupId: $groupId)';
+  return 'Cook(cookId: $cookId, cookName: $cookName, cookMemo: $cookMemo, cookNutriKcal: $cookNutriKcal, cookNutriCarbohydrate: $cookNutriCarbohydrate, cookNutriProtein: $cookNutriProtein, cookNutriFat: $cookNutriFat, cookItems: $cookItems, groupId: $groupId)';
 }
 
 
@@ -142,7 +142,7 @@ abstract mixin class _$CookCopyWith<$Res> implements $CookCopyWith<$Res> {
   factory _$CookCopyWith(_Cook value, $Res Function(_Cook) _then) = __$CookCopyWithImpl;
 @override @useResult
 $Res call({
- int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookingNutriFat, List<CookItems>? cookItems, int? groupId
+ int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookNutriFat, List<CookItems>? cookItems, int? groupId
 });
 
 
@@ -159,7 +159,7 @@ class __$CookCopyWithImpl<$Res>
 
 /// Create a copy of Cook
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cookId = freezed,Object? cookName = freezed,Object? cookMemo = freezed,Object? cookNutriKcal = freezed,Object? cookNutriCarbohydrate = freezed,Object? cookNutriProtein = freezed,Object? cookingNutriFat = freezed,Object? cookItems = freezed,Object? groupId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cookId = freezed,Object? cookName = freezed,Object? cookMemo = freezed,Object? cookNutriKcal = freezed,Object? cookNutriCarbohydrate = freezed,Object? cookNutriProtein = freezed,Object? cookNutriFat = freezed,Object? cookItems = freezed,Object? groupId = freezed,}) {
   return _then(_Cook(
 cookId: freezed == cookId ? _self.cookId : cookId // ignore: cast_nullable_to_non_nullable
 as int?,cookName: freezed == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
@@ -167,7 +167,7 @@ as String?,cookMemo: freezed == cookMemo ? _self.cookMemo : cookMemo // ignore: 
 as String?,cookNutriKcal: freezed == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
 as String?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
 as String?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
-as String?,cookingNutriFat: freezed == cookingNutriFat ? _self.cookingNutriFat : cookingNutriFat // ignore: cast_nullable_to_non_nullable
+as String?,cookNutriFat: freezed == cookNutriFat ? _self.cookNutriFat : cookNutriFat // ignore: cast_nullable_to_non_nullable
 as String?,cookItems: freezed == cookItems ? _self._cookItems : cookItems // ignore: cast_nullable_to_non_nullable
 as List<CookItems>?,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int?,

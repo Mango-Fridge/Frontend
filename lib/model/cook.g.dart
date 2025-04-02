@@ -13,7 +13,7 @@ _Cook _$CookFromJson(Map<String, dynamic> json) => _Cook(
   cookNutriKcal: json['cookNutriKcal'] as String?,
   cookNutriCarbohydrate: json['cookNutriCarbohydrate'] as String?,
   cookNutriProtein: json['cookNutriProtein'] as String?,
-  cookingNutriFat: json['cookingNutriFat'] as String?,
+  cookNutriFat: json['cookNutriFat'] as String?,
   cookItems:
       (json['cookItems'] as List<dynamic>?)
           ?.map((e) => CookItems.fromJson(e as Map<String, dynamic>))
@@ -28,7 +28,7 @@ Map<String, dynamic> _$CookToJson(_Cook instance) => <String, dynamic>{
   'cookNutriKcal': instance.cookNutriKcal,
   'cookNutriCarbohydrate': instance.cookNutriCarbohydrate,
   'cookNutriProtein': instance.cookNutriProtein,
-  'cookingNutriFat': instance.cookingNutriFat,
+  'cookNutriFat': instance.cookNutriFat,
   'cookItems': instance.cookItems,
   'groupId': instance.groupId,
 };

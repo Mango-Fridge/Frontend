@@ -6,14 +6,14 @@ part 'cook.g.dart';
 @freezed
 abstract class Cook with _$Cook {
   const factory Cook({
-    required int? cookId,
+    final int? cookId,
     required String? cookName,
     required String? cookMemo,
     required String? cookNutriKcal,
     required String? cookNutriCarbohydrate,
     required String? cookNutriProtein,
-    required String? cookingNutriFat,
-    required List<CookItems>? cookItems,
+    required String? cookNutriFat, 
+    final List<CookItems>? cookItems,
     required int? groupId,
   }) = _Cook;
 
