@@ -6,6 +6,7 @@ import 'package:mango/model/content.dart';
 import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/providers/cook_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
 import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
@@ -208,7 +209,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               // 비동기적으로 addCook 호출
               try {
                 await ref
-                    .read(addCookProvider.notifier)
+                    .read(cookProvider.notifier)
                     .addCook(
                       cookName,
                       memo,
@@ -218,6 +219,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                       _addCookState?.totalFat.toString() ?? '0',
                       _group?.groupId ?? 0,
                     );
+                    
                 context.pop(context); // 성공적으로 추가 후 화면 닫기
               } catch (e) {
                 // 에러 처리

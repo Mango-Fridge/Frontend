@@ -17,6 +17,37 @@ class CookNotifier extends Notifier<CookState?> {
     state = _cookState;
   }
 
+  // Cook 저장 함수
+  Future<void> addCook(
+    String cookName,
+    String cookMemo,
+    String cookNutriKcal,
+    String cookNutriCarbohydrate,
+    String cookNutriFat,
+    String cookNutriProtein,
+    int groupId,
+  ) async {
+    try {
+      Cook newCook = Cook(
+      cookName: cookName,
+      cookMemo: cookMemo,
+      cookNutriKcal: cookNutriKcal,
+      cookNutriCarbohydrate: cookNutriCarbohydrate,
+      cookNutriFat: cookNutriFat,
+      cookNutriProtein: cookNutriProtein,
+      groupId: groupId,
+    );
+
+    await _cookRepository.addCook(newCook);
+
+    state = state?.copyWith(
+      cookList: <Cook>[...(state?.cookList ?? <Cook>[]), newCook], // 새롭게 만든 newCook을 cookList에 추가
+    );
+    } catch (e) {
+      // 에러 처리
+    }
+  }
+
   // Cook list load 함수
   Future<void> loadCookList(int groupId) async {
     try {
