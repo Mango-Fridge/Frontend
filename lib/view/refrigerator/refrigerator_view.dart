@@ -69,43 +69,45 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               ),
               const Spacer(),
               // 새로고침 버튼
-              IconButton(
-                onPressed: () {
-                  (_group?.groupName ?? '').isEmpty
-                      ? null
-                      : ref
-                          .watch(refrigeratorNotifier.notifier)
-                          .loadContentList(_group?.groupId ?? 0);
-                },
-                icon: const Icon(Icons.refresh),
-              ),
-              // 물품 추가 버튼
-              ElevatedButton(
-                onPressed: () {
-                  (_group?.groupName ?? '').isEmpty
-                      ? null
-                      : ref.watch(refrigeratorNotifier.notifier).resetState();
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .loadContentList(_group?.groupId ?? 0);
-                  context.push('/searchContent');
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  backgroundColor: Colors.amber[300],
-                  foregroundColor: Colors.black,
+              if ((_group?.groupName ?? '').isNotEmpty)
+                IconButton(
+                  onPressed: () {
+                    (_group?.groupName ?? '').isEmpty
+                        ? null
+                        : ref
+                            .watch(refrigeratorNotifier.notifier)
+                            .loadContentList(_group?.groupId ?? 0);
+                  },
+                  icon: const Icon(Icons.refresh),
                 ),
-                child: const Text('물품 추가'),
-              ),
+              // 물품 추가 버튼
+              if ((_group?.groupName ?? '').isNotEmpty)
+                ElevatedButton(
+                  onPressed: () {
+                    (_group?.groupName ?? '').isEmpty
+                        ? null
+                        : ref.watch(refrigeratorNotifier.notifier).resetState();
+                    ref
+                        .watch(refrigeratorNotifier.notifier)
+                        .loadContentList(_group?.groupId ?? 0);
+                    context.push('/searchContent');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    backgroundColor: Colors.amber[300],
+                    foregroundColor: Colors.black,
+                  ),
+                  child: const Text('물품 추가'),
+                ),
             ],
           ),
         ),
       ),
       backgroundColor: Colors.white,
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Column(
           children: <Widget>[
             Padding(
@@ -117,10 +119,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   fontWeight: FontWeight.bold,
                   fontSize: Design.tabBarFontSize,
                 ),
-                indicatorWeight: 3,
+                indicatorWeight: 2,
                 indicatorSize: TabBarIndicatorSize.tab,
                 tabs: <Widget>[
-                  Tab(text: '유통 기한 임박'),
+                  //Tab(text: '유통 기한 임박'),
                   Tab(text: '냉장'),
                   Tab(text: '냉동'),
                 ],
@@ -141,13 +143,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         ),
       ),
       floatingActionButton:
-          _refrigeratorState?.isUpdatedContent ?? false
+          (_group?.groupName ?? "").isEmpty ||
+                  _refrigeratorState!.isUpdatedContent
               ? null
               : FloatingActionButton(
                 onPressed: () {
-                  (_group?.groupName ?? '').isEmpty
-                      ? null
-                      : context.push('/cook');
+                  context.push('/cook');
                 },
               ),
     );
@@ -156,7 +157,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 속한 그룹이 없을 때 보여지는 뷰
   List<Widget> _noGroupView() {
     return List.generate(
-      3,
+      2,
       (_) => const Center(
         child: Text(
           "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
@@ -171,37 +172,79 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return Center(child: Text(text, textAlign: TextAlign.center));
   }
 
+  Widget contentExpansionTile(
+    BuildContext context,
+    String title,
+    List<Content> contentList,
+  ) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        title: Text(
+          title,
+          style: TextStyle(
+            color: title == '유통 기한 마감 임박' ? Colors.red : Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        initiallyExpanded: true,
+        children: <Widget>[
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: contentList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildContentRow(contentList[index]);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   // 냉장고 ContentListView
   Widget _refrigeratorContent() {
-    return ListView.builder(
-      itemCount: _refrigeratorState?.refrigeratorContentList?.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Content content =
-            _refrigeratorState!.refrigeratorContentList![index];
-        return _buildContentRow(content);
-      },
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          if (_refrigeratorState?.refExpContentList?.isNotEmpty ?? false)
+            contentExpansionTile(
+              context,
+              '유통 기한 마감 임박',
+              _refrigeratorState!.refExpContentList!,
+            ),
+
+          if (_refrigeratorState?.refrigeratorContentList?.isNotEmpty ?? false)
+            contentExpansionTile(
+              context,
+              '냉장',
+              _refrigeratorState!.refrigeratorContentList!,
+            ),
+        ],
+      ),
     );
   }
 
   // 냉동실 ContentListView
   Widget _freezerContent() {
-    return ListView.builder(
-      itemCount: _refrigeratorState?.freezerContentList?.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Content content = _refrigeratorState!.freezerContentList![index];
-        return _buildContentRow(content);
-      },
-    );
-  }
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          if (_refrigeratorState?.frzExpContentList?.isNotEmpty ?? false)
+            contentExpansionTile(
+              context,
+              '유통 기한 마감 임박',
+              _refrigeratorState!.frzExpContentList!,
+            ),
 
-  // 마감 임박 ContentListView
-  Widget _expContent() {
-    return ListView.builder(
-      itemCount: _refrigeratorState?.expContentList?.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Content content = _refrigeratorState!.expContentList![index];
-        return _buildContentRow(content);
-      },
+          if (_refrigeratorState?.freezerContentList?.isNotEmpty ?? false)
+            contentExpansionTile(
+              context,
+              '냉동',
+              _refrigeratorState!.freezerContentList!,
+            ),
+        ],
+      ),
     );
   }
 
@@ -209,18 +252,15 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   List<Widget> _buildContent() {
     return <Widget>[
       _refrigeratorState != null &&
-              _refrigeratorState?.expContentList != null &&
-              _refrigeratorState!.expContentList!.isNotEmpty
-          ? _expContent()
-          : _noContentView('유통 기한 임박 물품이 없어요.'),
-      _refrigeratorState != null &&
               _refrigeratorState?.refrigeratorContentList != null &&
-              _refrigeratorState!.refrigeratorContentList!.isNotEmpty
+              (_refrigeratorState!.refrigeratorContentList!.isNotEmpty ||
+                  _refrigeratorState!.refExpContentList!.isNotEmpty)
           ? _refrigeratorContent()
           : _noContentView('냉장고에 보관중인 물품이 없어요.'),
       _refrigeratorState != null &&
               _refrigeratorState?.freezerContentList != null &&
-              _refrigeratorState!.freezerContentList!.isNotEmpty
+              (_refrigeratorState!.freezerContentList!.isNotEmpty ||
+                  _refrigeratorState!.frzExpContentList!.isNotEmpty)
           ? _freezerContent()
           : _noContentView('냉동실에 보관중인 물품이 없어요.'),
     ];

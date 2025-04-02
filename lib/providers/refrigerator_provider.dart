@@ -29,12 +29,14 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       _refrigeratorState.freezerContentList = getFreezerContentList(
         contentList,
       );
-      _refrigeratorState.expContentList = getExpContentList(contentList);
+      _refrigeratorState.refExpContentList = getRefExpContentList(contentList);
+      _refrigeratorState.frzExpContentList = getFrzExpContentList(contentList);
       _refrigeratorState.contentList = contentList;
       state = state?.copyWith(
         refrigeratorContentList: _refrigeratorState.refrigeratorContentList,
         freezerContentList: _refrigeratorState.freezerContentList,
-        expContentList: _refrigeratorState.expContentList,
+        refExpContentList: _refrigeratorState.refExpContentList,
+        frzExpContentList: _refrigeratorState.frzExpContentList,
         contentList: _refrigeratorState.contentList,
       );
     } catch (e) {
@@ -88,13 +90,38 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     return freezerContentList;
   }
 
-  List<Content> getExpContentList(List<Content> contentList) {
+  List<Content> getRefExpContentList(List<Content> contentList) {
     List<Content> expContentList =
         contentList.where((Content content) {
-          return DateTime.now().difference(content.expDate!).inHours > -24;
+          return (DateTime.now().difference(content.expDate!).inHours > -24) &&
+              (content.storageArea == '냉장');
         }).toList();
 
     return expContentList;
+  }
+
+  List<Content> getFrzExpContentList(List<Content> contentList) {
+    List<Content> expContentList =
+        contentList.where((Content content) {
+          return (DateTime.now().difference(content.expDate!).inHours > -24) &&
+              (content.storageArea == '냉동');
+        }).toList();
+
+    return expContentList;
+  }
+
+  int getRefrigeratorContentCount() {
+    if (state == null) return 0;
+
+    return (state?.refrigeratorContentList?.length ?? 0) +
+        (state?.refExpContentList?.length ?? 0);
+  }
+
+  int getFreezerContentCount() {
+    if (state == null) return 0;
+
+    return (state?.freezerContentList?.length ?? 0) +
+        (state?.frzExpContentList?.length ?? 0);
   }
 
   // count 증가 함수
@@ -150,7 +177,8 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       contentList: addedList,
       refrigeratorContentList: getRefrigeratorContentList(addedList!),
       freezerContentList: getFreezerContentList(addedList),
-      expContentList: getExpContentList(addedList),
+      refExpContentList: getRefExpContentList(addedList),
+      frzExpContentList: getFrzExpContentList(addedList),
       updateContentList: updateList,
       isUpdatedContent: updateList.isNotEmpty,
     );
@@ -209,7 +237,8 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       contentList: reducedList,
       refrigeratorContentList: getRefrigeratorContentList(reducedList!),
       freezerContentList: getFreezerContentList(reducedList),
-      expContentList: getExpContentList(reducedList),
+      refExpContentList: getRefExpContentList(reducedList),
+      frzExpContentList: getFrzExpContentList(reducedList),
       updateContentList: updateList,
       isUpdatedContent: updateList.isNotEmpty,
     );
@@ -250,7 +279,8 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
         contentList: updatedContentList,
         refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
         freezerContentList: getFreezerContentList(updatedContentList),
-        expContentList: getExpContentList(updatedContentList),
+        refExpContentList: getRefExpContentList(updatedContentList),
+        frzExpContentList: getFrzExpContentList(updatedContentList),
         updateContentList: <Content>[],
       );
     }
@@ -285,7 +315,8 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
         contentList: updatedContentList,
         refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
         freezerContentList: getFreezerContentList(updatedContentList),
-        expContentList: getExpContentList(updatedContentList),
+        refExpContentList: getRefExpContentList(updatedContentList),
+        frzExpContentList: getFrzExpContentList(updatedContentList),
         updateContentList: updatedUpdateList,
         isUpdatedContent: updatedUpdateList.isNotEmpty,
       );
@@ -302,7 +333,8 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       contentList: removedList,
       refrigeratorContentList: getRefrigeratorContentList(removedList),
       freezerContentList: getFreezerContentList(removedList),
-      expContentList: getExpContentList(removedList),
+      refExpContentList: getRefExpContentList(removedList),
+      frzExpContentList: getFrzExpContentList(removedList),
     );
   }
 }
