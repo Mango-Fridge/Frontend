@@ -148,7 +148,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 text: '추가',
                 backgroundColor: Colors.amber,
                 onPressed: () {
-                  ref.watch(addCookProvider.notifier).addItem(widget.item!);
+                  ref.watch(addCookProvider.notifier).addCookItem(widget.item!);
                   ref.watch(addCookProvider.notifier).sumKcal();
                   ref.watch(addCookProvider.notifier).sumCarb();
                   ref.watch(addCookProvider.notifier).sumProtein();

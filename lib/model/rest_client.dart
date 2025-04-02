@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:retrofit/retrofit.dart';
@@ -46,4 +48,10 @@ abstract class RestClient {
 
   @POST('/cooks/add') // cook 추가
   Future<ApiResponse> addCook(@Body() Map<String, Object?> body);
+
+  @POST('/cook-items/{cookId}') // cookId 해당 cookItem 추가
+  Future<ApiResponse> addCookItem(
+    @Path('cookId') int cookId,
+    @Body() Map<String, Object?> body,
+  );
 }

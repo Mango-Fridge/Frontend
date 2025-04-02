@@ -60,7 +60,8 @@ class AddCookNotifier extends Notifier<AddCookState> {
     state = state.copyWith(isSearchIngredientFocused: hasFocus);
   }
 
-  void addItem(RefrigeratorItem item) {
+  // cook에 Item을 추가하는 함수 ?
+  Future<void> addCookItem(RefrigeratorItem item) {
     List<RefrigeratorItem> cookItemList =
         state.itemListForCook ?? <RefrigeratorItem>[];
 
@@ -83,6 +84,12 @@ class AddCookNotifier extends Notifier<AddCookState> {
     }
 
     state = state.copyWith(itemListForCook: cookItemList);
+  } async {
+    try {
+      await
+    } catch (e) {
+      // 에러 처리
+    }
   }
 
   // item list 열량 합계 함수
