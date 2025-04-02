@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group/group.dart';
@@ -49,174 +50,180 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
         leadingWidth: double.infinity,
-        leading: Row(
-          spacing: 15,
-          children: <Widget>[
-            Container(),
-            Image.asset("assets/images/title.png", width: design.homeImageSize),
-            const Text("Mango"),
-          ],
+        toolbarHeight: design.screenHeight * 0.08,
+        leading: Padding(
+          padding: EdgeInsets.all(design.marginAndPadding),
+          child: Row(
+            children: <Widget>[
+              Container(),
+              Image.asset(
+                "assets/images/title.png",
+                width: design.homeImageSize,
+              ),
+              const Text(
+                "Mango",
+                style: TextStyle(
+                  fontSize: Design.appTitleFontSize,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              // 새로고침 버튼
+              IconButton(
+                onPressed: () {
+                  (_group?.groupName ?? '').isEmpty
+                      ? null
+                      : ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .loadContentList(_group?.groupId ?? 0);
+                },
+                icon: const Icon(Icons.refresh),
+              ),
+              // 물품 추가 버튼
+              ElevatedButton(
+                onPressed: () {
+                  (_group?.groupName ?? '').isEmpty
+                      ? null
+                      : ref.watch(refrigeratorNotifier.notifier).resetState();
+                  ref
+                      .watch(refrigeratorNotifier.notifier)
+                      .loadContentList(_group?.groupId ?? 0);
+                  context.push('/searchContent');
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  backgroundColor: Colors.amber[300],
+                  foregroundColor: Colors.black,
+                ),
+                child: const Text('물품 추가'),
+              ),
+            ],
+          ),
         ),
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Row(
-                  children: <Widget>[
-                    // 새로고침 버튼
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.refresh),
-                    ),
-                    // 물품 추가 버튼
-                    ElevatedButton(
-                      onPressed: () {
-                        ref.watch(refrigeratorNotifier.notifier).resetState();
-                        ref
-                            .watch(refrigeratorNotifier.notifier)
-                            .loadContentList(_group?.groupId ?? 0);
-                        context.push('/searchContent');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        backgroundColor: Colors.amber[300],
-                        foregroundColor: Colors.black,
-                      ),
-                      child: const Text('물품 추가'),
-                    ),
-                  ],
+      body: DefaultTabController(
+        length: 3,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(design.marginAndPadding),
+              child: const TabBar(
+                indicatorColor: Colors.amber,
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Design.tabBarFontSize,
                 ),
-              ],
+                indicatorWeight: 3,
+                indicatorSize: TabBarIndicatorSize.tab,
+                tabs: <Widget>[
+                  Tab(text: '유통 기한 임박'),
+                  Tab(text: '냉장'),
+                  Tab(text: '냉동'),
+                ],
+              ),
             ),
-          ),
-          // 물품 List
-          Expanded(
-            child:
-                (_group?.groupName ?? '').isEmpty
-                    ? const Center(
-                      child: Text(
-                        "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                    : ListView(
-                      padding: EdgeInsets.zero,
-                      children: <Widget>[
-                        _buildContent(_refrigeratorState?.contentList),
-                      ],
-                    ),
-          ),
 
-          if (_refrigeratorState?.isUpdatedContent ?? false)
-            _contentUpdateView(),
-        ],
+            // 물품 List
+            Expanded(
+              child: TabBarView(
+                children:
+                    (_group?.groupName ?? '').isEmpty
+                        ? _noGroupView()
+                        : _buildContent(),
+              ),
+            ),
+            if (_refrigeratorState?.isUpdatedContent ?? false) _setCountView(),
+          ],
+        ),
       ),
-
       floatingActionButton:
           _refrigeratorState?.isUpdatedContent ?? false
               ? null
               : FloatingActionButton(
                 onPressed: () {
-                  context.push('/cook');
+                  (_group?.groupName ?? '').isEmpty
+                      ? null
+                      : context.push('/cook');
                 },
               ),
     );
   }
 
-  // 보관장소 별 UI 구성
-  Widget _buildContent(List<Content>? contentList) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        children: <Widget>[
-          _refrigeratorState?.expContentList?.isNotEmpty ?? false
-              ? Column(
-                children: <Widget>[
-                  const Divider(),
-                  ExpansionTile(
-                    initiallyExpanded: true,
-                    backgroundColor: Colors.red[100],
-                    title: const Text(
-                      '마감 임박',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    shape: Border.all(color: Colors.transparent),
-                    children:
-                        _refrigeratorState!.expContentList!
-                            .map((Content content) => _buildContentRow(content))
-                            .toList(),
-                  ),
-                  const Divider(),
-                  Container(height: 10),
-                ],
-              )
-              : Container(),
-          const Divider(),
-          ExpansionTile(
-            initiallyExpanded: true,
-            title: const Text(
-              '냉장',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            shape: Border.all(color: Colors.transparent),
-            children:
-                _refrigeratorState?.refrigeratorContentList != null
-                    ? _refrigeratorState!.refrigeratorContentList!.isEmpty
-                        ? <Widget>[
-                          const Center(
-                            child: Text(
-                              "냉장고에 보관중인 물품이 없어요.",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ]
-                        : _refrigeratorState!.refrigeratorContentList!
-                            .map((Content content) => _buildContentRow(content))
-                            .toList()
-                    : <Widget>[],
-          ),
-          const Divider(),
-          Container(height: 10),
-          const Divider(),
-          ExpansionTile(
-            initiallyExpanded: true,
-            title: const Text(
-              '냉동',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            shape: Border.all(color: Colors.transparent),
-            children:
-                _refrigeratorState?.freezerContentList != null
-                    ? _refrigeratorState!.freezerContentList!.isEmpty
-                        ? <Widget>[
-                          const Center(
-                            child: Text(
-                              "냉동고에 보관중인 물품이 없어요.",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ]
-                        : _refrigeratorState!.freezerContentList!
-                            .map((Content content) => _buildContentRow(content))
-                            .toList()
-                    : <Widget>[],
-          ),
-          const Divider(),
-        ],
+  // 속한 그룹이 없을 때 보여지는 뷰
+  List<Widget> _noGroupView() {
+    return List.generate(
+      3,
+      (_) => const Center(
+        child: Text(
+          "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
+          textAlign: TextAlign.center,
+        ),
       ),
     );
+  }
+
+  // ContentList가 비었을 때 보여지는 뷰
+  Widget _noContentView(String text) {
+    return Center(child: Text(text, textAlign: TextAlign.center));
+  }
+
+  // 냉장고 ContentListView
+  Widget _refrigeratorContent() {
+    return ListView.builder(
+      itemCount: _refrigeratorState?.refrigeratorContentList?.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Content content =
+            _refrigeratorState!.refrigeratorContentList![index];
+        return _buildContentRow(content);
+      },
+    );
+  }
+
+  // 냉동실 ContentListView
+  Widget _freezerContent() {
+    return ListView.builder(
+      itemCount: _refrigeratorState?.freezerContentList?.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Content content = _refrigeratorState!.freezerContentList![index];
+        return _buildContentRow(content);
+      },
+    );
+  }
+
+  // 마감 임박 ContentListView
+  Widget _expContent() {
+    return ListView.builder(
+      itemCount: _refrigeratorState?.expContentList?.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Content content = _refrigeratorState!.expContentList![index];
+        return _buildContentRow(content);
+      },
+    );
+  }
+
+  // 보관장소 별 UI 구성
+  List<Widget> _buildContent() {
+    return <Widget>[
+      _refrigeratorState != null &&
+              _refrigeratorState?.expContentList != null &&
+              _refrigeratorState!.expContentList!.isNotEmpty
+          ? _expContent()
+          : _noContentView('유통 기한 임박 물품이 없어요.'),
+      _refrigeratorState != null &&
+              _refrigeratorState?.refrigeratorContentList != null &&
+              _refrigeratorState!.refrigeratorContentList!.isNotEmpty
+          ? _refrigeratorContent()
+          : _noContentView('냉장고에 보관중인 물품이 없어요.'),
+      _refrigeratorState != null &&
+              _refrigeratorState?.freezerContentList != null &&
+              _refrigeratorState!.freezerContentList!.isNotEmpty
+          ? _freezerContent()
+          : _noContentView('냉동실에 보관중인 물품이 없어요.'),
+    ];
   }
 
   // 물품 별 UI 구성
@@ -246,11 +253,16 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 final Content loadedContent = snapshot.data!;
 
                 return AlertDialog(
+                  insetPadding: EdgeInsets.zero,
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  content: ContentDetailView(content: loadedContent),
+                  content: SizedBox(
+                    width: design.termsOverlayWidth * 0.85,
+                    height: design.termsOverlayHeight * 0.90,
+                    child: ContentDetailView(content: loadedContent),
+                  ),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
@@ -291,8 +303,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '소비기한 ${content.expDate}',
-                    style: const TextStyle(fontSize: 12),
+                    '소비기한: ${DateFormat('yyyy-M-d a h:m:s', 'ko').format(content.expDate ?? DateTime.now())}',
+                    style: const TextStyle(
+                      fontSize: Design.contentRowExpFontSize,
+                    ),
                   ),
                 ],
               ),
@@ -312,8 +326,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 }),
                 const SizedBox(width: 5),
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: design.screenWidth * 0.17,
+                  height: design.screenWidth * 0.080,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -346,11 +360,13 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 수량 조절 버튼
   Widget _quantityButton(String symbol, VoidCallback onPressed) {
+    final Design design = Design(context);
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: 30,
-        height: 30,
+        width: design.screenWidth * 0.080,
+        height: design.screenWidth * 0.080,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -358,14 +374,17 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         ),
         child: Text(
           symbol,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontSize: Design.countButtonFontSize,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
   }
 
   // 수량 조절 버튼 탭 했을 시 나오는 수량 업데이트 뷰
-  Widget _contentUpdateView() {
+  Widget _setCountView() {
     Design design = Design(context);
     return Container(
       color: Colors.grey[200],
@@ -404,14 +423,14 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   title: Text(
                     content!.contentName,
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: Design.setCountViewFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   trailing: Text(
                     content.count.toString(),
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: Design.setCountViewFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -419,14 +438,14 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               },
             ),
           ),
-          _contentUpdateButtons(),
+          _setCountButtons(),
         ],
       ),
     );
   }
 
   // 수량 업데이트 뷰 버튼
-  Widget _contentUpdateButtons() {
+  Widget _setCountButtons() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: const BoxDecoration(
