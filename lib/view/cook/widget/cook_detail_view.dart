@@ -107,7 +107,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     ),
                     nutrientLabel(
                       nutriLabel: '지',
-                      nutriCapacity: '${widget.cook?.cookingNutriFat}g',
+                      nutriCapacity: '${widget.cook?.cookNutriFat}g',
                     ),
                   ],
                 ),

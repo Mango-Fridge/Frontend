@@ -23,7 +23,7 @@ class AddCookNotifier extends Notifier<AddCookState> {
     String cookMemo,
     String cookNutriKcal,
     String cookNutriCarbohydrate,
-    String cookingNutriFat,
+    String cookNutriFat,
     String cookNutriProtein,
     int groupId,
   ) async {
@@ -34,11 +34,13 @@ class AddCookNotifier extends Notifier<AddCookState> {
           cookMemo: cookMemo,
           cookNutriKcal: cookNutriKcal,
           cookNutriCarbohydrate: cookNutriCarbohydrate,
-          cookingNutriFat: cookingNutriFat,
+          cookNutriFat: cookNutriFat,
           cookNutriProtein: cookNutriProtein,
           groupId: groupId,
         ),
       );
+      
+      state = state.copyWith();
     } catch (e) {
       // 에러 처리
     }
@@ -61,36 +63,36 @@ class AddCookNotifier extends Notifier<AddCookState> {
   }
 
   // cook에 Item을 추가하는 함수 ?
-  Future<void> addCookItem(RefrigeratorItem item) {
-    List<RefrigeratorItem> cookItemList =
-        state.itemListForCook ?? <RefrigeratorItem>[];
+  // Future<void> addCookItem(RefrigeratorItem item) {
+  //   List<RefrigeratorItem> cookItemList =
+  //       state.itemListForCook ?? <RefrigeratorItem>[];
 
-    bool exists = cookItemList.any(
-      (RefrigeratorItem cookItem) => cookItem.itemId == item.itemId,
-    );
+  //   bool exists = cookItemList.any(
+  //     (RefrigeratorItem cookItem) => cookItem.itemId == item.itemId,
+  //   );
 
-    if (!exists) {
-      cookItemList.add(item.copyWith(count: state.itemCount));
-    } else {
-      cookItemList =
-          cookItemList.map((RefrigeratorItem cookItem) {
-            if (cookItem.itemId == item.itemId) {
-              return cookItem.copyWith(
-                count: (cookItem.count ?? 0) + state.itemCount,
-              );
-            }
-            return cookItem;
-          }).toList();
-    }
+  //   if (!exists) {
+  //     cookItemList.add(item.copyWith(count: state.itemCount));
+  //   } else {
+  //     cookItemList =
+  //         cookItemList.map((RefrigeratorItem cookItem) {
+  //           if (cookItem.itemId == item.itemId) {
+  //             return cookItem.copyWith(
+  //               count: (cookItem.count ?? 0) + state.itemCount,
+  //             );
+  //           }
+  //           return cookItem;
+  //         }).toList();
+  //   }
 
-    state = state.copyWith(itemListForCook: cookItemList);
-  } async {
-    try {
-      await
-    } catch (e) {
-      // 에러 처리
-    }
-  }
+  //   state = state.copyWith(itemListForCook: cookItemList);
+  // } async {
+  //   try {
+  //     await
+  //   } catch (e) {
+  //     // 에러 처리
+  //   }
+  // }
 
   // item list 열량 합계 함수
   void sumKcal() {
