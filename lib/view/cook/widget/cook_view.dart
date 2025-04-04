@@ -104,56 +104,85 @@ class _CookViewState extends ConsumerState<CookView> {
 
   Widget _buildCookRow(Cook cook) {
     Design design = Design(context);
-    return GestureDetector(
-      onTap: () {
-        context.push('/cookDetail', extra: cook);
+    return Dismissible(
+      key: Key(cook.cookId.toString()), // 각 항목의 고유 키 (cookId 사용)
+      direction: DismissDirection.endToStart, // 오른쪽에서 왼쪽으로 스와이프
+      background: Container(
+        color: Colors.red, // 빨간색 배경
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20.0),
+        child: const Text(
+          "삭제",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      onDismissed: (direction) {
+        // 스와이프 완료 시 삭제 동작
+        if (cook.cookId != null) {
+          ref.read(cookProvider.notifier).deleteCook(cook.cookId!);
+          // 삭제 후 사용자에게 알림
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("${cook.cookName}이(가) 삭제되었습니다.")),
+          );
+        }
       },
-      child: Container(
-        margin: EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: design.marginAndPadding,
-        ),
-        padding: EdgeInsets.all(design.marginAndPadding),
-        decoration: BoxDecoration(
-          color: Colors.amber[300],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        cook.cookName ?? "",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+      child: GestureDetector(
+        onTap: () {
+          context.push('/cookDetail', extra: cook);
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(
+            vertical: 4,
+            horizontal: design.marginAndPadding,
+          ),
+          padding: EdgeInsets.all(design.marginAndPadding),
+          decoration: BoxDecoration(
+            color: Colors.amber[300],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          cook.cookName ?? "",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: <Widget>[
-                  //     Text(
-                  //       '${cook.cookItems[0].contentName} 외 ${cook.cookItems.length}종',
-                  //       style: const TextStyle(
-                  //         fontSize: 14,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //       overflow: TextOverflow.ellipsis,
-                  //     ),
-                  //   ],
-                  // ),
-                ],
+                      ],
+                    ),
+                    // cookItem 복구 후 사용할 부분
+                    //
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   children: <Widget>[
+                    //     Text(
+                    //       '${cook.cookItems[0].contentName} 외 ${cook.cookItems.length}종',
+                    //       style: const TextStyle(
+                    //         fontSize: 14,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //       overflow: TextOverflow.ellipsis,
+                    //     ),
+                    //   ],
+                    // ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

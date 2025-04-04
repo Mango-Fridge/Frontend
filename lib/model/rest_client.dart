@@ -54,4 +54,7 @@ abstract class RestClient {
     @Path('cookId') int cookId,
     @Body() Map<String, Object?> body,
   );
+
+  @DELETE('/cooks/{cookId}') // cook 삭제
+  Future<ApiResponse> deleteCook(@Path('cookId') int cookId);
 }

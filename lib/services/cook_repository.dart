@@ -74,4 +74,20 @@ class CookRepository {
       AppLogger.logger.e("[cook_repository/addCook]: $e");
     }
   }
+
+  Future<void> DeleteCook(int cookId) async {
+    RestClient client = RestClient(dio);
+
+    try {
+      ApiResponse response = await client.deleteCook(cookId);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[cook_repository/deleteCook]: 요리 삭제 성공");
+      } else {
+        throw Exception('[cook_repository/deleteCook]: Json Parse Error');
+      }
+    } catch (e) {
+      AppLogger.logger.e("[cook_repository/deleteCook]: $e");
+    }
+  }
 }

@@ -29,20 +29,23 @@ class CookNotifier extends Notifier<CookState?> {
   ) async {
     try {
       Cook newCook = Cook(
-      cookName: cookName,
-      cookMemo: cookMemo,
-      cookNutriKcal: cookNutriKcal,
-      cookNutriCarbohydrate: cookNutriCarbohydrate,
-      cookNutriFat: cookNutriFat,
-      cookNutriProtein: cookNutriProtein,
-      groupId: groupId,
-    );
+        cookName: cookName,
+        cookMemo: cookMemo,
+        cookNutriKcal: cookNutriKcal,
+        cookNutriCarbohydrate: cookNutriCarbohydrate,
+        cookNutriFat: cookNutriFat,
+        cookNutriProtein: cookNutriProtein,
+        groupId: groupId,
+      );
 
-    await _cookRepository.addCook(newCook);
+      await _cookRepository.addCook(newCook);
 
-    state = state?.copyWith(
-      cookList: <Cook>[...(state?.cookList ?? <Cook>[]), newCook], // 새롭게 만든 newCook을 cookList에 추가
-    );
+      state = state?.copyWith(
+        cookList: <Cook>[
+          ...(state?.cookList ?? <Cook>[]),
+          newCook,
+        ], // 새롭게 만든 newCook을 cookList에 추가
+      );
     } catch (e) {
       // 에러 처리
     }
@@ -57,6 +60,15 @@ class CookNotifier extends Notifier<CookState?> {
       state = state?.copyWith(cookList: _cookState.cookList);
     } catch (e) {
       AppLogger.logger.e('[refrigerator_provider/loadContentList]: $e');
+    }
+  }
+
+  // 요리 삭제 함수
+  Future<void> deleteCook(int cookId) async {
+    try {
+      await _cookRepository.DeleteCook(cookId);
+    } catch (e) {
+      AppLogger.logger.e("[group_repository/exitCurrentGroup]: $e");
     }
   }
 }
