@@ -72,7 +72,7 @@ class GroupParticipationView extends ConsumerWidget {
                           color: Colors.amber,
                         ),
                         Text(
-                          '${groupState.gruoupUserKing ?? ''}외 ${groupState.groupUserCount ?? 0}명',
+                          '${groupState.groupOwnerName ?? ''}외 ${groupState.groupMemberCount ?? 0}명',
                           style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
                         ),
                       ],
