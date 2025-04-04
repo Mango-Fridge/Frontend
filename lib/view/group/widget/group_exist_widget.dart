@@ -22,6 +22,17 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
   GroupNotifier get groupNotifier => ref.read(groupProvider.notifier);
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(groupProvider.notifier)
+          .groupUserList(user?.usrId ?? 0, _group?.groupId ?? 0);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Design design = Design(context);
     final double fontSizeMediaQuery =
@@ -36,46 +47,84 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
             child: Row(
               children: <Widget>[
                 Text(
-                  '${_group?.groupName}', // 추후 그룹 코드가 들어갈 예정
+                  '${_group?.groupName}',
                   style: TextStyle(fontSize: fontSizeMediaQuery * 0.06),
                 ),
                 const Spacer(),
                 Text(
-                  '냉장고ID: ${_group?.groupId ?? 0}', // 추후 그룹 코드가 들어갈 예정
+                  '냉장고ID: ${_group?.groupCode ?? ''}',
                   style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 5),
-          ExpansionTile(
+          const SizedBox(height: 20),
+          ExpansionTile( // 승인 요청 대기
             initiallyExpanded: true, // 처음부터 펼쳐지게
             title: Text(
-              '그룹원(${1})',
+              '승인 요청 대기(${_group?.groupHopeUser?.length ?? 0})',
               style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
             ),
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding: EdgeInsets.all(design.marginAndPadding),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          '그룹장',
-                          style: TextStyle(fontSize: fontSizeMediaQuery * 0.06),
+                children:
+                    _group?.groupHopeUser?.map((GroupHopeUser user) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: EdgeInsets.all(design.marginAndPadding),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              user.username,
+                              style: TextStyle(
+                                fontSize: fontSizeMediaQuery * 0.06,
+                              ),
+                            ),
+                          ],
                         ),
-                        const Icon(
-                          Icons.emoji_events,
-                          size: 26,
-                          color: Colors.amber,
+                      );
+                    }).toList() ??
+                    [const SizedBox()],
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          ExpansionTile( // 그룹원
+            initiallyExpanded: true, // 처음부터 펼쳐지게
+            title: Text(
+              '그룹원(${_group?.groupUsers?.length})',
+              style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
+            ),
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                children:
+                    _group?.groupUsers?.map((GroupUser user) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: EdgeInsets.all(design.marginAndPadding),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              user.username,
+                              style: TextStyle(
+                                fontSize: fontSizeMediaQuery * 0.06,
+                              ),
+                            ),
+                            if (_group?.groupOwnerId ==
+                                user.userId) ...<Widget>[
+                              const Icon(
+                                Icons.emoji_events,
+                                size: 26,
+                                color: Colors.amber,
+                              ),
+                            ],
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
+                      );
+                    }).toList() ??
+                    [const SizedBox()],
               ),
             ],
           ),
@@ -94,7 +143,9 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                 builder:
                     (BuildContext context) => AlertDialog(
                       title: const Text('그룹 나가기'),
-                      content: const Text('해당 그룹을 나가면 되돌릴 수 없습니다.\n그룹을 나가겠습니까?'),
+                      content: const Text(
+                        '해당 그룹을 나가면 되돌릴 수 없습니다.\n그룹을 나가겠습니까?',
+                      ),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => context.pop(), // "취소" 버튼: 알럿 창 닫기

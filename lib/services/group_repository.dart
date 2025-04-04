@@ -82,6 +82,7 @@ class GroupRepository {
       ApiResponse response = await client.postGroupUserList(body);
       
       if (response.code == 200) {
+        AppLogger.logger.i("[group_repository/groupUserList]: ${Group.fromJson(response.data)}");
         return Group.fromJson(response.data);
       } else {
         throw Exception('그룹 인원 불러오기 실패');
