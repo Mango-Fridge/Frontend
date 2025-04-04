@@ -66,9 +66,16 @@ class CookNotifier extends Notifier<CookState?> {
   // 요리 삭제 함수
   Future<void> deleteCook(int cookId) async {
     try {
+      // 1. 상태를 즉시 업데이트하여 cookList에서 항목 제거
+      final updatedCookList =
+          state?.cookList?.where((cook) => cook.cookId != cookId).toList();
+      state = state?.copyWith(cookList: updatedCookList);
+
+      // 2. 비동기 작업 수행 (서버에서 삭제)
       await _cookRepository.DeleteCook(cookId);
     } catch (e) {
-      AppLogger.logger.e("[group_repository/exitCurrentGroup]: $e");
+      AppLogger.logger.e("[cook_notifier/deleteCook]: $e");
+      // 에러 처리
     }
   }
 }
