@@ -15,8 +15,8 @@ class GroupCreateNotifier extends Notifier<GroupState> {
     return GroupState(
       groupId: null,
       groupName: null,
-      gruoupUserKing: null,
-      groupUserCount: null,
+      groupOwnerName: null,
+      groupMemberCount: null,
       errorMessage: null,
       isButton: false,
       isLoadingButton: false,

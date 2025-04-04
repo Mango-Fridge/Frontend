@@ -46,4 +46,7 @@ abstract class RestClient {
 
   @DELETE('/api/groups/user') // 그룹 나가기
   Future<ApiResponse> exitGroup(@Body() Map<String, Object?> body);
+
+  @GET('/api/groups/exist/{groupCode}') // 그룹 존재 여부 확인(유효성)
+  Future<ApiResponse> isGroupValid(@Path('groupCode') String groupCode);
 }

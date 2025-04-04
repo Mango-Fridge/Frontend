@@ -3,6 +3,7 @@ import 'package:mango/app_logger.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:mango/model/group/group.dart';
 import 'package:mango/model/rest_client.dart';
+import 'package:mango/state/group_state.dart';
 
 class GroupRepository {
   final Dio dio = Dio();
@@ -103,6 +104,31 @@ class GroupRepository {
       } else {
         throw Exception('네트워크 오류 발생: ${e.message}');
       }
+    }
+  }
+
+  // groupCode로 그룹 존재 여부 확인(유효성)
+  Future<GroupState> isGroupValid(String groupCode) async {
+    RestClient client = RestClient(dio);
+
+    try {
+      ApiResponse response = await client.isGroupValid(groupCode);
+
+      // 통신이 성공하고, 데이터 값이 비어있지 않을 경우
+      if (response.code == 200 && response.data != null) {
+        final groupInfo = response.data;
+        AppLogger.logger.i("[group_repository/isGroupValid]: $groupInfo");
+
+        return GroupState(
+          groupName: groupInfo['groupName'],
+          groupOwnerName: groupInfo['groupOwnerName'],
+          groupMemberCount: groupInfo['groupMemberCount'],
+        );
+      } else {
+        throw Exception('그룹 정보를 불러오는 데 실패했습니다.');
+      }
+    } on DioException catch (e) {
+      throw Exception('네트워크 오류 발생: ${e.message}');
     }
   }
 

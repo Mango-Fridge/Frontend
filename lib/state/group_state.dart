@@ -1,6 +1,7 @@
 // 그룹 - 상태 클래스: 유효성 검사 및 통신에 사용
 class GroupState {
   final String? groupId; // 그룹id
+  final String? groupCode; // 그룹 코드
   final String? groupName; // 그룹 이름
   final String? groupOwnerName; // 그룹장
   final int? groupMemberCount; // 그룹 인원수
@@ -10,6 +11,7 @@ class GroupState {
 
   GroupState({
     this.groupId,
+    this.groupCode,
     this.groupName,
     this.groupOwnerName,
     this.groupMemberCount,
@@ -20,8 +22,9 @@ class GroupState {
 
   GroupState copyWith({
     String? groupId,
+    String? groupCode,
     String? groupName,
-    String? gruoupUserKing,
+    String? groupOwnerName,
     int? groupMemberCount,
     String? errorMessage,
     bool? isButton,
@@ -29,6 +32,7 @@ class GroupState {
   }) {
     return GroupState(
       groupId: groupId,
+      groupCode: groupCode,
       groupName: groupName,
       groupOwnerName: groupOwnerName,
       groupMemberCount: groupMemberCount,
