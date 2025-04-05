@@ -8,6 +8,7 @@ import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
+import 'package:mango/toastMessage.dart';
 
 class GrouExistWidget extends ConsumerStatefulWidget {
   const GrouExistWidget({super.key});
@@ -59,7 +60,8 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
             ),
           ),
           const SizedBox(height: 20),
-          ExpansionTile( // 승인 요청 대기
+          ExpansionTile(
+            // 승인 요청 대기
             initiallyExpanded: true, // 처음부터 펼쳐지게
             title: Text(
               '승인 요청 대기(${_group?.groupHopeUser?.length ?? 0})',
@@ -90,7 +92,8 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
             ],
           ),
           const SizedBox(height: 20),
-          ExpansionTile( // 그룹원
+          ExpansionTile(
+            // 그룹원
             initiallyExpanded: true, // 처음부터 펼쳐지게
             title: Text(
               '그룹원(${_group?.groupUsers?.length})',
@@ -152,14 +155,25 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                           child: const Text('취소'),
                         ),
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             context.pop(); // 알럿 창 닫기
-                            groupNotifier.exitCurrentGroup(
+                            if (await groupNotifier.exitCurrentGroup(
                               user?.usrId ?? 0,
                               _group?.groupId ?? 0,
-                            );
-                            ref.read(grouViewStateProvider.notifier).state =
-                                GroupViewState.empty;
+                            )) {
+                              ref.read(grouViewStateProvider.notifier).state =
+                                  GroupViewState.empty;
+                              toastMessage(
+                                context,
+                                "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
+                              );
+                            } else {
+                              toastMessage(
+                                context,
+                                "'${_group?.groupName ?? ''}' 그룹을 나갈 수 없습니다.",
+                                type: ToastmessageType.errorType,
+                              );
+                            }
                           },
                           child: const Text('확인'),
                         ),

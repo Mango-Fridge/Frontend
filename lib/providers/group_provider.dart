@@ -31,11 +31,13 @@ class GroupNotifier extends Notifier<Group?> {
   }
 
   // 해당 그룹 나가기
-  Future<void> exitCurrentGroup(int userId, int groupId) async {
+  Future<bool> exitCurrentGroup(int userId, int groupId) async {
     try {
       await _groupRepository.exitCurrentGroup(userId, groupId);
+      return true;
     } catch (e) {
-      AppLogger.logger.e("[group_repository/exitCurrentGroup]: $e");
+      AppLogger.logger.e(e);
+      return false;
     }
   }
 }

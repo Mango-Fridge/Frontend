@@ -151,7 +151,7 @@ class GroupRepository {
         throw Exception('[group_repository/exitCurrentGroup]: Json Parse Error');
       }
     } catch (e) {
-      AppLogger.logger.e("[group_repository/exitCurrentGroup]: $e");
+      throw Exception('[group_repository/exitCurrentGroup]: ${e}');
     }
   }
 }
