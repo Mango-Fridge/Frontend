@@ -28,6 +28,17 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
       state = null;
     }
   }
+
+  // itemId로 개별 item 불러오는 함수
+  Future<RefrigeratorItem?> loadItem(int itemId) async {
+    try {
+      final RefrigeratorItem? item = await _itemRepository.loadItem(itemId);
+
+      return item;
+    } catch (e) {
+      AppLogger.logger.e("[search_item_provider/loadItemListByString]: $e");
+    }
+  }
 }
 
 final NotifierProvider<SearchItemNotifier, SearchItemState?>

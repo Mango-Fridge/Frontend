@@ -36,7 +36,7 @@ class ContentRepository {
       ApiResponse response = await client.addItem(body);
 
       if (response.code == 200) {
-        AppLogger.logger.i("[content_repository/saveContent]: Item 정상 저장 완료.");
+        AppLogger.logger.d("[content_repository/saveContent]: Item 정상 저장 완료.");
       }
     } catch (e) {
       AppLogger.logger.e("[content_repository/saveContent]: $e");
@@ -51,7 +51,7 @@ class ContentRepository {
       ApiResponse response = await client.getContentList(groupId);
 
       if (response.code == 200) {
-        AppLogger.logger.i(
+        AppLogger.logger.d(
           "[content_repository/loadContentList]: Content list load 완료.",
         );
 
@@ -77,7 +77,7 @@ class ContentRepository {
       ApiResponse response = await client.getContent(contentId);
 
       if (response.code == 200) {
-        AppLogger.logger.i(
+        AppLogger.logger.d(
           "[content_repository/loadContent]: Content load 완료.",
         );
 
@@ -92,8 +92,9 @@ class ContentRepository {
     }
   }
 
-  Future<void> setCount(int groupId, List<Content> contentsList) async {
+  Future<String> setCount(int groupId, List<Content> contentsList) async {
     RestClient client = RestClient(dio);
+    String message = '';
 
     final Map<String, Object?> body = <String, Object?>{
       "contents":
@@ -110,10 +111,43 @@ class ContentRepository {
       ApiResponse response = await client.setCount(body);
 
       if (response.code == 200) {
-        AppLogger.logger.i("[content_repository/setCount]: 물품 개수 반영 완료.");
+        AppLogger.logger.d("[content_repository/setCount]: 물품 개수 반영 완료.");
+
+        message = '물품 개수가 정상적으로 반영 되었습니다.';
+
+        return message;
+      } else if (response.code == null) {
+        switch (response.error?.code) {
+          case 'C001':
+            AppLogger.logger.d(
+              "[content_repository/setCount]: 해당 Group을 찾을 수 없습니다.",
+            );
+
+            message = "해당 Group을 찾을 수 없습니다.";
+          case 'C002':
+            AppLogger.logger.d(
+              "[content_repository/setCount]: 해당 Content를 찾을 수 없습니다.",
+            );
+
+            message = "해당 Content를 찾을 수 없습니다.";
+          case 'C003':
+            AppLogger.logger.d(
+              "[content_repository/setCount]: 품목 개수가 0보다 작을 수 없습니다.",
+            );
+
+            message = "품목 개수가 0보다 작을 수 없습니다.";
+        }
+
+        return message;
       }
     } catch (e) {
       AppLogger.logger.e("[content_repository/setCount]: $e");
+
+      message = '수량 조절 중 에러가 발생하였습니다.';
+
+      return message;
     }
+
+    return message;
   }
 }

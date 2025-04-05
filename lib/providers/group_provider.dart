@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/group/group.dart';
 import 'package:mango/services/group_repository.dart';
 
@@ -8,6 +9,7 @@ class GroupNotifier extends Notifier<Group?> {
   @override
   Group? build() => const Group(groupId: 0, groupName: '');
 
+  // userId로 group id, name 불러오기
   Future<void> loadGroup(int userId) async {
     try {
       final Group group = await _groupRepository.loadGroup(userId);
@@ -17,6 +19,7 @@ class GroupNotifier extends Notifier<Group?> {
     }
   }
 
+  // 해당 그룹 인원 불러오기
   Future<void> groupUserList(int userId, int groupId) async {
     try {
       final Group group = await _groupRepository.groupUserList(userId, groupId);
@@ -24,6 +27,17 @@ class GroupNotifier extends Notifier<Group?> {
     } catch (e) {
       print(e);
       state = null;
+    }
+  }
+
+  // 해당 그룹 나가기
+  Future<bool> exitCurrentGroup(int userId, int groupId) async {
+    try {
+      await _groupRepository.exitCurrentGroup(userId, groupId);
+      return true;
+    } catch (e) {
+      AppLogger.logger.e(e);
+      return false;
     }
   }
 }

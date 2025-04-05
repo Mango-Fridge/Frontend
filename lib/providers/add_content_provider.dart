@@ -213,15 +213,17 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   }
 
   // view에서 선택 된 expDate 관리 함수
-  void setExpDate(DateTime expDate) {
+  bool setExpDate(DateTime expDate) {
     if (state != null) {
-      _addContentState = state!.copyWith(
-        selectedExpDate: expDate,
-        isRegDateEmpty: true,
-      );
+      if (expDate.isAfter(DateTime.now())) {
+        _addContentState = state!.copyWith(
+          selectedExpDate: expDate,
+          isRegDateEmpty: expDate.isAfter(DateTime.now()),
+        );
+      }
     }
-
     state = _addContentState;
+    return expDate.isAfter(DateTime.now());
   }
 
   // view에서 선택 된 unit 관리 함수

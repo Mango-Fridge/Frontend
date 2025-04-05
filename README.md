@@ -2,17 +2,11 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.0.9 (2025-03-27)
- - 로그인
-   - (Kakao) 로그인 handling 처리
+## VERSION 1.1.0 (2025-04-02)
  - 메인화면
-   - 물품 관련 API 연결
+   - View 일부 수정 (마감 임박/냉장/냉동 TabBar)
  - 그룹
-   - 그룹 관련 API 연결
- - 요리
-   - 요리 DetailView 관련 로직 구현
- - 그 외
-   - ToastMessage Type 추가 (기본, 에러)
+   - 그룹 나가기 AlertDialog 출력
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 

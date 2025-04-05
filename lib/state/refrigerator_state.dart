@@ -5,16 +5,20 @@ class RefrigeratorState {
   List<Content>? refrigeratorContentList;
   List<Content>? freezerContentList;
   List<Content>? updateContentList;
-  List<Content>? expContentList;
+  List<Content>? refExpContentList;
+  List<Content>? frzExpContentList;
   bool isUpdatedContent = false;
+  String? setCountMessage;
 
   RefrigeratorState({
     this.contentList,
     this.refrigeratorContentList,
     this.freezerContentList,
     this.updateContentList,
-    this.expContentList,
+    this.refExpContentList,
+    this.frzExpContentList,
     this.isUpdatedContent = false,
+    this.setCountMessage,
   });
 
   RefrigeratorState copyWith({
@@ -22,8 +26,10 @@ class RefrigeratorState {
     List<Content>? refrigeratorContentList,
     List<Content>? freezerContentList,
     List<Content>? updateContentList,
-    List<Content>? expContentList,
+    List<Content>? refExpContentList,
+    List<Content>? frzExpContentList,
     bool? isUpdatedContent,
+    String? setCountMessage,
   }) {
     return RefrigeratorState(
       contentList: contentList ?? this.contentList,
@@ -31,8 +37,10 @@ class RefrigeratorState {
           refrigeratorContentList ?? this.refrigeratorContentList,
       freezerContentList: freezerContentList ?? this.freezerContentList,
       updateContentList: updateContentList ?? this.updateContentList,
-      expContentList: expContentList ?? this.expContentList,
+      refExpContentList: refExpContentList ?? this.refExpContentList,
+      frzExpContentList: frzExpContentList ?? this.frzExpContentList,
       isUpdatedContent: isUpdatedContent ?? this.isUpdatedContent,
+      setCountMessage: setCountMessage ?? this.setCountMessage,
     );
   }
 }
