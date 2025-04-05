@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:retrofit/retrofit.dart';
@@ -49,4 +51,19 @@ abstract class RestClient {
 
   @GET('/api/groups/exist/{groupCode}') // 그룹 존재 여부 확인(유효성)
   Future<ApiResponse> isGroupValid(@Path('groupCode') String groupCode);
+
+  @GET('/cooks/list/{groupId}') // cook list 호출
+  Future<ApiResponse> getCookList(@Path('groupId') int groupId);
+
+  @POST('/cooks/add') // cook 추가
+  Future<ApiResponse> addCook(@Body() Map<String, Object?> body);
+
+  @POST('/cook-items/{cookId}') // cookId 해당 cookItem 추가
+  Future<ApiResponse> addCookItem(
+    @Path('cookId') int cookId,
+    @Body() Map<String, Object?> body,  
+  );
+
+  @DELETE('/cooks/{cookId}') // cook 삭제
+  Future<ApiResponse> deleteCook(@Path('cookId') int cookId);
 }

@@ -1,47 +1,32 @@
 import 'content.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'cook.freezed.dart';
+part 'cook.g.dart';
 
-class Cook {
-  final int groupID;
-  final String cookingName;
-  final String cookingMemo;
-  final String cookingNutriKcal;
-  final String cookingNutriCarbohydrate;
-  final String cookingNutriFat;
-  final String cookingNutriProtein;
-  final List<Content> cookingItems;
+@freezed
+abstract class Cook with _$Cook {
+  const factory Cook({
+    final int? cookId,
+    required String? cookName,
+    required String? cookMemo,
+    required String? cookNutriKcal,
+    required String? cookNutriCarbohydrate,
+    required String? cookNutriProtein,
+    required String? cookNutriFat, 
+    final List<CookItems>? cookItems,
+    required int? groupId,
+  }) = _Cook;
 
-  Cook({
-    required this.groupID,
-    required this.cookingName,
-    required this.cookingMemo,
-    required this.cookingNutriKcal,
-    required this.cookingNutriCarbohydrate,
-    required this.cookingNutriFat,
-    required this.cookingNutriProtein,
-    required this.cookingItems,
-  });
+  factory Cook.fromJson(Map<String, dynamic> json) => _$CookFromJson(json);
+}
 
-  // 변경 불가능한 final property를 변경 가능하게 함
-  Cook copyWith({
-    int? groupID,
-    String? cookingName,
-    String? cookingMemo,
-    String? cookingNutriKcal,
-    String? cookingNutriCarbohydrate,
-    String? cookingNutriFat,
-    String? cookingNutriProtein,
-    List<Content>? cookingItems,
-  }) {
-    return Cook(
-      groupID: groupID ?? this.groupID,
-      cookingName: cookingName ?? this.cookingName,
-      cookingMemo: cookingMemo ?? this.cookingMemo,
-      cookingNutriKcal: cookingNutriKcal ?? this.cookingNutriKcal,
-      cookingNutriCarbohydrate:
-          cookingNutriCarbohydrate ?? this.cookingNutriCarbohydrate,
-      cookingNutriFat: cookingNutriFat ?? this.cookingNutriFat,
-      cookingNutriProtein: cookingNutriProtein ?? this.cookingNutriProtein,
-      cookingItems: cookingItems ?? List.from(this.cookingItems),
-    );
-  }
+@freezed
+abstract class CookItems with _$CookItems {
+  const factory CookItems({
+    required int? cookItemId,
+    required String? cookItemName,
+  }) = _CookItems;
+
+  factory CookItems.fromJson(Map<String, dynamic> json) =>
+      _$CookItemsFromJson(json);
 }

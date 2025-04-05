@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
+import 'package:mango/model/content.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/add_cook_provider.dart';
+import 'package:mango/providers/cook_provider.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
 import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_app_bar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
+import 'package:mango/model/cook.dart'; // CookItems를 사용하기 위해 추가
 
 class AddCookView extends ConsumerStatefulWidget {
   const AddCookView({super.key});
@@ -31,6 +36,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
   SearchItemState? get _searchContentState => ref.watch(searchContentProvider);
   AddCookState? get _addCookState => ref.watch(addCookProvider);
+  // group 정보 받아옴
+  Group? get _group => ref.watch(groupProvider);
 
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
@@ -38,10 +45,12 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(addCookProvider.notifier).resetState();
-      ref.watch(addCookProvider.notifier).sumKcal();
+      ref.read(addCookProvider.notifier).resetState();
+      ref.read(addCookProvider.notifier).sumCarb();
+      ref.read(addCookProvider.notifier).sumFat();
+      ref.read(addCookProvider.notifier).sumProtein();
+      ref.read(addCookProvider.notifier).sumKcal();
     });
-    // view init 후 데이터 처리를 하기 위함
 
     _cookNameFocusNode.addListener(() {
       ref
@@ -144,10 +153,10 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
                     ref
-                        .watch(addCookProvider.notifier)
+                        .read(addCookProvider.notifier)
                         .updateSearchFieldEmpty(value.isEmpty);
                     ref
-                        .watch(searchContentProvider.notifier)
+                        .read(searchContentProvider.notifier)
                         .loadItemListByString(value);
                   },
                 ),
@@ -181,11 +190,43 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           visible: !(_addCookState?.isSearchIngredientFocused ?? false),
           child: AddCookBottomSheetWidget(
             memoController: _memoController,
-            onAddPressed: () {
+            onAddPressed: () async {
               final String cookName = _cookNameController.text;
-              final String ingredients = _searchIngridientController.text;
-              context.pop(context);
-              ref.read(addCookProvider.notifier).addCook(cookName, ingredients);
+              final String memo = _memoController.text;
+
+              // 테스트용 CookItems 리스트 생성
+              final List<CookItems> testIngredients = [
+                const CookItems(
+                  cookItemId: 9007199254740991,
+                  cookItemName: "Flour",
+                ),
+                const CookItems(
+                  cookItemId: 9007199254740992,
+                  cookItemName: "Sugar",
+                ),
+              ];
+
+              // 비동기적으로 addCook 호출
+              try {
+                await ref
+                    .read(cookProvider.notifier)
+                    .addCook(
+                      cookName,
+                      memo,
+                      _addCookState?.totalKcal.toString() ?? '0',
+                      _addCookState?.totalCarb.toString() ?? '0',
+                      _addCookState?.totalProtein.toString() ?? '0',
+                      _addCookState?.totalFat.toString() ?? '0',
+                      _group?.groupId ?? 0,
+                    );
+                    
+                context.pop(context); // 성공적으로 추가 후 화면 닫기
+              } catch (e) {
+                // 에러 처리
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('요리 추가 실패: $e')));
+              }
             },
           ),
         ),

@@ -1,136 +1,93 @@
+import 'package:dio/dio.dart';
+import 'package:mango/app_logger.dart';
+import 'package:mango/model/api_response.dart';
 import 'package:mango/model/cook.dart';
-import 'package:mango/model/content.dart';
+import 'package:mango/model/rest_client.dart';
 
 class CookRepository {
-  /// 'groupID'로 cook list 불러오는 함수
-  Future<List<Cook>> loadCookList(int groupID) async {
-    // groupId 해당하는 cook list 불러오는 api 호출
-    await Future.delayed(const Duration(seconds: 1));
+  final Dio dio = Dio();
 
-    return [
-      Cook(
-        groupID: groupID,
-        cookingName: "스파게티 카르보나라",
-        cookingMemo: "베이컨과 크림이 어우러진 부드러운 파스타",
-        cookingNutriKcal: "450",
-        cookingNutriCarbohydrate: "55",
-        cookingNutriFat: "20",
-        cookingNutriProtein: "15",
-        cookingItems: [
-          Content(
-            contentId: 123456766,
-            contentName: "스파게티 면",
-            category: "면류",
-            subCategory: "스파게티 면",
-            brandName: "어딘가의 스파게티",
-            count: 1,
-            regDate: DateTime.now(),
-            expDate: DateTime.now().add(Duration(days: 365)),
-            storageArea: "실온 보관",
-            memo: "이탈리아산 파스타 면",
-            nutriUnit: "g",
-            nutriCapacity: 200,
-            nutriKcal: 350,
-            nutriCarbohydrate: 70,
-            nutriProtein: 12,
-            nutriFat: 1,
-          ),
-          Content(
-            contentId: 123456765,
-            contentName: "베이컨",
-            category: "육류",
-            subCategory: "베이컨",
-            brandName: "어딘가의 베이컨",
-            count: 1,
-            regDate: DateTime.now(),
-            expDate: DateTime.now().add(Duration(days: 7)),
-            storageArea: "냉장 보관",
-            memo: "훈제 베이컨",
-            nutriUnit: "g",
-            nutriCapacity: 100,
-            nutriKcal: 250,
-            nutriCarbohydrate: 1,
-            nutriProtein: 15,
-            nutriFat: 20,
-          ),
-        ],
+  CookRepository() {
+    dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true,
       ),
-      Cook(
-        groupID: groupID,
-        cookingName: "김치찌개",
-        cookingMemo: "진한 국물과 깊은 맛을 내는 한국 전통 찌개",
-        cookingNutriKcal: "500",
-        cookingNutriCarbohydrate: "45",
-        cookingNutriFat: "15",
-        cookingNutriProtein: "20",
-        cookingItems: [
-          Content(
-            contentId: 123456764,
-            contentName: "김치",
-            category: "발효식품",
-            subCategory: "김치",
-            brandName: "어딘가의 김치",
-            count: 1,
-            regDate: DateTime.now(),
-            expDate: DateTime.now().add(Duration(days: 30)),
-            storageArea: "냉장 보관",
-            memo: "집에서 직접 담근 김치",
-            nutriUnit: "g",
-            nutriCapacity: 200,
-            nutriKcal: 100,
-            nutriCarbohydrate: 22,
-            nutriProtein: 4,
-            nutriFat: 0,
-          ),
-          Content(
-            contentId: 123456763,
-            contentName: "돼지고기",
-            category: "육류",
-            subCategory: "돼지고기",
-            brandName: "어딘가의 돼지고기",
-            count: 1,
-            regDate: DateTime.now(),
-            expDate: DateTime.now().add(Duration(days: 5)),
-            storageArea: "냉장 보관",
-            memo: "삼겹살 부위",
-            nutriUnit: "g",
-            nutriCapacity: 150,
-            nutriKcal: 300,
-            nutriCarbohydrate: 0,
-            nutriProtein: 25,
-            nutriFat: 20,
-          ),
-        ],
-      ),
-      Cook(
-        groupID: groupID,
-        cookingName: "비빔밥",
-        cookingMemo: "다양한 나물과 고기를 넣고 비벼먹는 한국식 한 그릇 요리",
-        cookingNutriKcal: "600",
-        cookingNutriCarbohydrate: "80",
-        cookingNutriFat: "20",
-        cookingNutriProtein: "25",
-        cookingItems: [
-          Content(
-            contentId: 123456762,
-            contentName: "밥",
-            category: "곡물",
-            subCategory: "밥",
-            brandName: "모르는 곳의 밥",
-            count: 1,
-            regDate: DateTime.now(),
-            expDate: DateTime.now().add(Duration(days: 1)),
-            storageArea: "실온 보관",
-            memo: "한국산 백미",
-            nutriUnit: "g",
-            nutriCapacity: 200,
-            nutriKcal: 300,
-            nutriCarbohydrate: 65,
-            nutriProtein: 5,
-            nutriFat: 0,
-          ),
-        ],
-      ),
-    ];
+    );
+  }
+
+  // groupId로 cook list 불러오는 함수
+  Future<List<Cook>> loadCookList(int groupId) async {
+    RestClient client = RestClient(dio);
+
+    AppLogger.logger.i("Requesting cook list with groupId: $groupId");
+
+    try {
+      ApiResponse response = await client.getCookList(groupId);
+
+      if (response.code == 200) {
+        AppLogger.logger.i(
+          "[cook_repository/loadCookList]: Cook list load 완료.",
+        );
+
+        List<dynamic> data = response.data;
+
+        return data.map((item) => Cook.fromJson(item)).toList();
+      } else {
+        throw Exception('[cook_repository/loadCookList]: Json Parse Error');
+      }
+    } catch (e) {
+      AppLogger.logger.e("[cook_repository/loadCookList]: $e");
+
+      return <Cook>[];
+    }
+  }
+
+  // cook 추가 함수
+  Future<void> addCook(Cook cook) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "cookName": cook.cookName,
+      "cookMemo": cook.cookMemo,
+      "cookNutriKcal": cook.cookNutriKcal,
+      "cookNutriCarbohydrate": cook.cookNutriCarbohydrate,
+      "cookNutriFat": cook.cookNutriFat,
+      "cookNutriProtein": cook.cookNutriProtein,
+      "cookItems": cook.cookItems,
+      "groupId": cook.groupId,
+    };
+
+    try {
+      ApiResponse response = await client.addCook(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[cook_repository/addCook]: Cook add 완료.");
+      } else {
+        throw Exception('[cook_repository/addCook]: Json Parse Error');
+      }
+    } catch (e) {
+      AppLogger.logger.e("[cook_repository/addCook]: $e");
+    }
+  }
+
+  Future<void> DeleteCook(int cookId) async {
+    RestClient client = RestClient(dio);
+
+    try {
+      ApiResponse response = await client.deleteCook(cookId);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[cook_repository/deleteCook]: 요리 삭제 성공");
+      } else {
+        throw Exception('[cook_repository/deleteCook]: Json Parse Error');
+      }
+    } catch (e) {
+      AppLogger.logger.e("[cook_repository/deleteCook]: $e");
+    }
   }
 }
