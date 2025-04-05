@@ -12,7 +12,7 @@ Widget groupCommonButton({
   return Consumer(
     builder: (context, ref, child) {
       final currentCreateState = ref.read(groupCreateProvider);
-      final currenParticipationtState = ref.read(groupParticipationProvider);
+      final currentParticipationtState = ref.read(groupParticipationProvider);
       final double fontSizeMediaQuery =
           MediaQuery.of(context).size.width; // 폰트 사이즈
 
@@ -29,12 +29,12 @@ Widget groupCommonButton({
           ),
           onPressed:
               (currentCreateState.isLoadingButton ||
-                      currenParticipationtState.isLoadingButton)
+                      currentParticipationtState.isLoadingButton)
                   ? null
                   : onPressed, // 검사 중일때는 버튼활성X
           child:
               (currentCreateState.isLoadingButton ||
-                      currenParticipationtState.isLoadingButton)
+                      currentParticipationtState.isLoadingButton)
                   ? const CircularProgressIndicator(color: Colors.white)
                   : Text(
                     text,

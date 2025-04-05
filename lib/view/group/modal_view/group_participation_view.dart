@@ -34,19 +34,19 @@ class GroupParticipationView extends ConsumerWidget {
             groupModalTitle(
               context: context,
               textTitle: '기존 냉장고 참여하기',
-              textSub: '다른 냉장고ID를 입력해 참여하세요',
+              textSub: '다른 냉장고 코드를 입력해 참여하세요',
             ),
             // const Spacer(),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: '냉장고ID 입력',
+                  hintText: '냉장고 코드 입력',
                   errorText: groupState.errorMessage, // 에러 메시지 표시
                 ),
                 onChanged:
-                    (String groupId) =>
-                        groupNotifier.checkGroupId(groupId), // 입력값 지속적으로 상태확인
+                    (String groupCode) =>
+                        groupNotifier.isGroupValid(groupCode), // 입력값 지속적으로 상태확인
               ),
             ),
             const Spacer(),
@@ -72,7 +72,7 @@ class GroupParticipationView extends ConsumerWidget {
                           color: Colors.amber,
                         ),
                         Text(
-                          '${groupState.gruoupUserKing ?? ''}외 ${groupState.groupUserCount ?? 0}명',
+                          '${groupState.groupOwnerName ?? ''}외 ${groupState.groupMemberCount ?? 0}명',
                           style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
                         ),
                       ],
