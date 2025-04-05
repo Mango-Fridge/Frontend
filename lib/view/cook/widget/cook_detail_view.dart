@@ -23,12 +23,12 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     // filterContentsBySubCategory 호출
     final filteredItems = cookDetailNotifier.filterContentsBySubCategory(
       sampleContentList.toList(),
-      widget.cook!.cookItems!,
+      widget.cook?.cookItems ?? [],
     );
 
     // getMissingCookIngredients 호출
     final missingIngredients = cookDetailNotifier.getMissingCookIngredients(
-      widget.cook!.cookItems!,
+      widget.cook?.cookItems?? [],
       sampleContentList,
     );
 
