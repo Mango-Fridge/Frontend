@@ -212,7 +212,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 ref
                     .watch(cookProvider.notifier)
                     .loadCookList(_group?.groupId ?? 0);
-                FToast().removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
+                FToast()
+                    .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
                 toastMessage(context, "$cookName 추가했습니다.");
                 context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
               } else {
@@ -224,6 +225,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 );
               }
             },
+            cookName: _cookNameController.text, // 요리 제목 전달
+            itemListForCook: _addCookState?.itemListForCook, // 재료 리스트 전달
           ),
         ),
       ),
