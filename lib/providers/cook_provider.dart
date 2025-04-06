@@ -18,7 +18,7 @@ class CookNotifier extends Notifier<CookState?> {
   }
 
   // Cook 저장 함수
-  Future<void> addCook(
+  Future<bool> addCook(
     String cookName,
     String cookMemo,
     String cookNutriKcal,
@@ -46,8 +46,10 @@ class CookNotifier extends Notifier<CookState?> {
           newCook,
         ], // 새롭게 만든 newCook을 cookList에 추가
       );
+      return true;
     } catch (e) {
-      // 에러 처리
+      AppLogger.logger.e(e);
+      return false;
     }
   }
 

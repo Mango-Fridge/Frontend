@@ -9,6 +9,7 @@ import 'package:mango/providers/add_cook_provider.dart';
 import 'package:mango/providers/cook_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
+import 'package:mango/toastMessage.dart';
 import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_app_bar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
@@ -194,38 +195,22 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               final String cookName = _cookNameController.text;
               final String memo = _memoController.text;
 
-              // 테스트용 CookItems 리스트 생성
-              final List<CookItems> testIngredients = [
-                const CookItems(
-                  cookItemId: 9007199254740991,
-                  cookItemName: "Flour",
-                ),
-                const CookItems(
-                  cookItemId: 9007199254740992,
-                  cookItemName: "Sugar",
-                ),
-              ];
+              final bool isSuccess = await ref
+                  .read(cookProvider.notifier)
+                  .addCook(
+                    cookName,
+                    memo,
+                    _addCookState?.totalKcal.toString() ?? '0',
+                    _addCookState?.totalCarb.toString() ?? '0',
+                    _addCookState?.totalProtein.toString() ?? '0',
+                    _addCookState?.totalFat.toString() ?? '0',
+                    _group?.groupId ?? 0,
+                  );
 
-              // 비동기적으로 addCook 호출
-              try {
-                await ref
-                    .read(cookProvider.notifier)
-                    .addCook(
-                      cookName,
-                      memo,
-                      _addCookState?.totalKcal.toString() ?? '0',
-                      _addCookState?.totalCarb.toString() ?? '0',
-                      _addCookState?.totalProtein.toString() ?? '0',
-                      _addCookState?.totalFat.toString() ?? '0',
-                      _group?.groupId ?? 0,
-                    );
-                    
-                context.pop(context); // 성공적으로 추가 후 화면 닫기
-              } catch (e) {
-                // 에러 처리
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('요리 추가 실패: $e')));
+              if (isSuccess) {
+                context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
+              } else {
+               
               }
             },
           ),
