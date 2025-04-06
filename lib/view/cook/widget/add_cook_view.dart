@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
@@ -211,9 +212,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 ref
                     .watch(cookProvider.notifier)
                     .loadCookList(_group?.groupId ?? 0);
+                FToast().removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
                 toastMessage(context, "$cookName 추가했습니다.");
                 context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
               } else {
+                FToast().removeCustomToast();
                 toastMessage(
                   context,
                   '$cookName 추가에 실패했습니다.',

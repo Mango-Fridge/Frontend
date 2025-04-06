@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/cook.dart';
@@ -127,8 +128,10 @@ class _CookViewState extends ConsumerState<CookView> {
             .read(cookProvider.notifier)
             .deleteCook(cook.cookId ?? 0)) {
           // 삭제 후 사용자에게 알림
+          FToast().removeCustomToast();
           toastMessage(context, "${cook.cookName}이(가) 삭제되었습니다.");
         } else {
+          FToast().removeCustomToast();
           toastMessage(context, "${cook.cookName}를 삭제하지 못했습니다.");
         }
       },
