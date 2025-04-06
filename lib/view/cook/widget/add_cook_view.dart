@@ -208,11 +208,17 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   );
 
               if (isSuccess) {
+                ref
+                    .watch(cookProvider.notifier)
+                    .loadCookList(_group?.groupId ?? 0);
+                toastMessage(context, "$cookName 추가했습니다.");
                 context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
-                ref.watch(cookProvider.notifier).loadCookList(_group?.groupId ?? 0);
-                
               } else {
-               
+                toastMessage(
+                  context,
+                  '$cookName 추가에 실패했습니다.',
+                  type: ToastmessageType.errorType,
+                );
               }
             },
           ),

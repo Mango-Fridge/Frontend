@@ -71,7 +71,7 @@ class CookRepository {
         throw Exception('[cook_repository/addCook]: Json Parse Error');
       }
     } catch (e) {
-      AppLogger.logger.e("[cook_repository/addCook]: $e");
+      throw Exception("[cook_repository/addCook]: $e");
     }
   }
 
@@ -87,7 +87,7 @@ class CookRepository {
         throw Exception('[cook_repository/deleteCook]: Json Parse Error');
       }
     } catch (e) {
-      AppLogger.logger.e("[cook_repository/deleteCook]: $e");
+      throw Exception("[cook_repository/deleteCook]: $e");
     }
   }
 }
