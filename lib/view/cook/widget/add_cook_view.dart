@@ -209,6 +209,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
               if (isSuccess) {
                 context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
+                ref.watch(cookProvider.notifier).loadCookList(_group?.groupId ?? 0);
+                
               } else {
                
               }
