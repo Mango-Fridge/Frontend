@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group/group.dart';
@@ -40,7 +41,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   AddCookState? get _addCookState => ref.watch(addCookProvider);
   // group 정보 받아옴
   Group? get _group => ref.watch(groupProvider);
-
+  final TextEditingController _controller = TextEditingController();
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
@@ -260,7 +261,14 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   Widget _buildItemRow(RefrigeratorItem item, Widget content) {
     Design design = Design(context);
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        RefrigeratorItem? loadedItem = await ref
+            .read(searchContentProvider.notifier)
+            .loadItem(item.itemId ?? 0);
+
+        ref.watch(searchContentProvider.notifier).resetState();
+        _controller.text = '';
+
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -269,7 +277,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              content: AddCookContentView(item: item),
+              content: AddCookContentView(item: loadedItem),
             );
           },
         );
