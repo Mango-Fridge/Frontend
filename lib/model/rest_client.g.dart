@@ -146,9 +146,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<ApiResponse<dynamic>> getItemList(String keyword) async {
+  Future<ApiResponse<dynamic>> getItemList(String keyword, int page) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'keyword': keyword};
+    final queryParameters = <String, dynamic>{
+      r'keyword': keyword,
+      r'page': page,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ApiResponse<dynamic>>(

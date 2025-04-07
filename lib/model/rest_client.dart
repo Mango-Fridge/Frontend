@@ -26,7 +26,10 @@ abstract class RestClient {
   Future<ApiResponse> getContent(@Path('contentId') int contentId);
 
   @GET('/api/items/search')
-  Future<ApiResponse> getItemList(@Query('keyword') String keyword);
+  Future<ApiResponse> getItemList(
+    @Query('keyword') String keyword,
+    @Query('page') int page,
+  );
 
   @POST('/api/items')
   Future<ApiResponse> addItem(@Body() Map<String, Object?> body);
@@ -61,7 +64,7 @@ abstract class RestClient {
   @POST('/cook-items/{cookId}') // cookId 해당 cookItem 추가
   Future<ApiResponse> addCookItem(
     @Path('cookId') int cookId,
-    @Body() Map<String, Object?> body,  
+    @Body() Map<String, Object?> body,
   );
 
   @DELETE('/cooks/{cookId}') // cook 삭제
