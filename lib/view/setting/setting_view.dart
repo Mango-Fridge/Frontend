@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/login_auth_provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingView extends ConsumerStatefulWidget {
   const SettingView({super.key});
@@ -13,6 +14,22 @@ class SettingView extends ConsumerStatefulWidget {
 
 class _SettingViewState extends ConsumerState<SettingView> {
   AuthInfo? get user => ref.watch(loginAuthProvider);
+  String version = "";
+
+  @override
+  void initState() {
+    super.initState();
+    checkVersion();
+  }
+
+  // App Version 체크
+  Future<void> checkVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    setState(() {
+      version = packageInfo.version;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +62,20 @@ class _SettingViewState extends ConsumerState<SettingView> {
           ),
           Card(
             child: ListTile(
-              leading: Icon(Icons.logout),
+              leading: const Icon(Icons.logout),
               title: Text('로그아웃'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () {},
             ),
           ),
 
-          ListTile(dense: true, title: Text('정보')),
-          Card(child: ListTile(title: Text('버전 정보'), trailing: Text("1.1v"))),
+          const ListTile(dense: true, title: Text('정보')),
+          Card(
+            child: ListTile(
+              title: const Text('버전 정보'),
+              trailing: Text("v$version"),
+            ),
+          ),
           Card(
             child: ListTile(
               leading: const Icon(Icons.badge),
