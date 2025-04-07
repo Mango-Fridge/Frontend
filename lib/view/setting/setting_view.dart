@@ -52,20 +52,23 @@ class _SettingViewState extends ConsumerState<SettingView> {
             ),
           ),
 
-          ListTile(dense: true, title: Text('계정 및 보안')),
+          const ListTile(dense: true, title: Text('계정 및 보안')),
           Card(
             child: ListTile(
-              leading: Icon(Icons.person_off),
-              title: Text('회원 탈퇴'),
-              trailing: Icon(Icons.keyboard_arrow_right),
+              leading: const Icon(Icons.person_off),
+              title: const Text('회원 탈퇴'),
+              trailing: const Icon(Icons.keyboard_arrow_right),
+              onTap: () {},
             ),
           ),
           Card(
             child: ListTile(
               leading: const Icon(Icons.logout),
-              title: Text('로그아웃'),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {},
+              title: const Text('로그아웃'),
+              trailing: const Icon(Icons.keyboard_arrow_right),
+              onTap: () {
+                logoutDialog(context);
+              },
             ),
           ),
 
@@ -86,18 +89,37 @@ class _SettingViewState extends ConsumerState<SettingView> {
           ),
         ],
       ),
-      // body: Center(
-      //   child: ElevatedButton(
-      //     onPressed: () async {
-      //       final authNotifier = ref.read(loginAuthProvider.notifier);
-      //       if (user != null) {
-      //         await authNotifier.logout(user!.oauthProvider!);
-      //         context.go('/login'); // 로그인 화면
-      //       }
-      //     },
-      //     child: const Text("로그아웃"),
-      //   ),
-      // ),
+    );
+  }
+
+  void logoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (BuildContext context) => AlertDialog(
+            title: const Text("로그아웃"),
+            content: const Text("정말로 로그아웃 하시겠습니까?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  final LoginAuthNotifier authNotifier = ref.read(
+                    loginAuthProvider.notifier,
+                  );
+                  if (user != null) {
+                    await authNotifier.logout(user!.oauthProvider!);
+                    context.go('/login'); // 로그인 화면
+                  }
+                },
+                child: const Text("확인", style: TextStyle(color: Colors.red)),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: const Text("취소", style: TextStyle(color: Colors.grey)),
+              ),
+            ],
+          ),
     );
   }
 }
