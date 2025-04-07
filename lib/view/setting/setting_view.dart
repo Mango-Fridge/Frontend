@@ -56,9 +56,10 @@ class _SettingViewState extends ConsumerState<SettingView> {
           Card(child: ListTile(title: Text('버전 정보'), trailing: Text("1.1v"))),
           Card(
             child: ListTile(
-              leading: Icon(Icons.menu_book),
-              title: Text('약관 및 정책'),
-              trailing: Icon(Icons.keyboard_arrow_right),
+              leading: const Icon(Icons.badge),
+              title: const Text('약관 및 정책'),
+              trailing: const Icon(Icons.keyboard_arrow_right),
+              onTap: () => context.push('/settingTerms'),
             ),
           ),
         ],
