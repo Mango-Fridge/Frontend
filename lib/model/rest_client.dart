@@ -52,6 +52,9 @@ abstract class RestClient {
   @GET('/api/groups/exist/{groupCode}') // 그룹 존재 여부 확인(유효성)
   Future<ApiResponse> isGroupValid(@Path('groupCode') String groupCode);
 
+  @POST('/api/groups/join') // 그룹 참여하기
+  Future<ApiResponse> postGroupJoin(@Body() Map<String, Object?> body);
+
   @GET('/cooks/list/{groupId}') // cook list 호출
   Future<ApiResponse> getCookList(@Path('groupId') int groupId);
 
