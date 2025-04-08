@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:dio/dio.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:retrofit/retrofit.dart';

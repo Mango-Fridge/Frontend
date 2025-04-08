@@ -32,12 +32,14 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       _refrigeratorState.refExpContentList = getRefExpContentList(contentList);
       _refrigeratorState.frzExpContentList = getFrzExpContentList(contentList);
       _refrigeratorState.contentList = contentList;
+
       state = state?.copyWith(
         refrigeratorContentList: _refrigeratorState.refrigeratorContentList,
         freezerContentList: _refrigeratorState.freezerContentList,
         refExpContentList: _refrigeratorState.refExpContentList,
         frzExpContentList: _refrigeratorState.frzExpContentList,
         contentList: _refrigeratorState.contentList,
+        isLoading: false,
       );
     } catch (e) {
       AppLogger.logger.e('[refrigerator_provider/loadContentList]: $e');
@@ -336,6 +338,10 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       refExpContentList: getRefExpContentList(removedList),
       frzExpContentList: getFrzExpContentList(removedList),
     );
+  }
+
+  void setLoading(bool isLoading) {
+    state = state?.copyWith(isLoading: isLoading);
   }
 }
 

@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/app_logger.dart';
 import 'package:mango/design.dart';
-import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
-import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
 
@@ -17,7 +15,6 @@ class SearchContentView extends ConsumerStatefulWidget {
 }
 
 class _SearchContentViewState extends ConsumerState<SearchContentView> {
-  Group? get _group => ref.watch(groupProvider);
   SearchItemState? get _searchContentState => ref.watch(searchContentProvider);
 
   final TextEditingController _controller = TextEditingController();

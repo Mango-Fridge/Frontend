@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Group? get _group => ref.watch(groupProvider);
   RefrigeratorState? get _refrigeratorState => ref.watch(refrigeratorNotifier);
 
+  Timer? _debounce;
+
   @override
   void initState() {
     super.initState();
@@ -35,9 +38,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(refrigeratorNotifier.notifier).resetState();
       await ref.read(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
-      await ref
-          .read(refrigeratorNotifier.notifier)
-          .loadContentList(_group?.groupId ?? 0);
+
+      _loadContentList();
     });
   }
 
@@ -74,9 +76,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   onPressed: () {
                     (_group?.groupName ?? '').isEmpty
                         ? null
-                        : ref
-                            .watch(refrigeratorNotifier.notifier)
-                            .loadContentList(_group?.groupId ?? 0);
+                        : _loadContentList();
                   },
                   icon: const Icon(Icons.refresh),
                 ),
@@ -87,9 +87,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     (_group?.groupName ?? '').isEmpty
                         ? null
                         : ref.watch(refrigeratorNotifier.notifier).resetState();
-                    ref
-                        .watch(refrigeratorNotifier.notifier)
-                        .loadContentList(_group?.groupId ?? 0);
+                    _loadContentList();
                     context.push('/searchContent');
                   },
                   style: ElevatedButton.styleFrom(
@@ -251,13 +249,17 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 보관장소 별 UI 구성
   List<Widget> _buildContent() {
     return <Widget>[
-      _refrigeratorState != null &&
+      _refrigeratorState?.isLoading ?? false
+          ? const Center(child: CircularProgressIndicator())
+          : _refrigeratorState != null &&
               _refrigeratorState?.refrigeratorContentList != null &&
               (_refrigeratorState!.refrigeratorContentList!.isNotEmpty ||
                   _refrigeratorState!.refExpContentList!.isNotEmpty)
           ? _refrigeratorContent()
           : _noContentView('냉장고에 보관중인 물품이 없어요.'),
-      _refrigeratorState != null &&
+      _refrigeratorState?.isLoading ?? false
+          ? const Center(child: CircularProgressIndicator())
+          : _refrigeratorState != null &&
               _refrigeratorState?.freezerContentList != null &&
               (_refrigeratorState!.freezerContentList!.isNotEmpty ||
                   _refrigeratorState!.frzExpContentList!.isNotEmpty)
@@ -551,5 +553,17 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         ],
       ),
     );
+  }
+
+  void _loadContentList() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+    ref.read(refrigeratorNotifier.notifier).setLoading(true);
+
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      ref
+          .read(refrigeratorNotifier.notifier)
+          .loadContentList(_group?.groupId ?? 0);
+    });
   }
 }
