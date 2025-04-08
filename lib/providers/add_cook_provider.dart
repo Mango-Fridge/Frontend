@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/model/refrigerator_item.dart';
@@ -60,6 +61,7 @@ class AddCookNotifier extends Notifier<AddCookState> {
       state = state.copyWith(itemListForCook: cookItemList);
     } catch (e) {
       // 에러 처리
+      AppLogger.logger.e('[add_cook_provider/addCookItem]: $e');
     }
   }
 
