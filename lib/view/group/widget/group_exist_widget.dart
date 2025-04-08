@@ -64,14 +64,14 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
             // 승인 요청 대기
             initiallyExpanded: true, // 처음부터 펼쳐지게
             title: Text(
-              '승인 요청 대기(${_group?.groupHopeUser?.length ?? 0})',
+              '승인 요청 대기(${_group?.groupHopeUsers?.length ?? 0})',
               style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
             ),
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
                 children:
-                    _group?.groupHopeUser?.map((GroupHopeUser user) {
+                    _group?.groupHopeUsers?.map((GroupHopeUser user) {
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         padding: EdgeInsets.all(design.marginAndPadding),

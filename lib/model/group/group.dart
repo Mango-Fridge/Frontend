@@ -10,7 +10,7 @@ abstract class Group with _$Group {
     required String groupName,
     final int? groupOwnerId,
     final List<GroupUser>? groupUsers,
-    final List<GroupHopeUser>? groupHopeUser,
+    final List<GroupHopeUser>? groupHopeUsers,
   }) = _Group;
 
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/state/group_state.dart';
 import 'package:mango/services/group_repository.dart';
 
@@ -76,6 +77,17 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
       isButton: false,
       isLoadingButton: false,
     );
+  }
+
+   // 그룹 참여하기
+  Future<bool> postGroupJoin(int userId, int groupId) async {
+    try {
+      await groupRepository.postGroupJoin(userId, groupId);
+      return true;
+    } catch (e) {
+      AppLogger.logger.e(e);
+      return false;
+    } 
   }
 }
 

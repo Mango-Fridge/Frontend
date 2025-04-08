@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Group {
 
- int get groupId; String? get groupCode; String get groupName; int? get groupOwnerId; List<GroupUser>? get groupUsers; List<GroupHopeUser>? get groupHopeUser;
+ int get groupId; String? get groupCode; String get groupName; int? get groupOwnerId; List<GroupUser>? get groupUsers; List<GroupHopeUser>? get groupHopeUsers;
 /// Create a copy of Group
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $GroupCopyWith<Group> get copyWith => _$GroupCopyWithImpl<Group>(this as Group, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Group&&(identical(other.groupId, groupId) || other.groupId == groupId)&&(identical(other.groupCode, groupCode) || other.groupCode == groupCode)&&(identical(other.groupName, groupName) || other.groupName == groupName)&&(identical(other.groupOwnerId, groupOwnerId) || other.groupOwnerId == groupOwnerId)&&const DeepCollectionEquality().equals(other.groupUsers, groupUsers)&&const DeepCollectionEquality().equals(other.groupHopeUser, groupHopeUser));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Group&&(identical(other.groupId, groupId) || other.groupId == groupId)&&(identical(other.groupCode, groupCode) || other.groupCode == groupCode)&&(identical(other.groupName, groupName) || other.groupName == groupName)&&(identical(other.groupOwnerId, groupOwnerId) || other.groupOwnerId == groupOwnerId)&&const DeepCollectionEquality().equals(other.groupUsers, groupUsers)&&const DeepCollectionEquality().equals(other.groupHopeUsers, groupHopeUsers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,groupId,groupCode,groupName,groupOwnerId,const DeepCollectionEquality().hash(groupUsers),const DeepCollectionEquality().hash(groupHopeUser));
+int get hashCode => Object.hash(runtimeType,groupId,groupCode,groupName,groupOwnerId,const DeepCollectionEquality().hash(groupUsers),const DeepCollectionEquality().hash(groupHopeUsers));
 
 @override
 String toString() {
-  return 'Group(groupId: $groupId, groupCode: $groupCode, groupName: $groupName, groupOwnerId: $groupOwnerId, groupUsers: $groupUsers, groupHopeUser: $groupHopeUser)';
+  return 'Group(groupId: $groupId, groupCode: $groupCode, groupName: $groupName, groupOwnerId: $groupOwnerId, groupUsers: $groupUsers, groupHopeUsers: $groupHopeUsers)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $GroupCopyWith<$Res>  {
   factory $GroupCopyWith(Group value, $Res Function(Group) _then) = _$GroupCopyWithImpl;
 @useResult
 $Res call({
- int groupId, String? groupCode, String groupName, int? groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUser
+ int groupId, String? groupCode, String groupName, int? groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUsers
 });
 
 
@@ -66,14 +66,14 @@ class _$GroupCopyWithImpl<$Res>
 
 /// Create a copy of Group
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? groupId = null,Object? groupCode = freezed,Object? groupName = null,Object? groupOwnerId = freezed,Object? groupUsers = freezed,Object? groupHopeUser = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? groupId = null,Object? groupCode = freezed,Object? groupName = null,Object? groupOwnerId = freezed,Object? groupUsers = freezed,Object? groupHopeUsers = freezed,}) {
   return _then(_self.copyWith(
 groupId: null == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int,groupCode: freezed == groupCode ? _self.groupCode : groupCode // ignore: cast_nullable_to_non_nullable
 as String?,groupName: null == groupName ? _self.groupName : groupName // ignore: cast_nullable_to_non_nullable
 as String,groupOwnerId: freezed == groupOwnerId ? _self.groupOwnerId : groupOwnerId // ignore: cast_nullable_to_non_nullable
 as int?,groupUsers: freezed == groupUsers ? _self.groupUsers : groupUsers // ignore: cast_nullable_to_non_nullable
-as List<GroupUser>?,groupHopeUser: freezed == groupHopeUser ? _self.groupHopeUser : groupHopeUser // ignore: cast_nullable_to_non_nullable
+as List<GroupUser>?,groupHopeUsers: freezed == groupHopeUsers ? _self.groupHopeUsers : groupHopeUsers // ignore: cast_nullable_to_non_nullable
 as List<GroupHopeUser>?,
   ));
 }
@@ -85,7 +85,7 @@ as List<GroupHopeUser>?,
 @JsonSerializable()
 
 class _Group implements Group {
-  const _Group({required this.groupId, this.groupCode, required this.groupName, this.groupOwnerId, final  List<GroupUser>? groupUsers, final  List<GroupHopeUser>? groupHopeUser}): _groupUsers = groupUsers,_groupHopeUser = groupHopeUser;
+  const _Group({required this.groupId, this.groupCode, required this.groupName, this.groupOwnerId, final  List<GroupUser>? groupUsers, final  List<GroupHopeUser>? groupHopeUsers}): _groupUsers = groupUsers,_groupHopeUsers = groupHopeUsers;
   factory _Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
 @override final  int groupId;
@@ -101,11 +101,11 @@ class _Group implements Group {
   return EqualUnmodifiableListView(value);
 }
 
- final  List<GroupHopeUser>? _groupHopeUser;
-@override List<GroupHopeUser>? get groupHopeUser {
-  final value = _groupHopeUser;
+ final  List<GroupHopeUser>? _groupHopeUsers;
+@override List<GroupHopeUser>? get groupHopeUsers {
+  final value = _groupHopeUsers;
   if (value == null) return null;
-  if (_groupHopeUser is EqualUnmodifiableListView) return _groupHopeUser;
+  if (_groupHopeUsers is EqualUnmodifiableListView) return _groupHopeUsers;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(value);
 }
@@ -124,16 +124,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Group&&(identical(other.groupId, groupId) || other.groupId == groupId)&&(identical(other.groupCode, groupCode) || other.groupCode == groupCode)&&(identical(other.groupName, groupName) || other.groupName == groupName)&&(identical(other.groupOwnerId, groupOwnerId) || other.groupOwnerId == groupOwnerId)&&const DeepCollectionEquality().equals(other._groupUsers, _groupUsers)&&const DeepCollectionEquality().equals(other._groupHopeUser, _groupHopeUser));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Group&&(identical(other.groupId, groupId) || other.groupId == groupId)&&(identical(other.groupCode, groupCode) || other.groupCode == groupCode)&&(identical(other.groupName, groupName) || other.groupName == groupName)&&(identical(other.groupOwnerId, groupOwnerId) || other.groupOwnerId == groupOwnerId)&&const DeepCollectionEquality().equals(other._groupUsers, _groupUsers)&&const DeepCollectionEquality().equals(other._groupHopeUsers, _groupHopeUsers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,groupId,groupCode,groupName,groupOwnerId,const DeepCollectionEquality().hash(_groupUsers),const DeepCollectionEquality().hash(_groupHopeUser));
+int get hashCode => Object.hash(runtimeType,groupId,groupCode,groupName,groupOwnerId,const DeepCollectionEquality().hash(_groupUsers),const DeepCollectionEquality().hash(_groupHopeUsers));
 
 @override
 String toString() {
-  return 'Group(groupId: $groupId, groupCode: $groupCode, groupName: $groupName, groupOwnerId: $groupOwnerId, groupUsers: $groupUsers, groupHopeUser: $groupHopeUser)';
+  return 'Group(groupId: $groupId, groupCode: $groupCode, groupName: $groupName, groupOwnerId: $groupOwnerId, groupUsers: $groupUsers, groupHopeUsers: $groupHopeUsers)';
 }
 
 
@@ -144,7 +144,7 @@ abstract mixin class _$GroupCopyWith<$Res> implements $GroupCopyWith<$Res> {
   factory _$GroupCopyWith(_Group value, $Res Function(_Group) _then) = __$GroupCopyWithImpl;
 @override @useResult
 $Res call({
- int groupId, String? groupCode, String groupName, int? groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUser
+ int groupId, String? groupCode, String groupName, int? groupOwnerId, List<GroupUser>? groupUsers, List<GroupHopeUser>? groupHopeUsers
 });
 
 
@@ -161,14 +161,14 @@ class __$GroupCopyWithImpl<$Res>
 
 /// Create a copy of Group
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? groupId = null,Object? groupCode = freezed,Object? groupName = null,Object? groupOwnerId = freezed,Object? groupUsers = freezed,Object? groupHopeUser = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? groupId = null,Object? groupCode = freezed,Object? groupName = null,Object? groupOwnerId = freezed,Object? groupUsers = freezed,Object? groupHopeUsers = freezed,}) {
   return _then(_Group(
 groupId: null == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int,groupCode: freezed == groupCode ? _self.groupCode : groupCode // ignore: cast_nullable_to_non_nullable
 as String?,groupName: null == groupName ? _self.groupName : groupName // ignore: cast_nullable_to_non_nullable
 as String,groupOwnerId: freezed == groupOwnerId ? _self.groupOwnerId : groupOwnerId // ignore: cast_nullable_to_non_nullable
 as int?,groupUsers: freezed == groupUsers ? _self._groupUsers : groupUsers // ignore: cast_nullable_to_non_nullable
-as List<GroupUser>?,groupHopeUser: freezed == groupHopeUser ? _self._groupHopeUser : groupHopeUser // ignore: cast_nullable_to_non_nullable
+as List<GroupUser>?,groupHopeUsers: freezed == groupHopeUsers ? _self._groupHopeUsers : groupHopeUsers // ignore: cast_nullable_to_non_nullable
 as List<GroupHopeUser>?,
   ));
 }

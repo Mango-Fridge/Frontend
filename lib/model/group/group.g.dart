@@ -15,8 +15,8 @@ _Group _$GroupFromJson(Map<String, dynamic> json) => _Group(
       (json['groupUsers'] as List<dynamic>?)
           ?.map((e) => GroupUser.fromJson(e as Map<String, dynamic>))
           .toList(),
-  groupHopeUser:
-      (json['groupHopeUser'] as List<dynamic>?)
+  groupHopeUsers:
+      (json['groupHopeUsers'] as List<dynamic>?)
           ?.map((e) => GroupHopeUser.fromJson(e as Map<String, dynamic>))
           .toList(),
 );
@@ -27,7 +27,7 @@ Map<String, dynamic> _$GroupToJson(_Group instance) => <String, dynamic>{
   'groupName': instance.groupName,
   'groupOwnerId': instance.groupOwnerId,
   'groupUsers': instance.groupUsers,
-  'groupHopeUser': instance.groupHopeUser,
+  'groupHopeUsers': instance.groupHopeUsers,
 };
 
 _GroupUser _$GroupUserFromJson(Map<String, dynamic> json) => _GroupUser(

@@ -154,4 +154,41 @@ class GroupRepository {
       throw Exception('[group_repository/exitCurrentGroup]: ${e}');
     }
   }
+
+  // 그룹 참여하기
+  Future<void> postGroupJoin(int userId, int groupId) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "userId": userId,
+      "groupId": groupId,
+    };
+
+    try {
+      ApiResponse response = await client.postGroupJoin(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[group_repository/createGroup]: 그룹 참여 완료.");
+      } else {
+        throw Exception('그룹 참여 실패');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final errorData = e.response!.data;
+
+        // 'error' 안에 'message'가 있을 경우
+        if (errorData is Map<String, dynamic> &&
+            errorData.containsKey("error") &&
+            errorData["error"] is Map<String, dynamic> &&
+            errorData["error"].containsKey("message")) {
+          throw Exception('${errorData["error"]["message"]}');
+        } else {
+          throw Exception('서버 응답 오류: ${e.response!.statusCode}');
+        }
+      } else {
+        throw Exception('네트워크 오류 발생: ${e.message}');
+      }
+    }
+  }
 }
