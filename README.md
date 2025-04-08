@@ -2,11 +2,15 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.1.0 (2025-04-02)
+## VERSION 1.1.1 (2025-04-08)
  - 메인화면
-   - View 일부 수정 (마감 임박/냉장/냉동 TabBar)
- - 그룹
-   - 그룹 나가기 AlertDialog 출력
+   - 그룹이 없을 때, 상호작용 버튼이 안보이게 수정
+   - 유통 기한 임박 관련된 View 수정
+   - 물품 추가에서, 검색 API & 페이징 적용
+ - 요리
+   - List 요소를 삭제할 때, 제대로 삭제가 되지 않는 현상 수정
+   - toastMessage 적용
+   - 요리 제목 & 재료가 최소 1개 이상 있을때만 "추가하기" 버튼 활성화
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
