@@ -11,6 +11,8 @@ import 'package:mango/view/refrigerator/add_content_view.dart';
 import 'package:mango/view/refrigerator/search_item_view.dart';
 import 'package:mango/view/refrigerator/refrigerator_view.dart';
 import 'package:mango/view/login/login_view.dart';
+import 'package:mango/view/setting/nickname_edit_view.dart';
+import 'package:mango/view/setting/setting_terms_view.dart';
 import 'package:mango/view/splashView.dart';
 
 // 라우터 관리(go_router)
@@ -54,6 +56,20 @@ final GoRouter goRouter = GoRouter(
       builder: (context, state) {
         final cook = state.extra as Cook;
         return CookDetailView(cook: cook);
+      },
+    ),
+    // 설정 - 닉네임 변경
+    GoRoute(
+      path: '/editNickName',
+      builder: (context, state) {
+        return const NicknameEditView();
+      },
+    ),
+    // 설정 - 약관 및 정책
+    GoRoute(
+      path: '/settingTerms',
+      builder: (context, state) {
+        return const SettingTermsView();
       },
     ),
   ],
