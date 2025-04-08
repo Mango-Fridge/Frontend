@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group/group.dart';
@@ -9,6 +11,7 @@ import 'package:mango/providers/add_cook_provider.dart';
 import 'package:mango/providers/cook_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
+import 'package:mango/toastMessage.dart';
 import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_app_bar_widget.dart';
 import 'package:mango/view/cook/sub_widget/add_cook_bottomSheet_widget.dart';
@@ -38,7 +41,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   AddCookState? get _addCookState => ref.watch(addCookProvider);
   // group 정보 받아옴
   Group? get _group => ref.watch(groupProvider);
-
+  final TextEditingController _controller = TextEditingController();
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
@@ -194,40 +197,37 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               final String cookName = _cookNameController.text;
               final String memo = _memoController.text;
 
-              // 테스트용 CookItems 리스트 생성
-              final List<CookItems> testIngredients = [
-                const CookItems(
-                  cookItemId: 9007199254740991,
-                  cookItemName: "Flour",
-                ),
-                const CookItems(
-                  cookItemId: 9007199254740992,
-                  cookItemName: "Sugar",
-                ),
-              ];
+              final bool isSuccess = await ref
+                  .read(cookProvider.notifier)
+                  .addCook(
+                    cookName,
+                    memo,
+                    _addCookState?.totalKcal.toString() ?? '0',
+                    _addCookState?.totalCarb.toString() ?? '0',
+                    _addCookState?.totalProtein.toString() ?? '0',
+                    _addCookState?.totalFat.toString() ?? '0',
+                    _group?.groupId ?? 0,
+                  );
 
-              // 비동기적으로 addCook 호출
-              try {
-                await ref
-                    .read(cookProvider.notifier)
-                    .addCook(
-                      cookName,
-                      memo,
-                      _addCookState?.totalKcal.toString() ?? '0',
-                      _addCookState?.totalCarb.toString() ?? '0',
-                      _addCookState?.totalProtein.toString() ?? '0',
-                      _addCookState?.totalFat.toString() ?? '0',
-                      _group?.groupId ?? 0,
-                    );
-                    
-                context.pop(context); // 성공적으로 추가 후 화면 닫기
-              } catch (e) {
-                // 에러 처리
-                ScaffoldMessenger.of(
+              if (isSuccess) {
+                ref
+                    .watch(cookProvider.notifier)
+                    .loadCookList(_group?.groupId ?? 0);
+                FToast()
+                    .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
+                toastMessage(context, "$cookName 추가했습니다.");
+                context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
+              } else {
+                FToast().removeCustomToast();
+                toastMessage(
                   context,
-                ).showSnackBar(SnackBar(content: Text('요리 추가 실패: $e')));
+                  '$cookName 추가에 실패했습니다.',
+                  type: ToastmessageType.errorType,
+                );
               }
             },
+            cookName: _cookNameController.text, // 요리 제목 전달
+            itemListForCook: _addCookState?.itemListForCook, // 재료 리스트 전달
           ),
         ),
       ),
@@ -261,7 +261,14 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   Widget _buildItemRow(RefrigeratorItem item, Widget content) {
     Design design = Design(context);
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        RefrigeratorItem? loadedItem = await ref
+            .read(searchContentProvider.notifier)
+            .loadItem(item.itemId ?? 0);
+
+        ref.watch(searchContentProvider.notifier).resetState();
+        _controller.text = '';
+
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -270,7 +277,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              content: AddCookContentView(item: item),
+              content: AddCookContentView(item: loadedItem),
             );
           },
         );

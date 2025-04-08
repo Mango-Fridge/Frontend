@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/cook.dart';
@@ -7,6 +8,7 @@ import 'package:mango/model/group/group.dart';
 import 'package:mango/providers/cook_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/state/cook_state.dart';
+import 'package:mango/toastMessage.dart';
 
 // 요리 리스트를 보여주는 view
 class CookView extends ConsumerStatefulWidget {
@@ -120,14 +122,17 @@ class _CookViewState extends ConsumerState<CookView> {
           ),
         ),
       ),
-      onDismissed: (direction) {
+      onDismissed: (direction) async {
         // 스와이프 완료 시 삭제 동작
-        if (cook.cookId != null) {
-          ref.read(cookProvider.notifier).deleteCook(cook.cookId!);
+        if (await ref
+            .read(cookProvider.notifier)
+            .deleteCook(cook.cookId ?? 0)) {
           // 삭제 후 사용자에게 알림
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("${cook.cookName}이(가) 삭제되었습니다.")),
-          );
+          FToast().removeCustomToast();
+          toastMessage(context, "${cook.cookName}이(가) 삭제되었습니다.");
+        } else {
+          FToast().removeCustomToast();
+          toastMessage(context, "${cook.cookName}를 삭제하지 못했습니다.");
         }
       },
       child: GestureDetector(

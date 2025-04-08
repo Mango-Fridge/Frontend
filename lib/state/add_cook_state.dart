@@ -28,7 +28,7 @@ class AddCookState {
     this.isOpenCookName,
     this.isSearchFieldEmpty,
 
-    this.itemCount = 0,
+    this.itemCount = 1,
   });
 
   AddCookState copyWith({
@@ -44,7 +44,7 @@ class AddCookState {
     bool? isOpenCookName,
     bool? isSearchFieldEmpty,
 
-    int itemCount = 0,
+    int? itemCount,
   }) {
     return AddCookState(
       itemListForCook: itemListForCook ?? this.itemListForCook,
@@ -60,7 +60,7 @@ class AddCookState {
       isOpenCookName: isOpenCookName ?? isOpenCookName,
       isCookNameFocused: isCookNameFocused ?? isCookNameFocused,
 
-      itemCount: itemCount,
+      itemCount: itemCount ?? this.itemCount,
     );
   }
 }

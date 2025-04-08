@@ -18,7 +18,7 @@ class CookNotifier extends Notifier<CookState?> {
   }
 
   // Cook 저장 함수
-  Future<void> addCook(
+  Future<bool> addCook(
     String cookName,
     String cookMemo,
     String cookNutriKcal,
@@ -46,8 +46,10 @@ class CookNotifier extends Notifier<CookState?> {
           newCook,
         ], // 새롭게 만든 newCook을 cookList에 추가
       );
+      return true;
     } catch (e) {
-      // 에러 처리
+      AppLogger.logger.e(e);
+      return false;
     }
   }
 
@@ -64,7 +66,7 @@ class CookNotifier extends Notifier<CookState?> {
   }
 
   // 요리 삭제 함수
-  Future<void> deleteCook(int cookId) async {
+  Future<bool> deleteCook(int cookId) async {
     try {
       // 1. 상태를 즉시 업데이트하여 cookList에서 항목 제거
       final updatedCookList =
@@ -73,9 +75,11 @@ class CookNotifier extends Notifier<CookState?> {
 
       // 2. 비동기 작업 수행 (서버에서 삭제)
       await _cookRepository.DeleteCook(cookId);
+      return true;
     } catch (e) {
-      AppLogger.logger.e("[cook_notifier/deleteCook]: $e");
       // 에러 처리
+      AppLogger.logger.e("[cook_notifier/deleteCook]: $e");
+      return false;
     }
   }
 }
