@@ -28,7 +28,7 @@ class AddCookState {
     this.isOpenCookName,
     this.isSearchFieldEmpty,
 
-    this.itemCount = 0,
+    this.itemCount = 1,
   });
 
   AddCookState copyWith({
@@ -44,7 +44,7 @@ class AddCookState {
     bool? isOpenCookName,
     bool? isSearchFieldEmpty,
 
-    int? itemCount = 1,
+    int? itemCount,
   }) {
     return AddCookState(
       itemListForCook: itemListForCook ?? this.itemListForCook,
