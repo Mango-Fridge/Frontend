@@ -21,6 +21,26 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
   Widget build(BuildContext context) {
     final Design design = Design(context);
 
+    int getItemTotalKcal() {
+      if (_addCookState == null) return 0;
+      return (widget.item?.nutriKcal ?? 0) * _addCookState!.itemCount;
+    }
+
+    int getItemTotalCarbohydrate() {
+      if (_addCookState == null) return 0;
+      return (widget.item?.nutriCarbohydrate ?? 0) * _addCookState!.itemCount;
+    }
+
+    int getItemTotalProtein() {
+      if (_addCookState == null) return 0;
+      return (widget.item?.nutriProtein ?? 0) * _addCookState!.itemCount;
+    }
+
+    int getItemTotalFat() {
+      if (_addCookState == null) return 0;
+      return (widget.item?.nutriFat ?? 0) * _addCookState!.itemCount;
+    }
+
     return SizedBox(
       width: design.screenHeight * 0.8,
       child: Column(
@@ -66,7 +86,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                   ),
                   child: Center(
                     child: Text(
-                      "${widget.item?.nutriKcal} kcal",
+                      "${getItemTotalKcal()} kcal",
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
@@ -80,9 +100,9 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 10,
             children: <Widget>[
-              nutrientBox('탄', '${widget.item?.nutriCarbohydrate}'),
-              nutrientBox('단', '${widget.item?.nutriProtein}'),
-              nutrientBox('지', '${widget.item?.nutriFat}'),
+              nutrientBox('탄', '${getItemTotalCarbohydrate()}'),
+              nutrientBox('단', '${getItemTotalProtein()}'),
+              nutrientBox('지', '${getItemTotalFat()}'),
             ],
           ),
 
