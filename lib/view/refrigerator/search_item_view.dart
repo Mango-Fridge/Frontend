@@ -1,12 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/app_logger.dart';
 import 'package:mango/design.dart';
-import 'package:mango/model/group/group.dart';
 import 'package:mango/model/refrigerator_item.dart';
-import 'package:mango/providers/group_provider.dart';
-import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
 
@@ -17,10 +15,12 @@ class SearchContentView extends ConsumerStatefulWidget {
 }
 
 class _SearchContentViewState extends ConsumerState<SearchContentView> {
-  Group? get _group => ref.watch(groupProvider);
   SearchItemState? get _searchContentState => ref.watch(searchContentProvider);
 
   final TextEditingController _controller = TextEditingController();
+  final ScrollController _listViewScrollController = ScrollController();
+
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -29,6 +29,23 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
     // view init 후 데이터 처리를 하기 위함
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(searchContentProvider.notifier).resetState();
+
+      _listViewScrollController.addListener(() {
+        final bool isNearBottom =
+            _listViewScrollController.position.pixels >=
+            _listViewScrollController.position.maxScrollExtent - 100;
+
+        final bool canLoadMore =
+            ref.read(searchContentProvider)?.hasMore ?? false;
+        final bool isLoading =
+            ref.read(searchContentProvider)?.isLoading ?? false;
+
+        if (isNearBottom && !isLoading && canLoadMore) {
+          ref
+              .read(searchContentProvider.notifier)
+              .loadItemListByString(_controller.text);
+        }
+      });
     });
   }
 
@@ -61,9 +78,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                   border: InputBorder.none,
                 ),
                 onChanged: (String value) {
-                  ref
-                      .watch(searchContentProvider.notifier)
-                      .loadItemListByString(value);
+                  _onSearchChanged(value);
                 },
               ),
             ),
@@ -86,14 +101,13 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
 
   Widget _buildItem(List<RefrigeratorItem>? itemList) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: const BoxDecoration(color: Colors.white),
       child: Column(
         children: <Widget>[
           const Divider(),
           Expanded(
             child: ListView.builder(
-              itemCount: itemList?.length ?? 0,
+              controller: _listViewScrollController,
+              itemCount: itemList?.length,
               itemBuilder: (BuildContext context, int index) {
                 final RefrigeratorItem item = itemList![index];
                 return _buildItemRow(item);
@@ -203,5 +217,14 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         const Spacer(),
       ],
     );
+  }
+
+  void _onSearchChanged(String keyword) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      ref
+          .read(searchContentProvider.notifier)
+          .loadItemListByString(keyword, isRefresh: true);
+    });
   }
 }

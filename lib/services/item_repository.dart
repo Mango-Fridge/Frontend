@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:mango/app_logger.dart';
 import 'package:mango/model/api_response.dart';
@@ -8,43 +7,35 @@ import 'package:mango/model/rest_client.dart';
 
 class ItemRepository {
   final Dio dio = Dio();
-  Timer? _debounceTimer;
 
   // 검색어를 받아오면 해당 검색어에 해당하는 결과 리스트 받아오는 api 함수
-  Future<List<RefrigeratorItem>> loadItemListByString(String keyword) async {
-    final Completer<List<RefrigeratorItem>> completer =
-        Completer<List<RefrigeratorItem>>();
+  Future<List<RefrigeratorItem>> loadItemListByString(
+    String keyword,
+    int page,
+  ) async {
+    RestClient client = RestClient(dio);
 
-    _debounceTimer?.cancel();
+    try {
+      ApiResponse response = await client.getItemList(keyword, page);
 
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      RestClient client = RestClient(dio);
+      if (response.code == 200) {
+        AppLogger.logger.d(
+          "[item_repository/loadItemListByString]: Item list load 완료.",
+        );
 
-      try {
-        ApiResponse response = await client.getItemList(keyword);
+        List<dynamic> data = response.data['items'];
 
-        if (response.code == 200) {
-          AppLogger.logger.d(
-            "[item_repository/loadItemListByString]: Item list load 완료.",
-          );
-
-          List<dynamic> data = response.data['items'];
-
-          completer.complete(
-            data.map((item) => RefrigeratorItem.fromJson(item)).toList(),
-          );
-        } else {
-          throw Exception(
-            "[item_repository/loadItemListByString]: Json Parse Error",
-          );
-        }
-      } catch (e) {
-        AppLogger.logger.e("[item_repository/loadItemListByString]: $e");
-
-        completer.complete(<RefrigeratorItem>[]);
+        return data.map((item) => RefrigeratorItem.fromJson(item)).toList();
+      } else {
+        throw Exception(
+          "[item_repository/loadItemListByString]: Json Parse Error",
+        );
       }
-    });
-    return completer.future;
+    } catch (e) {
+      AppLogger.logger.e("[item_repository/loadItemListByString]: $e");
+
+      return <RefrigeratorItem>[];
+    }
   }
 
   // itemId로 개별 item 불러오는 함수

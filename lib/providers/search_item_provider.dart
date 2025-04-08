@@ -18,14 +18,41 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
   }
 
   // 검색어로 부터 Item list load 함수
-  Future<void> loadItemListByString(String keyword) async {
-    final List<RefrigeratorItem> refrigeratorList = await _itemRepository
-        .loadItemListByString(keyword);
+  Future<void> loadItemListByString(
+    String keyword, {
+    bool isRefresh = false,
+  }) async {
+    if (state?.isLoading == true) return;
+
+    state = state?.copyWith(isLoading: true);
+
     try {
-      state = state?.copyWith(refrigeratorItemList: refrigeratorList);
+      final int currentPage = isRefresh ? 0 : state?.page ?? 0;
+      final List<RefrigeratorItem> newList = await _itemRepository
+          .loadItemListByString(keyword, currentPage);
+
+      List<RefrigeratorItem> updatedList = <RefrigeratorItem>[];
+      if (!isRefresh) {
+        updatedList = <RefrigeratorItem>[
+          ...?state?.refrigeratorItemList,
+          ...newList,
+        ];
+      } else {
+        updatedList = newList;
+      }
+
+      final int nextPage = newList.isNotEmpty ? currentPage + 1 : currentPage;
+      final bool hasMore = newList.isNotEmpty;
+
+      state = state?.copyWith(
+        refrigeratorItemList: updatedList,
+        page: nextPage,
+        isLoading: false,
+        hasMore: hasMore,
+      );
     } catch (e) {
-      AppLogger.logger.e("[search_item_provider/loadItemListByString]: $e");
-      state = null;
+      AppLogger.logger.e("[search_item_provider/loadItemListByString] $e");
+      state = state?.copyWith(isLoading: false);
     }
   }
 

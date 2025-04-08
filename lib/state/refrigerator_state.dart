@@ -8,6 +8,7 @@ class RefrigeratorState {
   List<Content>? refExpContentList;
   List<Content>? frzExpContentList;
   bool isUpdatedContent = false;
+  bool? isLoading;
   String? setCountMessage;
 
   RefrigeratorState({
@@ -18,6 +19,7 @@ class RefrigeratorState {
     this.refExpContentList,
     this.frzExpContentList,
     this.isUpdatedContent = false,
+    this.isLoading,
     this.setCountMessage,
   });
 
@@ -29,6 +31,7 @@ class RefrigeratorState {
     List<Content>? refExpContentList,
     List<Content>? frzExpContentList,
     bool? isUpdatedContent,
+    bool? isLoading,
     String? setCountMessage,
   }) {
     return RefrigeratorState(
@@ -40,6 +43,7 @@ class RefrigeratorState {
       refExpContentList: refExpContentList ?? this.refExpContentList,
       frzExpContentList: frzExpContentList ?? this.frzExpContentList,
       isUpdatedContent: isUpdatedContent ?? this.isUpdatedContent,
+      isLoading: isLoading ?? this.isLoading,
       setCountMessage: setCountMessage ?? this.setCountMessage,
     );
   }
