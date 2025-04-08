@@ -51,7 +51,7 @@ class AddCookNotifier extends Notifier<AddCookState> {
             cookItemList.map((RefrigeratorItem cookItem) {
               if (cookItem.itemId == item.itemId) {
                 return cookItem.copyWith(
-                  count: (cookItem.count ?? 0) + state.itemCount,
+                  count: state.itemCount,
                 );
               }
               return cookItem;

@@ -44,7 +44,7 @@ class AddCookState {
     bool? isOpenCookName,
     bool? isSearchFieldEmpty,
 
-    int itemCount = 1,
+    int? itemCount,
   }) {
     return AddCookState(
       itemListForCook: itemListForCook ?? this.itemListForCook,
@@ -60,7 +60,7 @@ class AddCookState {
       isOpenCookName: isOpenCookName ?? isOpenCookName,
       isCookNameFocused: isCookNameFocused ?? isCookNameFocused,
 
-      itemCount: itemCount,
+      itemCount: itemCount ?? this.itemCount,
     );
   }
 }
