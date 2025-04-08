@@ -205,19 +205,18 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          if (_refrigeratorState?.refExpContentList?.isNotEmpty ?? false)
+          if (_refrigeratorState?.refExpContentList?.isNotEmpty ??
+              false) ...<Widget>[
             contentExpansionTile(
               context,
               '유통 기한 마감 임박',
               _refrigeratorState!.refExpContentList!,
             ),
+            const Divider(),
+          ],
 
           if (_refrigeratorState?.refrigeratorContentList?.isNotEmpty ?? false)
-            contentExpansionTile(
-              context,
-              '냉장',
-              _refrigeratorState!.refrigeratorContentList!,
-            ),
+            _listViewBuilder(_refrigeratorState!.refrigeratorContentList!),
         ],
       ),
     );
@@ -228,21 +227,32 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          if (_refrigeratorState?.frzExpContentList?.isNotEmpty ?? false)
+          if (_refrigeratorState?.frzExpContentList?.isNotEmpty ??
+              false) ...<Widget>[
             contentExpansionTile(
               context,
               '유통 기한 마감 임박',
               _refrigeratorState!.frzExpContentList!,
             ),
 
+            const Divider(),
+          ],
+
           if (_refrigeratorState?.freezerContentList?.isNotEmpty ?? false)
-            contentExpansionTile(
-              context,
-              '냉동',
-              _refrigeratorState!.freezerContentList!,
-            ),
+            _listViewBuilder(_refrigeratorState!.freezerContentList!),
         ],
       ),
+    );
+  }
+
+  Widget _listViewBuilder(List<Content> contentList) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: contentList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _buildContentRow(contentList[index]);
+      },
     );
   }
 
