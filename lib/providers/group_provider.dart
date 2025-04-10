@@ -41,7 +41,7 @@ class GroupNotifier extends Notifier<Group?> {
     }
   }
 
-// 그룹 참여 승인 요청 - 거절
+  // 그룹 참여 승인 요청 - 거절
   Future<bool> putGroupReject(int userId, int groupId) async {
     try {
       await _groupRepository.putGroupReject(userId, groupId);
@@ -61,6 +61,20 @@ class GroupNotifier extends Notifier<Group?> {
       AppLogger.logger.e(e);
       return false;
     }
+  }
+
+  // 그룹원에서 그룹장은 제일 상단 위치 함수
+  List<GroupUser> getSortedGroupUsers() {
+    final group = state;
+    if (group == null || group.groupUsers == null) return [];
+
+    final List<GroupUser> sorted = List<GroupUser>.from(group.groupUsers!);
+    sorted.sort((a, b) {
+      if (a.userId == group.groupOwnerId) return -1;
+      if (b.userId == group.groupOwnerId) return 1;
+      return 0;
+    });
+    return sorted;
   }
 }
 

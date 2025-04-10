@@ -147,7 +147,7 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
                 children:
-                    _group?.groupUsers?.map((GroupUser user) {
+                    groupNotifier.getSortedGroupUsers().map((GroupUser user) {
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         padding: EdgeInsets.all(design.marginAndPadding),
