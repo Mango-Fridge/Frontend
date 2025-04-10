@@ -336,7 +336,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
-          color: Colors.amber[300],
+          color:
+              (DateTime.now().difference(content.expDate!).inHours > -24)
+                  ? Colors.red[200]
+                  : Colors.amber[300],
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
