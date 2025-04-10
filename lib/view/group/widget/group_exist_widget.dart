@@ -89,12 +89,12 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                             if (_user?.usrId == _group?.groupOwnerId) ...<Widget>{
                               actionButton(
                                 label: "거절",
-                                onPressed: () {
-                                  groupNotifier.putGroupReject(
+                                onPressed: () async {
+                                  await groupNotifier.putGroupReject( 
                                     user.userId,
                                     _group?.groupId ?? 0,
                                   );
-                                  ref
+                                  await ref
                                       .read(groupProvider.notifier)
                                       .groupUserList(
                                         _user?.usrId ?? 0,
@@ -110,12 +110,12 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                               ),
                               actionButton(
                                 label: "승인",
-                                onPressed: () {
-                                  groupNotifier.postGroupApprove(
+                                onPressed: () async {
+                                  await groupNotifier.postGroupApprove(
                                     user.userId,
                                     _group?.groupId ?? 0,
                                   );
-                                  ref
+                                  await ref
                                       .read(groupProvider.notifier)
                                       .groupUserList(
                                         _user?.usrId ?? 0,
