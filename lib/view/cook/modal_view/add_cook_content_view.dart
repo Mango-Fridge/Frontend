@@ -8,15 +8,8 @@ import 'package:mango/state/add_cook_state.dart';
 
 class AddCookContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
-  final TextEditingController? searchController; // 검색창 컨트롤러 전달
-  final FocusNode? searchFocusNode; // 검색창 포커스 노드 전달
 
-  const AddCookContentView({
-    super.key,
-    required this.item,
-    this.searchController,
-    this.searchFocusNode,
-  });
+  const AddCookContentView({super.key, required this.item});
 
   @override
   ConsumerState<AddCookContentView> createState() => _AddCookContentViewState();
@@ -47,18 +40,6 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
     int getItemTotalFat() {
       if (_addCookState == null) return 0;
       return (widget.item?.nutriFat ?? 0) * _addCookState!.itemCount;
-    }
-
-    // 검색창 초기화 및 포커스 해제 함수
-    void clearSearchField() {
-      if (widget.searchFocusNode != null) {
-        FocusScope.of(context).unfocus();
-      }
-      if (widget.searchController != null) {
-        widget.searchController!.text = ''; // 텍스트 초기화
-      }
-      // 상태 업데이트
-      ref.read(addCookProvider.notifier).updateSearchFieldEmpty(true);
     }
 
     return SizedBox(
@@ -180,7 +161,6 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 text: '닫기',
                 backgroundColor: Colors.white,
                 onPressed: () {
-                  clearSearchField(); // 검색창 초기화 및 포커스 해제
                   context.pop();
                 },
               ),
@@ -193,7 +173,6 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                   ref.watch(addCookProvider.notifier).sumCarb();
                   ref.watch(addCookProvider.notifier).sumProtein();
                   ref.watch(addCookProvider.notifier).sumFat();
-                  clearSearchField(); // 검색창 초기화 및 포커스 해제
                   context.pop();
                 },
               ),
