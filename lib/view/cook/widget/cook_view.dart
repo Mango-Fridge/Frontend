@@ -190,21 +190,17 @@ class _CookViewState extends ConsumerState<CookView> {
   }
 
   Widget _noCookView() {
-    final Design design = Design(context);
-
-    return Center(
+    return const Center(
       child: Column(
         children: <Widget>[
-          const Spacer(),
-          const Icon(Icons.local_dining, size: 50, color: Colors.black),
-          const Text(
+          Spacer(),
+          Icon(Icons.local_dining, size: 50, color: Colors.black),
+          Text(
             "요리를 추가해 보세요!",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
-
-          SizedBox(height: design.screenHeight * 0.25),
-          const Spacer(),
+          Spacer(),
         ],
       ),
     );
