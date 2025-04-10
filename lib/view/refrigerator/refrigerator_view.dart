@@ -347,7 +347,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    content.contentName,
+                    content.contentName.length > 10
+                        ? '${content.contentName.substring(0, 10)}...'
+                        : content.contentName,
                     style: const TextStyle(
                       fontSize: Design.normalFontSize,
                       fontWeight: FontWeight.bold,

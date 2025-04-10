@@ -154,7 +154,9 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.itemName ?? '',
+                    (item.itemName ?? '').length > 10
+                        ? '${(item.itemName ?? '').substring(0, 10)}...'
+                        : item.itemName ?? '',
                     style: const TextStyle(
                       fontSize: Design.normalFontSize,
                       fontWeight: FontWeight.bold,
@@ -173,7 +175,9 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                   style: const TextStyle(fontSize: 12),
                 ),
                 Text(
-                  item.brandName ?? '',
+                  (item.brandName ?? '').length > 10
+                      ? '${(item.brandName ?? '').substring(0, 10)}...'
+                      : item.brandName ?? '',
                   style: const TextStyle(fontSize: 12),
                 ),
               ],
