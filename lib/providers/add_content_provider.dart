@@ -194,6 +194,14 @@ class AddContentNotifier extends Notifier<AddContentState?> {
     state = _addContentState;
   }
 
+  void setCustomCategory(String customCategory) {
+    if (state != null) {
+      _addContentState = state!.copyWith(customContentCategory: customCategory);
+    }
+
+    state = _addContentState;
+  }
+
   // view에서 선택 된 storage 관리 함수
   void setStorage(String storage) {
     if (state != null) {
