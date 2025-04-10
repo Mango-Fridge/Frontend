@@ -191,4 +191,50 @@ class GroupRepository {
       }
     }
   }
+
+  // 그룹 참여 승인 요청 - 거절
+  Future<void> putGroupReject(int userId, int groupId) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "userId": userId,
+      "groupId": groupId,
+    };
+
+    try {
+      ApiResponse response = await client.putGroupReject(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[group_repository/putGroupReject]: 그룹 참여 승인 요청을 거절");
+      } else {
+        throw Exception('[group_repository/putGroupReject]: Json Parse Error');
+      }
+    } catch (e) {
+      throw Exception('[group_repository/putGroupReject]: ${e}');
+    }
+  }
+
+  // 그룹 참여 승인 요청 - 승인
+  Future<void> postGroupApprove(int userId, int groupId) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "userId": userId,
+      "groupId": groupId,
+    };
+
+    try {
+      ApiResponse response = await client.postGroupApprove(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[group_repository/postGroupApprove]: 그룹 참여 승인 요청을 승인");
+      } else {
+        throw Exception('[group_repository/postGroupApprove]: Json Parse Error');
+      }
+    } catch (e) {
+      throw Exception('[group_repository/postGroupApprove]: ${e}');
+    }
+  }
 }

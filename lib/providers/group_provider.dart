@@ -40,6 +40,28 @@ class GroupNotifier extends Notifier<Group?> {
       return false;
     }
   }
+
+// 그룹 참여 승인 요청 - 거절
+  Future<bool> putGroupReject(int userId, int groupId) async {
+    try {
+      await _groupRepository.putGroupReject(userId, groupId);
+      return true;
+    } catch (e) {
+      AppLogger.logger.e(e);
+      return false;
+    }
+  }
+
+  // 그룹 참여 승인 요청 - 승인
+  Future<bool> postGroupApprove(int userId, int groupId) async {
+    try {
+      await _groupRepository.postGroupApprove(userId, groupId);
+      return true;
+    } catch (e) {
+      AppLogger.logger.e(e);
+      return false;
+    }
+  }
 }
 
 final NotifierProvider<GroupNotifier, Group?> groupProvider =

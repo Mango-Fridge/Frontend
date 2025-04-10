@@ -56,6 +56,13 @@ abstract class RestClient {
   @POST('/api/groups/join') // 그룹 참여하기
   Future<ApiResponse> postGroupJoin(@Body() Map<String, Object?> body);
 
+  @PUT('/api/groups/reject') // 그룹 참여 승인 요청 - 거절
+  Future<ApiResponse> putGroupReject(@Body() Map<String, Object?> body);
+
+  @PUT('/api/groups/approve') // 그룹 참여 승인 요청 - 승인
+  Future<ApiResponse> postGroupApprove(@Body() Map<String, Object?> body);
+
+
   @GET('/cooks/list/{groupId}') // cook list 호출
   Future<ApiResponse> getCookList(@Path('groupId') int groupId);
 
