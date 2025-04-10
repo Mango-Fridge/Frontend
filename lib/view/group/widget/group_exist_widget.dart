@@ -19,7 +19,7 @@ class GrouExistWidget extends ConsumerStatefulWidget {
 
 class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
   Group? get _group => ref.watch(groupProvider);
-  AuthInfo? get user => ref.watch(loginAuthProvider);
+  AuthInfo? get _user => ref.watch(loginAuthProvider);
   GroupNotifier get groupNotifier => ref.read(groupProvider.notifier);
 
   @override
@@ -29,7 +29,7 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(groupProvider.notifier)
-          .groupUserList(user?.usrId ?? 0, _group?.groupId ?? 0);
+          .groupUserList(_user?.usrId ?? 0, _group?.groupId ?? 0);
     });
   }
 
@@ -38,6 +38,8 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
     final Design design = Design(context);
     final double fontSizeMediaQuery =
         MediaQuery.of(context).size.width; // 폰트 사이즈
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -83,11 +85,53 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                                 fontSize: fontSizeMediaQuery * 0.06,
                               ),
                             ),
+                            const Spacer(),
+                            if (_user?.usrId == _group?.groupOwnerId) ...<Widget>{
+                              actionButton(
+                                label: "거절",
+                                onPressed: () {
+                                  groupNotifier.putGroupReject(
+                                    user.userId,
+                                    _group?.groupId ?? 0,
+                                  );
+                                  ref
+                                      .read(groupProvider.notifier)
+                                      .groupUserList(
+                                        _user?.usrId ?? 0,
+                                        _group?.groupId ?? 0,
+                                      );
+                                },
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                fontSizeMediaQuery: fontSizeMediaQuery,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              actionButton(
+                                label: "승인",
+                                onPressed: () {
+                                  groupNotifier.postGroupApprove(
+                                    user.userId,
+                                    _group?.groupId ?? 0,
+                                  );
+                                  ref
+                                      .read(groupProvider.notifier)
+                                      .groupUserList(
+                                        _user?.usrId ?? 0,
+                                        _group?.groupId ?? 0,
+                                      );
+                                },
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                fontSizeMediaQuery: fontSizeMediaQuery,
+                              ),
+                            },
                           ],
                         ),
                       );
                     }).toList() ??
-                    [const SizedBox()],
+                    <Widget>[const SizedBox()],
               ),
             ],
           ),
@@ -132,15 +176,9 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
             ],
           ),
           const SizedBox(height: 5),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue, // 배경색
-              foregroundColor: Colors.black, // 텍스트색
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // 버튼 라운딩
-              ),
-            ),
-            onPressed: () async {
+          actionButton(
+            label: "그룹 나가기",
+            onPressed: () {
               showDialog(
                 context: context,
                 builder:
@@ -151,14 +189,14 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                       ),
                       actions: <Widget>[
                         TextButton(
-                          onPressed: () => context.pop(), // "취소" 버튼: 알럿 창 닫기
+                          onPressed: () => context.pop(),
                           child: const Text('취소'),
                         ),
                         TextButton(
                           onPressed: () async {
-                            context.pop(); // 알럿 창 닫기
+                            context.pop();
                             if (await groupNotifier.exitCurrentGroup(
-                              user?.usrId ?? 0,
+                              _user?.usrId ?? 0,
                               _group?.groupId ?? 0,
                             )) {
                               ref.read(grouViewStateProvider.notifier).state =
@@ -181,13 +219,31 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                     ),
               );
             },
-            child: Text(
-              "그룹 나가기",
-              style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
-            ),
+            screenWidth: screenWidth,
+            screenHeight: screenHeight,
+            fontSizeMediaQuery: fontSizeMediaQuery,
           ),
         ],
       ),
     );
   }
+}
+
+Widget actionButton({
+  required String label,
+  required VoidCallback onPressed,
+  required double screenWidth,
+  required double screenHeight,
+  required double fontSizeMediaQuery,
+}) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.blue,
+      foregroundColor: Colors.black,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      minimumSize: Size(screenWidth * 0.15, screenHeight * 0.04),
+    ),
+    onPressed: onPressed,
+    child: Text(label, style: TextStyle(fontSize: fontSizeMediaQuery * 0.04)),
+  );
 }
