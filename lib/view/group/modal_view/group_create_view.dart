@@ -17,7 +17,6 @@ import 'package:mango/view/group/sub_widget/group_modal_title.dart';
 class GroupCreateView extends ConsumerWidget {
   const GroupCreateView({super.key});
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GroupState groupState = ref.watch(groupCreateProvider);
@@ -25,6 +24,7 @@ class GroupCreateView extends ConsumerWidget {
       groupCreateProvider.notifier,
     );
     final AuthInfo? user = ref.watch(loginAuthProvider);
+    final Group? _group = ref.watch(groupProvider);
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
@@ -63,7 +63,15 @@ class GroupCreateView extends ConsumerWidget {
                           user?.usrId ?? 0,
                           '${groupState.groupName}',
                         )) {
-                          ref.read(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
+                          await ref
+                              .read(groupProvider.notifier)
+                              .loadGroup(user?.usrId ?? 0);
+                          await ref
+                              .read(groupProvider.notifier)
+                              .groupUserList(
+                                user?.usrId ?? 0,
+                                _group?.groupId ?? 0,
+                              );
                           ref.read(grouViewStateProvider.notifier).state =
                               GroupViewState.exist; // 그룹 생성으로 그룹 존재 뷰로
                           context.pop(); // Sheet 닫기
