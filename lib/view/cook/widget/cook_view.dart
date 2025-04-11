@@ -40,6 +40,25 @@ class _CookViewState extends ConsumerState<CookView> {
         elevation: 0,
         title: const Text('요리', style: TextStyle(color: Colors.black)),
         centerTitle: true,
+        toolbarHeight: design.screenHeight * 0.08,
+        // + 버튼 -> 클릭 시 add_cook_view로 이동
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: design.marginAndPadding),
+            child: IconButton(
+              icon: const Icon(Icons.add, color: Colors.black, size: 25),
+              onPressed: () {
+                context.push('/addCook');
+              },
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.amber,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.00),
@@ -47,25 +66,6 @@ class _CookViewState extends ConsumerState<CookView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 20,
           children: [
-            const SizedBox(height: 10),
-            // + 버튼 -> 클릭 시 add_cook_view로 이동
-            Padding(
-              padding: EdgeInsets.all(design.marginAndPadding),
-              child: Container(
-                width: design.screenWidth,
-                height: design.screenHeight * 0.07,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.add, color: Colors.black),
-                  onPressed: () {
-                    context.push('/addCook');
-                  },
-                ),
-              ),
-            ),
             Expanded(
               child:
                   _cookState != null &&
@@ -74,8 +74,6 @@ class _CookViewState extends ConsumerState<CookView> {
                       ? _buildCook(_cookState?.cookList!)
                       : _noCookView(),
             ),
-
-            SizedBox(height: design.screenHeight * 0.25),
           ],
         ),
       ),
@@ -88,7 +86,6 @@ class _CookViewState extends ConsumerState<CookView> {
       decoration: const BoxDecoration(color: Colors.white),
       child: Column(
         children: <Widget>[
-          const Divider(),
           Expanded(
             child: ListView.builder(
               itemCount: cookList?.length ?? 0,
@@ -98,7 +95,6 @@ class _CookViewState extends ConsumerState<CookView> {
               },
             ),
           ),
-          const Divider(),
         ],
       ),
     );

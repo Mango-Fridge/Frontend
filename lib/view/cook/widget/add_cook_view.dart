@@ -268,6 +268,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
         ref.watch(searchContentProvider.notifier).resetState();
         _controller.text = '';
+        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+        _searchIngridientController.text = ''; // 텍스트 초기화
+        ref
+            .read(addCookProvider.notifier)
+            .updateSearchFieldEmpty(true); // 상태 업데이트
 
         showDialog(
           context: context,

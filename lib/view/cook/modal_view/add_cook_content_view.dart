@@ -8,6 +8,7 @@ import 'package:mango/state/add_cook_state.dart';
 
 class AddCookContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
+
   const AddCookContentView({super.key, required this.item});
 
   @override
@@ -163,7 +164,6 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                   context.pop();
                 },
               ),
-
               actionButton(
                 text: '추가',
                 backgroundColor: Colors.amber,
