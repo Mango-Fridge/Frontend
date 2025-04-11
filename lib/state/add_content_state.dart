@@ -5,6 +5,7 @@ class AddContentState {
 
   // 선택 값 관리
   String? selectedContentCategory;
+  String? customContentCategory;
   String? selectedContentStorage;
   DateTime? selectedRegDate;
   DateTime? selectedExpDate;
@@ -46,6 +47,7 @@ class AddContentState {
     this.contentNameErrorMessage,
     this.contentCountErrorMessage,
     this.selectedContentCategory,
+    this.customContentCategory,
     this.subCategory,
     this.selectedContentStorage,
     this.selectedRegDate,
@@ -67,6 +69,7 @@ class AddContentState {
     String? contentNameErrorMessage,
     String? contentCountErrorMessage,
     String? selectedContentCategory,
+    String? customContentCategory,
     String? subCategory,
     String? selectedContentStorage,
     DateTime? selectedRegDate,
@@ -93,6 +96,8 @@ class AddContentState {
           contentCountErrorMessage ?? this.contentCountErrorMessage,
       selectedContentCategory:
           selectedContentCategory ?? this.selectedContentCategory,
+      customContentCategory:
+          customContentCategory ?? this.customContentCategory,
       subCategory: subCategory ?? this.subCategory,
       selectedContentStorage:
           selectedContentStorage ?? this.selectedContentStorage,

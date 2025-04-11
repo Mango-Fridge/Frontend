@@ -66,9 +66,9 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   // name error message 관리 함수
   void updateNameErrorMessage(String contentName) {
     if (state != null) {
-      if (contentName.length > 20) {
+      if (contentName.length > 15) {
         _addContentState = state!.copyWith(
-          contentNameErrorMessage: '물품 이름의 최대 길이는 20자 입니다.',
+          contentNameErrorMessage: '물품 이름의 최대 길이는 15자 입니다.',
           isNameEmpty: false,
         );
       } else {
@@ -189,6 +189,14 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   void setCategory(String category) {
     if (state != null) {
       _addContentState = state!.copyWith(selectedContentCategory: category);
+    }
+
+    state = _addContentState;
+  }
+
+  void setCustomCategory(String customCategory) {
+    if (state != null) {
+      _addContentState = state!.copyWith(customContentCategory: customCategory);
     }
 
     state = _addContentState;

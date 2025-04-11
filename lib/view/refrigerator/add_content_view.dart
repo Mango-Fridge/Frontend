@@ -19,8 +19,18 @@ class AddContentView extends ConsumerStatefulWidget {
 }
 
 class _AddContentViewState extends ConsumerState<AddContentView> {
-  List<String> contentCategory = <String>['육류', '음료류', '채소류', '과자류', '아이스크림류'];
+  List<String> contentCategory = <String>[
+    '육류',
+    '음료류',
+    '채소류',
+    '과자류',
+    '아이스크림류',
+    '직접 입력',
+  ];
   List<String> contentStorage = <String>['냉장', '냉동'];
+
+  String? selectedCategory;
+  String? customCategory;
 
   Group? get _group => ref.watch(groupProvider);
   AddContentState? get _addContentState => ref.watch(addContentProvider);
@@ -29,9 +39,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   static const int _memoMaxLength = 120;
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
   final TextEditingController countController = TextEditingController(
     text: '1',
   );
+  TextEditingController brandNameController = TextEditingController();
   final TextEditingController memoController = TextEditingController();
   TextEditingController subCategoryController = TextEditingController();
   TextEditingController capacityController = TextEditingController();
@@ -41,6 +53,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   TextEditingController fatController = TextEditingController();
 
   final GlobalKey _countKey = GlobalKey();
+  final GlobalKey _brandNameKey = GlobalKey();
   final GlobalKey _memoKey = GlobalKey();
   final GlobalKey _subCategoryKey = GlobalKey();
   final GlobalKey _capacityKey = GlobalKey();
@@ -59,11 +72,32 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(addContentProvider.notifier).resetState();
 
+      final category = widget.item?.category ?? '';
+
+      if (widget.item != null) {
+        if (contentCategory.contains(category)) {
+          ref.read(addContentProvider.notifier).setCategory(category);
+          ref.read(addContentProvider.notifier).setCustomCategory('');
+        } else {
+          ref.read(addContentProvider.notifier).setCategory('직접 입력');
+          ref.read(addContentProvider.notifier).setCustomCategory(category);
+        }
+      } else {
+        ref.read(addContentProvider.notifier).setCategory(contentCategory[0]);
+        ref.read(addContentProvider.notifier).setCustomCategory('');
+      }
+
       // search에서 받아온 item을 text에 초기화 시켜주기 위함
       nameController = TextEditingController(text: widget.item?.itemName ?? "");
       ref
           .watch(addContentProvider.notifier)
           .updateNameErrorMessage(nameController.text);
+      brandNameController = TextEditingController(
+        text: widget.item?.brandName ?? '',
+      );
+      categoryController = TextEditingController(
+        text: ref.watch(addContentProvider)?.customContentCategory,
+      );
       capacityController = TextEditingController(
         text: widget.item?.nutriCapacity.toString() ?? '',
       );
@@ -118,6 +152,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   }
 
   Widget contentDetailInfoView() {
+    final isCustomInput =
+        ref.watch(addContentProvider)?.selectedContentCategory == '직접 입력';
     Design design = Design(context);
     return Column(
       spacing: 10,
@@ -163,28 +199,68 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               ),
             ),
             Expanded(
-              child: DropdownButton<String>(
-                value:
-                    widget.item?.category ??
-                    _addContentState?.selectedContentCategory ??
-                    contentCategory[0],
-                isExpanded: true,
-                items:
-                    contentCategory.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                onChanged:
-                    widget.item != null
-                        ? null
-                        : (String? newValue) {
-                          ref
-                              .watch(addContentProvider.notifier)
-                              .setCategory(newValue ?? '');
+              child:
+                  isCustomInput
+                      ? Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              controller: categoryController,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              onChanged: (String value) {
+                                ref
+                                    .read(addContentProvider.notifier)
+                                    .setCustomCategory(value);
+                              },
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              ref
+                                  .read(addContentProvider.notifier)
+                                  .setCategory(contentCategory[0]);
+                              ref
+                                  .read(addContentProvider.notifier)
+                                  .setCustomCategory('');
+                            },
+                          ),
+                        ],
+                      )
+                      : DropdownButton<String>(
+                        value:
+                            ref
+                                .watch(addContentProvider)
+                                ?.selectedContentCategory ??
+                            '직접 입력',
+                        isExpanded: true,
+                        items:
+                            contentCategory.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                        onChanged: (String? newValue) {
+                          if (newValue == '직접 입력') {
+                            ref
+                                .read(addContentProvider.notifier)
+                                .setCategory('직접 입력');
+                            ref
+                                .read(addContentProvider.notifier)
+                                .setCustomCategory('');
+                          } else {
+                            ref
+                                .read(addContentProvider.notifier)
+                                .setCategory(newValue ?? '');
+                            ref
+                                .read(addContentProvider.notifier)
+                                .setCustomCategory('');
+                          }
                         },
-              ),
+                      ),
             ),
           ],
         ),
@@ -338,6 +414,34 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       .watch(addContentProvider.notifier)
                       .setStorage(newValue ?? '');
                 },
+              ),
+            ),
+          ],
+        ),
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            SizedBox(
+              width: design.screenWidth * 0.22,
+              child: const Text(
+                '브랜드 명',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextField(
+                    key: _brandNameKey,
+                    onTap: () => _focusTextField(_brandNameKey),
+                    controller: brandNameController,
+                    decoration: const InputDecoration(
+                      hintText: "ex) 오리온",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -600,7 +704,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                               _addContentState?.selectedContentCategory ??
                                   contentCategory[0],
                               subCategoryController.text,
-                              '',
+                              brandNameController.text,
                               int.parse(countController.text),
                               _addContentState?.selectedRegDate ??
                                   DateTime.now(),
@@ -655,10 +759,13 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             _group?.groupId ?? 0,
                             nameController.text,
                             false,
-                            _addContentState?.selectedContentCategory ??
-                                contentCategory[0],
+                            _addContentState?.selectedContentCategory == '직접 입력'
+                                ? _addContentState?.customContentCategory ??
+                                    contentCategory[0]
+                                : _addContentState?.selectedContentCategory ??
+                                    contentCategory[0],
                             subCategoryController.text,
-                            '',
+                            brandNameController.text,
                             int.parse(countController.text),
                             _addContentState?.selectedRegDate ?? DateTime.now(),
                             _addContentState?.selectedExpDate ?? DateTime.now(),
