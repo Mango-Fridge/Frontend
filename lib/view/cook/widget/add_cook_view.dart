@@ -274,6 +274,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
         ref
             .read(addCookProvider.notifier)
             .updateSearchFieldEmpty(true); // 상태 업데이트
+        ref
+            .watch(addCookProvider.notifier)
+            .currentItemCount(
+              item.count ?? 1,
+            ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
 
         showDialog(
           context: context,
