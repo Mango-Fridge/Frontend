@@ -138,13 +138,14 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _addCookState?.isSearchFieldEmpty ?? false
+                        _addCookState?.isSearchFieldEmpty ?? true
                             ? Icons.search
                             : Icons.close,
                         color: Colors.black,
                       ),
                       onPressed: () {
                         if (!(_addCookState?.isSearchFieldEmpty ?? false)) {
+                          FocusManager.instance.primaryFocus?.unfocus();
                           _searchIngridientController.clear();
                           ref
                               .read(addCookProvider.notifier)
