@@ -42,22 +42,24 @@ class _CookViewState extends ConsumerState<CookView> {
         centerTitle: true,
         toolbarHeight: design.screenHeight * 0.08,
         // + 버튼 -> 클릭 시 add_cook_view로 이동
+        // 요리가 없다면 보이지 않음
         actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: design.marginAndPadding),
-            child: IconButton(
-              icon: const Icon(Icons.add, color: Colors.black, size: 25),
-              onPressed: () {
-                context.push('/addCook');
-              },
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.amber,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+          if (_cookState!.cookList!.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(right: design.marginAndPadding),
+              child: IconButton(
+                icon: const Icon(Icons.add, color: Colors.black, size: 25),
+                onPressed: () {
+                  context.push('/addCook');
+                },
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
       body: Padding(
@@ -180,15 +182,36 @@ class _CookViewState extends ConsumerState<CookView> {
   }
 
   Widget _noCookView() {
-    return const Center(
+    return Center(
       child: Column(
         children: <Widget>[
-          Spacer(),
-          Icon(Icons.local_dining, size: 50, color: Colors.black),
-          Text(
+          const Spacer(),
+          const Icon(Icons.local_dining, size: 50, color: Colors.black),
+          const Text(
             "요리를 추가해 보세요!",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 5),
+          // 요리 추가 버튼
+          ElevatedButton(
+            onPressed: () {
+              context.push('/addCook');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 32.0,
+                vertical: 12.0,
+              ),
+            ),
+            child: const Text(
+              '요리 추가하기',
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
           ),
           Spacer(),
         ],
