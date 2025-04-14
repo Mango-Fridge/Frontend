@@ -44,7 +44,7 @@ class _CookViewState extends ConsumerState<CookView> {
         // + 버튼 -> 클릭 시 add_cook_view로 이동
         // 요리가 없다면 보이지 않음
         actions: <Widget>[
-          if (_cookState!.cookList!.isNotEmpty)
+          if (_cookState?.cookList?.isNotEmpty ?? false)
             Padding(
               padding: EdgeInsets.only(right: design.marginAndPadding),
               child: IconButton(
