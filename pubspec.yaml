@@ -2,7 +2,7 @@ name: mango
 description: "냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트"
 publish_to: 'none'
 
-version: 1.1.1+1
+version: 1.1.2+1
 
 environment:
   sdk: ^3.7.0
