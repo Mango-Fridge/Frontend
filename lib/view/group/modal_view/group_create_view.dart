@@ -24,7 +24,6 @@ class GroupCreateView extends ConsumerWidget {
       groupCreateProvider.notifier,
     );
     final AuthInfo? user = ref.watch(loginAuthProvider);
-    final Group? _group = ref.watch(groupProvider);
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
@@ -70,7 +69,7 @@ class GroupCreateView extends ConsumerWidget {
                               .read(groupProvider.notifier)
                               .groupUserList(
                                 user?.usrId ?? 0,
-                                _group?.groupId ?? 0,
+                                ref.read(groupProvider)?.groupId ?? 0,
                               );
                           ref.read(grouViewStateProvider.notifier).state =
                               GroupViewState.exist; // 그룹 생성으로 그룹 존재 뷰로
