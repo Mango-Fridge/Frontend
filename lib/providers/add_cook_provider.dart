@@ -133,6 +133,10 @@ class AddCookNotifier extends Notifier<AddCookState> {
       state = state.copyWith(itemCount: state.itemCount - 1);
     }
   }
+
+  void currentItemCount(int itemCount) {
+    state = state.copyWith(itemCount: itemCount);
+  }
 }
 
 final NotifierProvider<AddCookNotifier, AddCookState> addCookProvider =
