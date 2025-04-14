@@ -98,6 +98,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       categoryController = TextEditingController(
         text: ref.watch(addContentProvider)?.customContentCategory,
       );
+      subCategoryController = TextEditingController(
+        text: widget.item?.subCategory ?? '',
+      );
       capacityController = TextEditingController(
         text: widget.item?.nutriCapacity.toString() ?? '',
       );
@@ -515,6 +518,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 key: _subCategoryKey,
                 label: '중분류',
                 controller: subCategoryController,
+                enabled: true,
                 hintText: 'ex) 밥',
                 textInputType: TextInputType.text,
                 onChanged: () {
@@ -629,6 +633,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 key: _kcalKey,
                 label: '열량',
                 controller: kcalController,
+                enabled: widget.item == null,
                 hintText: 'ex) 150',
                 textInputType: TextInputType.number,
                 onChanged: () {
@@ -641,6 +646,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 key: _carbsKey,
                 label: '탄수화물',
                 controller: carbsController,
+                enabled: widget.item == null,
                 hintText: 'ex) 50',
                 textInputType: TextInputType.number,
                 onChanged: () {
@@ -653,6 +659,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 key: _proteinKey,
                 label: '단백질',
                 controller: proteinController,
+                enabled: widget.item == null,
                 hintText: 'ex) 150',
                 textInputType: TextInputType.number,
                 onChanged: () {
@@ -665,6 +672,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 key: _fatKey,
                 label: '지방',
                 controller: fatController,
+                enabled: widget.item == null,
                 hintText: 'ex) 150',
                 textInputType: TextInputType.number,
                 onChanged: () {
@@ -812,6 +820,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required GlobalKey key,
     required String label,
     required TextEditingController controller,
+    required bool enabled,
     required String hintText,
     required VoidCallback onChanged,
     required TextInputType textInputType,
@@ -832,7 +841,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             keyboardType: textInputType,
             controller: controller,
             style: const TextStyle(color: Colors.black),
-            enabled: widget.item == null,
+            enabled: enabled,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               hintText: hintText,
