@@ -101,7 +101,7 @@ class GroupParticipationView extends ConsumerWidget {
                       ? () async {
                         if (await groupNotifier.postGroupJoin(
                           user?.usrId ?? 0,
-                          group?.groupId ?? 0,
+                          groupState.groupId ?? 0,
                         )) {
                           ref
                               .read(groupProvider.notifier)

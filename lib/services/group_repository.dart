@@ -120,6 +120,7 @@ class GroupRepository {
         AppLogger.logger.i("[group_repository/isGroupValid]: $groupInfo");
 
         return GroupState(
+          groupId: groupInfo['groupId'],
           groupName: groupInfo['groupName'],
           groupOwnerName: groupInfo['groupOwnerName'],
           groupMemberCount: groupInfo['groupMemberCount'],
