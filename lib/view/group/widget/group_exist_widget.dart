@@ -111,7 +111,7 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                               actionButton(
                                 label: "승인",
                                 onPressed: () async {
-                                  await groupNotifier.postGroupApprove(
+                                  await groupNotifier.putGroupApprove(
                                     user.userId,
                                     _group?.groupId ?? 0,
                                   );

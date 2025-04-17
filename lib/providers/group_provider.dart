@@ -53,9 +53,9 @@ class GroupNotifier extends Notifier<Group?> {
   }
 
   // 그룹 참여 승인 요청 - 승인
-  Future<bool> postGroupApprove(int userId, int groupId) async {
+  Future<bool> putGroupApprove(int userId, int groupId) async {
     try {
-      await _groupRepository.postGroupApprove(userId, groupId);
+      await _groupRepository.putGroupApprove(userId, groupId);
       return true;
     } catch (e) {
       AppLogger.logger.e(e);

@@ -216,7 +216,7 @@ class GroupRepository {
   }
 
   // 그룹 참여 승인 요청 - 승인
-  Future<void> postGroupApprove(int userId, int groupId) async {
+  Future<void> putGroupApprove(int userId, int groupId) async {
     RestClient client = RestClient(dio);
 
     // 전송할 데이터
@@ -226,7 +226,7 @@ class GroupRepository {
     };
 
     try {
-      ApiResponse response = await client.postGroupApprove(body);
+      ApiResponse response = await client.putGroupApprove(body);
 
       if (response.code == 200) {
         AppLogger.logger.i("[group_repository/postGroupApprove]: 그룹 참여 승인 요청을 승인");

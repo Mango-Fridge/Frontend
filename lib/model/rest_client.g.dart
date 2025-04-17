@@ -490,7 +490,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<ApiResponse<dynamic>> postGroupApprove(
+  Future<ApiResponse<dynamic>> putGroupApprove(
     Map<String, Object?> body,
   ) async {
     final _extra = <String, dynamic>{};
