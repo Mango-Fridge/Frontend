@@ -323,9 +323,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
-                item.itemName ?? '',
+                (item.itemName ?? '').length > 10
+                    ? '${(item.itemName ?? '').substring(0, 10)}...'
+                    : item.itemName ?? '',
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: Design.normalFontSize,
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -341,7 +343,12 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
               style: const TextStyle(fontSize: 12),
             ),
-            Text(item.brandName ?? '', style: const TextStyle(fontSize: 12)),
+            Text(
+              (item.brandName ?? '').length > 10
+                  ? '${(item.brandName ?? '').substring(0, 10)}...'
+                  : item.brandName ?? '',
+              style: const TextStyle(fontSize: 12),
+            ),
           ],
         ),
       ],

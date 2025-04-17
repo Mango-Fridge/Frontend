@@ -57,15 +57,21 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    '${widget.item?.itemName}',
+                    (widget.item?.itemName ?? '').length > 10
+                        ? '${(widget.item?.itemName ?? '').substring(0, 10)}...'
+                        : widget.item?.itemName ?? '',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '${widget.item?.brandName}',
-                    style: const TextStyle(fontSize: 16),
+                    (widget.item?.brandName ?? '').length > 5
+                        ? '${(widget.item?.brandName ?? '').substring(0, 5)}...'
+                        : widget.item?.brandName ?? '',
+                    style: const TextStyle(fontSize: 14),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
