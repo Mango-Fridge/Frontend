@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,6 +44,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   // group 정보 받아옴
   Group? get _group => ref.watch(groupProvider);
   final TextEditingController _controller = TextEditingController();
+
+  Timer? _debounce;
+
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
@@ -156,6 +161,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   ),
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
+                    _onSearchChanged(value);
                     ref
                         .read(addCookProvider.notifier)
                         .updateSearchFieldEmpty(value.isEmpty);
@@ -383,5 +389,14 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
         const Text("요리 재료를 추가해주세요."),
       ],
     );
+  }
+
+  void _onSearchChanged(String keyword) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      ref
+          .read(searchContentProvider.notifier)
+          .loadItemListByString(keyword, isRefresh: true);
+    });
   }
 }
