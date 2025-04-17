@@ -53,13 +53,11 @@ class GroupNotifier extends Notifier<Group?> {
   }
 
   // 그룹 참여 승인 요청 - 승인
-  Future<bool> putGroupApprove(int userId, int groupId) async {
+  Future<void> putGroupApprove(int userId, int groupId) async {
     try {
       await _groupRepository.putGroupApprove(userId, groupId);
-      return true;
     } catch (e) {
       AppLogger.logger.e(e);
-      return false;
     }
   }
 
@@ -75,6 +73,17 @@ class GroupNotifier extends Notifier<Group?> {
       return 0;
     });
     return sorted;
+  }
+
+  // 그룹 참여 승인 요청 - 승인
+  Future<bool> putGroupOwner(int userId, int groupId) async {
+    try {
+      await _groupRepository.putGroupOwner(userId, groupId);
+      return true;
+    } catch (e) {
+      AppLogger.logger.e(e);
+      return false;
+    }
   }
 }
 
