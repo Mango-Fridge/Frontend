@@ -111,7 +111,7 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                               actionButton(
                                 label: "승인",
                                 onPressed: () async {
-                                  await groupNotifier.postGroupApprove(
+                                  await groupNotifier.putGroupApprove(
                                     user.userId,
                                     _group?.groupId ?? 0,
                                   );
@@ -167,6 +167,48 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                                 color: Colors.amber,
                               ),
                             ],
+                            const Spacer(),
+                            if (_user?.usrId == _group?.groupOwnerId && _user?.usrId != user.userId) ...<Widget>{
+                              actionButton(
+                                label: "내보내기",
+                                onPressed: () async {
+                                  await groupNotifier.exitCurrentGroup( 
+                                    user.userId,
+                                    _group?.groupId ?? 0,
+                                  );
+                                  await ref
+                                      .read(groupProvider.notifier)
+                                      .groupUserList(
+                                        _user?.usrId ?? 0,
+                                        _group?.groupId ?? 0,
+                                      );
+                                },
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                fontSizeMediaQuery: fontSizeMediaQuery,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              actionButton(
+                                label: "위임하기",
+                                onPressed: () async {
+                                  await groupNotifier.putGroupOwner(
+                                    user.userId,
+                                    _group?.groupId ?? 0,
+                                  );
+                                  await ref
+                                      .read(groupProvider.notifier)
+                                      .groupUserList(
+                                        _user?.usrId ?? 0,
+                                        _group?.groupId ?? 0,
+                                      );
+                                },
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                fontSizeMediaQuery: fontSizeMediaQuery,
+                              ),
+                            },
                           ],
                         ),
                       );

@@ -46,6 +46,7 @@ class GroupParticipationNotifier extends Notifier<GroupState> {
       final groupState = await groupRepository.isGroupValid(groupCode);
 
       state = state.copyWith(
+        groupId: groupState.groupId,
         groupCode: groupCode,
         groupName: groupState.groupName,
         groupOwnerName: groupState.groupOwnerName,

@@ -1,6 +1,6 @@
 // 그룹 - 상태 클래스: 유효성 검사 및 통신에 사용
 class GroupState {
-  final String? groupId; // 그룹id
+  final int? groupId; // 그룹id
   final String? groupCode; // 그룹 코드
   final String? groupName; // 그룹 이름
   final String? groupOwnerName; // 그룹장
@@ -21,7 +21,7 @@ class GroupState {
   });
 
   GroupState copyWith({
-    String? groupId,
+    int? groupId,
     String? groupCode,
     String? groupName,
     String? groupOwnerName,

@@ -120,6 +120,7 @@ class GroupRepository {
         AppLogger.logger.i("[group_repository/isGroupValid]: $groupInfo");
 
         return GroupState(
+          groupId: groupInfo['groupId'],
           groupName: groupInfo['groupName'],
           groupOwnerName: groupInfo['groupOwnerName'],
           groupMemberCount: groupInfo['groupMemberCount'],
@@ -216,7 +217,7 @@ class GroupRepository {
   }
 
   // 그룹 참여 승인 요청 - 승인
-  Future<void> postGroupApprove(int userId, int groupId) async {
+  Future<void> putGroupApprove(int userId, int groupId) async {
     RestClient client = RestClient(dio);
 
     // 전송할 데이터
@@ -226,10 +227,33 @@ class GroupRepository {
     };
 
     try {
-      ApiResponse response = await client.postGroupApprove(body);
+      ApiResponse response = await client.putGroupApprove(body);
 
       if (response.code == 200) {
         AppLogger.logger.i("[group_repository/postGroupApprove]: 그룹 참여 승인 요청을 승인");
+      } else {
+        throw Exception('[group_repository/postGroupApprove]: Json Parse Error');
+      }
+    } catch (e) {
+      throw Exception('[group_repository/postGroupApprove]: ${e}');
+    }
+  }
+
+  // 그룹 참여 승인 요청 - 승인
+  Future<void> putGroupOwner(int userId, int groupId) async {
+    RestClient client = RestClient(dio);
+
+    // 전송할 데이터
+    final Map<String, Object?> body = <String, Object?>{
+      "userId": userId,
+      "groupId": groupId,
+    };
+
+    try {
+      ApiResponse response = await client.putGroupOwner(body);
+
+      if (response.code == 200) {
+        AppLogger.logger.i("[group_repository/postGroupApprove]: 그룹장을 임명했습니다.");
       } else {
         throw Exception('[group_repository/postGroupApprove]: Json Parse Error');
       }
