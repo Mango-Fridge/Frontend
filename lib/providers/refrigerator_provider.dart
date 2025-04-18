@@ -343,6 +343,37 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   void setLoading(bool isLoading) {
     state = state?.copyWith(isLoading: isLoading);
   }
+
+  // cook item 추가 row에서 삭제 구현 시 사용
+
+  // Future<bool> deleteCookItem(int itemId) async {
+  //   try {
+  //     // Create a new list excluding the item with the matching itemId
+  //     final List<Content> updatedContentList =
+  //         state?.contentList
+  //             ?.where((Content content) => content.contentId != itemId)
+  //             .toList() ??
+  //         [];
+
+  //     // Update the state with the new lists
+  //     state = RefrigeratorState(
+  //       contentList: updatedContentList,
+  //       refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
+  //       freezerContentList: getFreezerContentList(updatedContentList),
+  //       refExpContentList: getRefExpContentList(updatedContentList),
+  //       frzExpContentList: getFrzExpContentList(updatedContentList),
+  //       updateContentList: state?.updateContentList,
+  //       isUpdatedContent: state?.isUpdatedContent ?? false,
+  //       isLoading: state?.isLoading ?? false,
+  //       setCountMessage: state?.setCountMessage,
+  //     );
+
+  //     return true; // Deletion successful
+  //   } catch (e) {
+  //     AppLogger.logger.e('[refrigerator_provider/deleteCookItem]: $e');
+  //     return false; // Deletion failed
+  //   }
+  // }
 }
 
 final NotifierProvider<RefrigeratorNotifier, RefrigeratorState?>

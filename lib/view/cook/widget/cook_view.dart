@@ -169,6 +169,8 @@ class _CookViewState extends ConsumerState<CookView> {
                         ),
                       ],
                     ),
+                    // add2 변경 후 복구
+
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.start,
                     //   children: <Widget>[
