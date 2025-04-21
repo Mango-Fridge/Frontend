@@ -205,13 +205,18 @@ class _CookViewState extends ConsumerState<CookView> {
   }
 
   Widget _noCookView() {
+    final Design design = Design(context);
+
     return Center(
       child: Column(
         children: <Widget>[
-          const Spacer(),
-          const Icon(Icons.local_dining, size: 50, color: Colors.black),
+          Spacer(),
+          Image.asset(
+            "assets/images/null_cook.png",
+            scale: design.splashImageSize,
+          ),
           const Text(
-            "요리를 추가해 보세요!",
+            "다양한 물품을 검색해서 \n 나만의 요리를 만들어보세요!",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),

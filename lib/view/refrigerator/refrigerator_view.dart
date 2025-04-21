@@ -249,7 +249,18 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // ContentList가 비었을 때 보여지는 뷰
   Widget _noContentView(String text) {
-    return Center(child: Text(text, textAlign: TextAlign.center));
+    final Design design = Design(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          "assets/images/null_home.png",
+          scale: design.splashImageSize,
+        ),
+        Center(child: Text(text, textAlign: TextAlign.center)),
+      ],
+    );
   }
 
   Widget contentExpansionTile(

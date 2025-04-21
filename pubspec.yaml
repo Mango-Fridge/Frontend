@@ -48,6 +48,8 @@ flutter:
     - assets/.env
     - assets/images/title.png
     - assets/images/cart.png
+    - assets/images/null_home.png
+    - assets/images/null_cook.png
 
   # fonts:
   #   - family: Schyler
