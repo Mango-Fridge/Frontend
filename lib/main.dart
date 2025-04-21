@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       locale: const Locale('ko', 'KR'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Mainfonts',
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 232, 176, 7),
         ),

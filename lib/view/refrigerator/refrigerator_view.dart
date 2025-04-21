@@ -101,7 +101,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           onPressed: () {
                             context.push("/group");
                           },
-                          child: Text("${_group?.groupName}의 냉장고 >"),
+                          child: Text(
+                            "${_group?.groupName}의 냉장고 >",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
 
                         if ((_group?.groupName ?? '').isNotEmpty)
