@@ -6,6 +6,7 @@ import 'package:mango/view/cook/modal_view/add_cook_content_view.dart';
 import 'package:mango/view/cook/widget/cook_view.dart';
 import 'package:mango/view/cook/widget/add_cook_view.dart';
 import 'package:mango/view/cook/widget/cook_detail_view.dart';
+import 'package:mango/view/group/group_view.dart';
 import 'package:mango/view/home/home_view.dart';
 import 'package:mango/view/refrigerator/add_content_view.dart';
 import 'package:mango/view/refrigerator/search_item_view.dart';
@@ -13,6 +14,7 @@ import 'package:mango/view/refrigerator/refrigerator_view.dart';
 import 'package:mango/view/login/login_view.dart';
 import 'package:mango/view/setting/nickname_edit_view.dart';
 import 'package:mango/view/setting/setting_terms_view.dart';
+import 'package:mango/view/setting/setting_view.dart';
 import 'package:mango/view/splashView.dart';
 
 // 라우터 관리(go_router)
@@ -25,7 +27,11 @@ final GoRouter goRouter = GoRouter(
     // 로그인 화면
     GoRoute(path: '/login', builder: (context, state) => const LoginView()),
     // 메인 화면
-    GoRoute(path: '/home', builder: (context, state) => const HomeView()),
+    // 2025-04-21 메인 == 냉장고 화면 통일
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const RefrigeratorView(),
+    ),
     // 냉장고 화면
     GoRoute(
       path: '/refrigerator',
@@ -42,6 +48,8 @@ final GoRouter goRouter = GoRouter(
         return AddContentView(item: item);
       },
     ),
+    // 그룹 화면
+    GoRoute(path: '/group', builder: (context, state) => const GroupView()),
     // 요리 화면
     GoRoute(path: '/cook', builder: (context, state) => const CookView()),
     // 요리 제작 화면
@@ -58,6 +66,8 @@ final GoRouter goRouter = GoRouter(
         return CookDetailView(cook: cook);
       },
     ),
+    // 그룹 화면
+    GoRoute(path: '/setting', builder: (context, state) => const SettingView()),
     // 설정 - 닉네임 변경
     GoRoute(
       path: '/editNickName',

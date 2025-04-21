@@ -12,6 +12,7 @@ import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/state/refrigerator_state.dart';
 import 'package:mango/toastMessage.dart';
+import 'package:mango/view/login/terms_overlay.dart';
 import 'package:mango/view/refrigerator/content_detail_view.dart';
 
 // 냉장고 화면
@@ -47,109 +48,190 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Widget build(BuildContext context) {
     final Design design = Design(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        scrolledUnderElevation: 0,
-        leadingWidth: double.infinity,
-        toolbarHeight: design.screenHeight * 0.08,
-        leading: Padding(
-          padding: EdgeInsets.all(design.marginAndPadding),
-          child: Row(
-            children: <Widget>[
-              Container(),
-              Image.asset(
-                "assets/images/title.png",
-                width: design.homeImageSize,
-              ),
-              const Text(
-                "Mango",
-                style: TextStyle(
-                  fontSize: Design.appTitleFontSize,
-                  fontWeight: FontWeight.bold,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(design.screenHeight * 0.115),
+            child: SafeArea(
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(
+                  horizontal: design.marginAndPadding,
                 ),
-              ),
-              const Spacer(),
-              // 새로고침 버튼
-              if ((_group?.groupName ?? '').isNotEmpty)
-                IconButton(
-                  onPressed: () {
-                    (_group?.groupName ?? '').isEmpty
-                        ? null
-                        : _loadContentList();
-                  },
-                  icon: const Icon(Icons.refresh),
-                ),
-              // 물품 추가 버튼
-              if ((_group?.groupName ?? '').isNotEmpty)
-                ElevatedButton(
-                  onPressed: () {
-                    (_group?.groupName ?? '').isEmpty
-                        ? null
-                        : ref.watch(refrigeratorNotifier.notifier).resetState();
-                    _loadContentList();
-                    context.push('/searchContent');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    backgroundColor: Colors.amber[300],
-                    foregroundColor: Colors.black,
-                  ),
-                  child: const Text('물품 추가'),
-                ),
-            ],
-          ),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(design.marginAndPadding),
-              child: const TabBar(
-                indicatorColor: Colors.amber,
-                labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Design.tabBarFontSize,
-                ),
-                indicatorWeight: 2,
-                indicatorSize: TabBarIndicatorSize.tab,
-                tabs: <Widget>[
-                  //Tab(text: '유통 기한 임박'),
-                  Tab(text: '냉장'),
-                  Tab(text: '냉동'),
-                ],
-              ),
-            ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: design.marginAndPadding,
+                          ),
+                          // 추후 이미지로 변경 (임시 배치)
+                          child: const Text(
+                            "Mango",
+                            style: TextStyle(
+                              color: Colors.amber,
+                              fontSize: Design.appTitleFontSize,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
 
-            // 물품 List
-            Expanded(
-              child: TabBarView(
-                children:
-                    (_group?.groupName ?? '').isEmpty
-                        ? _noGroupView()
-                        : _buildContent(),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: design.marginAndPadding,
+                          ),
+                          height: 30,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.push("/setting");
+                            },
+                            child: const Text("설정"),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            context.push("/group");
+                          },
+                          child: Text("${_group?.groupName}의 냉장고 >"),
+                        ),
+
+                        if ((_group?.groupName ?? '').isNotEmpty)
+                          Row(
+                            children: [
+                              const Text("새로고침"),
+                              IconButton(
+                                onPressed: () {
+                                  (_group?.groupName ?? '').isEmpty
+                                      ? null
+                                      : _loadContentList();
+                                },
+                                icon: const Icon(Icons.refresh),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            if (_refrigeratorState?.isUpdatedContent ?? false) _setCountView(),
-          ],
+          ),
+          backgroundColor: Colors.white,
+          body: DefaultTabController(
+            length: 2,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: design.marginAndPadding,
+                  ),
+                  child: const TabBar(
+                    indicatorColor: Colors.amber,
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.tabBarFontSize,
+                    ),
+                    indicatorWeight: 2,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    tabs: <Widget>[
+                      //Tab(text: '유통 기한 임박'),
+                      Tab(text: '냉장'),
+                      Tab(text: '냉동'),
+                    ],
+                  ),
+                ),
+
+                // 물품 List
+                Expanded(
+                  child: TabBarView(
+                    children:
+                        (_group?.groupName ?? '').isEmpty
+                            ? _noGroupView()
+                            : _buildContent(),
+                  ),
+                ),
+                if (_refrigeratorState?.isUpdatedContent ?? false)
+                  _setCountView(),
+              ],
+            ),
+          ),
+
+          // Android / iOS 하단 영역 침범을 방지 하기 위한 용도
+          bottomNavigationBar:
+              (_group?.groupName ?? "").isEmpty ||
+                      _refrigeratorState!.isUpdatedContent
+                  ? null
+                  : SafeArea(
+                    minimum: const EdgeInsets.only(bottom: 16),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                (_group?.groupName ?? '').isEmpty
+                                    ? null
+                                    : ref
+                                        .watch(refrigeratorNotifier.notifier)
+                                        .resetState();
+                                _loadContentList();
+                                context.push('/searchContent');
+                              },
+                              child: Text("물품 추가"),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 2,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context.push('/cook');
+                              },
+                              child: Text("요리"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
         ),
-      ),
-      floatingActionButton:
-          (_group?.groupName ?? "").isEmpty ||
-                  _refrigeratorState!.isUpdatedContent
-              ? null
-              : FloatingActionButton(
-                onPressed: () {
-                  context.push('/cook');
-                },
-              ),
+        _buildTermsOverlay(), // 약관 동의
+      ],
     );
+  }
+
+  // TermsOverlay 표시 여부를 결정하는 메소드
+  Widget _buildTermsOverlay() {
+    // 유저가 없으면 화면을 띄우지 않음.
+    if (user == null) return const SizedBox.shrink();
+
+    // 유저가 동의를 하지 않았을 때,
+    if (!user!.agreePrivacyPolicy!) {
+      return const TermsOverlay(
+        key: ValueKey('privacyPolicy'),
+        termsType: 'privacy policy',
+      );
+    }
+    // 유저가 동의를 하지 않았을 때,
+    if (!user!.agreeTermsOfService!) {
+      return const TermsOverlay(key: ValueKey('terms'), termsType: 'terms');
+    }
+
+    // 유저가 모든 동의를 했을경우, 화면을 띄우지 않음.
+    return const SizedBox.shrink();
   }
 
   // 속한 그룹이 없을 때 보여지는 뷰
