@@ -19,6 +19,11 @@ class Design {
   final double contentUpdateViewHeight; // 물품 수량 조절 뷰 높이
   final double homeImageSize; // refrigerator 로고 이미지 크기
   final double cartImageSize; // cart 이미지 크기
+  final Color mainColor; // 메인 컬러
+  final Color subColor; // 서브 컬러
+  final Color textFieldColor; // 텍스트 필드 내부 컬러
+  final Color textFieldborderColor; // 텍스트 필드 외곽 컬러
+  final Color cancelColor; // 취소 컬러
 
   // 생성자에서 초기화
   Design(BuildContext context)
@@ -31,5 +36,10 @@ class Design {
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
       contentUpdateViewHeight = MediaQuery.of(context).size.height * 0.20,
       homeImageSize = MediaQuery.of(context).size.width * 0.12,
-      cartImageSize = MediaQuery.of(context).size.width * 0.35;
+      cartImageSize = MediaQuery.of(context).size.width * 0.35,
+      mainColor = const Color.fromRGBO(255, 205, 72, 1.0),
+      subColor = const Color.fromRGBO(255, 244, 216, 1.0),
+      textFieldColor = const Color.fromRGBO(255, 238, 192, 1.0),
+      textFieldborderColor = const Color.fromRGBO(195, 142, 1, 1.0),
+      cancelColor = const Color.fromRGBO(255, 208, 208, 1.0);
 }

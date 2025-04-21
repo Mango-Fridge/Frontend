@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mango/design.dart';
 import 'package:mango/router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,13 +22,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Design design = Design(context);
+
     return MaterialApp.router(
       locale: const Locale('ko', 'KR'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Mainfonts',
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 232, 176, 7),
+        colorScheme: const ColorScheme.light(
+          primary: Colors.black, // 메인 색상
+          secondary: Colors.amber, // 보조 색상
+          surface: Colors.white,
+          onPrimary: Colors.white,
+          onSecondary: Colors.black,
+          onSurface: Colors.black,
+          error: Colors.red,
+          onError: Colors.white,
         ),
       ),
       routerConfig: goRouter,

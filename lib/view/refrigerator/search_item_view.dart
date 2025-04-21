@@ -68,8 +68,12 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 horizontal: design.marginAndPadding,
               ),
               decoration: BoxDecoration(
-                color: Colors.amber[200],
+                color: design.textFieldColor,
                 borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: design.textFieldborderColor,
+                  width: 2,
+                ),
               ),
               child: TextField(
                 controller: _controller,
