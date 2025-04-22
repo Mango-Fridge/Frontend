@@ -347,7 +347,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   String getRemainDate(DateTime expDateTime) {
-    final now = DateTime.now();
+    final DateTime now = DateTime.now();
     bool isNegative = expDateTime.isBefore(now);
     DateTime start = isNegative ? expDateTime : now;
     DateTime end = isNegative ? now : expDateTime;
@@ -367,7 +367,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       days -= 1;
     }
     if (days < 0) {
-      final prevMonth = DateTime(end.year, end.month, 0);
+      final DateTime prevMonth = DateTime(end.year, end.month, 0);
       days += prevMonth.day;
       months -= 1;
     }
@@ -376,15 +376,15 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       years -= 1;
     }
 
-    List<String> parts = [];
+    List<String> parts = <String>[];
 
-    if (years > 0) parts.add('${years}년');
-    if (months > 0) parts.add('${months}개월');
-    if (days > 0) parts.add('${days}일');
-    if (hours > 0) parts.add('${hours}시간');
+    if (years > 0) parts.add('$years년');
+    if (months > 0) parts.add('$months개월');
+    if (days > 0) parts.add('$days일');
+    if (hours > 0) parts.add('$hours시간');
 
     if (years == 0 && months == 0 && hours == 0 && minutes > 0) {
-      parts.add('${minutes}분');
+      parts.add('$minutes분');
     }
 
     if (parts.isEmpty) {
@@ -416,35 +416,15 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       );
       if (state == null) return;
 
-      final list = state?.contentList;
+      final List<Content>? list = state?.contentList;
       if (list == null) return;
 
-      final index = list.indexWhere((e) => e.contentId == content.contentId);
+      final int index = list.indexWhere(
+        (Content e) => e.contentId == content.contentId,
+      );
 
-      final updatedList = List<Content>.from(list);
+      final List<Content> updatedList = List<Content>.from(list);
       updatedList[index] = updatedList[index].copyWith(count: 0);
-
-      // if (content.storageArea == '냉장') {
-      //   final list = state!.refExpContentList;
-      //   if (list == null) return;
-
-      //   final index = list.indexWhere((e) => e.contentId == content.contentId);
-      //   if (index != -1) {
-      //     final updatedList = List<Content>.from(list);
-      //     updatedList[index] = updatedList[index].copyWith(count: 0);
-      //     state = state!.copyWith(refExpContentList: [...updatedList]);
-      //   }
-      // } else if (content.storageArea == '냉동') {
-      //   final list = state!.frzExpContentList;
-      //   if (list == null) return;
-
-      //   final index = list.indexWhere((e) => e.contentId == content.contentId);
-      //   if (index != -1) {
-      //     final updatedList = List<Content>.from(list);
-      //     updatedList[index] = updatedList[index].copyWith(count: 0);
-      //     state = state!.copyWith(frzExpContentList: [...updatedList]);
-      //   }
-      // }
 
       tempContentList.add(content);
       setCountMessage = await _contentRepository.setCount(
@@ -462,14 +442,14 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
   }
 
   Color getColorByRemainTime(DateTime expDateTime) {
-    final now = DateTime.now();
+    final DateTime now = DateTime.now();
     Duration diff = expDateTime.difference(now);
 
     if (diff.isNegative) {
       return Colors.grey.shade700;
     }
 
-    final hours = diff.inHours;
+    final int hours = diff.inHours;
 
     if (hours < 12) {
       return Colors.red;
