@@ -12,7 +12,6 @@ import 'package:mango/providers/group_participation_provider.dart';
 import 'package:mango/toastMessage.dart';
 import 'package:mango/view/group/sub_widget/group_common_button.dart';
 import 'package:mango/view/group/sub_widget/group_modal_title.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // 그룹 참여하기 모달 뷰
 class GroupParticipationView extends ConsumerWidget {
@@ -104,12 +103,6 @@ class GroupParticipationView extends ConsumerWidget {
                           user?.usrId ?? 0,
                           groupState.groupId ?? 0,
                         )) {
-                          // 참여하고자 하는 그룹id를 로컬에 저장
-                          final SharedPreferences prefs = await SharedPreferences.getInstance();
-                          await prefs.setInt(
-                            'joinGroupId',
-                            groupState.groupId ?? 0,
-                          );
                           ref
                               .read(groupProvider.notifier)
                               .loadGroup(user?.usrId ?? 0);

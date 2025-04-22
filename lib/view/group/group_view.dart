@@ -7,7 +7,6 @@ import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/view/group/widget/group_empty_widget.dart';
 import 'package:mango/view/group/widget/group_firstRequest_widget.dart';
 import 'package:mango/view/group/widget/group_exist_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GroupView extends ConsumerStatefulWidget {
   const GroupView({super.key});
@@ -23,17 +22,9 @@ class _GroupViewState extends ConsumerState<GroupView> {
   void initState() {
     super.initState();
     // 그룹이 있다면 존재하는 뷰로 아니라면 생성하기 뷰
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final prefs = await SharedPreferences.getInstance();
-      final joinGroupId = prefs.getInt('joinGroupId');
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_group?.groupId != null) {
-        await prefs.remove('joinGroupId'); // 그룹에 승인되었거나 혹은 그룹이 존재한다면 로컬에 joinedGroupId 삭제
         ref.read(grouViewStateProvider.notifier).state = GroupViewState.exist;
-      } else if (joinGroupId != null) {
-        print(joinGroupId);
-        ref.read(grouViewStateProvider.notifier).state =
-            GroupViewState.firstRequest;
       } else {
         ref.read(grouViewStateProvider.notifier).state = GroupViewState.empty;
       }
