@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group/group.dart';
@@ -193,7 +192,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             flex: 4,
                             child: ElevatedButton(
@@ -206,17 +205,17 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                                 _loadContentList();
                                 context.push('/searchContent');
                               },
-                              child: Text("물품 추가"),
+                              child: const Text("물품 추가"),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             flex: 2,
                             child: ElevatedButton(
                               onPressed: () {
                                 context.push('/cook');
                               },
-                              child: Text("요리"),
+                              child: const Text("요리"),
                             ),
                           ),
                         ],
@@ -275,10 +274,14 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           "assets/images/null_home.png",
           scale: design.splashImageSize,
         ),
-        Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: 24)),
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: Design.normalFontSize2),
+        ),
         const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(
               '물품 추가',
               textAlign: TextAlign.center,
@@ -301,7 +304,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 유통 기한 마감 임박 항목
   Widget expContentCard({required Content content}) {
-    final design = Design(context);
+    final Design design = Design(context);
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -408,7 +411,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: contentList.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: EdgeInsets.all(design.marginAndPadding),
           child: expContentCard(content: contentList[index]),
@@ -449,8 +452,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 냉장고 ContentListView
   Widget _refrigeratorContent() {
-    final design = Design(context);
-    final totalCount =
+    final Design design = Design(context);
+    final int totalCount =
         (_refrigeratorState?.refrigeratorContentList?.length ?? 0) +
         (_refrigeratorState?.refExpContentList?.length ?? 0);
     return SingleChildScrollView(
@@ -520,7 +523,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: contentList.length,
       itemBuilder: (BuildContext context, int index) {
-        return _buildContentRow(contentList[index]);
+        return Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: _buildContentRow(contentList[index]),
+        );
       },
     );
   }
@@ -566,14 +572,16 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         );
       },
       child: Container(
+        height: 100,
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color:
               (DateTime.now().difference(content.expDate!).inHours > -24)
                   ? Colors.red[200]
-                  : Colors.amber[300],
-          borderRadius: BorderRadius.circular(8),
+                  : Colors.amber.shade50,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: design.mainColor, width: 1.5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -587,87 +595,53 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         ? '${content.contentName.substring(0, 10)}...'
                         : content.contentName,
                     style: const TextStyle(
-                      fontSize: Design.normalFontSize1,
+                      fontSize: Design.normalFontSize2,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '소비기한: ${DateFormat('yyyy-M-d a h:m:s', 'ko').format(content.expDate ?? DateTime.now())}',
-                    style: const TextStyle(
-                      fontSize: Design.contentRowExpFontSize,
-                    ),
+                    '${content.brandName}',
+                    style: const TextStyle(fontSize: Design.normalFontSize1),
                   ),
                 ],
               ),
             ),
-            // 수량 조절 버튼
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 20,
               children: <Widget>[
-                _quantityButton('-', () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  if (content.count > 0) {
-                    ref
-                        .watch(refrigeratorNotifier.notifier)
-                        .reduceContentCount(content.contentId ?? 0);
-                  }
-                }),
-                const SizedBox(width: 5),
-                Container(
-                  width: design.screenWidth * 0.17,
-                  height: design.screenWidth * 0.080,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    '${content.count}',
-                    style: const TextStyle(
-                      fontSize: Design.normalFontSize1,
-                      fontWeight: FontWeight.bold,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .getRemainDate(content.expDate!),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 5),
-                _quantityButton('+', () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .addContentCount(content.contentId ?? 0);
-                }),
+                contentCounter(
+                  count: content.count,
+                  contentId: content.contentId ?? 0,
+                  ref: ref,
+                ),
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  // 수량 조절 버튼
-  Widget _quantityButton(String symbol, VoidCallback onPressed) {
-    final Design design = Design(context);
-
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: design.screenWidth * 0.080,
-        height: design.screenWidth * 0.080,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Text(
-          symbol,
-          style: const TextStyle(
-            fontSize: Design.countButtonFontSize,
-            fontWeight: FontWeight.bold,
-          ),
         ),
       ),
     );
@@ -740,7 +714,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     required WidgetRef ref,
   }) {
     return SizedBox(
-      width: double.infinity,
+      width: 100,
       height: 30,
       child: Container(
         decoration: BoxDecoration(

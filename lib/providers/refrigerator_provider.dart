@@ -348,22 +348,43 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
   String getRemainDate(DateTime expDateTime) {
     final now = DateTime.now();
-    Duration diff = expDateTime.difference(now);
+    bool isNegative = expDateTime.isBefore(now);
+    DateTime start = isNegative ? expDateTime : now;
+    DateTime end = isNegative ? now : expDateTime;
 
-    bool isNegative = diff.isNegative;
-    diff = diff.abs();
+    int years = end.year - start.year;
+    int months = end.month - start.month;
+    int days = end.day - start.day;
+    int hours = end.hour - start.hour;
+    int minutes = end.minute - start.minute;
 
-    int days = diff.inDays;
-    int hours = diff.inHours % 24;
-    int minutes = diff.inMinutes % 60;
+    if (minutes < 0) {
+      minutes += 60;
+      hours -= 1;
+    }
+    if (hours < 0) {
+      hours += 24;
+      days -= 1;
+    }
+    if (days < 0) {
+      final prevMonth = DateTime(end.year, end.month, 0);
+      days += prevMonth.day;
+      months -= 1;
+    }
+    if (months < 0) {
+      months += 12;
+      years -= 1;
+    }
 
     List<String> parts = [];
 
-    if (days > 0) {
-      parts.add('$days일');
-    } else {
-      if (hours > 0) parts.add('$hours시간');
-      if (minutes > 0) parts.add('$minutes분');
+    if (years > 0) parts.add('${years}년');
+    if (months > 0) parts.add('${months}개월');
+    if (days > 0) parts.add('${days}일');
+    if (hours > 0) parts.add('${hours}시간');
+
+    if (years == 0 && months == 0 && hours == 0 && minutes > 0) {
+      parts.add('${minutes}분');
     }
 
     if (parts.isEmpty) {
