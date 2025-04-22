@@ -2,7 +2,8 @@ import 'package:flutter/widgets.dart';
 
 class Design {
   static const double appTitleFontSize = 25;
-  static const double normalFontSize = 16;
+  static const double normalFontSize1 = 16;
+  static const double normalFontSize2 = 18;
   static const double tabBarSelectedFontSize = 20;
   static const double tabBarUnSelectedFontSize = 18;
   static const double contentRowNameFontSize = 13;
@@ -34,7 +35,7 @@ class Design {
     : screenWidth = MediaQuery.of(context).size.width,
       screenHeight = MediaQuery.of(context).size.height,
       marginAndPadding = MediaQuery.of(context).size.width * 0.022,
-      splashImageSize = MediaQuery.of(context).size.height * 0.005,
+      splashImageSize = MediaQuery.of(context).size.height * 0.007,
       termsOverlayWidth = MediaQuery.of(context).size.width * 0.95,
       termsOverlayHeight = MediaQuery.of(context).size.height * 0.7,
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,

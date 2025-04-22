@@ -327,7 +327,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                     ? '${(item.itemName ?? '').substring(0, 10)}...'
                     : item.itemName ?? '',
                 style: const TextStyle(
-                  fontSize: Design.normalFontSize,
+                  fontSize: Design.normalFontSize1,
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.ellipsis,

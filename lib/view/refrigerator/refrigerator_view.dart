@@ -108,7 +108,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           },
                           child: Text(
                             "${_group?.groupName}의 냉장고 >",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Design.normalFontSize2,
+                            ),
                           ),
                         ),
 
@@ -266,12 +269,32 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      spacing: 10,
+      children: <Widget>[
         Image.asset(
           "assets/images/null_home.png",
           scale: design.splashImageSize,
         ),
-        Center(child: Text(text, textAlign: TextAlign.center)),
+        Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: 24)),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '물품 추가',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              '를 통해서 물건을 등록해 주세요.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -512,7 +535,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               (_refrigeratorState!.refrigeratorContentList!.isNotEmpty ||
                   _refrigeratorState!.refExpContentList!.isNotEmpty)
           ? _refrigeratorContent()
-          : _noContentView('냉장고에 보관중인 물품이 없어요.'),
+          : _noContentView('냉장고에 아무것도 들어있지 않습니다.'),
       _refrigeratorState?.isLoading ?? false
           ? const Center(child: CircularProgressIndicator())
           : _refrigeratorState != null &&
@@ -520,7 +543,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               (_refrigeratorState!.freezerContentList!.isNotEmpty ||
                   _refrigeratorState!.frzExpContentList!.isNotEmpty)
           ? _freezerContent()
-          : _noContentView('냉동실에 보관중인 물품이 없어요.'),
+          : _noContentView('냉동실에 아무것도 들어있지 않습니다.'),
     ];
   }
 
@@ -564,7 +587,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         ? '${content.contentName.substring(0, 10)}...'
                         : content.contentName,
                     style: const TextStyle(
-                      fontSize: Design.normalFontSize,
+                      fontSize: Design.normalFontSize1,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -603,7 +626,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   child: Text(
                     '${content.count}',
                     style: const TextStyle(
-                      fontSize: Design.normalFontSize,
+                      fontSize: Design.normalFontSize1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -887,11 +910,20 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Widget buildLastUpdatedText(RefrigeratorState state, WidgetRef ref) {
     final DateTime? updatedTime = state.lastUpdatedTime;
     if (updatedTime == null) {
-      return const Text("방금 전");
+      return const Text(
+        "방금 전",
+        style: TextStyle(fontSize: Design.normalFontSize1),
+      );
     }
 
     final String text = ref.watch(timeAgoNotifierProvider(updatedTime));
-    return Text(text);
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: Design.normalFontSize1,
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 
   void _loadContentList() {
