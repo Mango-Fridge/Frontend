@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/app_logger.dart';
 import 'package:mango/model/content.dart';
@@ -40,6 +41,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
         frzExpContentList: _refrigeratorState.frzExpContentList,
         contentList: _refrigeratorState.contentList,
         isLoading: false,
+        lastUpdatedTime: DateTime.now(),
       );
     } catch (e) {
       AppLogger.logger.e('[refrigerator_provider/loadContentList]: $e');
@@ -344,36 +346,118 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     state = state?.copyWith(isLoading: isLoading);
   }
 
-  // cook item 추가 row에서 삭제 구현 시 사용
+  String getRemainDate(DateTime expDateTime) {
+    final now = DateTime.now();
+    Duration diff = expDateTime.difference(now);
 
-  // Future<bool> deleteCookItem(int itemId) async {
-  //   try {
-  //     // Create a new list excluding the item with the matching itemId
-  //     final List<Content> updatedContentList =
-  //         state?.contentList
-  //             ?.where((Content content) => content.contentId != itemId)
-  //             .toList() ??
-  //         [];
+    bool isNegative = diff.isNegative;
+    diff = diff.abs();
 
-  //     // Update the state with the new lists
-  //     state = RefrigeratorState(
-  //       contentList: updatedContentList,
-  //       refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
-  //       freezerContentList: getFreezerContentList(updatedContentList),
-  //       refExpContentList: getRefExpContentList(updatedContentList),
-  //       frzExpContentList: getFrzExpContentList(updatedContentList),
-  //       updateContentList: state?.updateContentList,
-  //       isUpdatedContent: state?.isUpdatedContent ?? false,
-  //       isLoading: state?.isLoading ?? false,
-  //       setCountMessage: state?.setCountMessage,
-  //     );
+    int days = diff.inDays;
+    int hours = diff.inHours % 24;
+    int minutes = diff.inMinutes % 60;
 
-  //     return true; // Deletion successful
-  //   } catch (e) {
-  //     AppLogger.logger.e('[refrigerator_provider/deleteCookItem]: $e');
-  //     return false; // Deletion failed
-  //   }
-  // }
+    List<String> parts = [];
+
+    if (days > 0) {
+      parts.add('$days일');
+    } else {
+      if (hours > 0) parts.add('$hours시간');
+      if (minutes > 0) parts.add('$minutes분');
+    }
+
+    if (parts.isEmpty) {
+      parts.add('0분');
+    }
+
+    return isNegative ? '-${parts.join(' ')}' : parts.join(' ');
+  }
+
+  bool getExpiredStatus(DateTime expDateTime) {
+    return expDateTime.isBefore(DateTime.now());
+  }
+
+  Future<void> setCountZero(int groupId, Content content) async {
+    String setCountMessage = '';
+
+    try {
+      List<Content> tempContentList = <Content>[];
+
+      content = content.copyWith(
+        count:
+            -(state?.contentList
+                    ?.firstWhere(
+                      (Content content) =>
+                          content.contentId == content.contentId,
+                    )
+                    .count ??
+                0),
+      );
+      if (state == null) return;
+
+      final list = state?.contentList;
+      if (list == null) return;
+
+      final index = list.indexWhere((e) => e.contentId == content.contentId);
+
+      final updatedList = List<Content>.from(list);
+      updatedList[index] = updatedList[index].copyWith(count: 0);
+
+      // if (content.storageArea == '냉장') {
+      //   final list = state!.refExpContentList;
+      //   if (list == null) return;
+
+      //   final index = list.indexWhere((e) => e.contentId == content.contentId);
+      //   if (index != -1) {
+      //     final updatedList = List<Content>.from(list);
+      //     updatedList[index] = updatedList[index].copyWith(count: 0);
+      //     state = state!.copyWith(refExpContentList: [...updatedList]);
+      //   }
+      // } else if (content.storageArea == '냉동') {
+      //   final list = state!.frzExpContentList;
+      //   if (list == null) return;
+
+      //   final index = list.indexWhere((e) => e.contentId == content.contentId);
+      //   if (index != -1) {
+      //     final updatedList = List<Content>.from(list);
+      //     updatedList[index] = updatedList[index].copyWith(count: 0);
+      //     state = state!.copyWith(frzExpContentList: [...updatedList]);
+      //   }
+      // }
+
+      tempContentList.add(content);
+      setCountMessage = await _contentRepository.setCount(
+        groupId,
+        tempContentList,
+      );
+
+      state = state?.copyWith(
+        contentList: updatedList,
+        setCountMessage: setCountMessage,
+      );
+    } catch (e) {
+      AppLogger.logger.e('[refrigerator_provider/setCountZero]: $e');
+    }
+  }
+
+  Color getColorByRemainTime(DateTime expDateTime) {
+    final now = DateTime.now();
+    Duration diff = expDateTime.difference(now);
+
+    if (diff.isNegative) {
+      return Colors.grey.shade700;
+    }
+
+    final hours = diff.inHours;
+
+    if (hours < 12) {
+      return Colors.red;
+    } else if (hours < 24) {
+      return Colors.orange;
+    } else {
+      return Colors.transparent;
+    }
+  }
 }
 
 final NotifierProvider<RefrigeratorNotifier, RefrigeratorState?>

@@ -3,7 +3,8 @@ import 'package:flutter/widgets.dart';
 class Design {
   static const double appTitleFontSize = 25;
   static const double normalFontSize = 16;
-  static const double tabBarFontSize = 14;
+  static const double tabBarSelectedFontSize = 20;
+  static const double tabBarUnSelectedFontSize = 18;
   static const double contentRowNameFontSize = 13;
   static const double contentRowExpFontSize = 12;
   static const double countButtonFontSize = 20;
@@ -25,6 +26,9 @@ class Design {
   final Color textFieldborderColor; // 텍스트 필드 외곽 컬러
   final Color cancelColor; // 취소 컬러
 
+  final double settingBtnWidth;
+  final double settingBtnHeight;
+
   // 생성자에서 초기화
   Design(BuildContext context)
     : screenWidth = MediaQuery.of(context).size.width,
@@ -41,5 +45,8 @@ class Design {
       subColor = const Color.fromRGBO(255, 244, 216, 1.0),
       textFieldColor = const Color.fromRGBO(255, 238, 192, 1.0),
       textFieldborderColor = const Color.fromRGBO(195, 142, 1, 1.0),
-      cancelColor = const Color.fromRGBO(255, 208, 208, 1.0);
+      cancelColor = const Color.fromRGBO(255, 208, 208, 1.0),
+
+      settingBtnWidth = 120,
+      settingBtnHeight = 30;
 }
