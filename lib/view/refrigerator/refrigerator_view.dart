@@ -51,6 +51,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return Stack(
       children: <Widget>[
         Scaffold(
+          extendBody: true,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(design.screenHeight * 0.097),
             child: SafeArea(
@@ -187,15 +188,22 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                       _refrigeratorState!.isUpdatedContent
                   ? null
                   : SafeArea(
-                    minimum: const EdgeInsets.only(bottom: 16),
+                    minimum: EdgeInsets.only(bottom: design.marginAndPadding),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        spacing: 5,
                         children: <Widget>[
                           Expanded(
-                            flex: 4,
+                            flex: 3,
                             child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: design.mainColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                              ),
                               onPressed: () {
                                 (_group?.groupName ?? '').isEmpty
                                     ? null
@@ -205,17 +213,57 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                                 _loadContentList();
                                 context.push('/searchContent');
                               },
-                              child: const Text("물품 추가"),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  design.marginAndPadding,
+                                ),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing: 10,
+                                  children: <Widget>[
+                                    Icon(Icons.add_shopping_cart),
+                                    Text(
+                                      "물품 추가",
+                                      style: TextStyle(
+                                        fontSize: Design.normalFontSize2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
                             flex: 2,
                             child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: design.cookBtnColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                              ),
                               onPressed: () {
                                 context.push('/cook');
                               },
-                              child: const Text("요리"),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  design.marginAndPadding,
+                                ),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing: 10,
+                                  children: <Widget>[
+                                    Icon(Icons.restaurant),
+                                    Text(
+                                      "요리",
+                                      style: TextStyle(
+                                        fontSize: Design.normalFontSize2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],

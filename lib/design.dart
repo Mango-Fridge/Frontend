@@ -26,6 +26,7 @@ class Design {
   final Color textFieldColor; // 텍스트 필드 내부 컬러
   final Color textFieldborderColor; // 텍스트 필드 외곽 컬러
   final Color cancelColor; // 취소 컬러
+  final Color cookBtnColor; // 요리 버튼 컬러
 
   final double settingBtnWidth;
   final double settingBtnHeight;
@@ -47,6 +48,7 @@ class Design {
       textFieldColor = const Color.fromRGBO(255, 238, 192, 1.0),
       textFieldborderColor = const Color.fromRGBO(195, 142, 1, 1.0),
       cancelColor = const Color.fromRGBO(255, 208, 208, 1.0),
+      cookBtnColor = const Color.fromRGBO(219, 254, 128, 1.0),
 
       settingBtnWidth = 120,
       settingBtnHeight = 30;
