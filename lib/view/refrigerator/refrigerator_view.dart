@@ -176,7 +176,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     ),
                   ),
                   if (_refrigeratorState?.isUpdatedContent ?? false)
-                    _setCountView(),
+                    Column(
+                      children: <Widget>[
+                        _setCountView(),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -699,52 +704,77 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Widget _setCountView() {
     Design design = Design(context);
     return Container(
-      color: Colors.grey[200],
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0), // 둥근 테두리
+        border: Border.all(
+          color: Colors.black, // 테두리 색
+          width: 2, // 테두리 두께
+        ),
+        color: design.mainColor.withAlpha(150),
+      ),
       height: design.contentUpdateViewHeight,
       child: Column(
         children: <Widget>[
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.zero,
               itemCount: _refrigeratorState?.updateContentList?.length,
               itemBuilder: (BuildContext context, int index) {
                 final Content? content =
                     _refrigeratorState?.updateContentList?[index];
-                return ListTile(
-                  dense: true,
-                  contentPadding: const EdgeInsets.only(right: 10),
-                  leading: IconButton(
-                    onPressed: () {
-                      ref
-                          .watch(refrigeratorNotifier.notifier)
-                          .removeUpdateContentById(content!.contentId ?? 0);
-                    },
-                    icon: Container(
-                      padding: const EdgeInsets.all(1),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        color: Colors.white,
-                        size: 15,
-                      ),
-                    ),
+                return Padding(
+                  padding: EdgeInsets.only(
+                    left: design.marginAndPadding + 5,
+                    right: design.marginAndPadding + 5,
+                    top: design.marginAndPadding,
                   ),
-                  title: Text(
-                    content!.contentName,
-                    style: const TextStyle(
-                      fontSize: Design.setCountViewFontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  trailing: Text(
-                    content.count.toString(),
-                    style: const TextStyle(
-                      fontSize: Design.setCountViewFontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            ref
+                                .watch(refrigeratorNotifier.notifier)
+                                .removeUpdateContentById(
+                                  content!.contentId ?? 0,
+                                );
+                          },
+                          splashColor: Colors.grey.shade200,
+                          highlightColor: Colors.grey.shade200,
+                          child: Container(
+                            padding: const EdgeInsets.all(1),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          content!.contentName,
+                          style: const TextStyle(
+                            fontSize: Design.normalFontSize1,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        content.count.toString(),
+                        style: TextStyle(
+                          fontSize: Design.normalFontSize1,
+                          fontWeight: FontWeight.bold,
+                          color: content.count > 0 ? Colors.blue : Colors.red,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -832,25 +862,25 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Expanded(
-            child: ElevatedButton(
+            child: OutlinedButton(
               onPressed: () {
                 ref.watch(refrigeratorNotifier.notifier).cancelUpdate();
                 ref
                     .watch(refrigeratorNotifier.notifier)
                     .closeUpdateContentCountView();
               },
-              style: ElevatedButton.styleFrom(
+              style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
+                backgroundColor: Colors.red.shade100,
+                side: const BorderSide(color: Colors.red, width: 2),
               ),
-              child: const Text('전체 취소'),
+              child: const Text('전체 취소', style: TextStyle(color: Colors.red)),
             ),
           ),
           Expanded(
-            child: ElevatedButton(
+            child: OutlinedButton(
               onPressed: () async {
                 await ref
                     .watch(refrigeratorNotifier.notifier)
@@ -874,12 +904,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     .watch(refrigeratorNotifier.notifier)
                     .closeUpdateContentCountView();
               },
-              style: ElevatedButton.styleFrom(
+              style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.amber[300],
+                side: const BorderSide(color: Colors.amber, width: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                backgroundColor: Colors.amber[300],
-                foregroundColor: Colors.black,
               ),
               child: const Text('물품 개수 반영'),
             ),
