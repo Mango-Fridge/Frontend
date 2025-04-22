@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GroupSharedPrefs {
-  // 그룹 정보 저장
+  // 참여 희망 그룹 정보 저장
   Future<void> saveJoinedGroup(int groupId, String groupName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('joinedGroupId', groupId);

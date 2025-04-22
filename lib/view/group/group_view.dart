@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/model/group/group.dart';
+import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_provider.dart';
+import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/services/group_shared_prefs.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/view/group/widget/group_empty_widget.dart';
 import 'package:mango/view/group/widget/group_firstRequest_widget.dart';
 import 'package:mango/view/group/widget/group_exist_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GroupView extends ConsumerStatefulWidget {
   const GroupView({super.key});
@@ -17,14 +21,27 @@ class GroupView extends ConsumerStatefulWidget {
 
 class _GroupViewState extends ConsumerState<GroupView> {
   Group? get _group => ref.watch(groupProvider);
+  AuthInfo? get user => ref.watch(loginAuthProvider);
+
+  final GroupSharedPrefs groupSharedPrefs = GroupSharedPrefs();
 
   @override
   void initState() {
     super.initState();
-    // 그룹이 있다면 존재하는 뷰로 아니라면 생성하기 뷰
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // GRP-25-00007
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final int? joinedGroupId = await groupSharedPrefs.getJoinedGroupId();
+      final String? getJoinedGroupName =
+          await groupSharedPrefs.getJoinedGroupName();
+
+      await ref.read(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
+
       if (_group?.groupId != null) {
+        groupSharedPrefs.removeJoinedGroup();
         ref.read(grouViewStateProvider.notifier).state = GroupViewState.exist;
+      } else if (joinedGroupId != null && getJoinedGroupName != null) {
+        ref.read(grouViewStateProvider.notifier).state =
+            GroupViewState.firstRequest;
       } else {
         ref.read(grouViewStateProvider.notifier).state = GroupViewState.empty;
       }
