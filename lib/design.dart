@@ -2,8 +2,10 @@ import 'package:flutter/widgets.dart';
 
 class Design {
   static const double appTitleFontSize = 25;
-  static const double normalFontSize = 16;
-  static const double tabBarFontSize = 14;
+  static const double normalFontSize1 = 16;
+  static const double normalFontSize2 = 22;
+  static const double tabBarSelectedFontSize = 20;
+  static const double tabBarUnSelectedFontSize = 18;
   static const double contentRowNameFontSize = 13;
   static const double contentRowExpFontSize = 12;
   static const double countButtonFontSize = 20;
@@ -24,13 +26,17 @@ class Design {
   final Color textFieldColor; // 텍스트 필드 내부 컬러
   final Color textFieldborderColor; // 텍스트 필드 외곽 컬러
   final Color cancelColor; // 취소 컬러
+  final Color cookBtnColor; // 요리 버튼 컬러
+
+  final double settingBtnWidth;
+  final double settingBtnHeight;
 
   // 생성자에서 초기화
   Design(BuildContext context)
     : screenWidth = MediaQuery.of(context).size.width,
       screenHeight = MediaQuery.of(context).size.height,
       marginAndPadding = MediaQuery.of(context).size.width * 0.022,
-      splashImageSize = MediaQuery.of(context).size.height * 0.005,
+      splashImageSize = MediaQuery.of(context).size.height * 0.007,
       termsOverlayWidth = MediaQuery.of(context).size.width * 0.95,
       termsOverlayHeight = MediaQuery.of(context).size.height * 0.7,
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
@@ -41,5 +47,9 @@ class Design {
       subColor = const Color.fromRGBO(255, 244, 216, 1.0),
       textFieldColor = const Color.fromRGBO(255, 238, 192, 1.0),
       textFieldborderColor = const Color.fromRGBO(195, 142, 1, 1.0),
-      cancelColor = const Color.fromRGBO(255, 208, 208, 1.0);
+      cancelColor = const Color.fromRGBO(255, 208, 208, 1.0),
+      cookBtnColor = const Color.fromRGBO(219, 254, 128, 1.0),
+
+      settingBtnWidth = 120,
+      settingBtnHeight = 30;
 }

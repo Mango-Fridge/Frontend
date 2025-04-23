@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/group/group.dart';
@@ -10,6 +9,7 @@ import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/providers/time_ago_provider.dart';
 import 'package:mango/state/refrigerator_state.dart';
 import 'package:mango/toastMessage.dart';
 import 'package:mango/view/login/terms_overlay.dart';
@@ -49,10 +49,11 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     final Design design = Design(context);
 
     return Stack(
-      children: [
+      children: <Widget>[
         Scaffold(
+          extendBody: true,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(design.screenHeight * 0.115),
+            preferredSize: Size.fromHeight(design.screenHeight * 0.097),
             child: SafeArea(
               child: Container(
                 color: Colors.white,
@@ -61,7 +62,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -84,33 +85,40 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           padding: EdgeInsets.symmetric(
                             horizontal: design.marginAndPadding,
                           ),
-                          height: 30,
+                          width: design.settingBtnWidth,
+                          height: design.settingBtnHeight,
                           child: ElevatedButton(
                             onPressed: () {
                               context.push("/setting");
                             },
-                            child: const Text("설정"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: design.mainColor,
+                            ),
+                            child: const Text("⛭ 설정"),
                           ),
                         ),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         TextButton(
                           onPressed: () {
                             context.push("/group");
                           },
                           child: Text(
                             "${_group?.groupName}의 냉장고 >",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Design.normalFontSize2,
+                            ),
                           ),
                         ),
 
                         if ((_group?.groupName ?? '').isNotEmpty)
                           Row(
-                            children: [
-                              const Text("새로고침"),
+                            children: <Widget>[
+                              buildLastUpdatedText(_refrigeratorState!, ref),
                               IconButton(
                                 onPressed: () {
                                   (_group?.groupName ?? '').isEmpty
@@ -129,43 +137,53 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
           ),
           backgroundColor: Colors.white,
-          body: DefaultTabController(
-            length: 2,
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: design.marginAndPadding,
-                  ),
-                  child: const TabBar(
-                    indicatorColor: Colors.amber,
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Design.tabBarFontSize,
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
+            child: DefaultTabController(
+              length: 2,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: design.marginAndPadding,
                     ),
-                    indicatorWeight: 2,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    tabs: <Widget>[
-                      //Tab(text: '유통 기한 임박'),
-                      Tab(text: '냉장'),
-                      Tab(text: '냉동'),
-                    ],
+                    child: const TabBar(
+                      indicatorColor: Colors.amber,
+                      indicatorWeight: 4.0,
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Design.tabBarSelectedFontSize,
+                        fontFamily: 'Mainfonts',
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: Design.tabBarUnSelectedFontSize,
+                        fontFamily: 'Mainfonts',
+                      ),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      tabs: <Widget>[Tab(text: '냉장'), Tab(text: '냉동')],
+                    ),
                   ),
-                ),
 
-                // 물품 List
-                Expanded(
-                  child: TabBarView(
-                    children:
-                        (_group?.groupName ?? '').isEmpty
-                            ? _noGroupView()
-                            : _buildContent(),
+                  // 물품 List
+                  Expanded(
+                    child: TabBarView(
+                      children:
+                          (_group?.groupName ?? '').isEmpty
+                              ? _noGroupView()
+                              : _buildContent(),
+                    ),
                   ),
-                ),
-                if (_refrigeratorState?.isUpdatedContent ?? false)
-                  _setCountView(),
-              ],
+                  if (_refrigeratorState?.isUpdatedContent ?? false)
+                    Column(
+                      children: <Widget>[
+                        _setCountView(),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
 
@@ -175,15 +193,22 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                       _refrigeratorState!.isUpdatedContent
                   ? null
                   : SafeArea(
-                    minimum: const EdgeInsets.only(bottom: 16),
+                    minimum: EdgeInsets.only(bottom: design.marginAndPadding),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
+                        spacing: 5,
+                        children: <Widget>[
                           Expanded(
-                            flex: 4,
+                            flex: 3,
                             child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: design.mainColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                              ),
                               onPressed: () {
                                 (_group?.groupName ?? '').isEmpty
                                     ? null
@@ -193,17 +218,57 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                                 _loadContentList();
                                 context.push('/searchContent');
                               },
-                              child: Text("물품 추가"),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  design.marginAndPadding,
+                                ),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing: 10,
+                                  children: <Widget>[
+                                    Icon(Icons.add_shopping_cart),
+                                    Text(
+                                      "물품 추가",
+                                      style: TextStyle(
+                                        fontSize: Design.normalFontSize2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             flex: 2,
                             child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: design.cookBtnColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                              ),
                               onPressed: () {
                                 context.push('/cook');
                               },
-                              child: Text("요리"),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  design.marginAndPadding,
+                                ),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing: 10,
+                                  children: <Widget>[
+                                    Icon(Icons.restaurant),
+                                    Text(
+                                      "요리",
+                                      style: TextStyle(
+                                        fontSize: Design.normalFontSize2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -256,13 +321,155 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      spacing: 10,
+      children: <Widget>[
         Image.asset(
           "assets/images/null_home.png",
           scale: design.splashImageSize,
         ),
-        Center(child: Text(text, textAlign: TextAlign.center)),
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: Design.normalFontSize2),
+        ),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '물품 추가',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              '를 통해서 물건을 등록해 주세요.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ],
+    );
+  }
+
+  // 유통 기한 마감 임박 항목
+  Widget expContentCard({required Content content}) {
+    final Design design = Design(context);
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext dialogContext) {
+            return contentDetailDialog(
+              context: dialogContext,
+              ref: ref,
+              contentId: content.contentId ?? 0,
+              design: design,
+            );
+          },
+        );
+      },
+      child: Container(
+        width: 120,
+        padding: EdgeInsets.all(design.marginAndPadding),
+        decoration: BoxDecoration(
+          color: ref
+              .watch(refrigeratorNotifier.notifier)
+              .getColorByRemainTime(content.expDate!)
+              .withAlpha(100),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: ref
+                .watch(refrigeratorNotifier.notifier)
+                .getColorByRemainTime(content.expDate!),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 8,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              decoration: BoxDecoration(
+                color: ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .getColorByRemainTime(content.expDate!),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .getRemainDate(content.expDate!),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Text(
+              content.contentName,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Spacer(),
+            ref
+                    .watch(refrigeratorNotifier.notifier)
+                    .getExpiredStatus(content.expDate!)
+                ? SizedBox(
+                  width: double.infinity,
+                  height: 30,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      await ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .setCountZero(_group?.groupId ?? 0, content);
+
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .removeZeroCountContent();
+                    },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: design.cancelColor,
+                      side: const BorderSide(color: Colors.red, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      "삭제",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                )
+                : contentCounter(
+                  count: content.count,
+                  contentId: content.contentId!,
+                  ref: ref,
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 마감 임박 항목 리스트
+  Widget horizontalExpContentCards(
+    BuildContext context,
+    List<Content> contentList,
+  ) {
+    final Design design = Design(context);
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: contentList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: EdgeInsets.all(design.marginAndPadding),
+          child: expContentCard(content: contentList[index]),
+        );
+      },
     );
   }
 
@@ -298,19 +505,41 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 냉장고 ContentListView
   Widget _refrigeratorContent() {
+    final Design design = Design(context);
+    final int totalCount =
+        (_refrigeratorState?.refrigeratorContentList?.length ?? 0) +
+        (_refrigeratorState?.refExpContentList?.length ?? 0);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(design.marginAndPadding),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: <Widget>[
+                  Text('총 $totalCount개 물품'),
+                  (_refrigeratorState?.refExpContentList?.isNotEmpty ?? false)
+                      ? Text(
+                        ' (마감 임박 ${_refrigeratorState!.refExpContentList!.length}개)',
+                        style: const TextStyle(color: Colors.red),
+                      )
+                      : const SizedBox.shrink(),
+                ],
+              ),
+            ),
+          ),
+
           if (_refrigeratorState?.refExpContentList?.isNotEmpty ??
               false) ...<Widget>[
-            contentExpansionTile(
-              context,
-              '유통 기한 마감 임박',
-              _refrigeratorState!.refExpContentList!,
+            SizedBox(
+              height: 160,
+              child: horizontalExpContentCards(
+                context,
+                _refrigeratorState!.refExpContentList!,
+              ),
             ),
-            const Divider(),
           ],
-
           if (_refrigeratorState?.refrigeratorContentList?.isNotEmpty ?? false)
             _listViewBuilder(_refrigeratorState!.refrigeratorContentList!),
         ],
@@ -347,7 +576,10 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: contentList.length,
       itemBuilder: (BuildContext context, int index) {
-        return _buildContentRow(contentList[index]);
+        return Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: _buildContentRow(contentList[index]),
+        );
       },
     );
   }
@@ -362,7 +594,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               (_refrigeratorState!.refrigeratorContentList!.isNotEmpty ||
                   _refrigeratorState!.refExpContentList!.isNotEmpty)
           ? _refrigeratorContent()
-          : _noContentView('냉장고에 보관중인 물품이 없어요.'),
+          : _noContentView('냉장고에 아무것도 들어있지 않습니다.'),
       _refrigeratorState?.isLoading ?? false
           ? const Center(child: CircularProgressIndicator())
           : _refrigeratorState != null &&
@@ -370,7 +602,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               (_refrigeratorState!.freezerContentList!.isNotEmpty ||
                   _refrigeratorState!.frzExpContentList!.isNotEmpty)
           ? _freezerContent()
-          : _noContentView('냉동실에 보관중인 물품이 없어요.'),
+          : _noContentView('냉동실에 아무것도 들어있지 않습니다.'),
     ];
   }
 
@@ -383,60 +615,26 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return FutureBuilder(
-              future: ref
-                  .watch(refrigeratorNotifier.notifier)
-                  .loadContent(content.contentId ?? 0),
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<Content?> snapshot,
-              ) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError || snapshot.data == null) {
-                  return const AlertDialog(
-                    title: Text('데이터를 불러 오는 도중 에러가 발생하였습니다.'),
-                  );
-                }
-                final Content loadedContent = snapshot.data!;
-
-                return AlertDialog(
-                  insetPadding: EdgeInsets.zero,
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  content: SizedBox(
-                    width: design.termsOverlayWidth * 0.85,
-                    height: design.termsOverlayHeight * 0.90,
-                    child: ContentDetailView(content: loadedContent),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        context.pop();
-                      },
-                      child: const Text(
-                        '닫기',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ],
-                );
-              },
+            return contentDetailDialog(
+              context: context,
+              ref: ref,
+              contentId: content.contentId!,
+              design: design,
             );
           },
         );
       },
       child: Container(
+        height: 100,
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color:
               (DateTime.now().difference(content.expDate!).inHours > -24)
                   ? Colors.red[200]
-                  : Colors.amber[300],
-          borderRadius: BorderRadius.circular(8),
+                  : Colors.amber.shade50,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: design.mainColor, width: 1.5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -450,87 +648,53 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         ? '${content.contentName.substring(0, 10)}...'
                         : content.contentName,
                     style: const TextStyle(
-                      fontSize: Design.normalFontSize,
+                      fontSize: Design.normalFontSize2,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '소비기한: ${DateFormat('yyyy-M-d a h:m:s', 'ko').format(content.expDate ?? DateTime.now())}',
-                    style: const TextStyle(
-                      fontSize: Design.contentRowExpFontSize,
-                    ),
+                    '${content.brandName}',
+                    style: const TextStyle(fontSize: Design.normalFontSize1),
                   ),
                 ],
               ),
             ),
-            // 수량 조절 버튼
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 20,
               children: <Widget>[
-                _quantityButton('-', () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  if (content.count > 0) {
-                    ref
-                        .watch(refrigeratorNotifier.notifier)
-                        .reduceContentCount(content.contentId ?? 0);
-                  }
-                }),
-                const SizedBox(width: 5),
-                Container(
-                  width: design.screenWidth * 0.17,
-                  height: design.screenWidth * 0.080,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    '${content.count}',
-                    style: const TextStyle(
-                      fontSize: Design.normalFontSize,
-                      fontWeight: FontWeight.bold,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .getRemainDate(content.expDate!),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 5),
-                _quantityButton('+', () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .addContentCount(content.contentId ?? 0);
-                }),
+                contentCounter(
+                  count: content.count,
+                  contentId: content.contentId ?? 0,
+                  ref: ref,
+                ),
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  // 수량 조절 버튼
-  Widget _quantityButton(String symbol, VoidCallback onPressed) {
-    final Design design = Design(context);
-
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: design.screenWidth * 0.080,
-        height: design.screenWidth * 0.080,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Text(
-          symbol,
-          style: const TextStyle(
-            fontSize: Design.countButtonFontSize,
-            fontWeight: FontWeight.bold,
-          ),
         ),
       ),
     );
@@ -540,52 +704,77 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Widget _setCountView() {
     Design design = Design(context);
     return Container(
-      color: Colors.grey[200],
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0), // 둥근 테두리
+        border: Border.all(
+          color: Colors.black, // 테두리 색
+          width: 2, // 테두리 두께
+        ),
+        color: design.mainColor.withAlpha(150),
+      ),
       height: design.contentUpdateViewHeight,
       child: Column(
         children: <Widget>[
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.zero,
               itemCount: _refrigeratorState?.updateContentList?.length,
               itemBuilder: (BuildContext context, int index) {
                 final Content? content =
                     _refrigeratorState?.updateContentList?[index];
-                return ListTile(
-                  dense: true,
-                  contentPadding: const EdgeInsets.only(right: 10),
-                  leading: IconButton(
-                    onPressed: () {
-                      ref
-                          .watch(refrigeratorNotifier.notifier)
-                          .removeUpdateContentById(content!.contentId ?? 0);
-                    },
-                    icon: Container(
-                      padding: const EdgeInsets.all(1),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        color: Colors.white,
-                        size: 15,
-                      ),
-                    ),
+                return Padding(
+                  padding: EdgeInsets.only(
+                    left: design.marginAndPadding + 5,
+                    right: design.marginAndPadding + 5,
+                    top: design.marginAndPadding,
                   ),
-                  title: Text(
-                    content!.contentName,
-                    style: const TextStyle(
-                      fontSize: Design.setCountViewFontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  trailing: Text(
-                    content.count.toString(),
-                    style: const TextStyle(
-                      fontSize: Design.setCountViewFontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            ref
+                                .watch(refrigeratorNotifier.notifier)
+                                .removeUpdateContentById(
+                                  content!.contentId ?? 0,
+                                );
+                          },
+                          splashColor: Colors.grey.shade200,
+                          highlightColor: Colors.grey.shade200,
+                          child: Container(
+                            padding: const EdgeInsets.all(1),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          content!.contentName,
+                          style: const TextStyle(
+                            fontSize: Design.normalFontSize1,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        content.count.toString(),
+                        style: TextStyle(
+                          fontSize: Design.normalFontSize1,
+                          fontWeight: FontWeight.bold,
+                          color: content.count > 0 ? Colors.blue : Colors.red,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -593,6 +782,70 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           ),
           _setCountButtons(),
         ],
+      ),
+    );
+  }
+
+  Widget contentCounter({
+    required int count,
+    required int contentId,
+    required WidgetRef ref,
+  }) {
+    return SizedBox(
+      width: 100,
+      height: 30,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.black, width: 1.5),
+          color: Colors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 5,
+          children: <Widget>[
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  ref
+                      .watch(refrigeratorNotifier.notifier)
+                      .openUpdateContentCountView();
+                  if (count > 0) {
+                    ref
+                        .watch(refrigeratorNotifier.notifier)
+                        .reduceContentCount(contentId);
+                  }
+                },
+                splashColor: Colors.grey.shade200,
+                highlightColor: Colors.grey.shade200,
+                child: const Icon(Icons.remove, size: 20, color: Colors.black),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text('$count개'),
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  ref
+                      .watch(refrigeratorNotifier.notifier)
+                      .openUpdateContentCountView();
+                  if (count > 0) {
+                    ref
+                        .watch(refrigeratorNotifier.notifier)
+                        .addContentCount(contentId);
+                  }
+                },
+                splashColor: Colors.grey.shade200,
+                highlightColor: Colors.grey.shade200,
+                child: const Icon(Icons.add, size: 20, color: Colors.black),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -609,25 +862,25 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Expanded(
-            child: ElevatedButton(
+            child: OutlinedButton(
               onPressed: () {
                 ref.watch(refrigeratorNotifier.notifier).cancelUpdate();
                 ref
                     .watch(refrigeratorNotifier.notifier)
                     .closeUpdateContentCountView();
               },
-              style: ElevatedButton.styleFrom(
+              style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
+                backgroundColor: Colors.red.shade100,
+                side: const BorderSide(color: Colors.red, width: 2),
               ),
-              child: const Text('전체 취소'),
+              child: const Text('전체 취소', style: TextStyle(color: Colors.red)),
             ),
           ),
           Expanded(
-            child: ElevatedButton(
+            child: OutlinedButton(
               onPressed: () async {
                 await ref
                     .watch(refrigeratorNotifier.notifier)
@@ -651,17 +904,76 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     .watch(refrigeratorNotifier.notifier)
                     .closeUpdateContentCountView();
               },
-              style: ElevatedButton.styleFrom(
+              style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.amber[300],
+                side: const BorderSide(color: Colors.amber, width: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                backgroundColor: Colors.amber[300],
-                foregroundColor: Colors.black,
               ),
               child: const Text('물품 개수 반영'),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget contentDetailDialog({
+    required BuildContext context,
+    required WidgetRef ref,
+    required int contentId,
+    required Design design,
+  }) {
+    return FutureBuilder(
+      future: ref.watch(refrigeratorNotifier.notifier).loadContent(contentId),
+      builder: (BuildContext context, AsyncSnapshot<Content?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError || snapshot.data == null) {
+          return const AlertDialog(title: Text('데이터를 불러 오는 도중 에러가 발생하였습니다.'));
+        }
+        final Content loadedContent = snapshot.data!;
+
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          content: SizedBox(
+            width: design.termsOverlayWidth * 0.85,
+            height: design.termsOverlayHeight * 0.90,
+            child: ContentDetailView(content: loadedContent),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                context.pop();
+              },
+              child: const Text('닫기', style: TextStyle(color: Colors.black)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildLastUpdatedText(RefrigeratorState state, WidgetRef ref) {
+    final DateTime? updatedTime = state.lastUpdatedTime;
+    if (updatedTime == null) {
+      return const Text(
+        "방금 전",
+        style: TextStyle(fontSize: Design.normalFontSize1),
+      );
+    }
+
+    final String text = ref.watch(timeAgoNotifierProvider(updatedTime));
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: Design.normalFontSize1,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

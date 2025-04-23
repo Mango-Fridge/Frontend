@@ -10,6 +10,7 @@ class RefrigeratorState {
   bool isUpdatedContent = false;
   bool? isLoading;
   String? setCountMessage;
+  final DateTime? lastUpdatedTime;
 
   RefrigeratorState({
     this.contentList,
@@ -21,6 +22,7 @@ class RefrigeratorState {
     this.isUpdatedContent = false,
     this.isLoading,
     this.setCountMessage,
+    this.lastUpdatedTime,
   });
 
   RefrigeratorState copyWith({
@@ -33,6 +35,7 @@ class RefrigeratorState {
     bool? isUpdatedContent,
     bool? isLoading,
     String? setCountMessage,
+    final DateTime? lastUpdatedTime,
   }) {
     return RefrigeratorState(
       contentList: contentList ?? this.contentList,
@@ -45,6 +48,7 @@ class RefrigeratorState {
       isUpdatedContent: isUpdatedContent ?? this.isUpdatedContent,
       isLoading: isLoading ?? this.isLoading,
       setCountMessage: setCountMessage ?? this.setCountMessage,
+      lastUpdatedTime: lastUpdatedTime ?? this.lastUpdatedTime,
     );
   }
 }

@@ -499,7 +499,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             Text(
               '선택 사항',
               style: TextStyle(
-                fontSize: Design.normalFontSize,
+                fontSize: Design.normalFontSize1,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -547,7 +547,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             Text(
               '영양 성분',
               style: TextStyle(
-                fontSize: Design.normalFontSize,
+                fontSize: Design.normalFontSize1,
                 fontWeight: FontWeight.bold,
               ),
             ),

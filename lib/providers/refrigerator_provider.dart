@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/app_logger.dart';
 import 'package:mango/model/content.dart';
@@ -40,6 +41,7 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
         frzExpContentList: _refrigeratorState.frzExpContentList,
         contentList: _refrigeratorState.contentList,
         isLoading: false,
+        lastUpdatedTime: DateTime.now(),
       );
     } catch (e) {
       AppLogger.logger.e('[refrigerator_provider/loadContentList]: $e');
@@ -344,36 +346,119 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     state = state?.copyWith(isLoading: isLoading);
   }
 
-  // cook item 추가 row에서 삭제 구현 시 사용
+  String getRemainDate(DateTime expDateTime) {
+    final DateTime now = DateTime.now();
+    bool isNegative = expDateTime.isBefore(now);
+    DateTime start = isNegative ? expDateTime : now;
+    DateTime end = isNegative ? now : expDateTime;
 
-  // Future<bool> deleteCookItem(int itemId) async {
-  //   try {
-  //     // Create a new list excluding the item with the matching itemId
-  //     final List<Content> updatedContentList =
-  //         state?.contentList
-  //             ?.where((Content content) => content.contentId != itemId)
-  //             .toList() ??
-  //         [];
+    int years = end.year - start.year;
+    int months = end.month - start.month;
+    int days = end.day - start.day;
+    int hours = end.hour - start.hour;
+    int minutes = end.minute - start.minute;
 
-  //     // Update the state with the new lists
-  //     state = RefrigeratorState(
-  //       contentList: updatedContentList,
-  //       refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
-  //       freezerContentList: getFreezerContentList(updatedContentList),
-  //       refExpContentList: getRefExpContentList(updatedContentList),
-  //       frzExpContentList: getFrzExpContentList(updatedContentList),
-  //       updateContentList: state?.updateContentList,
-  //       isUpdatedContent: state?.isUpdatedContent ?? false,
-  //       isLoading: state?.isLoading ?? false,
-  //       setCountMessage: state?.setCountMessage,
-  //     );
+    if (minutes < 0) {
+      minutes += 60;
+      hours -= 1;
+    }
+    if (hours < 0) {
+      hours += 24;
+      days -= 1;
+    }
+    if (days < 0) {
+      final DateTime prevMonth = DateTime(end.year, end.month, 0);
+      days += prevMonth.day;
+      months -= 1;
+    }
+    if (months < 0) {
+      months += 12;
+      years -= 1;
+    }
 
-  //     return true; // Deletion successful
-  //   } catch (e) {
-  //     AppLogger.logger.e('[refrigerator_provider/deleteCookItem]: $e');
-  //     return false; // Deletion failed
-  //   }
-  // }
+    List<String> parts = <String>[];
+
+    if (years > 0) parts.add('$years년');
+    if (months > 0) parts.add('$months개월');
+    if (days > 0) parts.add('$days일');
+    if (hours > 0) parts.add('$hours시간');
+
+    if (years == 0 && months == 0 && hours == 0 && minutes > 0) {
+      parts.add('$minutes분');
+    }
+
+    if (parts.isEmpty) {
+      parts.add('0분');
+    }
+
+    return isNegative ? '-${parts.join(' ')}' : parts.join(' ');
+  }
+
+  bool getExpiredStatus(DateTime expDateTime) {
+    return expDateTime.isBefore(DateTime.now());
+  }
+
+  Future<void> setCountZero(int groupId, Content content) async {
+    String setCountMessage = '';
+
+    try {
+      List<Content> tempContentList = <Content>[];
+
+      content = content.copyWith(
+        count:
+            -(state?.contentList
+                    ?.firstWhere(
+                      (Content content) =>
+                          content.contentId == content.contentId,
+                    )
+                    .count ??
+                0),
+      );
+      if (state == null) return;
+
+      final List<Content>? list = state?.contentList;
+      if (list == null) return;
+
+      final int index = list.indexWhere(
+        (Content e) => e.contentId == content.contentId,
+      );
+
+      final List<Content> updatedList = List<Content>.from(list);
+      updatedList[index] = updatedList[index].copyWith(count: 0);
+
+      tempContentList.add(content);
+      setCountMessage = await _contentRepository.setCount(
+        groupId,
+        tempContentList,
+      );
+
+      state = state?.copyWith(
+        contentList: updatedList,
+        setCountMessage: setCountMessage,
+      );
+    } catch (e) {
+      AppLogger.logger.e('[refrigerator_provider/setCountZero]: $e');
+    }
+  }
+
+  Color getColorByRemainTime(DateTime expDateTime) {
+    final DateTime now = DateTime.now();
+    Duration diff = expDateTime.difference(now);
+
+    if (diff.isNegative) {
+      return Colors.grey.shade700;
+    }
+
+    final int hours = diff.inHours;
+
+    if (hours < 12) {
+      return Colors.red;
+    } else if (hours < 24) {
+      return Colors.orange;
+    } else {
+      return Colors.transparent;
+    }
+  }
 }
 
 final NotifierProvider<RefrigeratorNotifier, RefrigeratorState?>
