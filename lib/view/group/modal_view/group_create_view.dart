@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mango/model/group/group.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_provider.dart';

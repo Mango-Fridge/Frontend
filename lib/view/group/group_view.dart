@@ -34,8 +34,6 @@ class _GroupViewState extends ConsumerState<GroupView> {
       final String? getJoinedGroupName =
           await groupSharedPrefs.getJoinedGroupName();
 
-      await ref.read(groupProvider.notifier).loadGroup(user?.usrId ?? 0);
-
       if (_group?.groupId != null) {
         groupSharedPrefs.removeJoinedGroup();
         ref.read(grouViewStateProvider.notifier).state = GroupViewState.exist;

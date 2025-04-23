@@ -241,6 +241,9 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                               _user?.usrId ?? 0,
                               _group?.groupId ?? 0,
                             )) {
+                              await ref
+                              .read(groupProvider.notifier)
+                              .loadGroup(_user?.usrId ?? 0);
                               ref.read(grouViewStateProvider.notifier).state =
                                   GroupViewState.empty;
                               toastMessage(
