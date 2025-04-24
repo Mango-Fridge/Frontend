@@ -833,11 +833,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   ref
                       .watch(refrigeratorNotifier.notifier)
                       .openUpdateContentCountView();
-                  if (count > 0) {
-                    ref
-                        .watch(refrigeratorNotifier.notifier)
-                        .addContentCount(contentId);
-                  }
+                  ref
+                      .watch(refrigeratorNotifier.notifier)
+                      .addContentCount(contentId);
                 },
                 splashColor: Colors.grey.shade200,
                 highlightColor: Colors.grey.shade200,
