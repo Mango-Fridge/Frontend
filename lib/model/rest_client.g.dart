@@ -615,20 +615,16 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<ApiResponse<dynamic>> addCookItem(
-    int cookId,
-    Map<String, Object?> body,
-  ) async {
+  Future<ApiResponse<dynamic>> deleteCook(int cookId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
+    const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ApiResponse<dynamic>>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/cook-items/${cookId}',
+            '/cooks/${cookId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -649,13 +645,13 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<ApiResponse<dynamic>> deleteCook(int cookId) async {
+  Future<ApiResponse<dynamic>> getCookDetail(int cookId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ApiResponse<dynamic>>(
-      Options(method: 'DELETE', headers: _headers, extra: _extra)
+      Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             '/cooks/${cookId}',

@@ -46,7 +46,7 @@ class CookRepository {
     }
   }
 
-  // cook 추가 함수
+  // cook 추가 함수  -> add2 API
   Future<void> addCook(Cook cook) async {
     RestClient client = RestClient(dio);
 
@@ -88,6 +88,33 @@ class CookRepository {
       }
     } catch (e) {
       throw Exception("[cook_repository/deleteCook]: $e");
+    }
+  }
+
+  // 요리 상세 정보 가져오기
+  Future<List<Cook>> getCookDetail(int cookId) async {
+    RestClient client = RestClient(dio);
+
+    AppLogger.logger.i("Requesting cook list with groupId: $cookId");
+
+    try {
+      ApiResponse response = await client.getCookDetail(cookId);
+
+      if (response.code == 200) {
+        AppLogger.logger.i(
+          "[cook_repository/loadCookList]: Cook list load 완료.",
+        );
+
+        List<dynamic> data = response.data;
+
+        return data.map((item) => Cook.fromJson(item)).toList();
+      } else {
+        throw Exception('[cook_repository/loadCookList]: Json Parse Error');
+      }
+    } catch (e) {
+      AppLogger.logger.e("[cook_repository/loadCookList]: $e");
+
+      return <Cook>[];
     }
   }
 }
