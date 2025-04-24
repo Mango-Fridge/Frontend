@@ -79,4 +79,7 @@ abstract class RestClient {
 
   @DELETE('/cooks/{cookId}') // cook 삭제
   Future<ApiResponse> deleteCook(@Path('cookId') int cookId);
+
+  @DELETE('/cook-items/{cookItemId}') // item 삭제
+  Future<ApiResponse> deleteItem(@Path('cookItemId') int cookItemId);
 }

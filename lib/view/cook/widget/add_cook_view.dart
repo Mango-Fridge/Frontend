@@ -359,17 +359,50 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.close),
+          color: Colors.red,
+          onPressed: () async {
+            if (item.cookItemId != null) {
+              try {
+                final result = await ref
+                    .read(searchContentProvider.notifier)
+                    .deleteItem(item.cookItemId!);
+                FToast().removeCustomToast();
+                if (result) {
+                  // addCookProvider의 itemListForCook 업데이트
+                  ref
+                      .read(addCookProvider.notifier)
+                      .removeItem(item.cookItemId!);
+                  toastMessage(context, "${item.itemName}이(가) 삭제되었습니다.");
+                } else {
+                  toastMessage(context, "${item.itemName}를 삭제하지 못했습니다.");
+                }
+              } catch (e) {
+                FToast().removeCustomToast();
+                toastMessage(context, "삭제 중 오류가 발생했습니다: $e");
+                AppLogger.logger.e("[_cookItemRow/onPressed]: $e");
+              }
+            } else {
+              FToast().removeCustomToast();
+              toastMessage(context, "CookItem ID가 없습니다.");
+            }
+          },
+        ),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                item.itemName ?? '',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  item.itemName ?? '',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
               Text(
                 "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
@@ -378,6 +411,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ],
           ),

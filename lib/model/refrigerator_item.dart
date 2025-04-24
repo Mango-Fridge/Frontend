@@ -23,6 +23,7 @@ abstract class RefrigeratorItem with _$RefrigeratorItem {
     required int? nutriProtein,
     required int? nutriFat,
     required bool? openItem,
+    int? cookItemId, // 요리와의 관계 ID 추가
   }) = Refrigerator;
 
   factory RefrigeratorItem.fromJson(Map<String, dynamic> json) =>

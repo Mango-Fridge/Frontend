@@ -23,7 +23,7 @@ RefrigeratorItem _$RefrigeratorItemFromJson(
 /// @nodoc
 mixin _$RefrigeratorItem {
 
- int? get itemId; String? get itemName; String? get category; String? get subCategory; String? get brandName; int? get count; DateTime? get regDate; DateTime? get expDate; String? get storageArea; String? get memo; String? get nutriUnit; int? get nutriCapacity; int? get nutriKcal; int? get nutriCarbohydrate; int? get nutriProtein; int? get nutriFat; bool? get openItem;
+ int? get itemId; String? get itemName; String? get category; String? get subCategory; String? get brandName; int? get count; DateTime? get regDate; DateTime? get expDate; String? get storageArea; String? get memo; String? get nutriUnit; int? get nutriCapacity; int? get nutriKcal; int? get nutriCarbohydrate; int? get nutriProtein; int? get nutriFat; bool? get openItem; int? get cookItemId;
 /// Create a copy of RefrigeratorItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -36,16 +36,16 @@ $RefrigeratorItemCopyWith<RefrigeratorItem> get copyWith => _$RefrigeratorItemCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RefrigeratorItem&&(identical(other.itemId, itemId) || other.itemId == itemId)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.category, category) || other.category == category)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.count, count) || other.count == count)&&(identical(other.regDate, regDate) || other.regDate == regDate)&&(identical(other.expDate, expDate) || other.expDate == expDate)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.memo, memo) || other.memo == memo)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.nutriCarbohydrate, nutriCarbohydrate) || other.nutriCarbohydrate == nutriCarbohydrate)&&(identical(other.nutriProtein, nutriProtein) || other.nutriProtein == nutriProtein)&&(identical(other.nutriFat, nutriFat) || other.nutriFat == nutriFat)&&(identical(other.openItem, openItem) || other.openItem == openItem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RefrigeratorItem&&(identical(other.itemId, itemId) || other.itemId == itemId)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.category, category) || other.category == category)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.count, count) || other.count == count)&&(identical(other.regDate, regDate) || other.regDate == regDate)&&(identical(other.expDate, expDate) || other.expDate == expDate)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.memo, memo) || other.memo == memo)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.nutriCarbohydrate, nutriCarbohydrate) || other.nutriCarbohydrate == nutriCarbohydrate)&&(identical(other.nutriProtein, nutriProtein) || other.nutriProtein == nutriProtein)&&(identical(other.nutriFat, nutriFat) || other.nutriFat == nutriFat)&&(identical(other.openItem, openItem) || other.openItem == openItem)&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,itemId,itemName,category,subCategory,brandName,count,regDate,expDate,storageArea,memo,nutriUnit,nutriCapacity,nutriKcal,nutriCarbohydrate,nutriProtein,nutriFat,openItem);
+int get hashCode => Object.hash(runtimeType,itemId,itemName,category,subCategory,brandName,count,regDate,expDate,storageArea,memo,nutriUnit,nutriCapacity,nutriKcal,nutriCarbohydrate,nutriProtein,nutriFat,openItem,cookItemId);
 
 @override
 String toString() {
-  return 'RefrigeratorItem(itemId: $itemId, itemName: $itemName, category: $category, subCategory: $subCategory, brandName: $brandName, count: $count, regDate: $regDate, expDate: $expDate, storageArea: $storageArea, memo: $memo, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, nutriCarbohydrate: $nutriCarbohydrate, nutriProtein: $nutriProtein, nutriFat: $nutriFat, openItem: $openItem)';
+  return 'RefrigeratorItem(itemId: $itemId, itemName: $itemName, category: $category, subCategory: $subCategory, brandName: $brandName, count: $count, regDate: $regDate, expDate: $expDate, storageArea: $storageArea, memo: $memo, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, nutriCarbohydrate: $nutriCarbohydrate, nutriProtein: $nutriProtein, nutriFat: $nutriFat, openItem: $openItem, cookItemId: $cookItemId)';
 }
 
 
@@ -56,7 +56,7 @@ abstract mixin class $RefrigeratorItemCopyWith<$Res>  {
   factory $RefrigeratorItemCopyWith(RefrigeratorItem value, $Res Function(RefrigeratorItem) _then) = _$RefrigeratorItemCopyWithImpl;
 @useResult
 $Res call({
- int? itemId, String? itemName, String? category, String? subCategory, String? brandName, int? count, DateTime? regDate, DateTime? expDate, String? storageArea, String? memo, String? nutriUnit, int? nutriCapacity, int? nutriKcal, int? nutriCarbohydrate, int? nutriProtein, int? nutriFat, bool? openItem
+ int? itemId, String? itemName, String? category, String? subCategory, String? brandName, int? count, DateTime? regDate, DateTime? expDate, String? storageArea, String? memo, String? nutriUnit, int? nutriCapacity, int? nutriKcal, int? nutriCarbohydrate, int? nutriProtein, int? nutriFat, bool? openItem, int? cookItemId
 });
 
 
@@ -73,7 +73,7 @@ class _$RefrigeratorItemCopyWithImpl<$Res>
 
 /// Create a copy of RefrigeratorItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? itemId = freezed,Object? itemName = freezed,Object? category = freezed,Object? subCategory = freezed,Object? brandName = freezed,Object? count = freezed,Object? regDate = freezed,Object? expDate = freezed,Object? storageArea = freezed,Object? memo = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? nutriCarbohydrate = freezed,Object? nutriProtein = freezed,Object? nutriFat = freezed,Object? openItem = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? itemId = freezed,Object? itemName = freezed,Object? category = freezed,Object? subCategory = freezed,Object? brandName = freezed,Object? count = freezed,Object? regDate = freezed,Object? expDate = freezed,Object? storageArea = freezed,Object? memo = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? nutriCarbohydrate = freezed,Object? nutriProtein = freezed,Object? nutriFat = freezed,Object? openItem = freezed,Object? cookItemId = freezed,}) {
   return _then(_self.copyWith(
 itemId: freezed == itemId ? _self.itemId : itemId // ignore: cast_nullable_to_non_nullable
 as int?,itemName: freezed == itemName ? _self.itemName : itemName // ignore: cast_nullable_to_non_nullable
@@ -92,7 +92,8 @@ as int?,nutriCarbohydrate: freezed == nutriCarbohydrate ? _self.nutriCarbohydrat
 as int?,nutriProtein: freezed == nutriProtein ? _self.nutriProtein : nutriProtein // ignore: cast_nullable_to_non_nullable
 as int?,nutriFat: freezed == nutriFat ? _self.nutriFat : nutriFat // ignore: cast_nullable_to_non_nullable
 as int?,openItem: freezed == openItem ? _self.openItem : openItem // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -103,7 +104,7 @@ as bool?,
 @JsonSerializable()
 
 class Refrigerator implements RefrigeratorItem {
-  const Refrigerator({required this.itemId, required this.itemName, required this.category, required this.subCategory, required this.brandName, required this.count, required this.regDate, required this.expDate, required this.storageArea, required this.memo, required this.nutriUnit, required this.nutriCapacity, required this.nutriKcal, required this.nutriCarbohydrate, required this.nutriProtein, required this.nutriFat, required this.openItem});
+  const Refrigerator({required this.itemId, required this.itemName, required this.category, required this.subCategory, required this.brandName, required this.count, required this.regDate, required this.expDate, required this.storageArea, required this.memo, required this.nutriUnit, required this.nutriCapacity, required this.nutriKcal, required this.nutriCarbohydrate, required this.nutriProtein, required this.nutriFat, required this.openItem, this.cookItemId});
   factory Refrigerator.fromJson(Map<String, dynamic> json) => _$RefrigeratorFromJson(json);
 
 @override final  int? itemId;
@@ -123,6 +124,7 @@ class Refrigerator implements RefrigeratorItem {
 @override final  int? nutriProtein;
 @override final  int? nutriFat;
 @override final  bool? openItem;
+@override final  int? cookItemId;
 
 /// Create a copy of RefrigeratorItem
 /// with the given fields replaced by the non-null parameter values.
@@ -137,16 +139,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Refrigerator&&(identical(other.itemId, itemId) || other.itemId == itemId)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.category, category) || other.category == category)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.count, count) || other.count == count)&&(identical(other.regDate, regDate) || other.regDate == regDate)&&(identical(other.expDate, expDate) || other.expDate == expDate)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.memo, memo) || other.memo == memo)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.nutriCarbohydrate, nutriCarbohydrate) || other.nutriCarbohydrate == nutriCarbohydrate)&&(identical(other.nutriProtein, nutriProtein) || other.nutriProtein == nutriProtein)&&(identical(other.nutriFat, nutriFat) || other.nutriFat == nutriFat)&&(identical(other.openItem, openItem) || other.openItem == openItem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Refrigerator&&(identical(other.itemId, itemId) || other.itemId == itemId)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.category, category) || other.category == category)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.count, count) || other.count == count)&&(identical(other.regDate, regDate) || other.regDate == regDate)&&(identical(other.expDate, expDate) || other.expDate == expDate)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.memo, memo) || other.memo == memo)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.nutriCarbohydrate, nutriCarbohydrate) || other.nutriCarbohydrate == nutriCarbohydrate)&&(identical(other.nutriProtein, nutriProtein) || other.nutriProtein == nutriProtein)&&(identical(other.nutriFat, nutriFat) || other.nutriFat == nutriFat)&&(identical(other.openItem, openItem) || other.openItem == openItem)&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,itemId,itemName,category,subCategory,brandName,count,regDate,expDate,storageArea,memo,nutriUnit,nutriCapacity,nutriKcal,nutriCarbohydrate,nutriProtein,nutriFat,openItem);
+int get hashCode => Object.hash(runtimeType,itemId,itemName,category,subCategory,brandName,count,regDate,expDate,storageArea,memo,nutriUnit,nutriCapacity,nutriKcal,nutriCarbohydrate,nutriProtein,nutriFat,openItem,cookItemId);
 
 @override
 String toString() {
-  return 'RefrigeratorItem(itemId: $itemId, itemName: $itemName, category: $category, subCategory: $subCategory, brandName: $brandName, count: $count, regDate: $regDate, expDate: $expDate, storageArea: $storageArea, memo: $memo, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, nutriCarbohydrate: $nutriCarbohydrate, nutriProtein: $nutriProtein, nutriFat: $nutriFat, openItem: $openItem)';
+  return 'RefrigeratorItem(itemId: $itemId, itemName: $itemName, category: $category, subCategory: $subCategory, brandName: $brandName, count: $count, regDate: $regDate, expDate: $expDate, storageArea: $storageArea, memo: $memo, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, nutriCarbohydrate: $nutriCarbohydrate, nutriProtein: $nutriProtein, nutriFat: $nutriFat, openItem: $openItem, cookItemId: $cookItemId)';
 }
 
 
@@ -157,7 +159,7 @@ abstract mixin class $RefrigeratorCopyWith<$Res> implements $RefrigeratorItemCop
   factory $RefrigeratorCopyWith(Refrigerator value, $Res Function(Refrigerator) _then) = _$RefrigeratorCopyWithImpl;
 @override @useResult
 $Res call({
- int? itemId, String? itemName, String? category, String? subCategory, String? brandName, int? count, DateTime? regDate, DateTime? expDate, String? storageArea, String? memo, String? nutriUnit, int? nutriCapacity, int? nutriKcal, int? nutriCarbohydrate, int? nutriProtein, int? nutriFat, bool? openItem
+ int? itemId, String? itemName, String? category, String? subCategory, String? brandName, int? count, DateTime? regDate, DateTime? expDate, String? storageArea, String? memo, String? nutriUnit, int? nutriCapacity, int? nutriKcal, int? nutriCarbohydrate, int? nutriProtein, int? nutriFat, bool? openItem, int? cookItemId
 });
 
 
@@ -174,7 +176,7 @@ class _$RefrigeratorCopyWithImpl<$Res>
 
 /// Create a copy of RefrigeratorItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? itemId = freezed,Object? itemName = freezed,Object? category = freezed,Object? subCategory = freezed,Object? brandName = freezed,Object? count = freezed,Object? regDate = freezed,Object? expDate = freezed,Object? storageArea = freezed,Object? memo = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? nutriCarbohydrate = freezed,Object? nutriProtein = freezed,Object? nutriFat = freezed,Object? openItem = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? itemId = freezed,Object? itemName = freezed,Object? category = freezed,Object? subCategory = freezed,Object? brandName = freezed,Object? count = freezed,Object? regDate = freezed,Object? expDate = freezed,Object? storageArea = freezed,Object? memo = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? nutriCarbohydrate = freezed,Object? nutriProtein = freezed,Object? nutriFat = freezed,Object? openItem = freezed,Object? cookItemId = freezed,}) {
   return _then(Refrigerator(
 itemId: freezed == itemId ? _self.itemId : itemId // ignore: cast_nullable_to_non_nullable
 as int?,itemName: freezed == itemName ? _self.itemName : itemName // ignore: cast_nullable_to_non_nullable
@@ -193,7 +195,8 @@ as int?,nutriCarbohydrate: freezed == nutriCarbohydrate ? _self.nutriCarbohydrat
 as int?,nutriProtein: freezed == nutriProtein ? _self.nutriProtein : nutriProtein // ignore: cast_nullable_to_non_nullable
 as int?,nutriFat: freezed == nutriFat ? _self.nutriFat : nutriFat // ignore: cast_nullable_to_non_nullable
 as int?,openItem: freezed == openItem ? _self.openItem : openItem // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

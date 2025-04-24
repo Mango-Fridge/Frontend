@@ -57,6 +57,24 @@ class ItemRepository {
       AppLogger.logger.e("[item_repository/loadItem]: $e");
     }
   }
+
+  // itemId로 아이템 삭제하는 함수
+  Future<void> deleteItem(int cookItemId) async {
+    RestClient client = RestClient(dio);
+    try {
+      ApiResponse response = await client.deleteItem(cookItemId);
+      if (response.code == 200) {
+        AppLogger.logger.d("[item_repository/deleteItem]: Item 삭제 완료.");
+      } else {
+        throw Exception(
+          "[item_repository/deleteItem]: 삭제 실패 - 코드 ${response.code}",
+        );
+      }
+    } catch (e) {
+      AppLogger.logger.e("[item_repository/deleteItem]: $e");
+      throw e; // 호출자에게 예외 전달
+    }
+  }
 }
 
 class Item {}

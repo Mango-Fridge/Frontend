@@ -66,6 +66,32 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
       AppLogger.logger.e("[search_item_provider/loadItemListByString]: $e");
     }
   }
+
+  Future<bool> deleteItem(int cookItemId) async {
+    try {
+      await _itemRepository.deleteItem(cookItemId);
+      if (state?.refrigeratorItemList != null) {
+        final updatedList =
+            state!.refrigeratorItemList!
+                .where((i) => i.itemId != cookItemId)
+                .toList();
+        state = state!.copyWith(refrigeratorItemList: updatedList);
+        AppLogger.logger.d(
+          "[search_item_provider/deleteItem]: Item deleted successfully, ID: $cookItemId",
+        );
+        return true;
+      }
+      AppLogger.logger.w(
+        "[search_item_provider/deleteItem]: No items to update.",
+      );
+      return false; // 상태가 없거나 리스트가 비어있으면 실패로 간주
+    } catch (e) {
+      AppLogger.logger.e(
+        "[search_item_provider/deleteItem]: Failed to delete item, ID: $cookItemId, Error: $e",
+      );
+      return false;
+    }
+  }
 }
 
 final NotifierProvider<SearchItemNotifier, SearchItemState?>

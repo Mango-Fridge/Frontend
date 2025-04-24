@@ -137,6 +137,21 @@ class AddCookNotifier extends Notifier<AddCookState> {
   void currentItemCount(int itemCount) {
     state = state.copyWith(itemCount: itemCount);
   }
+
+  void removeItem(int cookItemId) {
+    if (state?.itemListForCook != null) {
+      final updatedList =
+          state!.itemListForCook!
+              .where((item) => item.cookItemId != cookItemId)
+              .toList();
+      state = state!.copyWith(itemListForCook: updatedList);
+      // 영양소 합계 갱신
+      sumCarb();
+      sumFat();
+      sumProtein();
+      sumKcal();
+    }
+  }
 }
 
 final NotifierProvider<AddCookNotifier, AddCookState> addCookProvider =
