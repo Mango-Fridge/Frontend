@@ -102,17 +102,17 @@ class CookRepository {
 
       if (response.code == 200) {
         AppLogger.logger.i(
-          "[cook_repository/loadCookList]: Cook list load 완료.",
+          "[cook_repository/getCookDetail]: getCookDetail 완료.",
         );
 
         List<dynamic> data = response.data;
 
         return data.map((item) => Cook.fromJson(item)).toList();
       } else {
-        throw Exception('[cook_repository/loadCookList]: Json Parse Error');
+        throw Exception('[cook_repository/getCookDetail]: Json Parse Error');
       }
     } catch (e) {
-      AppLogger.logger.e("[cook_repository/loadCookList]: $e");
+      AppLogger.logger.e("[cook_repository/getCookDetail]: $e");
 
       return <Cook>[];
     }
