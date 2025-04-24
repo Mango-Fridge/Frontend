@@ -594,7 +594,7 @@ class _RestClient implements RestClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/cooks/add',
+            '/cooks/add2',
             queryParameters: queryParameters,
             data: _data,
           )

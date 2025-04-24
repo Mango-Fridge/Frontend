@@ -26,6 +26,7 @@ class CookNotifier extends Notifier<CookState?> {
     String cookNutriFat,
     String cookNutriProtein,
     int groupId,
+    List<CookItems> cookItems,
   ) async {
     try {
       Cook newCook = Cook(
@@ -36,6 +37,7 @@ class CookNotifier extends Notifier<CookState?> {
         cookNutriFat: cookNutriFat,
         cookNutriProtein: cookNutriProtein,
         groupId: groupId,
+        cookItems: cookItems,
       );
 
       await _cookRepository.addCook(newCook);

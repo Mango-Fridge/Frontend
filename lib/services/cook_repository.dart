@@ -56,10 +56,10 @@ class CookRepository {
       "cookMemo": cook.cookMemo,
       "cookNutriKcal": cook.cookNutriKcal,
       "cookNutriCarbohydrate": cook.cookNutriCarbohydrate,
-      "cookNutriFat": cook.cookNutriFat,
       "cookNutriProtein": cook.cookNutriProtein,
-      "cookItems": cook.cookItems,
+      "cookNutriFat": cook.cookNutriFat,
       "groupId": cook.groupId,
+      "cookItems": cook.cookItems,
     };
 
     try {
