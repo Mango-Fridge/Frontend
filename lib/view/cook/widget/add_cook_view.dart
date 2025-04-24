@@ -203,6 +203,23 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             onAddPressed: () async {
               final String cookName = _cookNameController.text;
               final String memo = _memoController.text;
+              final List<CookItems> cookItems =
+                  (_addCookState?.itemListForCook ?? [])
+                      .map(
+                        (item) => CookItems(
+                          cookItemId: item.itemId ?? 0,
+                          itemName: item.itemName ?? '',
+                          count: item.count ?? 1,
+                          nutriKcal: item.nutriKcal ?? 0,
+                          cookItemName: item.itemName ?? '',
+                          category: item.category ?? '',
+                          brandName: item.brandName ?? '',
+                          storageArea: item.storageArea ?? '',
+                          nutriUnit: item.nutriUnit ?? '',
+                          nutriCapacity: item.nutriCapacity ?? 0,
+                        ),
+                      )
+                      .toList();
 
               final bool isSuccess = await ref
                   .read(cookProvider.notifier)
@@ -214,6 +231,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                     _addCookState?.totalProtein.toString() ?? '0',
                     _addCookState?.totalFat.toString() ?? '0',
                     _group?.groupId ?? 0,
+                    cookItems,
                   );
 
               if (isSuccess) {
