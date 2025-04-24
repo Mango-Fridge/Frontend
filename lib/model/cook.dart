@@ -13,7 +13,7 @@ abstract class Cook with _$Cook {
     required String? cookNutriCarbohydrate,
     required String? cookNutriProtein,
     required String? cookNutriFat, 
-    final List<CookItems>? cookItems,
+    required List<CookItems>? cookItems,
     required int? groupId,
   }) = _Cook;
 
@@ -25,6 +25,14 @@ abstract class CookItems with _$CookItems {
   const factory CookItems({
     required int? cookItemId,
     required String? cookItemName,
+    required String? itemName,
+    required int? count,
+    required String? category,
+    required String? brandName,
+    required String? storageArea,
+    required String? nutriUnit,
+    required int? nutriCapacity,
+    required int? nutriKcal,
   }) = _CookItems;
 
   factory CookItems.fromJson(Map<String, dynamic> json) =>
