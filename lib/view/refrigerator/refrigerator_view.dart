@@ -833,11 +833,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   ref
                       .watch(refrigeratorNotifier.notifier)
                       .openUpdateContentCountView();
-                  if (count > 0) {
-                    ref
-                        .watch(refrigeratorNotifier.notifier)
-                        .addContentCount(contentId);
-                  }
+                  ref
+                      .watch(refrigeratorNotifier.notifier)
+                      .addContentCount(contentId);
                 },
                 splashColor: Colors.grey.shade200,
                 highlightColor: Colors.grey.shade200,
@@ -937,23 +935,15 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
         return AlertDialog(
           insetPadding: EdgeInsets.zero,
-          backgroundColor: Colors.white,
+          backgroundColor: design.subColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
-          content: SizedBox(
+          content: Container(
             width: design.termsOverlayWidth * 0.85,
             height: design.termsOverlayHeight * 0.90,
             child: ContentDetailView(content: loadedContent),
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                context.pop();
-              },
-              child: const Text('닫기', style: TextStyle(color: Colors.black)),
-            ),
-          ],
         );
       },
     );

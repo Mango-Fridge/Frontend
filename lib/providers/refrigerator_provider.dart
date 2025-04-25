@@ -101,6 +101,10 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
               (content.storageArea == '냉장');
         }).toList();
 
+    expContentList.sort(
+      (Content a, Content b) => a.expDate!.compareTo(b.expDate!),
+    );
+
     return expContentList;
   }
 
@@ -110,6 +114,10 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
           return (DateTime.now().difference(content.expDate!).inHours > -24) &&
               (content.storageArea == '냉동');
         }).toList();
+
+    expContentList.sort(
+      (Content a, Content b) => a.expDate!.compareTo(b.expDate!),
+    );
 
     return expContentList;
   }
