@@ -88,7 +88,7 @@ as int?,
 @JsonSerializable()
 
 class _Cook implements Cook {
-  const _Cook({this.cookId, required this.cookName, required this.cookMemo, required this.cookNutriKcal, required this.cookNutriCarbohydrate, required this.cookNutriProtein, required this.cookNutriFat, final  List<CookItems>? cookItems, required this.groupId}): _cookItems = cookItems;
+  const _Cook({this.cookId, required this.cookName, required this.cookMemo, required this.cookNutriKcal, required this.cookNutriCarbohydrate, required this.cookNutriProtein, required this.cookNutriFat, required final  List<CookItems>? cookItems, required this.groupId}): _cookItems = cookItems;
   factory _Cook.fromJson(Map<String, dynamic> json) => _$CookFromJson(json);
 
 @override final  int? cookId;
@@ -181,7 +181,7 @@ as int?,
 /// @nodoc
 mixin _$CookItems {
 
- int? get cookItemId; String? get cookItemName;
+ int? get cookItemId; String? get cookItemName; String? get itemName; int? get count; String? get category; String? get brandName; String? get storageArea; String? get nutriUnit; int? get nutriCapacity; int? get nutriKcal;
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -194,16 +194,16 @@ $CookItemsCopyWith<CookItems> get copyWith => _$CookItemsCopyWithImpl<CookItems>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.count, count) || other.count == count)&&(identical(other.category, category) || other.category == category)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cookItemId,cookItemName);
+int get hashCode => Object.hash(runtimeType,cookItemId,cookItemName,itemName,count,category,brandName,storageArea,nutriUnit,nutriCapacity,nutriKcal);
 
 @override
 String toString() {
-  return 'CookItems(cookItemId: $cookItemId, cookItemName: $cookItemName)';
+  return 'CookItems(cookItemId: $cookItemId, cookItemName: $cookItemName, itemName: $itemName, count: $count, category: $category, brandName: $brandName, storageArea: $storageArea, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal)';
 }
 
 
@@ -214,7 +214,7 @@ abstract mixin class $CookItemsCopyWith<$Res>  {
   factory $CookItemsCopyWith(CookItems value, $Res Function(CookItems) _then) = _$CookItemsCopyWithImpl;
 @useResult
 $Res call({
- int? cookItemId, String? cookItemName
+ int? cookItemId, String? cookItemName, String? itemName, int? count, String? category, String? brandName, String? storageArea, String? nutriUnit, int? nutriCapacity, int? nutriKcal
 });
 
 
@@ -231,11 +231,19 @@ class _$CookItemsCopyWithImpl<$Res>
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,Object? itemName = freezed,Object? count = freezed,Object? category = freezed,Object? brandName = freezed,Object? storageArea = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,}) {
   return _then(_self.copyWith(
 cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
 as int?,cookItemName: freezed == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,itemName: freezed == itemName ? _self.itemName : itemName // ignore: cast_nullable_to_non_nullable
+as String?,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
+as int?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String?,brandName: freezed == brandName ? _self.brandName : brandName // ignore: cast_nullable_to_non_nullable
+as String?,storageArea: freezed == storageArea ? _self.storageArea : storageArea // ignore: cast_nullable_to_non_nullable
+as String?,nutriUnit: freezed == nutriUnit ? _self.nutriUnit : nutriUnit // ignore: cast_nullable_to_non_nullable
+as String?,nutriCapacity: freezed == nutriCapacity ? _self.nutriCapacity : nutriCapacity // ignore: cast_nullable_to_non_nullable
+as int?,nutriKcal: freezed == nutriKcal ? _self.nutriKcal : nutriKcal // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -246,11 +254,19 @@ as String?,
 @JsonSerializable()
 
 class _CookItems implements CookItems {
-  const _CookItems({required this.cookItemId, required this.cookItemName});
+  const _CookItems({required this.cookItemId, required this.cookItemName, required this.itemName, required this.count, required this.category, required this.brandName, required this.storageArea, required this.nutriUnit, required this.nutriCapacity, required this.nutriKcal});
   factory _CookItems.fromJson(Map<String, dynamic> json) => _$CookItemsFromJson(json);
 
 @override final  int? cookItemId;
 @override final  String? cookItemName;
+@override final  String? itemName;
+@override final  int? count;
+@override final  String? category;
+@override final  String? brandName;
+@override final  String? storageArea;
+@override final  String? nutriUnit;
+@override final  int? nutriCapacity;
+@override final  int? nutriKcal;
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
@@ -265,16 +281,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.count, count) || other.count == count)&&(identical(other.category, category) || other.category == category)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cookItemId,cookItemName);
+int get hashCode => Object.hash(runtimeType,cookItemId,cookItemName,itemName,count,category,brandName,storageArea,nutriUnit,nutriCapacity,nutriKcal);
 
 @override
 String toString() {
-  return 'CookItems(cookItemId: $cookItemId, cookItemName: $cookItemName)';
+  return 'CookItems(cookItemId: $cookItemId, cookItemName: $cookItemName, itemName: $itemName, count: $count, category: $category, brandName: $brandName, storageArea: $storageArea, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal)';
 }
 
 
@@ -285,7 +301,7 @@ abstract mixin class _$CookItemsCopyWith<$Res> implements $CookItemsCopyWith<$Re
   factory _$CookItemsCopyWith(_CookItems value, $Res Function(_CookItems) _then) = __$CookItemsCopyWithImpl;
 @override @useResult
 $Res call({
- int? cookItemId, String? cookItemName
+ int? cookItemId, String? cookItemName, String? itemName, int? count, String? category, String? brandName, String? storageArea, String? nutriUnit, int? nutriCapacity, int? nutriKcal
 });
 
 
@@ -302,11 +318,19 @@ class __$CookItemsCopyWithImpl<$Res>
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,Object? itemName = freezed,Object? count = freezed,Object? category = freezed,Object? brandName = freezed,Object? storageArea = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,}) {
   return _then(_CookItems(
 cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
 as int?,cookItemName: freezed == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,itemName: freezed == itemName ? _self.itemName : itemName // ignore: cast_nullable_to_non_nullable
+as String?,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
+as int?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String?,brandName: freezed == brandName ? _self.brandName : brandName // ignore: cast_nullable_to_non_nullable
+as String?,storageArea: freezed == storageArea ? _self.storageArea : storageArea // ignore: cast_nullable_to_non_nullable
+as String?,nutriUnit: freezed == nutriUnit ? _self.nutriUnit : nutriUnit // ignore: cast_nullable_to_non_nullable
+as String?,nutriCapacity: freezed == nutriCapacity ? _self.nutriCapacity : nutriCapacity // ignore: cast_nullable_to_non_nullable
+as int?,nutriKcal: freezed == nutriKcal ? _self.nutriKcal : nutriKcal // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

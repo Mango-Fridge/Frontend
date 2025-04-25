@@ -68,15 +68,19 @@ abstract class RestClient {
   @GET('/cooks/list/{groupId}') // cook list 호출
   Future<ApiResponse> getCookList(@Path('groupId') int groupId);
 
-  @POST('/cooks/add') // cook 추가
+  @POST('/cooks/add2') // cook 추가
   Future<ApiResponse> addCook(@Body() Map<String, Object?> body);
 
-  @POST('/cook-items/{cookId}') // cookId 해당 cookItem 추가
-  Future<ApiResponse> addCookItem(
-    @Path('cookId') int cookId,
-    @Body() Map<String, Object?> body,
-  );
+  // 사용 안함. add -> add2로 API 변경되었으므로 통합되었음.
+  // @POST('/cook-items/{cookId}') // cookId 해당 cookItem 추가
+  // Future<ApiResponse> addCookItem(
+  //   @Path('cookId') int cookId,
+  //   @Body() Map<String, Object?> body,
+  // );
 
   @DELETE('/cooks/{cookId}') // cook 삭제
   Future<ApiResponse> deleteCook(@Path('cookId') int cookId);
+
+  @GET('/cooks/{cookId}') // 그룹 존재 여부 확인(유효성)
+  Future<ApiResponse> getCookDetail(@Path('cookId') int cookId);  
 }

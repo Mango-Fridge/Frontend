@@ -26,6 +26,7 @@ class CookNotifier extends Notifier<CookState?> {
     String cookNutriFat,
     String cookNutriProtein,
     int groupId,
+    List<CookItems> cookItems,
   ) async {
     try {
       Cook newCook = Cook(
@@ -36,6 +37,7 @@ class CookNotifier extends Notifier<CookState?> {
         cookNutriFat: cookNutriFat,
         cookNutriProtein: cookNutriProtein,
         groupId: groupId,
+        cookItems: cookItems,
       );
 
       await _cookRepository.addCook(newCook);
@@ -61,7 +63,7 @@ class CookNotifier extends Notifier<CookState?> {
 
       state = state?.copyWith(cookList: _cookState.cookList);
     } catch (e) {
-      AppLogger.logger.e('[refrigerator_provider/loadContentList]: $e');
+      AppLogger.logger.e('[cook_provider/loadContentList]: $e');
     }
   }
 
@@ -78,8 +80,20 @@ class CookNotifier extends Notifier<CookState?> {
       return true;
     } catch (e) {
       // 에러 처리
-      AppLogger.logger.e("[cook_notifier/deleteCook]: $e");
+      AppLogger.logger.e("[cook_provider/deleteCook]: $e");
       return false;
+    }
+  }
+
+  // Cook list load 함수
+  Future<void> getCookDetail(int cookId) async {
+    try {
+      final List<Cook> cookList = await _cookRepository.getCookDetail(cookId);
+      _cookState.cookList = cookList;
+
+      state = state?.copyWith(cookList: _cookState.cookList);
+    } catch (e) {
+      AppLogger.logger.e('[cook_provider/getCookDetail]: $e');
     }
   }
 }
