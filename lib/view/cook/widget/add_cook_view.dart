@@ -363,17 +363,15 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           icon: const Icon(Icons.close),
           color: Colors.red,
           onPressed: () async {
-            if (item.cookItemId != null) {
+            if (item.itemId != null) {
               try {
                 final result = await ref
                     .read(searchContentProvider.notifier)
-                    .deleteItem(item.cookItemId!);
+                    .deleteItem(item.itemId!);
                 FToast().removeCustomToast();
                 if (result) {
                   // addCookProvider의 itemListForCook 업데이트
-                  ref
-                      .read(addCookProvider.notifier)
-                      .removeItem(item.cookItemId!);
+                  ref.read(addCookProvider.notifier).removeItem(item.itemId!);
                   toastMessage(context, "${item.itemName}이(가) 삭제되었습니다.");
                 } else {
                   toastMessage(context, "${item.itemName}를 삭제하지 못했습니다.");

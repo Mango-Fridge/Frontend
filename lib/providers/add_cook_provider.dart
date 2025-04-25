@@ -142,7 +142,7 @@ class AddCookNotifier extends Notifier<AddCookState> {
     if (state?.itemListForCook != null) {
       final updatedList =
           state!.itemListForCook!
-              .where((item) => item.cookItemId != cookItemId)
+              .where((item) => item.itemId != cookItemId)
               .toList();
       state = state!.copyWith(itemListForCook: updatedList);
       // 영양소 합계 갱신

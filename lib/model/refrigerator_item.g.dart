@@ -30,7 +30,6 @@ Refrigerator _$RefrigeratorFromJson(Map<String, dynamic> json) => Refrigerator(
   nutriProtein: (json['nutriProtein'] as num?)?.toInt(),
   nutriFat: (json['nutriFat'] as num?)?.toInt(),
   openItem: json['openItem'] as bool?,
-  cookItemId: (json['cookItemId'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$RefrigeratorToJson(Refrigerator instance) =>
@@ -52,5 +51,4 @@ Map<String, dynamic> _$RefrigeratorToJson(Refrigerator instance) =>
       'nutriProtein': instance.nutriProtein,
       'nutriFat': instance.nutriFat,
       'openItem': instance.openItem,
-      'cookItemId': instance.cookItemId,
     };
