@@ -226,10 +226,10 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   .addCook(
                     cookName,
                     memo,
-                    _addCookState?.totalKcal.toString() ?? '0',
-                    _addCookState?.totalCarb.toString() ?? '0',
-                    _addCookState?.totalProtein.toString() ?? '0',
-                    _addCookState?.totalFat.toString() ?? '0',
+                    _addCookState?.totalKcal ?? 0,
+                    _addCookState?.totalCarb ?? 0,
+                    _addCookState?.totalProtein ?? 0,
+                    _addCookState?.totalFat ?? 0,
                     _group?.groupId ?? 0,
                     cookItems,
                   );

@@ -81,6 +81,6 @@ abstract class RestClient {
   @DELETE('/cooks/{cookId}') // cook 삭제
   Future<ApiResponse> deleteCook(@Path('cookId') int cookId);
 
-  @GET('/cooks/{cookId}') // 그룹 존재 여부 확인(유효성)
+  @GET('/cooks/{cookId}') // 요리 상세정보 
   Future<ApiResponse> getCookDetail(@Path('cookId') int cookId);  
 }

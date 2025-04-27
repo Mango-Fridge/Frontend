@@ -1,7 +1,9 @@
+import 'package:mango/model/cook.dart';
 import 'package:mango/model/refrigerator_item.dart';
 
 class AddCookState {
   List<RefrigeratorItem>? itemListForCook;
+  Cook? cookDetail;
 
   int totalKcal;
   int totalCarb;
@@ -17,6 +19,7 @@ class AddCookState {
 
   AddCookState({
     this.itemListForCook,
+    this.cookDetail,
 
     this.totalKcal = 0,
     this.totalCarb = 0,
@@ -33,6 +36,7 @@ class AddCookState {
 
   AddCookState copyWith({
     List<RefrigeratorItem>? itemListForCook,
+    Cook? cookDetail,
 
     int? totalKcal,
     int? totalCarb,
@@ -48,6 +52,7 @@ class AddCookState {
   }) {
     return AddCookState(
       itemListForCook: itemListForCook ?? this.itemListForCook,
+      cookDetail: cookDetail ?? this.cookDetail,
 
       totalKcal: totalKcal ?? this.totalKcal,
       totalCarb: totalCarb ?? this.totalCarb,
