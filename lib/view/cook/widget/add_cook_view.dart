@@ -162,12 +162,6 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   onChanged: (String value) {
                     // 입력값이 변경될 때 상태 업데이트
                     _onSearchChanged(value);
-                    ref
-                        .read(addCookProvider.notifier)
-                        .updateSearchFieldEmpty(value.isEmpty);
-                    ref
-                        .read(searchContentProvider.notifier)
-                        .loadItemListByString(value);
                   },
                 ),
               ),
@@ -419,6 +413,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   void _onSearchChanged(String keyword) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
+      ref
+          .read(addCookProvider.notifier)
+          .updateSearchFieldEmpty(keyword.isEmpty);
       ref
           .read(searchContentProvider.notifier)
           .loadItemListByString(keyword, isRefresh: true);
