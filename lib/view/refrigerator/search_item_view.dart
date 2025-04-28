@@ -109,7 +109,9 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             ),
             Expanded(
               child:
-                  _controller.text != ''
+                  (ref.watch(searchContentProvider)?.isLoading ?? false)
+                      ? _buildSkeleton()
+                      : _controller.text != ''
                       ? (_searchContentState != null &&
                               _searchContentState?.refrigeratorItemList !=
                                   null &&
@@ -136,6 +138,26 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSkeleton() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        );
+      },
     );
   }
 
