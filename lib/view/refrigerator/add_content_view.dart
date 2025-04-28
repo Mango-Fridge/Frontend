@@ -490,7 +490,25 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             text: '선택 사항',
           ),
         ),
-
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('선택사항 일부는 '),
+            Text(
+              '요리',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+            Text(' / '),
+            Text(
+              '물품 검색',
+              style: TextStyle(
+                color: Colors.indigo,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('에 사용됩니다.'),
+          ],
+        ),
         Row(
           spacing: 10,
           children: <Widget>[
