@@ -109,14 +109,29 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             ),
             Expanded(
               child:
-                  _searchContentState != null &&
+                  _controller.text != ''
+                      ? (_searchContentState != null &&
+                              _searchContentState?.refrigeratorItemList !=
+                                  null &&
+                              _searchContentState!
+                                  .refrigeratorItemList!
+                                  .isNotEmpty)
+                          ? _buildItem(
+                            _searchContentState?.refrigeratorItemList!,
+                          )
+                          : (_searchContentState != null &&
+                              _searchContentState?.refrigeratorItemList !=
+                                  null &&
+                              _searchContentState!
+                                  .refrigeratorItemList!
+                                  .isEmpty)
+                          ? _noItemView() // 항목은 있지만 내용이 없는 경우
+                          : _noItemView() // 항목 자체가 없는 경우
+                      : (_searchContentState != null &&
                           _searchContentState?.refrigeratorItemList != null &&
-                          _searchContentState!
-                              .refrigeratorItemList!
-                              .isNotEmpty &&
-                          _controller.text != ''
-                      ? _buildItem(_searchContentState?.refrigeratorItemList!)
-                      : _noItemView(),
+                          _searchContentState!.refrigeratorItemList!.isEmpty)
+                      ? _noSearchView() // 텍스트가 없고 항목이 비어있는 경우
+                      : _noSearchView(), // 텍스트가 없고 항목도 없을 때
             ),
           ],
         ),
@@ -255,10 +270,9 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
     );
   }
 
-  // 검색어에 의한 물품이 없을 시 화면
-  Widget _noItemView() {
+  // 검색어를 입력하지 않았을 때의 화면
+  Widget _noSearchView() {
     Design design = Design(context);
-
     return Column(
       spacing: 10,
       children: <Widget>[
@@ -294,7 +308,32 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
     );
   }
 
+  // 검색어에 의한 물품이 없을 시 화면
+  Widget _noItemView() {
+    Design design = Design(context);
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        const SizedBox(height: 100),
+        Image.asset(
+          "assets/images/null_item.png",
+          width: design.cartImageSize,
+          height: design.cartImageSize,
+        ),
+        const Text(
+          "검색어에 해당하는 물품이 없습니다.",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: Design.normalFontSize1),
+        ),
+      ],
+    );
+  }
+
   void _onSearchChanged(String keyword) {
+    if (keyword.isEmpty) {
+      ref.read(searchContentProvider.notifier).resetState();
+      return;
+    }
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       ref

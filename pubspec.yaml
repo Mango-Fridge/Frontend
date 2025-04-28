@@ -51,6 +51,7 @@ flutter:
     - assets/images/cart.png
     - assets/images/null_home.png
     - assets/images/null_cook.png
+    - assets/images/null_item.png
 
   fonts:
     - family: Mainfonts
