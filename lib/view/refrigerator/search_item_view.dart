@@ -260,6 +260,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
     Design design = Design(context);
 
     return Column(
+      spacing: 10,
       children: <Widget>[
         const SizedBox(height: 100),
         Image.asset(
@@ -280,10 +281,13 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             backgroundColor: Colors.amber[300],
             foregroundColor: Colors.black,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
-          child: const Text("직접 물품 추가"),
+          child: const Text(
+            "직접 물품 추가",
+            style: TextStyle(fontSize: Design.normalFontSize1),
+          ),
         ),
         const Spacer(),
       ],

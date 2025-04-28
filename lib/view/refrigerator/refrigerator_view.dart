@@ -705,11 +705,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     Design design = Design(context);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0), // 둥근 테두리
-        border: Border.all(
-          color: Colors.black, // 테두리 색
-          width: 2, // 테두리 두께
-        ),
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: Colors.black, width: 2),
         color: design.mainColor.withAlpha(150),
       ),
       height: design.contentUpdateViewHeight,
