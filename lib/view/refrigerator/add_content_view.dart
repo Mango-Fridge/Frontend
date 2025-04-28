@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -222,8 +223,17 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           Expanded(
                             child: TextField(
                               controller: categoryController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: design.textFieldborderColor,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: design.textFieldborderColor,
+                                  ),
+                                ),
                               ),
                               onChanged: (String value) {
                                 ref
@@ -245,13 +255,47 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           ),
                         ],
                       )
-                      : DropdownButton<String>(
+                      : DropdownButtonFormField2<String>(
                         value:
                             ref
                                 .watch(addContentProvider)
                                 ?.selectedContentCategory ??
                             '직접 입력',
                         isExpanded: true,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: design.subColor,
+                          ),
+                        ),
+                        buttonStyleData: const ButtonStyleData(
+                          height: 20,
+                          padding: EdgeInsets.only(right: 10),
+                        ),
                         items:
                             contentCategory.map((String value) {
                               return DropdownMenuItem<String>(
