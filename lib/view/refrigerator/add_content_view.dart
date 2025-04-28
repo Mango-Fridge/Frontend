@@ -329,16 +329,29 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               ),
             ),
             Expanded(
-              child: Text(
-                DateFormat(
-                  'yyyy년 M월 d일 a h시 m분',
-                  'ko',
-                ).format(_addContentState?.selectedRegDate ?? DateTime.now()),
+              child: GestureDetector(
+                onTap: () {
+                  _selectDateTime(context, true);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(design.marginAndPadding),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    border: Border.all(
+                      color: design.textFieldborderColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
+                        _addContentState?.selectedRegDate ?? DateTime.now(),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: () => _selectDateTime(context, true),
             ),
           ],
         ),
@@ -362,23 +375,38 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
 
             Expanded(
-              child: Text(
-                _addContentState?.selectedExpDate == null
-                    ? '날짜를 선택하세요'
-                    : DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
-                      _addContentState!.selectedExpDate ?? DateTime.now(),
+              child: GestureDetector(
+                onTap: () {
+                  _selectDateTime(context, false);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(design.marginAndPadding),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    border: Border.all(
+                      color: design.textFieldborderColor,
+                      width: 2,
                     ),
-                style: TextStyle(
-                  color:
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
                       _addContentState?.selectedExpDate == null
-                          ? Colors.red[300]
-                          : Colors.black,
+                          ? '날짜를 선택하세요'
+                          : DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
+                            _addContentState!.selectedExpDate ?? DateTime.now(),
+                          ),
+                      style: TextStyle(
+                        color:
+                            _addContentState?.selectedExpDate == null
+                                ? Colors.red[300]
+                                : Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: () => _selectDateTime(context, false),
             ),
           ],
         ),
