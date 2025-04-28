@@ -30,6 +30,7 @@ dependencies:
   json_annotation: ^4.9.0
   logger: ^2.5.0
   package_info_plus: ^8.3.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -939,7 +939,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
-          content: Container(
+          content: SizedBox(
             width: design.termsOverlayWidth * 0.85,
             child: ContentDetailView(content: loadedContent),
           ),

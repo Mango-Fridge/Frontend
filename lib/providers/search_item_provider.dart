@@ -26,6 +26,8 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
 
     state = state?.copyWith(isLoading: true);
 
+    await Future.delayed(Duration(milliseconds: 1000)); // 테스트용
+
     try {
       final int currentPage = isRefresh ? 0 : state?.page ?? 0;
       final List<RefrigeratorItem> newList = await _itemRepository

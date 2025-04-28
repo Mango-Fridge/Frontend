@@ -7,6 +7,7 @@ import 'package:mango/design.dart';
 import 'package:mango/model/refrigerator_item.dart';
 import 'package:mango/providers/search_item_provider.dart';
 import 'package:mango/state/search_item_state.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SearchContentView extends ConsumerStatefulWidget {
   const SearchContentView({super.key});
@@ -58,18 +59,25 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text("물품 추가"), scrolledUnderElevation: 0),
+        appBar: AppBar(
+          title: const Text(
+            "물품 추가",
+            style: TextStyle(fontSize: Design.normalFontSize4),
+          ),
+          scrolledUnderElevation: 0,
+        ),
         body: Column(
           spacing: 20,
           children: <Widget>[
             Container(
               margin: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
               padding: EdgeInsets.symmetric(
-                horizontal: design.marginAndPadding,
+                horizontal: design.marginAndPadding * 1.5,
+                vertical: design.marginAndPadding * 0.5,
               ),
               decoration: BoxDecoration(
                 color: design.textFieldColor,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: design.textFieldborderColor,
                   width: 2,
@@ -77,7 +85,8 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
               ),
               child: TextField(
                 controller: _controller,
-                decoration: const InputDecoration(
+                style: const TextStyle(fontSize: Design.normalFontSize2),
+                decoration: InputDecoration(
                   hintText: "ex) 초코칩",
                   border: InputBorder.none,
                 ),
@@ -104,23 +113,43 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   }
 
   Widget _buildItem(List<RefrigeratorItem>? itemList) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          const Divider(),
-          Expanded(
-            child: ListView.builder(
-              controller: _listViewScrollController,
-              itemCount: itemList?.length,
-              itemBuilder: (BuildContext context, int index) {
-                final RefrigeratorItem item = itemList![index];
-                return _buildItemRow(item);
-              },
-            ),
-          ),
-          const Divider(),
-        ],
-      ),
+    final Design design = Design(context);
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child:
+              (ref.watch(searchContentProvider)?.isLoading ?? false)
+                  ? ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                            vertical: design.marginAndPadding,
+                            horizontal: design.marginAndPadding,
+                          ),
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                  : ListView.builder(
+                    controller: _listViewScrollController,
+                    itemCount: itemList?.length ?? 0,
+                    itemBuilder: (BuildContext context, int index) {
+                      final RefrigeratorItem item = itemList![index];
+                      return _buildItemRow(item);
+                    },
+                  ),
+        ),
+        const Divider(),
+      ],
     );
   }
 
@@ -142,31 +171,29 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(
-          vertical: 4,
+          vertical: design.marginAndPadding,
           horizontal: design.marginAndPadding,
         ),
-        padding: EdgeInsets.all(design.marginAndPadding),
+        padding: EdgeInsets.only(
+          left: design.marginAndPadding * 1.5,
+          right: design.marginAndPadding * 1.5,
+          top: design.marginAndPadding * 1.3,
+          bottom: design.marginAndPadding * 1.3,
+        ),
         decoration: BoxDecoration(
-          color: Colors.amber[300],
-          borderRadius: BorderRadius.circular(8),
+          color: design.subColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: design.mainColor, width: 1),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    (item.itemName ?? '').length > 10
-                        ? '${(item.itemName ?? '').substring(0, 10)}...'
-                        : item.itemName ?? '',
-                    style: const TextStyle(
-                      fontSize: Design.normalFontSize1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  _nameAndBrandText(item.itemName, Design.normalFontSize2),
+                  _nameAndBrandText(item.brandName, Design.normalFontSize1),
                 ],
               ),
             ),
@@ -174,21 +201,45 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Text(
-                  '${item.nutriCapacity}${item.nutriUnit} / ${item.nutriKcal}kcal',
-                  style: const TextStyle(fontSize: 12),
+                _capacityAndKcalRow(
+                  '용량 : ',
+                  '${item.nutriCapacity}${item.nutriUnit}',
                 ),
-                Text(
-                  (item.brandName ?? '').length > 10
-                      ? '${(item.brandName ?? '').substring(0, 10)}...'
-                      : item.brandName ?? '',
-                  style: const TextStyle(fontSize: 12),
-                ),
+                _capacityAndKcalRow('칼로리 : ', '${item.nutriKcal}kcal'),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  // 이름 및 브랜드 표기
+  Widget _nameAndBrandText(String? text, double fontSize) {
+    final String displayText =
+        (text ?? '').length > 10
+            ? '${(text ?? '').substring(0, 10)}...'
+            : text ?? '';
+    return Text(
+      displayText,
+      style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  // 용량 및 칼로리 표기
+  Widget _capacityAndKcalRow(String info, String value) {
+    return Row(
+      children: <Widget>[
+        Text(
+          info,
+          style: const TextStyle(
+            fontSize: Design.normalFontSize1,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(value, style: const TextStyle(fontSize: Design.normalFontSize1)),
+      ],
     );
   }
 
