@@ -71,9 +71,10 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
-              padding: EdgeInsets.symmetric(
-                horizontal: design.marginAndPadding * 1.5,
-                vertical: design.marginAndPadding * 0.5,
+              padding: EdgeInsets.only(
+                left: design.marginAndPadding * 1.5,
+                top: design.marginAndPadding * 0.5,
+                bottom: design.marginAndPadding * 0.5,
               ),
               decoration: BoxDecoration(
                 color: design.textFieldColor,
@@ -89,6 +90,17 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 decoration: InputDecoration(
                   hintText: "ex) 초코칩",
                   border: InputBorder.none,
+                  suffixIcon:
+                      (_controller.text.isNotEmpty)
+                          ? IconButton(
+                            icon: const Icon(Icons.clear, color: Colors.red),
+                            onPressed: () {
+                              _controller.clear();
+                              _onSearchChanged('');
+                              FocusScope.of(context).unfocus();
+                            },
+                          )
+                          : null,
                 ),
                 onChanged: (String value) {
                   _onSearchChanged(value);
