@@ -156,11 +156,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   }
 
   Widget contentDetailInfoView() {
-    final isCustomInput =
+    final bool isCustomInput =
         ref.watch(addContentProvider)?.selectedContentCategory == '직접 입력';
     Design design = Design(context);
     return Column(
-      spacing: 10,
+      spacing: 20,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextField(
@@ -269,6 +269,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           spacing: 10,
           children: <Widget>[
             SizedBox(
@@ -289,14 +290,21 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ],
               ),
             ),
-            Expanded(
+            SizedBox(
+              width: 150,
               child: TextField(
                 key: _countKey,
+                textAlign: TextAlign.right,
                 onTap: () => _focusTextField(_countKey),
                 controller: countController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: design.textFieldborderColor),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: design.textFieldborderColor),
+                  ),
                   errorText:
                       _addContentState?.contentCountErrorMessage?.isEmpty ??
                               true
