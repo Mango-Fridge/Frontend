@@ -11,6 +11,7 @@ import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_content_state.dart';
 import 'package:mango/toastMessage.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:mango/view/dotted_divider.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
@@ -480,6 +481,16 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
           ],
         ),
+
+        Container(
+          padding: EdgeInsets.symmetric(vertical: design.marginAndPadding),
+          child: dottedDivider(
+            color: Colors.green,
+            dashWidth: 1,
+            text: '선택 사항',
+          ),
+        ),
+
         Row(
           spacing: 10,
           children: <Widget>[
