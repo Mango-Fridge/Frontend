@@ -941,7 +941,6 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           ),
           content: Container(
             width: design.termsOverlayWidth * 0.85,
-            height: design.termsOverlayHeight * 0.90,
             child: ContentDetailView(content: loadedContent),
           ),
         );

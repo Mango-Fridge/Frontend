@@ -5,6 +5,7 @@ class Design {
   static const double normalFontSize1 = 16;
   static const double normalFontSize2 = 22;
   static const double normalFontSize3 = 24;
+  static const double normalFontSize4 = 30;
   static const double tabBarSelectedFontSize = 20;
   static const double tabBarUnSelectedFontSize = 18;
   static const double contentRowNameFontSize = 13;
