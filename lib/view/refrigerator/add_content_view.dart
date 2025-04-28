@@ -527,9 +527,19 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     key: _brandNameKey,
                     onTap: () => _focusTextField(_brandNameKey),
                     controller: brandNameController,
-                    decoration: const InputDecoration(
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
                       hintText: "ex) 오리온",
-                      border: OutlineInputBorder(),
                     ),
                   ),
                 ],
