@@ -29,7 +29,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     '아이스크림류',
     '직접 입력',
   ];
-  List<String> contentStorage = <String>['냉장', '냉동'];
 
   String? selectedCategory;
   String? customCategory;
@@ -37,8 +36,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   Group? get _group => ref.watch(groupProvider);
   AddContentState? get _addContentState => ref.watch(addContentProvider);
 
-  static const int _memoMaxLine = 3;
-  static const int _memoMaxLength = 120;
+  static const int _memoMaxLine = 5;
+  static const int _memoMaxLength = 100;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
@@ -172,6 +171,18 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             fontWeight: FontWeight.bold,
           ),
           decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: design.textFieldborderColor,
+                width: 2,
+              ),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: design.textFieldborderColor,
+                width: 2,
+              ),
+            ),
             hintText: 'ex) 촉촉한 초코칩',
             hintStyle: const TextStyle(color: Colors.grey),
             errorText:
@@ -547,32 +558,42 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
           ],
         ),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: <Widget>[
-            SizedBox(
-              width: design.screenWidth * 0.22,
-              child: const Text(
-                '메모',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('메모', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  '* 물품 공개 등록에 포함되지 않습니다.',
+                  style: TextStyle(color: Colors.grey.shade600),
+                ),
+              ],
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextField(
-                    key: _memoKey,
-                    onTap: () => _focusTextField(_memoKey),
-                    controller: memoController,
-                    maxLines: _memoMaxLine,
-                    maxLength: _memoMaxLength,
-                    decoration: const InputDecoration(
-                      hintText: "메모를 입력하세요",
-                      border: OutlineInputBorder(),
-                    ),
+            TextField(
+              key: _memoKey,
+              onTap: () => _focusTextField(_memoKey),
+              controller: memoController,
+              maxLines: _memoMaxLine,
+              maxLength: _memoMaxLength,
+              decoration: InputDecoration(
+                hintText: "최대 100자 까지 작성 가능합니다.",
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: design.textFieldborderColor,
+                    width: 2.0,
                   ),
-                ],
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: design.textFieldborderColor,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
               ),
             ),
           ],
@@ -816,8 +837,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                   DateTime.now(),
                               _addContentState?.selectedExpDate ??
                                   DateTime.now(),
-                              _addContentState?.selectedContentStorage ??
-                                  contentStorage[0],
+                              _addContentState?.selectedContentStorage ?? '냉장',
                               memoController.text,
                               _addContentState?.selectedUnit ?? '',
                               capacityController.text.isNotEmpty
@@ -875,8 +895,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             int.parse(countController.text),
                             _addContentState?.selectedRegDate ?? DateTime.now(),
                             _addContentState?.selectedExpDate ?? DateTime.now(),
-                            _addContentState?.selectedContentStorage ??
-                                contentStorage[0],
+                            _addContentState?.selectedContentStorage ?? '냉장',
                             memoController.text,
                             _addContentState?.selectedUnit ?? '',
                             capacityController.text.isNotEmpty
