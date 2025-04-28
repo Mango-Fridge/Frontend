@@ -274,9 +274,9 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   Widget _noSearchView() {
     Design design = Design(context);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       spacing: 10,
       children: <Widget>[
-        const SizedBox(height: 100),
         Image.asset(
           "assets/images/cart.png",
           width: design.cartImageSize,
@@ -303,7 +303,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             style: TextStyle(fontSize: Design.normalFontSize1),
           ),
         ),
-        const Spacer(),
+        const SizedBox(height: 100),
       ],
     );
   }
@@ -312,9 +312,9 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
   Widget _noItemView() {
     Design design = Design(context);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       spacing: 10,
       children: <Widget>[
-        const SizedBox(height: 100),
         Image.asset(
           "assets/images/null_item.png",
           width: design.cartImageSize,
@@ -325,6 +325,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: Design.normalFontSize1),
         ),
+        const SizedBox(height: 100),
       ],
     );
   }
