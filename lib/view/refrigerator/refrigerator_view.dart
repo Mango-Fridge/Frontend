@@ -193,6 +193,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                   : SafeArea(
                     minimum: EdgeInsets.only(bottom: design.marginAndPadding),
                     child: Container(
+                      height: design.homeBottomHeight,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -348,6 +349,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
           ],
         ),
+        // BottomSheet 만큼의 공간을 올림
+        SizedBox(height: design.homeBottomHeight * 2),
       ],
     );
   }

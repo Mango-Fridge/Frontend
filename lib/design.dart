@@ -22,6 +22,7 @@ class Design {
   final double termsAgreeButtonHeight; // 약관 동의 버튼 세로 크기
   final double contentUpdateViewHeight; // 물품 수량 조절 뷰 높이
   final double homeImageSize; // refrigerator 로고 이미지 크기
+  final double homeBottomHeight; // 메인화면 BottomSheet 높이
   final double cartImageSize; // cart 이미지 크기
   final Color mainColor; // 메인 컬러
   final Color subColor; // 서브 컬러
@@ -44,6 +45,7 @@ class Design {
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
       contentUpdateViewHeight = MediaQuery.of(context).size.height * 0.20,
       homeImageSize = MediaQuery.of(context).size.width * 0.12,
+      homeBottomHeight = MediaQuery.of(context).size.height * 0.055,
       cartImageSize = MediaQuery.of(context).size.width * 0.35,
       mainColor = const Color.fromRGBO(255, 205, 72, 1.0),
       subColor = const Color.fromRGBO(255, 244, 216, 1.0),
