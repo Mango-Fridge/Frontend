@@ -2,12 +2,17 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.1.3 (2025-04-21)
- - 공통
-   - 폰트 및 공통 컬러 적용
-   - 이미지 3개 추가
+## VERSION 1.1.4 (2025-04-29)
  - 메인화면
-   - 화면 구조 변경
+   - Figma 디자인 일부 적용
+   - 수량 조절 버튼 구조 개선
+   - 수량을 0에서 조절 할때 반영이 되지 않는 현상 수정
+   - 물품 추가에서 검색시, 시각적인 로딩 화면 추가 (shimmer)
+ - 그룹
+   - 그룹 나가기 했을때, groupProvider에서 load 적용
+ - 요리
+   - 요리 상세화면 일부 구현
+   - 요리 추가에서 물품을 삭제하는 기능 추가
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
