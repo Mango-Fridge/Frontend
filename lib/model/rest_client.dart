@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:mango/model/api_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'rest_client.g.dart';
 
+/// Android : 10.0.2.2 으로 변경하고 "flutter pub run build_runner build" 실행
+/// iOS : localhost 혹은 127.0.0.1 으로 변경하고 "flutter pub run build_runner build" 실행
 @RestApi(baseUrl: "http://localhost:8080")
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
@@ -81,6 +85,6 @@ abstract class RestClient {
   @DELETE('/cooks/{cookId}') // cook 삭제
   Future<ApiResponse> deleteCook(@Path('cookId') int cookId);
 
-  @GET('/cooks/{cookId}') // 요리 상세정보 
-  Future<ApiResponse> getCookDetail(@Path('cookId') int cookId);  
+  @GET('/cooks/{cookId}') // 요리 상세정보
+  Future<ApiResponse> getCookDetail(@Path('cookId') int cookId);
 }
