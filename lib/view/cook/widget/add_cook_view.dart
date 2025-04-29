@@ -257,6 +257,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
     List<RefrigeratorItem>? itemList,
     Function(RefrigeratorItem item) content,
   ) {
+    final isCookItemRow = content == _cookItemRow;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
@@ -267,7 +269,35 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               itemCount: itemList?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 final RefrigeratorItem item = itemList![index];
-                return _buildItemRow(item, content(item));
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: _buildItemRow(item, content(item))),
+                    if (isCookItemRow)
+                      Transform.translate(
+                        offset: const Offset(-8, 0),
+                        child: IconButton(
+                          icon: const Icon(Icons.close),
+                          color: Colors.red,
+                          onPressed: () {
+                            if (item.itemId != null) {
+                              final updatedList =
+                                  itemList
+                                      .where((i) => i.itemId != item.itemId)
+                                      .toList();
+                              ref
+                                  .read(addCookProvider.notifier)
+                                  .updateItemList(updatedList);
+                              toastMessage(
+                                context,
+                                "${item.itemName}이(가) 삭제되었습니다.",
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                  ],
+                );
               },
             ),
           ),
@@ -375,21 +405,29 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                item.itemName ?? '',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  item.itemName ?? '',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
-              Text(
-                "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 100),
+                child: Text(
+                  "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 65, 65, 65),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
