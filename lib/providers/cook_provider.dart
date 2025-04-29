@@ -21,10 +21,10 @@ class CookNotifier extends Notifier<CookState?> {
   Future<bool> addCook(
     String cookName,
     String cookMemo,
-    String cookNutriKcal,
-    String cookNutriCarbohydrate,
-    String cookNutriFat,
-    String cookNutriProtein,
+    int cookNutriKcal,
+    int cookNutriCarbohydrate,
+    int cookNutriFat,
+    int cookNutriProtein,
     int groupId,
     List<CookItems> cookItems,
   ) async {
@@ -82,18 +82,6 @@ class CookNotifier extends Notifier<CookState?> {
       // 에러 처리
       AppLogger.logger.e("[cook_provider/deleteCook]: $e");
       return false;
-    }
-  }
-
-  // Cook list load 함수
-  Future<void> getCookDetail(int cookId) async {
-    try {
-      final List<Cook> cookList = await _cookRepository.getCookDetail(cookId);
-      _cookState.cookList = cookList;
-
-      state = state?.copyWith(cookList: _cookState.cookList);
-    } catch (e) {
-      AppLogger.logger.e('[cook_provider/getCookDetail]: $e');
     }
   }
 }

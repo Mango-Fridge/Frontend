@@ -92,10 +92,10 @@ class CookRepository {
   }
 
   // 요리 상세 정보 가져오기
-  Future<List<Cook>> getCookDetail(int cookId) async {
+  Future<Cook> getCookDetail(int cookId) async {
     RestClient client = RestClient(dio);
 
-    AppLogger.logger.i("Requesting cook list with groupId: $cookId");
+    AppLogger.logger.i("Requesting cook detail with cookId: $cookId");
 
     try {
       ApiResponse response = await client.getCookDetail(cookId);
@@ -105,16 +105,14 @@ class CookRepository {
           "[cook_repository/getCookDetail]: getCookDetail 완료.",
         );
 
-        List<dynamic> data = response.data;
+        Map<String, dynamic> data = response.data;
 
-        return data.map((item) => Cook.fromJson(item)).toList();
+        return Cook.fromJson(data);
       } else {
         throw Exception('[cook_repository/getCookDetail]: Json Parse Error');
       }
     } catch (e) {
-      AppLogger.logger.e("[cook_repository/getCookDetail]: $e");
-
-      return <Cook>[];
+      throw Exception('요리 상세 정보 가져오기 실패');
     }
   }
 }

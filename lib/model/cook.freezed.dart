@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Cook {
 
- int? get cookId; String? get cookName; String? get cookMemo; String? get cookNutriKcal; String? get cookNutriCarbohydrate; String? get cookNutriProtein; String? get cookNutriFat; List<CookItems>? get cookItems; int? get groupId;
+ int? get cookId; String? get cookName; String? get cookMemo; int? get cookNutriKcal; int? get cookNutriCarbohydrate; int? get cookNutriProtein; int? get cookNutriFat; List<CookItems>? get cookItems; int? get groupId;
 /// Create a copy of Cook
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $CookCopyWith<$Res>  {
   factory $CookCopyWith(Cook value, $Res Function(Cook) _then) = _$CookCopyWithImpl;
 @useResult
 $Res call({
- int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookNutriFat, List<CookItems>? cookItems, int? groupId
+ int? cookId, String? cookName, String? cookMemo, int? cookNutriKcal, int? cookNutriCarbohydrate, int? cookNutriProtein, int? cookNutriFat, List<CookItems>? cookItems, int? groupId
 });
 
 
@@ -72,10 +72,10 @@ cookId: freezed == cookId ? _self.cookId : cookId // ignore: cast_nullable_to_no
 as int?,cookName: freezed == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
 as String?,cookMemo: freezed == cookMemo ? _self.cookMemo : cookMemo // ignore: cast_nullable_to_non_nullable
 as String?,cookNutriKcal: freezed == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
-as String?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
-as String?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
-as String?,cookNutriFat: freezed == cookNutriFat ? _self.cookNutriFat : cookNutriFat // ignore: cast_nullable_to_non_nullable
-as String?,cookItems: freezed == cookItems ? _self.cookItems : cookItems // ignore: cast_nullable_to_non_nullable
+as int?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
+as int?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
+as int?,cookNutriFat: freezed == cookNutriFat ? _self.cookNutriFat : cookNutriFat // ignore: cast_nullable_to_non_nullable
+as int?,cookItems: freezed == cookItems ? _self.cookItems : cookItems // ignore: cast_nullable_to_non_nullable
 as List<CookItems>?,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
@@ -94,10 +94,10 @@ class _Cook implements Cook {
 @override final  int? cookId;
 @override final  String? cookName;
 @override final  String? cookMemo;
-@override final  String? cookNutriKcal;
-@override final  String? cookNutriCarbohydrate;
-@override final  String? cookNutriProtein;
-@override final  String? cookNutriFat;
+@override final  int? cookNutriKcal;
+@override final  int? cookNutriCarbohydrate;
+@override final  int? cookNutriProtein;
+@override final  int? cookNutriFat;
  final  List<CookItems>? _cookItems;
 @override List<CookItems>? get cookItems {
   final value = _cookItems;
@@ -142,7 +142,7 @@ abstract mixin class _$CookCopyWith<$Res> implements $CookCopyWith<$Res> {
   factory _$CookCopyWith(_Cook value, $Res Function(_Cook) _then) = __$CookCopyWithImpl;
 @override @useResult
 $Res call({
- int? cookId, String? cookName, String? cookMemo, String? cookNutriKcal, String? cookNutriCarbohydrate, String? cookNutriProtein, String? cookNutriFat, List<CookItems>? cookItems, int? groupId
+ int? cookId, String? cookName, String? cookMemo, int? cookNutriKcal, int? cookNutriCarbohydrate, int? cookNutriProtein, int? cookNutriFat, List<CookItems>? cookItems, int? groupId
 });
 
 
@@ -165,10 +165,10 @@ cookId: freezed == cookId ? _self.cookId : cookId // ignore: cast_nullable_to_no
 as int?,cookName: freezed == cookName ? _self.cookName : cookName // ignore: cast_nullable_to_non_nullable
 as String?,cookMemo: freezed == cookMemo ? _self.cookMemo : cookMemo // ignore: cast_nullable_to_non_nullable
 as String?,cookNutriKcal: freezed == cookNutriKcal ? _self.cookNutriKcal : cookNutriKcal // ignore: cast_nullable_to_non_nullable
-as String?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
-as String?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
-as String?,cookNutriFat: freezed == cookNutriFat ? _self.cookNutriFat : cookNutriFat // ignore: cast_nullable_to_non_nullable
-as String?,cookItems: freezed == cookItems ? _self._cookItems : cookItems // ignore: cast_nullable_to_non_nullable
+as int?,cookNutriCarbohydrate: freezed == cookNutriCarbohydrate ? _self.cookNutriCarbohydrate : cookNutriCarbohydrate // ignore: cast_nullable_to_non_nullable
+as int?,cookNutriProtein: freezed == cookNutriProtein ? _self.cookNutriProtein : cookNutriProtein // ignore: cast_nullable_to_non_nullable
+as int?,cookNutriFat: freezed == cookNutriFat ? _self.cookNutriFat : cookNutriFat // ignore: cast_nullable_to_non_nullable
+as int?,cookItems: freezed == cookItems ? _self._cookItems : cookItems // ignore: cast_nullable_to_non_nullable
 as List<CookItems>?,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
 as int?,
   ));

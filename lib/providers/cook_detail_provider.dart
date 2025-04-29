@@ -1,14 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/app_logger.dart';
 import 'package:mango/model/cook.dart';
-import 'package:mango/model/refrigerator_item.dart';
+import 'package:mango/services/cook_repository.dart';
 import 'package:mango/state/add_cook_state.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/services/content_repository.dart';
 
 class CookDetailNotifier extends Notifier<AddCookState> {
   final ContentRepository _contentRepository = ContentRepository();
+  final CookRepository _cookRepository = CookRepository();
+  final AddCookState _addCookState = AddCookState();
 
   @override
   AddCookState build() => AddCookState();
@@ -62,7 +63,19 @@ class CookDetailNotifier extends Notifier<AddCookState> {
       (content) => subCategorySet.contains(content.subCategory),
     ).toList();
   }
+
+  // 요리 상제정보 함수
+  Future<void> getCookDetail(int cookId) async {
+  try {
+    final Cook cookDetail = await _cookRepository.getCookDetail(cookId);
+    _addCookState.cookDetail = cookDetail;
+
+    state = state.copyWith(cookDetail: cookDetail);
+  } catch (e) {
+    AppLogger.logger.e('[cook_provider/getCookDetail]: $e');
+  }
+}
 }
 
-final NotifierProvider<CookDetailNotifier, AddCookState> CookDetailProvider =
+final NotifierProvider<CookDetailNotifier, AddCookState> cookDetailProvider =
     NotifierProvider<CookDetailNotifier, AddCookState>(CookDetailNotifier.new);

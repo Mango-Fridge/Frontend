@@ -10,10 +10,10 @@ _Cook _$CookFromJson(Map<String, dynamic> json) => _Cook(
   cookId: (json['cookId'] as num?)?.toInt(),
   cookName: json['cookName'] as String?,
   cookMemo: json['cookMemo'] as String?,
-  cookNutriKcal: json['cookNutriKcal'] as String?,
-  cookNutriCarbohydrate: json['cookNutriCarbohydrate'] as String?,
-  cookNutriProtein: json['cookNutriProtein'] as String?,
-  cookNutriFat: json['cookNutriFat'] as String?,
+  cookNutriKcal: (json['cookNutriKcal'] as num?)?.toInt(),
+  cookNutriCarbohydrate: (json['cookNutriCarbohydrate'] as num?)?.toInt(),
+  cookNutriProtein: (json['cookNutriProtein'] as num?)?.toInt(),
+  cookNutriFat: (json['cookNutriFat'] as num?)?.toInt(),
   cookItems:
       (json['cookItems'] as List<dynamic>?)
           ?.map((e) => CookItems.fromJson(e as Map<String, dynamic>))
