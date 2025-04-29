@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +11,8 @@ import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_content_state.dart';
 import 'package:mango/toastMessage.dart';
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:mango/view/dotted_divider.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
@@ -27,7 +30,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     '아이스크림류',
     '직접 입력',
   ];
-  List<String> contentStorage = <String>['냉장', '냉동'];
 
   String? selectedCategory;
   String? customCategory;
@@ -35,8 +37,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   Group? get _group => ref.watch(groupProvider);
   AddContentState? get _addContentState => ref.watch(addContentProvider);
 
-  static const int _memoMaxLine = 3;
-  static const int _memoMaxLength = 120;
+  static const int _memoMaxLine = 5;
+  static const int _memoMaxLength = 100;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
@@ -155,11 +157,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   }
 
   Widget contentDetailInfoView() {
-    final isCustomInput =
+    final bool isCustomInput =
         ref.watch(addContentProvider)?.selectedContentCategory == '직접 입력';
     Design design = Design(context);
     return Column(
-      spacing: 10,
+      spacing: 20,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextField(
@@ -170,6 +172,18 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             fontWeight: FontWeight.bold,
           ),
           decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: design.textFieldborderColor,
+                width: 2,
+              ),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: design.textFieldborderColor,
+                width: 2,
+              ),
+            ),
             hintText: 'ex) 촉촉한 초코칩',
             hintStyle: const TextStyle(color: Colors.grey),
             errorText:
@@ -209,8 +223,17 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           Expanded(
                             child: TextField(
                               controller: categoryController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: design.textFieldborderColor,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: design.textFieldborderColor,
+                                  ),
+                                ),
                               ),
                               onChanged: (String value) {
                                 ref
@@ -232,13 +255,47 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           ),
                         ],
                       )
-                      : DropdownButton<String>(
+                      : DropdownButtonFormField2<String>(
                         value:
                             ref
                                 .watch(addContentProvider)
                                 ?.selectedContentCategory ??
                             '직접 입력',
                         isExpanded: true,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: design.subColor,
+                          ),
+                        ),
+                        buttonStyleData: const ButtonStyleData(
+                          height: 20,
+                          padding: EdgeInsets.only(right: 10),
+                        ),
                         items:
                             contentCategory.map((String value) {
                               return DropdownMenuItem<String>(
@@ -268,6 +325,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           spacing: 10,
           children: <Widget>[
             SizedBox(
@@ -288,14 +346,21 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ],
               ),
             ),
-            Expanded(
+            SizedBox(
+              width: 150,
               child: TextField(
                 key: _countKey,
+                textAlign: TextAlign.right,
                 onTap: () => _focusTextField(_countKey),
                 controller: countController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: design.textFieldborderColor),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: design.textFieldborderColor),
+                  ),
                   errorText:
                       _addContentState?.contentCountErrorMessage?.isEmpty ??
                               true
@@ -328,16 +393,29 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               ),
             ),
             Expanded(
-              child: Text(
-                DateFormat(
-                  'yyyy년 M월 d일 a h시 m분',
-                  'ko',
-                ).format(_addContentState?.selectedRegDate ?? DateTime.now()),
+              child: GestureDetector(
+                onTap: () {
+                  _selectDateTime(context, true);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(design.marginAndPadding),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    border: Border.all(
+                      color: design.textFieldborderColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
+                        _addContentState?.selectedRegDate ?? DateTime.now(),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: () => _selectDateTime(context, true),
             ),
           ],
         ),
@@ -361,27 +439,43 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
 
             Expanded(
-              child: Text(
-                _addContentState?.selectedExpDate == null
-                    ? '날짜를 선택하세요'
-                    : DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
-                      _addContentState!.selectedExpDate ?? DateTime.now(),
+              child: GestureDetector(
+                onTap: () {
+                  _selectDateTime(context, false);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(design.marginAndPadding),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    border: Border.all(
+                      color: design.textFieldborderColor,
+                      width: 2,
                     ),
-                style: TextStyle(
-                  color:
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
                       _addContentState?.selectedExpDate == null
-                          ? Colors.red[300]
-                          : Colors.black,
+                          ? '날짜를 선택하세요'
+                          : DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
+                            _addContentState!.selectedExpDate ?? DateTime.now(),
+                          ),
+                      style: TextStyle(
+                        color:
+                            _addContentState?.selectedExpDate == null
+                                ? Colors.red[300]
+                                : Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: () => _selectDateTime(context, false),
             ),
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           spacing: 10,
           children: <Widget>[
             SizedBox(
@@ -399,26 +493,75 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ],
               ),
             ),
-            Expanded(
-              child: DropdownButton<String>(
-                value:
-                    _addContentState?.selectedContentStorage ??
-                    contentStorage[0],
-                isExpanded: true,
-                items:
-                    contentStorage.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                onChanged: (String? newValue) {
-                  ref
-                      .watch(addContentProvider.notifier)
-                      .setStorage(newValue ?? '');
-                },
+            CustomSlidingSegmentedControl<int>(
+              padding: design.marginAndPadding * 2,
+              initialValue: 1,
+              children: const <int, Widget>{1: Text('냉장'), 2: Text('냉동')},
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: design.textFieldborderColor,
+                  width: 2,
+                ),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              thumbDecoration: BoxDecoration(
+                color: design.subColor,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: design.textFieldborderColor.withAlpha(150),
+                    blurRadius: 4.0,
+                    spreadRadius: 1.0,
+                    offset: const Offset(0.0, 2.0),
+                  ),
+                ],
+              ),
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.linear,
+              onValueChanged: (int value) {
+                String storage = '';
+
+                switch (value) {
+                  case 1:
+                    storage = '냉장';
+                    break;
+                  case 2:
+                    storage = '냉동';
+                    break;
+                }
+
+                ref.watch(addContentProvider.notifier).setStorage(storage);
+              },
+            ),
+          ],
+        ),
+
+        Container(
+          padding: EdgeInsets.symmetric(vertical: design.marginAndPadding),
+          child: dottedDivider(
+            color: Colors.green,
+            dashWidth: 1,
+            text: '선택 사항',
+          ),
+        ),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('선택사항 일부는 '),
+            Text(
+              '요리',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+            Text(' / '),
+            Text(
+              '물품 검색',
+              style: TextStyle(
+                color: Colors.indigo,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            Text('에 사용됩니다.'),
           ],
         ),
         Row(
@@ -439,9 +582,19 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     key: _brandNameKey,
                     onTap: () => _focusTextField(_brandNameKey),
                     controller: brandNameController,
-                    decoration: const InputDecoration(
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
                       hintText: "ex) 오리온",
-                      border: OutlineInputBorder(),
                     ),
                   ),
                 ],
@@ -449,32 +602,42 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
           ],
         ),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: <Widget>[
-            SizedBox(
-              width: design.screenWidth * 0.22,
-              child: const Text(
-                '메모',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('메모', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  '* 물품 공개 등록에 포함되지 않습니다.',
+                  style: TextStyle(color: Colors.grey.shade600),
+                ),
+              ],
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextField(
-                    key: _memoKey,
-                    onTap: () => _focusTextField(_memoKey),
-                    controller: memoController,
-                    maxLines: _memoMaxLine,
-                    maxLength: _memoMaxLength,
-                    decoration: const InputDecoration(
-                      hintText: "메모를 입력하세요",
-                      border: OutlineInputBorder(),
-                    ),
+            TextField(
+              key: _memoKey,
+              onTap: () => _focusTextField(_memoKey),
+              controller: memoController,
+              maxLines: _memoMaxLine,
+              maxLength: _memoMaxLength,
+              decoration: InputDecoration(
+                hintText: "최대 100자 까지 작성 가능합니다.",
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: design.textFieldborderColor,
+                    width: 2.0,
                   ),
-                ],
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: design.textFieldborderColor,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
               ),
             ),
           ],
@@ -718,8 +881,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                   DateTime.now(),
                               _addContentState?.selectedExpDate ??
                                   DateTime.now(),
-                              _addContentState?.selectedContentStorage ??
-                                  contentStorage[0],
+                              _addContentState?.selectedContentStorage ?? '냉장',
                               memoController.text,
                               _addContentState?.selectedUnit ?? '',
                               capacityController.text.isNotEmpty
@@ -777,8 +939,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             int.parse(countController.text),
                             _addContentState?.selectedRegDate ?? DateTime.now(),
                             _addContentState?.selectedExpDate ?? DateTime.now(),
-                            _addContentState?.selectedContentStorage ??
-                                contentStorage[0],
+                            _addContentState?.selectedContentStorage ?? '냉장',
                             memoController.text,
                             _addContentState?.selectedUnit ?? '',
                             capacityController.text.isNotEmpty

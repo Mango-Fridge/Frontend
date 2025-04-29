@@ -47,13 +47,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   @override
   Widget build(BuildContext context) {
     final Design design = Design(context);
-
     return Stack(
       children: <Widget>[
         Scaffold(
           extendBody: true,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(design.screenHeight * 0.097),
+            preferredSize: Size.fromHeight(design.screenHeight * 0.13),
             child: SafeArea(
               child: Container(
                 color: Colors.white,
@@ -80,7 +79,6 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                             ),
                           ),
                         ),
-
                         Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: design.marginAndPadding,
@@ -197,8 +195,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        spacing: 5,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Expanded(
                             flex: 3,
@@ -238,7 +235,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 15),
                           Expanded(
                             flex: 2,
                             child: ElevatedButton(
@@ -705,11 +702,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     Design design = Design(context);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0), // 둥근 테두리
-        border: Border.all(
-          color: Colors.black, // 테두리 색
-          width: 2, // 테두리 두께
-        ),
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: Colors.black, width: 2),
         color: design.mainColor.withAlpha(150),
       ),
       height: design.contentUpdateViewHeight,
@@ -939,9 +933,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
-          content: Container(
+          content: SizedBox(
             width: design.termsOverlayWidth * 0.85,
-            height: design.termsOverlayHeight * 0.90,
             child: ContentDetailView(content: loadedContent),
           ),
         );
