@@ -133,7 +133,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         extendBody: true,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('물품 추가 상세 입력'),
+          title: const Text(
+            '물품 추가 상세 입력',
+            style: TextStyle(fontSize: Design.normalFontSize4),
+          ),
+          scrolledUnderElevation: 0,
           backgroundColor: Colors.white,
         ),
         body: Padding(
