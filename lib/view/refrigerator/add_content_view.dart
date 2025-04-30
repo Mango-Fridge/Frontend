@@ -649,59 +649,53 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
           ],
         ),
-        optionView(),
-        nutritionView(),
-      ],
-    );
-  }
-
-  Widget optionView() {
-    Design design = Design(context);
-
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        childrenPadding: EdgeInsets.zero,
-        tilePadding: EdgeInsets.zero,
-        title: const Row(
-          spacing: 10,
-          children: <Widget>[
-            Text(
-              '선택 사항',
-              style: TextStyle(
-                fontSize: Design.normalFontSize1,
-                fontWeight: FontWeight.bold,
+        Row(
+          children: [
+            SizedBox(
+              width: design.screenWidth * 0.22,
+              child: const Row(
+                spacing: 10,
+                children: [
+                  Text('중분류', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Tooltip(
+                    triggerMode: TooltipTriggerMode.tap,
+                    message: "중분류는 요리 재료 검색 시 사용되는 정보입니다.",
+                    child: Icon(Icons.help_outline),
+                  ),
+                ],
               ),
             ),
-            Tooltip(
-              triggerMode: TooltipTriggerMode.tap,
-              message: "중분류는 요리 재료 검색 시 사용되는 정보입니다.",
-              child: Icon(Icons.help_outline),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextField(
+                    key: _subCategoryKey,
+                    onTap: () => _focusTextField(_subCategoryKey),
+                    controller: subCategoryController,
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
+                      hintText: "ex) 돼지고기, 소고기",
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        children: <Widget>[
-          Column(
-            spacing: 10,
-            children: <Widget>[
-              optionTextField(
-                key: _subCategoryKey,
-                label: '중분류',
-                controller: subCategoryController,
-                enabled: true,
-                hintText: 'ex) 밥',
-                textInputType: TextInputType.text,
-                onChanged: () {
-                  ref
-                      .read(addContentProvider.notifier)
-                      .updateKcal(subCategoryController.text);
-                },
-              ),
-              const SizedBox(),
-            ],
-          ),
-        ],
-      ),
+        nutritionView(),
+      ],
     );
   }
 
