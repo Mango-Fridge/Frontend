@@ -493,46 +493,51 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ],
               ),
             ),
-            CustomSlidingSegmentedControl<int>(
-              padding: design.marginAndPadding * 2,
-              initialValue: 1,
-              children: const <int, Widget>{1: Text('냉장'), 2: Text('냉동')},
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: design.textFieldborderColor,
-                  width: 2,
-                ),
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
+            Theme(
+              data: Theme.of(context).copyWith(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
               ),
-              thumbDecoration: BoxDecoration(
-                color: design.subColor,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: design.textFieldborderColor.withAlpha(150),
-                    blurRadius: 4.0,
-                    spreadRadius: 1.0,
-                    offset: const Offset(0.0, 2.0),
+              child: CustomSlidingSegmentedControl<int>(
+                padding: design.marginAndPadding * 2,
+                initialValue: 1,
+                children: const <int, Widget>{1: Text('냉장'), 2: Text('냉동')},
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: design.textFieldborderColor,
+                    width: 2,
                   ),
-                ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                thumbDecoration: BoxDecoration(
+                  color: design.subColor,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: design.textFieldborderColor.withAlpha(150),
+                      blurRadius: 4.0,
+                      spreadRadius: 1.0,
+                      offset: const Offset(0.0, 2.0),
+                    ),
+                  ],
+                ),
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.linear,
+                onValueChanged: (int value) {
+                  String storage = '';
+
+                  switch (value) {
+                    case 1:
+                      storage = '냉장';
+                      break;
+                    case 2:
+                      storage = '냉동';
+                      break;
+                  }
+                  ref.watch(addContentProvider.notifier).setStorage(storage);
+                },
               ),
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.linear,
-              onValueChanged: (int value) {
-                String storage = '';
-
-                switch (value) {
-                  case 1:
-                    storage = '냉장';
-                    break;
-                  case 2:
-                    storage = '냉동';
-                    break;
-                }
-
-                ref.watch(addContentProvider.notifier).setStorage(storage);
-              },
             ),
           ],
         ),
