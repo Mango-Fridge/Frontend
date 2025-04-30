@@ -52,7 +52,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         Scaffold(
           extendBody: true,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(design.screenHeight * 0.13),
+            preferredSize: Size.fromHeight(design.screenHeight * 0.055),
             child: SafeArea(
               child: Container(
                 color: Colors.white,
@@ -97,94 +97,99 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            context.push("/group");
-                          },
-                          child: Text(
-                            "${_group?.groupName}의 냉장고 >",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: Design.normalFontSize2,
-                            ),
-                          ),
-                        ),
-
-                        if ((_group?.groupName ?? '').isNotEmpty)
-                          Row(
-                            children: <Widget>[
-                              buildLastUpdatedText(_refrigeratorState!, ref),
-                              IconButton(
-                                onPressed: () {
-                                  (_group?.groupName ?? '').isEmpty
-                                      ? null
-                                      : _loadContentList();
-                                },
-                                icon: const Icon(Icons.refresh),
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
                   ],
                 ),
               ),
             ),
           ),
           backgroundColor: Colors.white,
-          body: Padding(
+          body: Container(
             padding: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
-            child: DefaultTabController(
-              length: 2,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: design.marginAndPadding,
-                    ),
-                    child: const TabBar(
-                      indicatorColor: Colors.amber,
-                      indicatorWeight: 4.0,
-                      labelStyle: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Design.tabBarSelectedFontSize,
-                        fontFamily: 'Mainfonts',
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        context.push("/group");
+                      },
+                      child: Text(
+                        _group?.groupName == null
+                            ? "'그룹'으로 이동 >"
+                            : "${_group?.groupName}의 냉장고 >",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Design.normalFontSize2,
+                        ),
                       ),
-                      unselectedLabelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: Design.tabBarUnSelectedFontSize,
-                        fontFamily: 'Mainfonts',
+                    ),
+                    if ((_group?.groupName ?? '').isNotEmpty)
+                      Row(
+                        children: <Widget>[
+                          buildLastUpdatedText(_refrigeratorState!, ref),
+                          IconButton(
+                            onPressed: () {
+                              (_group?.groupName ?? '').isEmpty
+                                  ? null
+                                  : _loadContentList();
+                            },
+                            icon: const Icon(Icons.refresh),
+                          ),
+                        ],
                       ),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      tabs: <Widget>[Tab(text: '냉장'), Tab(text: '냉동')],
-                    ),
-                  ),
-
-                  // 물품 List
-                  Expanded(
-                    child: TabBarView(
-                      children:
-                          (_group?.groupName ?? '').isEmpty
-                              ? _noGroupView()
-                              : _buildContent(),
-                    ),
-                  ),
-                  if (_refrigeratorState?.isUpdatedContent ?? false)
-                    Column(
+                  ],
+                ),
+                Expanded(
+                  child: DefaultTabController(
+                    length: 2,
+                    child: Column(
                       children: <Widget>[
-                        _setCountView(),
-                        const SizedBox(height: 50),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: design.marginAndPadding,
+                          ),
+                          child: const TabBar(
+                            indicatorColor: Colors.amber,
+                            indicatorWeight: 4.0,
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Design.tabBarSelectedFontSize,
+                              fontFamily: 'Mainfonts',
+                            ),
+                            unselectedLabelStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: Design.tabBarUnSelectedFontSize,
+                              fontFamily: 'Mainfonts',
+                            ),
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            tabs: <Widget>[Tab(text: '냉장'), Tab(text: '냉동')],
+                          ),
+                        ),
+                        // 물품 List
+                        Expanded(
+                          child: TabBarView(
+                            children:
+                                (_group?.groupName ?? '').isEmpty
+                                    ? _noGroupView()
+                                    : _buildContent(),
+                          ),
+                        ),
+                        if (_refrigeratorState?.isUpdatedContent ?? false)
+                          Column(
+                            children: <Widget>[
+                              _setCountView(),
+                              const SizedBox(height: 50),
+                            ],
+                          ),
                       ],
                     ),
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
-
           // Android / iOS 하단 영역 침범을 방지 하기 위한 용도
           bottomNavigationBar:
               (_group?.groupName ?? "").isEmpty ||
@@ -306,7 +311,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       2,
       (_) => const Center(
         child: Text(
-          "표시 할 냉장고 정보가 없어요. \n '그룹'탭에서 냉장고를 설정해 보세요!",
+          "표시 할 냉장고 정보가 없어요. \n '그룹'에서 냉장고를 설정해 보세요!",
           textAlign: TextAlign.center,
         ),
       ),
