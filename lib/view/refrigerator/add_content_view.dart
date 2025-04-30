@@ -205,15 +205,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('카테고리 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '카테고리 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -333,18 +340,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
                   Text(
-                    '수량 (인분) ',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    '수량(인분) ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
                   ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -382,15 +393,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('등록 날짜 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '등록 날짜 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -427,15 +445,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('소비 기한 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '소비 기한 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -483,15 +508,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('보관 장소 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '보관 장소 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -530,7 +562,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             Text('선택사항 일부는 '),
             Text(
               '요리',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: Design.normalFontSize2,
+              ),
             ),
             Text(' / '),
             Text(
@@ -550,7 +586,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               width: design.screenWidth * 0.22,
               child: const Text(
                 '브랜드 명',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Design.normalFontSize2,
+                ),
               ),
             ),
             Expanded(
@@ -588,7 +627,13 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text('메모', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  '메모',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: Design.normalFontSize2,
+                  ),
+                ),
                 Text(
                   '* 물품 공개 등록에 포함되지 않습니다.',
                   style: TextStyle(color: Colors.grey.shade600),
@@ -626,11 +671,17 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         Row(
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 spacing: 10,
                 children: <Widget>[
-                  Text('중분류', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '중분류',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Tooltip(
                     triggerMode: TooltipTriggerMode.tap,
                     message: "중분류는 요리 재료 검색 시 사용되는 정보입니다.",
@@ -685,7 +736,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               Text(
                 '영양 성분',
                 style: TextStyle(
-                  fontSize: Design.normalFontSize1,
+                  fontSize: Design.normalFontSize2,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -717,13 +768,16 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   spacing: 10,
                   children: <Widget>[
                     SizedBox(
-                      width: design.screenWidth * 0.22,
+                      width: design.addContentNutritionTextWidth,
                       child: const Row(
                         spacing: 2,
                         children: <Widget>[
                           Text(
                             '1회 제공 용량',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Design.normalFontSize1,
+                            ),
                           ),
 
                           Text(
@@ -731,6 +785,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             style: TextStyle(
                               color: Colors.indigo,
                               fontWeight: FontWeight.bold,
+                              fontSize: Design.normalFontSize1,
                             ),
                           ),
                         ],
@@ -738,7 +793,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     ),
                     const Spacer(),
                     SizedBox(
-                      width: 120,
+                      width: 110,
                       child: TextField(
                         key: _capacityKey,
                         keyboardType: TextInputType.number,
@@ -840,7 +895,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         .updateFat(fatController.text);
                   },
                 ),
-                const SizedBox(),
+                const SizedBox(height: 70),
               ],
             ),
           ),
@@ -1039,16 +1094,23 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       spacing: 10,
       children: <Widget>[
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.22,
+          width: design.addContentNutritionTextWidth,
           child: Row(
             spacing: 2,
             children: <Widget>[
-              Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Design.normalFontSize1,
+                ),
+              ),
               const Text(
                 '*',
                 style: TextStyle(
                   color: Colors.indigo,
                   fontWeight: FontWeight.bold,
+                  fontSize: Design.normalFontSize1,
                 ),
               ),
             ],
@@ -1056,7 +1118,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         ),
         const Spacer(),
         SizedBox(
-          width: 120,
+          width: 110,
           child: TextField(
             key: key,
             keyboardType: textInputType,

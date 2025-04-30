@@ -23,6 +23,9 @@ class Design {
   final double termsOverlayHeight; // 약관 동의 overlay 세로 크기
   final double termsAgreeButtonHeight; // 약관 동의 버튼 세로 크기
   final double contentUpdateViewHeight; // 물품 수량 조절 뷰 높이
+  final double addContentTextWidth; // AddContentView 항목의 Text 가로 크기
+  final double
+  addContentNutritionTextWidth; // AddContentView Nutrition 항목의 Text 가로 크기
   final double homeImageSize; // refrigerator 로고 이미지 크기
   final double homeBottomHeight; // 메인화면 BottomSheet 높이
   final double cartImageSize; // cart 이미지 크기
@@ -47,6 +50,8 @@ class Design {
       termsOverlayHeight = MediaQuery.of(context).size.height * 0.7,
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
       contentUpdateViewHeight = MediaQuery.of(context).size.height * 0.20,
+      addContentTextWidth = MediaQuery.of(context).size.width * 0.30,
+      addContentNutritionTextWidth = MediaQuery.of(context).size.width * 0.25,
       homeImageSize = MediaQuery.of(context).size.width * 0.12,
       homeBottomHeight = 50,
       cartImageSize = MediaQuery.of(context).size.width * 0.35,
