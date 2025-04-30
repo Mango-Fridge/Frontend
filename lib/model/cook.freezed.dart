@@ -88,7 +88,7 @@ as int?,
 @JsonSerializable()
 
 class _Cook implements Cook {
-  const _Cook({this.cookId, required this.cookName, required this.cookMemo, required this.cookNutriKcal, required this.cookNutriCarbohydrate, required this.cookNutriProtein, required this.cookNutriFat, required final  List<CookItems>? cookItems, required this.groupId}): _cookItems = cookItems;
+  const _Cook({this.cookId, this.cookName, this.cookMemo, this.cookNutriKcal, this.cookNutriCarbohydrate, this.cookNutriProtein, this.cookNutriFat, final  List<CookItems>? cookItems, this.groupId}): _cookItems = cookItems;
   factory _Cook.fromJson(Map<String, dynamic> json) => _$CookFromJson(json);
 
 @override final  int? cookId;
@@ -181,7 +181,7 @@ as int?,
 /// @nodoc
 mixin _$CookItems {
 
- int? get cookItemId; String? get cookItemName; String? get itemName; int? get count; String? get category; String? get brandName; String? get storageArea; String? get nutriUnit; int? get nutriCapacity; int? get nutriKcal; String? get subCategory;
+ int? get cookItemId; int? get itemId; String? get cookItemName; String? get itemName; int? get count; String? get category; String? get brandName; String? get storageArea; String? get nutriUnit; int? get nutriCapacity; int? get nutriKcal; String? get subCategory;
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -194,16 +194,16 @@ $CookItemsCopyWith<CookItems> get copyWith => _$CookItemsCopyWithImpl<CookItems>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.count, count) || other.count == count)&&(identical(other.category, category) || other.category == category)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.itemId, itemId) || other.itemId == itemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.count, count) || other.count == count)&&(identical(other.category, category) || other.category == category)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cookItemId,cookItemName,itemName,count,category,brandName,storageArea,nutriUnit,nutriCapacity,nutriKcal,subCategory);
+int get hashCode => Object.hash(runtimeType,cookItemId,itemId,cookItemName,itemName,count,category,brandName,storageArea,nutriUnit,nutriCapacity,nutriKcal,subCategory);
 
 @override
 String toString() {
-  return 'CookItems(cookItemId: $cookItemId, cookItemName: $cookItemName, itemName: $itemName, count: $count, category: $category, brandName: $brandName, storageArea: $storageArea, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, subCategory: $subCategory)';
+  return 'CookItems(cookItemId: $cookItemId, itemId: $itemId, cookItemName: $cookItemName, itemName: $itemName, count: $count, category: $category, brandName: $brandName, storageArea: $storageArea, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, subCategory: $subCategory)';
 }
 
 
@@ -214,7 +214,7 @@ abstract mixin class $CookItemsCopyWith<$Res>  {
   factory $CookItemsCopyWith(CookItems value, $Res Function(CookItems) _then) = _$CookItemsCopyWithImpl;
 @useResult
 $Res call({
- int? cookItemId, String? cookItemName, String? itemName, int? count, String? category, String? brandName, String? storageArea, String? nutriUnit, int? nutriCapacity, int? nutriKcal, String? subCategory
+ int? cookItemId, int? itemId, String? cookItemName, String? itemName, int? count, String? category, String? brandName, String? storageArea, String? nutriUnit, int? nutriCapacity, int? nutriKcal, String? subCategory
 });
 
 
@@ -231,9 +231,10 @@ class _$CookItemsCopyWithImpl<$Res>
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,Object? itemName = freezed,Object? count = freezed,Object? category = freezed,Object? brandName = freezed,Object? storageArea = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? subCategory = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cookItemId = freezed,Object? itemId = freezed,Object? cookItemName = freezed,Object? itemName = freezed,Object? count = freezed,Object? category = freezed,Object? brandName = freezed,Object? storageArea = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? subCategory = freezed,}) {
   return _then(_self.copyWith(
 cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
+as int?,itemId: freezed == itemId ? _self.itemId : itemId // ignore: cast_nullable_to_non_nullable
 as int?,cookItemName: freezed == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
 as String?,itemName: freezed == itemName ? _self.itemName : itemName // ignore: cast_nullable_to_non_nullable
 as String?,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
@@ -255,10 +256,11 @@ as String?,
 @JsonSerializable()
 
 class _CookItems implements CookItems {
-  const _CookItems({required this.cookItemId, required this.cookItemName, required this.itemName, required this.count, required this.category, required this.brandName, required this.storageArea, required this.nutriUnit, required this.nutriCapacity, required this.nutriKcal, required this.subCategory});
+  const _CookItems({required this.cookItemId, this.itemId, required this.cookItemName, required this.itemName, required this.count, required this.category, required this.brandName, required this.storageArea, required this.nutriUnit, required this.nutriCapacity, required this.nutriKcal, required this.subCategory});
   factory _CookItems.fromJson(Map<String, dynamic> json) => _$CookItemsFromJson(json);
 
 @override final  int? cookItemId;
+@override final  int? itemId;
 @override final  String? cookItemName;
 @override final  String? itemName;
 @override final  int? count;
@@ -283,16 +285,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.count, count) || other.count == count)&&(identical(other.category, category) || other.category == category)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CookItems&&(identical(other.cookItemId, cookItemId) || other.cookItemId == cookItemId)&&(identical(other.itemId, itemId) || other.itemId == itemId)&&(identical(other.cookItemName, cookItemName) || other.cookItemName == cookItemName)&&(identical(other.itemName, itemName) || other.itemName == itemName)&&(identical(other.count, count) || other.count == count)&&(identical(other.category, category) || other.category == category)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.storageArea, storageArea) || other.storageArea == storageArea)&&(identical(other.nutriUnit, nutriUnit) || other.nutriUnit == nutriUnit)&&(identical(other.nutriCapacity, nutriCapacity) || other.nutriCapacity == nutriCapacity)&&(identical(other.nutriKcal, nutriKcal) || other.nutriKcal == nutriKcal)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,cookItemId,cookItemName,itemName,count,category,brandName,storageArea,nutriUnit,nutriCapacity,nutriKcal,subCategory);
+int get hashCode => Object.hash(runtimeType,cookItemId,itemId,cookItemName,itemName,count,category,brandName,storageArea,nutriUnit,nutriCapacity,nutriKcal,subCategory);
 
 @override
 String toString() {
-  return 'CookItems(cookItemId: $cookItemId, cookItemName: $cookItemName, itemName: $itemName, count: $count, category: $category, brandName: $brandName, storageArea: $storageArea, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, subCategory: $subCategory)';
+  return 'CookItems(cookItemId: $cookItemId, itemId: $itemId, cookItemName: $cookItemName, itemName: $itemName, count: $count, category: $category, brandName: $brandName, storageArea: $storageArea, nutriUnit: $nutriUnit, nutriCapacity: $nutriCapacity, nutriKcal: $nutriKcal, subCategory: $subCategory)';
 }
 
 
@@ -303,7 +305,7 @@ abstract mixin class _$CookItemsCopyWith<$Res> implements $CookItemsCopyWith<$Re
   factory _$CookItemsCopyWith(_CookItems value, $Res Function(_CookItems) _then) = __$CookItemsCopyWithImpl;
 @override @useResult
 $Res call({
- int? cookItemId, String? cookItemName, String? itemName, int? count, String? category, String? brandName, String? storageArea, String? nutriUnit, int? nutriCapacity, int? nutriKcal, String? subCategory
+ int? cookItemId, int? itemId, String? cookItemName, String? itemName, int? count, String? category, String? brandName, String? storageArea, String? nutriUnit, int? nutriCapacity, int? nutriKcal, String? subCategory
 });
 
 
@@ -320,9 +322,10 @@ class __$CookItemsCopyWithImpl<$Res>
 
 /// Create a copy of CookItems
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cookItemId = freezed,Object? cookItemName = freezed,Object? itemName = freezed,Object? count = freezed,Object? category = freezed,Object? brandName = freezed,Object? storageArea = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? subCategory = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cookItemId = freezed,Object? itemId = freezed,Object? cookItemName = freezed,Object? itemName = freezed,Object? count = freezed,Object? category = freezed,Object? brandName = freezed,Object? storageArea = freezed,Object? nutriUnit = freezed,Object? nutriCapacity = freezed,Object? nutriKcal = freezed,Object? subCategory = freezed,}) {
   return _then(_CookItems(
 cookItemId: freezed == cookItemId ? _self.cookItemId : cookItemId // ignore: cast_nullable_to_non_nullable
+as int?,itemId: freezed == itemId ? _self.itemId : itemId // ignore: cast_nullable_to_non_nullable
 as int?,cookItemName: freezed == cookItemName ? _self.cookItemName : cookItemName // ignore: cast_nullable_to_non_nullable
 as String?,itemName: freezed == itemName ? _self.itemName : itemName // ignore: cast_nullable_to_non_nullable
 as String?,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable

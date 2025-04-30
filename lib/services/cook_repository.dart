@@ -91,7 +91,7 @@ class CookRepository {
     }
   }
 
-  // 요리 상세 정보 가져오기
+  // 요리 상세정보(칼로리, 탄단지 등)
   Future<Cook> getCookDetail(int cookId) async {
     RestClient client = RestClient(dio);
 
@@ -113,6 +113,38 @@ class CookRepository {
       }
     } catch (e) {
       throw Exception('요리 상세 정보 가져오기 실패');
+    }
+  }
+
+  // 요리 상세정보 리스트(개수, 중분류 등)
+  Future<Cook> getCookDetailList(int cookId) async {
+    RestClient client = RestClient(dio);
+
+    AppLogger.logger.i("Requesting cook detail with cookId: $cookId");
+
+    try {
+      ApiResponse response = await client.getCookDetailList(cookId);
+
+      if (response.code == 200) {
+        AppLogger.logger.i(
+          "[cook_repository/getCookDetail]: getCookDetailList 완료.",
+        );
+
+        List<dynamic> dataList = response.data;
+
+        List<CookItems> cookItems =
+            dataList
+                .map((item) => CookItems.fromJson(item as Map<String, dynamic>))
+                .toList();
+
+        return Cook(cookItems: cookItems);
+      } else {
+        throw Exception(
+          '[cook_repository/getCookDetailList]: Json Parse Error',
+        );
+      }
+    } catch (e) {
+      throw Exception('요리 상세정보 리스트 가져오기 실패');
     }
   }
 }
