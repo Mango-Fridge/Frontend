@@ -211,6 +211,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           storageArea: item.storageArea ?? '',
                           nutriUnit: item.nutriUnit ?? '',
                           nutriCapacity: item.nutriCapacity ?? 0,
+                          subCategory: item.subCategory ?? '',
                         ),
                       )
                       .toList();
