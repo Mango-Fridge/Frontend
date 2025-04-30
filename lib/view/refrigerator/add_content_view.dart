@@ -613,7 +613,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 const Text('메모', style: TextStyle(fontWeight: FontWeight.bold)),
                 Text(
                   '* 물품 공개 등록에 포함되지 않습니다.',
@@ -629,6 +629,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               maxLength: _memoMaxLength,
               decoration: InputDecoration(
                 hintText: "최대 100자 까지 작성 가능합니다.",
+                filled: true,
+                fillColor: design.subColor,
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: design.textFieldborderColor,
