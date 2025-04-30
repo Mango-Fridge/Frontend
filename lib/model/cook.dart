@@ -33,6 +33,7 @@ abstract class CookItems with _$CookItems {
     required String? nutriUnit,
     required int? nutriCapacity,
     required int? nutriKcal,
+    required String? subCategory,
   }) = _CookItems;
 
   factory CookItems.fromJson(Map<String, dynamic> json) =>
