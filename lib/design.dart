@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 class Design {
   static const double appTitleFontSize = 25;
+  static const double normalFontSize0 = 12;
   static const double normalFontSize1 = 16;
   static const double normalFontSize2 = 22;
   static const double normalFontSize3 = 24;
@@ -16,6 +17,7 @@ class Design {
   final double screenWidth; // 시스템 가로
   final double screenHeight; // 시스템 세로
   final double marginAndPadding; // 기본 마진 및 패딩
+  final double nutritionViewMarginAndPadding; // 영양 성분 뷰 마진 및 패딩
   final double splashImageSize; // splash & login 로고 이미지 크기 (scale)
   final double termsOverlayWidth; // 약관 동의 overlay 가로 크기
   final double termsOverlayHeight; // 약관 동의 overlay 세로 크기
@@ -39,6 +41,7 @@ class Design {
     : screenWidth = MediaQuery.of(context).size.width,
       screenHeight = MediaQuery.of(context).size.height,
       marginAndPadding = MediaQuery.of(context).size.width * 0.022,
+      nutritionViewMarginAndPadding = MediaQuery.of(context).size.width * 0.030,
       splashImageSize = MediaQuery.of(context).size.height * 0.007,
       termsOverlayWidth = MediaQuery.of(context).size.width * 0.95,
       termsOverlayHeight = MediaQuery.of(context).size.height * 0.7,
