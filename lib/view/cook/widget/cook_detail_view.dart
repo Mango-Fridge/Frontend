@@ -22,8 +22,9 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
   void initState() {
     super.initState();
     // view init 후 데이터 처리를 하기 위함
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cookDetailNotifier?.getCookDetail(widget.cook?.cookId ?? 0);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await cookDetailNotifier?.getCookDetail(widget.cook?.cookId ?? 0);
+      await cookDetailNotifier?.getCookDetailList(widget.cook?.cookId ?? 0);
     });
   }
 
@@ -125,9 +126,23 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           color: Colors.amber,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
-                          content.cookItemName ?? '재료 이름 없음',
-                          style: const TextStyle(fontSize: 18),
+                        child: Row(
+                          children: [
+                            Text(
+                              content.itemName ?? '재료 이름 없음',
+                              // '${content.itemName ?? '재료 이름 없음'}',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '${content.count ?? 0}개 / ',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            Text(
+                              '${(content.nutriKcal ?? 0) * (content.count ?? 0)} kcal',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
                         ),
                       );
                     }),
