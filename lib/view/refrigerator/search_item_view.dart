@@ -170,8 +170,8 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
 
   Widget _buildItem(List<RefrigeratorItem>? itemList) {
     final Design design = Design(context);
-    final hasMore = _searchContentState?.hasMore ?? false;
-    final isLoadingMore = _searchContentState?.isLoadingMore ?? false;
+    final bool hasMore = _searchContentState?.hasMore ?? false;
+    final bool isLoadingMore = _searchContentState?.isLoadingMore ?? false;
 
     return Column(
       children: <Widget>[
