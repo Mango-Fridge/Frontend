@@ -45,7 +45,7 @@ class Design {
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
       contentUpdateViewHeight = MediaQuery.of(context).size.height * 0.20,
       homeImageSize = MediaQuery.of(context).size.width * 0.12,
-      homeBottomHeight = MediaQuery.of(context).size.height * 0.055,
+      homeBottomHeight = 50,
       cartImageSize = MediaQuery.of(context).size.width * 0.35,
       mainColor = const Color.fromRGBO(255, 205, 72, 1.0),
       subColor = const Color.fromRGBO(255, 244, 216, 1.0),
