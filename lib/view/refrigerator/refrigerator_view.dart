@@ -343,16 +343,6 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     return const SizedBox.shrink();
   }
 
-  // 속한 그룹이 없을 때 보여지는 뷰
-  Widget _noGroupView() {
-    return const Center(
-      child: Text(
-        "표시 할 냉장고 정보가 없어요. \n '그룹'에서 냉장고를 설정해 보세요!",
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
   // 무엇인가 비었을 때 보여지는 뷰
   Widget _emptyView(
     String imagePath,

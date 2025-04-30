@@ -130,6 +130,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        extendBody: true,
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('물품 추가 상세 입력'),
@@ -147,11 +148,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   child: contentDetailInfoView(),
                 ),
               ),
-              bottomSubmitButtons(),
-              const SizedBox(height: 20),
             ],
           ),
         ),
+        bottomNavigationBar: SafeArea(child: bottomSubmitButtons()),
       ),
     );
   }
@@ -885,126 +885,139 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
 
   // Bottom Submit Buttons
   Widget bottomSubmitButtons() {
-    return Row(
-      spacing: 10,
-      children: <Widget>[
-        if (widget.item == null)
-          Expanded(
-            child: buildElevatedButton(
-              label: '물품 공개 등록',
-              onPressed:
-                  widget.item == null &&
-                          _addContentState!.isNutritionEmpty &&
-                          _addContentState!.isDetailInfoEmpty
-                      ? () async {
-                        await ref
-                            .watch(addContentProvider.notifier)
-                            .saveItem(
-                              _group?.groupId ?? 0,
-                              nameController.text,
-                              true,
-                              _addContentState?.selectedContentCategory ??
-                                  contentCategory[0],
-                              subCategoryController.text,
-                              brandNameController.text,
-                              int.parse(countController.text),
-                              _addContentState?.selectedRegDate ??
-                                  DateTime.now(),
-                              _addContentState?.selectedExpDate ??
-                                  DateTime.now(),
-                              _addContentState?.selectedContentStorage ?? '냉장',
-                              memoController.text,
-                              _addContentState?.selectedUnit ?? '',
-                              capacityController.text.isNotEmpty
-                                  ? int.parse(capacityController.text)
-                                  : 0,
-                              kcalController.text.isNotEmpty
-                                  ? int.parse(kcalController.text)
-                                  : 0,
-                              carbsController.text.isNotEmpty
-                                  ? int.parse(carbsController.text)
-                                  : 0,
-                              proteinController.text.isNotEmpty
-                                  ? int.parse(proteinController.text)
-                                  : 0,
-                              fatController.text.isNotEmpty
-                                  ? int.parse(fatController.text)
-                                  : 0,
+    final Design design = Design(context);
+    return Padding(
+      padding: EdgeInsets.all(design.marginAndPadding),
+      child: SizedBox(
+        height: design.homeBottomHeight,
+        child: Row(
+          spacing: 10,
+          children: <Widget>[
+            if (widget.item == null)
+              Expanded(
+                child: buildElevatedButton(
+                  label: "물품 공개 + 등록\n(검색 허용)",
+                  onPressed:
+                      widget.item == null &&
+                              _addContentState!.isNutritionEmpty &&
+                              _addContentState!.isDetailInfoEmpty
+                          ? () async {
+                            await ref
+                                .watch(addContentProvider.notifier)
+                                .saveItem(
+                                  _group?.groupId ?? 0,
+                                  nameController.text,
+                                  true,
+                                  _addContentState?.selectedContentCategory ??
+                                      contentCategory[0],
+                                  subCategoryController.text,
+                                  brandNameController.text,
+                                  int.parse(countController.text),
+                                  _addContentState?.selectedRegDate ??
+                                      DateTime.now(),
+                                  _addContentState?.selectedExpDate ??
+                                      DateTime.now(),
+                                  _addContentState?.selectedContentStorage ??
+                                      '냉장',
+                                  memoController.text,
+                                  _addContentState?.selectedUnit ?? '',
+                                  capacityController.text.isNotEmpty
+                                      ? int.parse(capacityController.text)
+                                      : 0,
+                                  kcalController.text.isNotEmpty
+                                      ? int.parse(kcalController.text)
+                                      : 0,
+                                  carbsController.text.isNotEmpty
+                                      ? int.parse(carbsController.text)
+                                      : 0,
+                                  proteinController.text.isNotEmpty
+                                      ? int.parse(proteinController.text)
+                                      : 0,
+                                  fatController.text.isNotEmpty
+                                      ? int.parse(fatController.text)
+                                      : 0,
+                                );
+
+                            toastMessage(
+                              context,
+                              "${nameController.text}(이)가 정상적으로\n공개등록이 되었습니다!",
                             );
 
-                        toastMessage(
-                          context,
-                          "${nameController.text}(이)가 정상적으로\n공개등록이 되었습니다!",
-                        );
-
-                        await ref
-                            .read(refrigeratorNotifier.notifier)
-                            .loadContentList(_group?.groupId ?? 0);
-                        context.pop();
-                      }
-                      : null,
-              backgroundColor: Colors.amber[200]!,
-              foregroundColor: Colors.black,
-              borderColor: Colors.transparent,
-            ),
-          ),
-        Expanded(
-          child: buildElevatedButton(
-            label: '물품 등록',
-            onPressed:
-                _addContentState?.isDetailInfoEmpty ?? false
-                    ? () async {
-                      await ref
-                          .watch(addContentProvider.notifier)
-                          .saveItem(
-                            _group?.groupId ?? 0,
-                            nameController.text,
-                            false,
-                            _addContentState?.selectedContentCategory == '직접 입력'
-                                ? _addContentState?.customContentCategory ??
-                                    contentCategory[0]
-                                : _addContentState?.selectedContentCategory ??
-                                    contentCategory[0],
-                            subCategoryController.text,
-                            brandNameController.text,
-                            int.parse(countController.text),
-                            _addContentState?.selectedRegDate ?? DateTime.now(),
-                            _addContentState?.selectedExpDate ?? DateTime.now(),
-                            _addContentState?.selectedContentStorage ?? '냉장',
-                            memoController.text,
-                            _addContentState?.selectedUnit ?? '',
-                            capacityController.text.isNotEmpty
-                                ? int.parse(capacityController.text)
-                                : 0,
-                            kcalController.text.isNotEmpty
-                                ? int.parse(kcalController.text)
-                                : 0,
-                            carbsController.text.isNotEmpty
-                                ? int.parse(carbsController.text)
-                                : 0,
-                            proteinController.text.isNotEmpty
-                                ? int.parse(proteinController.text)
-                                : 0,
-                            fatController.text.isNotEmpty
-                                ? int.parse(fatController.text)
-                                : 0,
+                            await ref
+                                .read(refrigeratorNotifier.notifier)
+                                .loadContentList(_group?.groupId ?? 0);
+                            context.pop();
+                          }
+                          : null,
+                  backgroundColor: Colors.amber[200]!,
+                  foregroundColor: Colors.black,
+                  borderColor: Colors.transparent,
+                ),
+              ),
+            Expanded(
+              child: buildElevatedButton(
+                label: '냉장고에 등록',
+                onPressed:
+                    _addContentState?.isDetailInfoEmpty ?? false
+                        ? () async {
+                          await ref
+                              .watch(addContentProvider.notifier)
+                              .saveItem(
+                                _group?.groupId ?? 0,
+                                nameController.text,
+                                false,
+                                _addContentState?.selectedContentCategory ==
+                                        '직접 입력'
+                                    ? _addContentState?.customContentCategory ??
+                                        contentCategory[0]
+                                    : _addContentState
+                                            ?.selectedContentCategory ??
+                                        contentCategory[0],
+                                subCategoryController.text,
+                                brandNameController.text,
+                                int.parse(countController.text),
+                                _addContentState?.selectedRegDate ??
+                                    DateTime.now(),
+                                _addContentState?.selectedExpDate ??
+                                    DateTime.now(),
+                                _addContentState?.selectedContentStorage ??
+                                    '냉장',
+                                memoController.text,
+                                _addContentState?.selectedUnit ?? '',
+                                capacityController.text.isNotEmpty
+                                    ? int.parse(capacityController.text)
+                                    : 0,
+                                kcalController.text.isNotEmpty
+                                    ? int.parse(kcalController.text)
+                                    : 0,
+                                carbsController.text.isNotEmpty
+                                    ? int.parse(carbsController.text)
+                                    : 0,
+                                proteinController.text.isNotEmpty
+                                    ? int.parse(proteinController.text)
+                                    : 0,
+                                fatController.text.isNotEmpty
+                                    ? int.parse(fatController.text)
+                                    : 0,
+                              );
+                          toastMessage(
+                            context,
+                            "${nameController.text}(이)가 정상적으로\n추가되었습니다!",
                           );
-                      toastMessage(
-                        context,
-                        "${nameController.text}(이)가 정상적으로\n추가되었습니다!",
-                      );
-                      await ref
-                          .read(refrigeratorNotifier.notifier)
-                          .loadContentList(_group?.groupId ?? 0);
-                      context.pop();
-                    }
-                    : null,
-            backgroundColor: Colors.amber[300]!,
-            foregroundColor: Colors.black,
-            borderColor: Colors.transparent,
-          ),
+                          await ref
+                              .read(refrigeratorNotifier.notifier)
+                              .loadContentList(_group?.groupId ?? 0);
+                          context.pop();
+                        }
+                        : null,
+                backgroundColor: Colors.amber[300]!,
+                foregroundColor: Colors.black,
+                borderColor: Colors.transparent,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -1075,17 +1088,40 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required Color foregroundColor,
     required Color borderColor,
   }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-          side: BorderSide(color: borderColor, width: 2.0),
+    return SizedBox(
+      height: 50,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.disabled)) {
+              return Colors.grey.shade300;
+            }
+            return backgroundColor;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.disabled)) {
+              return Colors.grey.shade600;
+            }
+            return foregroundColor;
+          }),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+              side: BorderSide(color: borderColor, width: 2.0),
+            ),
+          ),
         ),
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
+        child: Text(
+          label,
+          style: TextStyle(color: foregroundColor),
+          textAlign: TextAlign.center,
+        ),
       ),
-      child: Text(label, style: TextStyle(color: foregroundColor)),
     );
   }
 
