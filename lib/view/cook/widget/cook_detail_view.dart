@@ -143,7 +143,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                               style: const TextStyle(fontSize: 18),
                             ),
                             Text(
-                              '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
+                              '${item.nutriKcal ?? 0} kcal',
                               style: const TextStyle(fontSize: 18),
                             ),
                           ],
@@ -179,12 +179,12 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                                     children: <Widget>[
                                       Text(
                                         content.contentName,
-                                        style: const TextStyle(fontSize: 16),
+                                        style: const TextStyle(fontSize: 18),
                                       ),
                                       const Spacer(),
                                       Text(
-                                        "${content.count}개 있습니다.",
-                                        style: const TextStyle(fontSize: 16),
+                                        "${content.count}개 / ${content.nutriKcal} kcal",
+                                        style: const TextStyle(fontSize: 18),
                                       ),
                                     ],
                                   ),
@@ -222,7 +222,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                                     children: <Widget>[
                                       Text(
                                         itemSubCategory,
-                                        style: const TextStyle(fontSize: 16),
+                                        style: const TextStyle(fontSize: 18),
                                       ),
                                     ],
                                   ),
