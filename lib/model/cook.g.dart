@@ -35,6 +35,7 @@ Map<String, dynamic> _$CookToJson(_Cook instance) => <String, dynamic>{
 
 _CookItems _$CookItemsFromJson(Map<String, dynamic> json) => _CookItems(
   cookItemId: (json['cookItemId'] as num?)?.toInt(),
+  itemId: (json['itemId'] as num?)?.toInt(),
   cookItemName: json['cookItemName'] as String?,
   itemName: json['itemName'] as String?,
   count: (json['count'] as num?)?.toInt(),
@@ -44,11 +45,13 @@ _CookItems _$CookItemsFromJson(Map<String, dynamic> json) => _CookItems(
   nutriUnit: json['nutriUnit'] as String?,
   nutriCapacity: (json['nutriCapacity'] as num?)?.toInt(),
   nutriKcal: (json['nutriKcal'] as num?)?.toInt(),
+  subCategory: json['subCategory'] as String?,
 );
 
 Map<String, dynamic> _$CookItemsToJson(_CookItems instance) =>
     <String, dynamic>{
       'cookItemId': instance.cookItemId,
+      'itemId': instance.itemId,
       'cookItemName': instance.cookItemName,
       'itemName': instance.itemName,
       'count': instance.count,
@@ -58,4 +61,5 @@ Map<String, dynamic> _$CookItemsToJson(_CookItems instance) =>
       'nutriUnit': instance.nutriUnit,
       'nutriCapacity': instance.nutriCapacity,
       'nutriKcal': instance.nutriKcal,
+      'subCategory': instance.subCategory,
     };

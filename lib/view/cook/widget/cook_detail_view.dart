@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/providers/cook_detail_provider.dart';
+import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
+import 'package:mango/state/refrigerator_state.dart';
 
 class CookDetailView extends ConsumerStatefulWidget {
   final Cook? cook;
@@ -17,13 +20,15 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
   CookDetailNotifier? get cookDetailNotifier =>
       ref.watch(cookDetailProvider.notifier);
   AddCookState? get _cookState => ref.watch(cookDetailProvider);
+  RefrigeratorState? get _refrigeratorState => ref.watch(refrigeratorNotifier);
 
   @override
   void initState() {
     super.initState();
     // view init 후 데이터 처리를 하기 위함
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cookDetailNotifier?.getCookDetail(widget.cook?.cookId ?? 0);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await cookDetailNotifier?.getCookDetail(widget.cook?.cookId ?? 0);
+      await cookDetailNotifier?.getCookDetailList(widget.cook?.cookId ?? 0);
     });
   }
 
@@ -116,7 +121,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     ),
                     const SizedBox(height: 16),
                     ...?_cookState?.cookDetail?.cookItems?.map((
-                      CookItems content,
+                      CookItems item,
                     ) {
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 8),
@@ -125,12 +130,107 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           color: Colors.amber,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
-                          content.cookItemName ?? '재료 이름 없음',
-                          style: const TextStyle(fontSize: 18),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              item.itemName ?? '재료 이름 없음',
+                              // '${content.itemName ?? '재료 이름 없음'}',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '${item.count ?? 0}개 / ',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            Text(
+                              '${item.nutriKcal ?? 0} kcal',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
                         ),
                       );
                     }),
+                    const SizedBox(height: 30),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text("일치하는 물품", style: TextStyle(fontSize: 30)),
+                          ...cookDetailNotifier!
+                              .refrigeratorSubCategory(
+                                _cookState!,
+                                _refrigeratorState,
+                              )
+                              .map(
+                                (Content content) => Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[100],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        content.contentName,
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        "${content.count}개 / ${content.nutriKcal} kcal",
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text("필요한 물품", style: TextStyle(fontSize: 30)),
+                          ...cookDetailNotifier!
+                              .cookItemSubCategory(
+                                _cookState!,
+                                _refrigeratorState,
+                              )
+                              .map(
+                                (String itemSubCategory) => Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[100],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        itemSubCategory,
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
