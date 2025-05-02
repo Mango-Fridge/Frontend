@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 class Design {
   static const double appTitleFontSize = 25;
+  static const double normalFontSize0 = 12;
   static const double normalFontSize1 = 16;
   static const double normalFontSize2 = 22;
   static const double normalFontSize3 = 24;
@@ -16,11 +17,15 @@ class Design {
   final double screenWidth; // 시스템 가로
   final double screenHeight; // 시스템 세로
   final double marginAndPadding; // 기본 마진 및 패딩
+  final double nutritionViewMarginAndPadding; // 영양 성분 뷰 마진 및 패딩
   final double splashImageSize; // splash & login 로고 이미지 크기 (scale)
   final double termsOverlayWidth; // 약관 동의 overlay 가로 크기
   final double termsOverlayHeight; // 약관 동의 overlay 세로 크기
   final double termsAgreeButtonHeight; // 약관 동의 버튼 세로 크기
   final double contentUpdateViewHeight; // 물품 수량 조절 뷰 높이
+  final double addContentTextWidth; // AddContentView 항목의 Text 가로 크기
+  final double
+  addContentNutritionTextWidth; // AddContentView Nutrition 항목의 Text 가로 크기
   final double homeImageSize; // refrigerator 로고 이미지 크기
   final double homeBottomHeight; // 메인화면 BottomSheet 높이
   final double cartImageSize; // cart 이미지 크기
@@ -39,13 +44,16 @@ class Design {
     : screenWidth = MediaQuery.of(context).size.width,
       screenHeight = MediaQuery.of(context).size.height,
       marginAndPadding = MediaQuery.of(context).size.width * 0.022,
+      nutritionViewMarginAndPadding = MediaQuery.of(context).size.width * 0.030,
       splashImageSize = MediaQuery.of(context).size.height * 0.007,
       termsOverlayWidth = MediaQuery.of(context).size.width * 0.95,
       termsOverlayHeight = MediaQuery.of(context).size.height * 0.7,
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
       contentUpdateViewHeight = MediaQuery.of(context).size.height * 0.20,
+      addContentTextWidth = MediaQuery.of(context).size.width * 0.30,
+      addContentNutritionTextWidth = MediaQuery.of(context).size.width * 0.25,
       homeImageSize = MediaQuery.of(context).size.width * 0.12,
-      homeBottomHeight = MediaQuery.of(context).size.height * 0.055,
+      homeBottomHeight = 50,
       cartImageSize = MediaQuery.of(context).size.width * 0.35,
       mainColor = const Color.fromRGBO(255, 205, 72, 1.0),
       subColor = const Color.fromRGBO(255, 244, 216, 1.0),

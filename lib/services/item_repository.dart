@@ -16,6 +16,8 @@ class ItemRepository {
     RestClient client = RestClient(dio);
 
     try {
+      await Future.delayed(const Duration(seconds: 1));
+
       ApiResponse response = await client.getItemList(keyword, page);
 
       if (response.code == 200) {

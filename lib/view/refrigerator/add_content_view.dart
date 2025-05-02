@@ -130,9 +130,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        extendBody: true,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('물품 추가 상세 입력'),
+          title: const Text(
+            '물품 추가 상세 입력',
+            style: TextStyle(fontSize: Design.normalFontSize4),
+          ),
+          scrolledUnderElevation: 0,
           backgroundColor: Colors.white,
         ),
         body: Padding(
@@ -147,11 +152,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   child: contentDetailInfoView(),
                 ),
               ),
-              bottomSubmitButtons(),
-              const SizedBox(height: 20),
             ],
           ),
         ),
+        bottomNavigationBar: SafeArea(child: bottomSubmitButtons()),
       ),
     );
   }
@@ -201,15 +205,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('카테고리 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '카테고리 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -329,18 +340,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
                   Text(
-                    '수량 (인분) ',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    '수량(인분) ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
                   ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -378,15 +393,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('등록 날짜 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '등록 날짜 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -423,15 +445,22 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('소비 기한 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '소비 기한 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
@@ -479,46 +508,29 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           spacing: 10,
           children: <Widget>[
             SizedBox(
-              width: design.screenWidth * 0.22,
+              width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text('보관 장소 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    '보관 장소 ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
                     ),
                   ),
                 ],
               ),
             ),
-            CustomSlidingSegmentedControl<int>(
-              padding: design.marginAndPadding * 2,
-              initialValue: 1,
-              children: const <int, Widget>{1: Text('냉장'), 2: Text('냉동')},
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: design.textFieldborderColor,
-                  width: 2,
-                ),
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              thumbDecoration: BoxDecoration(
-                color: design.subColor,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: design.textFieldborderColor.withAlpha(150),
-                    blurRadius: 4.0,
-                    spreadRadius: 1.0,
-                    offset: const Offset(0.0, 2.0),
-                  ),
-                ],
-              ),
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.linear,
+            _doubleSegmentedControl(
+              segments: const <int, Widget>{1: Text('냉장'), 2: Text('냉동')},
               onValueChanged: (int value) {
                 String storage = '';
 
@@ -530,7 +542,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     storage = '냉동';
                     break;
                 }
-
                 ref.watch(addContentProvider.notifier).setStorage(storage);
               },
             ),
@@ -551,7 +562,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             Text('선택사항 일부는 '),
             Text(
               '요리',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: Design.normalFontSize2,
+              ),
             ),
             Text(' / '),
             Text(
@@ -571,7 +586,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               width: design.screenWidth * 0.22,
               child: const Text(
                 '브랜드 명',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Design.normalFontSize2,
+                ),
               ),
             ),
             Expanded(
@@ -608,8 +626,14 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('메모', style: TextStyle(fontWeight: FontWeight.bold)),
+              children: <Widget>[
+                const Text(
+                  '메모',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: Design.normalFontSize2,
+                  ),
+                ),
                 Text(
                   '* 물품 공개 등록에 포함되지 않습니다.',
                   style: TextStyle(color: Colors.grey.shade600),
@@ -624,6 +648,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               maxLength: _memoMaxLength,
               decoration: InputDecoration(
                 hintText: "최대 100자 까지 작성 가능합니다.",
+                filled: true,
+                fillColor: design.subColor,
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: design.textFieldborderColor,
@@ -642,59 +668,59 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
           ],
         ),
-        optionView(),
-        nutritionView(),
-      ],
-    );
-  }
-
-  Widget optionView() {
-    Design design = Design(context);
-
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        childrenPadding: EdgeInsets.zero,
-        tilePadding: EdgeInsets.zero,
-        title: const Row(
-          spacing: 10,
+        Row(
           children: <Widget>[
-            Text(
-              '선택 사항',
-              style: TextStyle(
-                fontSize: Design.normalFontSize1,
-                fontWeight: FontWeight.bold,
+            SizedBox(
+              width: design.addContentTextWidth,
+              child: const Row(
+                spacing: 10,
+                children: <Widget>[
+                  Text(
+                    '중분류',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Design.normalFontSize2,
+                    ),
+                  ),
+                  Tooltip(
+                    triggerMode: TooltipTriggerMode.tap,
+                    message: "중분류는 요리 재료 검색 시 사용되는 정보입니다.",
+                    child: Icon(Icons.help_outline),
+                  ),
+                ],
               ),
             ),
-            Tooltip(
-              triggerMode: TooltipTriggerMode.tap,
-              message: "중분류는 요리 재료 검색 시 사용되는 정보입니다.",
-              child: Icon(Icons.help_outline),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextField(
+                    key: _subCategoryKey,
+                    onTap: () => _focusTextField(_subCategoryKey),
+                    controller: subCategoryController,
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                        ),
+                      ),
+                      hintText: "ex) 돼지고기, 소고기",
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        children: <Widget>[
-          Column(
-            spacing: 10,
-            children: <Widget>[
-              optionTextField(
-                key: _subCategoryKey,
-                label: '중분류',
-                controller: subCategoryController,
-                enabled: true,
-                hintText: 'ex) 밥',
-                textInputType: TextInputType.text,
-                onChanged: () {
-                  ref
-                      .read(addContentProvider.notifier)
-                      .updateKcal(subCategoryController.text);
-                },
-              ),
-              const SizedBox(),
-            ],
-          ),
-        ],
-      ),
+        nutritionView(),
+      ],
     );
   }
 
@@ -702,278 +728,355 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     Design design = Design(context);
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        tilePadding: EdgeInsets.zero,
-        title: const Row(
-          spacing: 10,
-          children: <Widget>[
-            Text(
-              '영양 성분',
-              style: TextStyle(
-                fontSize: Design.normalFontSize1,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Tooltip(
-              triggerMode: TooltipTriggerMode.tap,
-              message: "각 영양 성분을 입력해야 \n'물품 공개 등록' 버튼을 \n활성화할 수 있습니다.",
-              child: Icon(Icons.help_outline),
-            ),
-          ],
-        ),
+      child: Column(
         children: <Widget>[
-          Column(
+          const Row(
             spacing: 10,
             children: <Widget>[
-              Row(
-                spacing: 10,
-                children: <Widget>[
-                  SizedBox(
-                    width: design.screenWidth * 0.22,
-                    child: const Text(
-                      '단위',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      key: _capacityKey,
-                      keyboardType: TextInputType.number,
-                      controller: capacityController,
-                      enabled: widget.item == null,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'ex) 150',
-                      ),
-                      onChanged: (String? newValue) {
-                        ref
-                            .read(addContentProvider.notifier)
-                            .updateCapacity(capacityController.text);
-                      },
-                      onTap: () => _focusTextField(_capacityKey),
-                    ),
-                  ),
-                  buildElevatedButton(
-                    label: 'g',
-                    onPressed:
-                        (widget.item != null)
-                            ? null
-                            : () {
-                              ref
-                                  .watch(addContentProvider.notifier)
-                                  .setUnit('g');
-                            },
-                    backgroundColor: Colors.amber[300]!,
-                    foregroundColor: Colors.black,
-                    borderColor:
-                        widget.item?.nutriUnit == 'g' ||
-                                _addContentState?.selectedUnit == 'g'
-                            ? Colors.red
-                            : Colors.transparent,
-                  ),
-                  buildElevatedButton(
-                    label: 'ml',
-                    onPressed:
-                        (widget.item != null)
-                            ? null
-                            : () {
-                              ref
-                                  .watch(addContentProvider.notifier)
-                                  .setUnit('ml');
-                            },
-                    backgroundColor: Colors.amber[300]!,
-                    foregroundColor: Colors.black,
-                    borderColor:
-                        widget.item?.nutriUnit == 'ml' ||
-                                _addContentState?.selectedUnit == 'ml'
-                            ? Colors.red
-                            : Colors.transparent,
-                  ),
-                ],
+              Text(
+                '영양 성분',
+                style: TextStyle(
+                  fontSize: Design.normalFontSize2,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              optionTextField(
-                key: _kcalKey,
-                label: '열량',
-                controller: kcalController,
-                enabled: widget.item == null,
-                hintText: 'ex) 150',
-                textInputType: TextInputType.number,
-                onChanged: () {
-                  ref
-                      .read(addContentProvider.notifier)
-                      .updateKcal(kcalController.text);
-                },
+              Tooltip(
+                triggerMode: TooltipTriggerMode.tap,
+                message: "각 영양 성분을 입력해야 \n'물품 공개 등록' 버튼을 \n활성화할 수 있습니다.",
+                child: Icon(Icons.help_outline),
               ),
-              optionTextField(
-                key: _carbsKey,
-                label: '탄수화물',
-                controller: carbsController,
-                enabled: widget.item == null,
-                hintText: 'ex) 50',
-                textInputType: TextInputType.number,
-                onChanged: () {
-                  ref
-                      .read(addContentProvider.notifier)
-                      .updateCarbs(carbsController.text);
-                },
+              Spacer(),
+              Text(
+                '* 공개 등록 필수 기입사항',
+                style: TextStyle(
+                  fontSize: Design.normalFontSize0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo,
+                ),
               ),
-              optionTextField(
-                key: _proteinKey,
-                label: '단백질',
-                controller: proteinController,
-                enabled: widget.item == null,
-                hintText: 'ex) 150',
-                textInputType: TextInputType.number,
-                onChanged: () {
-                  ref
-                      .read(addContentProvider.notifier)
-                      .updateProtein(proteinController.text);
-                },
-              ),
-              optionTextField(
-                key: _fatKey,
-                label: '지방',
-                controller: fatController,
-                enabled: widget.item == null,
-                hintText: 'ex) 150',
-                textInputType: TextInputType.number,
-                onChanged: () {
-                  ref
-                      .read(addContentProvider.notifier)
-                      .updateFat(fatController.text);
-                },
-              ),
-              const SizedBox(),
             ],
+          ),
+          const SizedBox(height: 15),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: design.nutritionViewMarginAndPadding,
+            ),
+            child: Column(
+              spacing: 10,
+              children: <Widget>[
+                Row(
+                  spacing: 10,
+                  children: <Widget>[
+                    SizedBox(
+                      width: design.addContentNutritionTextWidth,
+                      child: const Row(
+                        spacing: 2,
+                        children: <Widget>[
+                          Text(
+                            '1회 제공 용량',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Design.normalFontSize1,
+                            ),
+                          ),
+
+                          Text(
+                            '*',
+                            style: TextStyle(
+                              color: Colors.indigo,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Design.normalFontSize1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: 110,
+                      child: TextField(
+                        key: _capacityKey,
+                        keyboardType: TextInputType.number,
+                        controller: capacityController,
+                        textAlign: TextAlign.right,
+                        enabled: widget.item == null,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          hintText: 'ex) 150',
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: design.textFieldborderColor,
+                            ),
+                          ),
+                        ),
+                        onChanged: (String? newValue) {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateCapacity(capacityController.text);
+                        },
+                        onTap: () => _focusTextField(_capacityKey),
+                      ),
+                    ),
+                    _doubleSegmentedControl(
+                      segments: const <int, Widget>{
+                        1: Text(' g '),
+                        2: Text('ml'),
+                      },
+                      onValueChanged: (int value) {
+                        String unit = '';
+
+                        switch (value) {
+                          case 1:
+                            unit = 'g';
+                            break;
+                          case 2:
+                            unit = 'ml';
+                            break;
+                        }
+                        ref.watch(addContentProvider.notifier).setUnit(unit);
+                      },
+                    ),
+                  ],
+                ),
+                optionTextField(
+                  key: _kcalKey,
+                  label: '열량',
+                  controller: kcalController,
+                  enabled: widget.item == null,
+                  hintText: 'ex) 150',
+                  textInputType: TextInputType.number,
+                  onChanged: () {
+                    ref
+                        .read(addContentProvider.notifier)
+                        .updateKcal(kcalController.text);
+                  },
+                ),
+                optionTextField(
+                  key: _carbsKey,
+                  label: '탄수화물',
+                  controller: carbsController,
+                  enabled: widget.item == null,
+                  hintText: 'ex) 50',
+                  textInputType: TextInputType.number,
+                  onChanged: () {
+                    ref
+                        .read(addContentProvider.notifier)
+                        .updateCarbs(carbsController.text);
+                  },
+                ),
+                optionTextField(
+                  key: _proteinKey,
+                  label: '단백질',
+                  controller: proteinController,
+                  enabled: widget.item == null,
+                  hintText: 'ex) 150',
+                  textInputType: TextInputType.number,
+                  onChanged: () {
+                    ref
+                        .read(addContentProvider.notifier)
+                        .updateProtein(proteinController.text);
+                  },
+                ),
+                optionTextField(
+                  key: _fatKey,
+                  label: '지방',
+                  controller: fatController,
+                  enabled: widget.item == null,
+                  hintText: 'ex) 150',
+                  textInputType: TextInputType.number,
+                  onChanged: () {
+                    ref
+                        .read(addContentProvider.notifier)
+                        .updateFat(fatController.text);
+                  },
+                ),
+                const SizedBox(height: 70),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
+  Widget _doubleSegmentedControl({
+    required Map<int, Widget> segments,
+    required void Function(int) onValueChanged,
+  }) {
+    final Design design = Design(context);
+    return Theme(
+      data: Theme.of(context).copyWith(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+      ),
+      child: CustomSlidingSegmentedControl<int>(
+        initialValue: 1,
+        children: segments,
+        padding: 15,
+        decoration: BoxDecoration(
+          border: Border.all(color: design.textFieldborderColor, width: 2),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        thumbDecoration: BoxDecoration(
+          color: design.mainColor,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.grey.withAlpha(150),
+              blurRadius: 4.0,
+              spreadRadius: 1.0,
+              offset: const Offset(0.0, 1.0),
+            ),
+          ],
+        ),
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.linear,
+        onValueChanged: onValueChanged,
+      ),
+    );
+  }
+
   // Bottom Submit Buttons
   Widget bottomSubmitButtons() {
-    return Row(
-      spacing: 10,
-      children: <Widget>[
-        if (widget.item == null)
-          Expanded(
-            child: buildElevatedButton(
-              label: '물품 공개 등록',
-              onPressed:
-                  widget.item == null &&
-                          _addContentState!.isNutritionEmpty &&
-                          _addContentState!.isDetailInfoEmpty
-                      ? () async {
-                        await ref
-                            .watch(addContentProvider.notifier)
-                            .saveItem(
-                              _group?.groupId ?? 0,
-                              nameController.text,
-                              true,
-                              _addContentState?.selectedContentCategory ??
-                                  contentCategory[0],
-                              subCategoryController.text,
-                              brandNameController.text,
-                              int.parse(countController.text),
-                              _addContentState?.selectedRegDate ??
-                                  DateTime.now(),
-                              _addContentState?.selectedExpDate ??
-                                  DateTime.now(),
-                              _addContentState?.selectedContentStorage ?? '냉장',
-                              memoController.text,
-                              _addContentState?.selectedUnit ?? '',
-                              capacityController.text.isNotEmpty
-                                  ? int.parse(capacityController.text)
-                                  : 0,
-                              kcalController.text.isNotEmpty
-                                  ? int.parse(kcalController.text)
-                                  : 0,
-                              carbsController.text.isNotEmpty
-                                  ? int.parse(carbsController.text)
-                                  : 0,
-                              proteinController.text.isNotEmpty
-                                  ? int.parse(proteinController.text)
-                                  : 0,
-                              fatController.text.isNotEmpty
-                                  ? int.parse(fatController.text)
-                                  : 0,
+    final Design design = Design(context);
+    return Padding(
+      padding: EdgeInsets.all(design.marginAndPadding),
+      child: SizedBox(
+        height: design.homeBottomHeight,
+        child: Row(
+          spacing: 10,
+          children: <Widget>[
+            if (widget.item == null)
+              Expanded(
+                child: buildElevatedButton(
+                  label: "물품 공개 + 등록\n(검색 허용)",
+                  onPressed:
+                      widget.item == null &&
+                              _addContentState!.isNutritionEmpty &&
+                              _addContentState!.isDetailInfoEmpty
+                          ? () async {
+                            await ref
+                                .watch(addContentProvider.notifier)
+                                .saveItem(
+                                  _group?.groupId ?? 0,
+                                  nameController.text,
+                                  true,
+                                  _addContentState?.selectedContentCategory ??
+                                      contentCategory[0],
+                                  subCategoryController.text,
+                                  brandNameController.text,
+                                  int.parse(countController.text),
+                                  _addContentState?.selectedRegDate ??
+                                      DateTime.now(),
+                                  _addContentState?.selectedExpDate ??
+                                      DateTime.now(),
+                                  _addContentState?.selectedContentStorage ??
+                                      '냉장',
+                                  memoController.text,
+                                  _addContentState?.selectedUnit ?? '',
+                                  capacityController.text.isNotEmpty
+                                      ? int.parse(capacityController.text)
+                                      : 0,
+                                  kcalController.text.isNotEmpty
+                                      ? int.parse(kcalController.text)
+                                      : 0,
+                                  carbsController.text.isNotEmpty
+                                      ? int.parse(carbsController.text)
+                                      : 0,
+                                  proteinController.text.isNotEmpty
+                                      ? int.parse(proteinController.text)
+                                      : 0,
+                                  fatController.text.isNotEmpty
+                                      ? int.parse(fatController.text)
+                                      : 0,
+                                );
+
+                            toastMessage(
+                              context,
+                              "${nameController.text}(이)가 정상적으로\n공개등록이 되었습니다!",
                             );
 
-                        toastMessage(
-                          context,
-                          "${nameController.text}(이)가 정상적으로\n공개등록이 되었습니다!",
-                        );
-
-                        await ref
-                            .read(refrigeratorNotifier.notifier)
-                            .loadContentList(_group?.groupId ?? 0);
-                        context.pop();
-                      }
-                      : null,
-              backgroundColor: Colors.amber[200]!,
-              foregroundColor: Colors.black,
-              borderColor: Colors.transparent,
-            ),
-          ),
-        Expanded(
-          child: buildElevatedButton(
-            label: '물품 등록',
-            onPressed:
-                _addContentState?.isDetailInfoEmpty ?? false
-                    ? () async {
-                      await ref
-                          .watch(addContentProvider.notifier)
-                          .saveItem(
-                            _group?.groupId ?? 0,
-                            nameController.text,
-                            false,
-                            _addContentState?.selectedContentCategory == '직접 입력'
-                                ? _addContentState?.customContentCategory ??
-                                    contentCategory[0]
-                                : _addContentState?.selectedContentCategory ??
-                                    contentCategory[0],
-                            subCategoryController.text,
-                            brandNameController.text,
-                            int.parse(countController.text),
-                            _addContentState?.selectedRegDate ?? DateTime.now(),
-                            _addContentState?.selectedExpDate ?? DateTime.now(),
-                            _addContentState?.selectedContentStorage ?? '냉장',
-                            memoController.text,
-                            _addContentState?.selectedUnit ?? '',
-                            capacityController.text.isNotEmpty
-                                ? int.parse(capacityController.text)
-                                : 0,
-                            kcalController.text.isNotEmpty
-                                ? int.parse(kcalController.text)
-                                : 0,
-                            carbsController.text.isNotEmpty
-                                ? int.parse(carbsController.text)
-                                : 0,
-                            proteinController.text.isNotEmpty
-                                ? int.parse(proteinController.text)
-                                : 0,
-                            fatController.text.isNotEmpty
-                                ? int.parse(fatController.text)
-                                : 0,
+                            await ref
+                                .read(refrigeratorNotifier.notifier)
+                                .loadContentList(_group?.groupId ?? 0);
+                            context.pop();
+                          }
+                          : null,
+                  backgroundColor: Colors.amber[200]!,
+                  foregroundColor: Colors.black,
+                  borderColor: Colors.transparent,
+                ),
+              ),
+            Expanded(
+              child: buildElevatedButton(
+                label: '냉장고에 등록',
+                onPressed:
+                    _addContentState?.isDetailInfoEmpty ?? false
+                        ? () async {
+                          await ref
+                              .watch(addContentProvider.notifier)
+                              .saveItem(
+                                _group?.groupId ?? 0,
+                                nameController.text,
+                                false,
+                                _addContentState?.selectedContentCategory ==
+                                        '직접 입력'
+                                    ? _addContentState?.customContentCategory ??
+                                        contentCategory[0]
+                                    : _addContentState
+                                            ?.selectedContentCategory ??
+                                        contentCategory[0],
+                                subCategoryController.text,
+                                brandNameController.text,
+                                int.parse(countController.text),
+                                _addContentState?.selectedRegDate ??
+                                    DateTime.now(),
+                                _addContentState?.selectedExpDate ??
+                                    DateTime.now(),
+                                _addContentState?.selectedContentStorage ??
+                                    '냉장',
+                                memoController.text,
+                                _addContentState?.selectedUnit ?? '',
+                                capacityController.text.isNotEmpty
+                                    ? int.parse(capacityController.text)
+                                    : 0,
+                                kcalController.text.isNotEmpty
+                                    ? int.parse(kcalController.text)
+                                    : 0,
+                                carbsController.text.isNotEmpty
+                                    ? int.parse(carbsController.text)
+                                    : 0,
+                                proteinController.text.isNotEmpty
+                                    ? int.parse(proteinController.text)
+                                    : 0,
+                                fatController.text.isNotEmpty
+                                    ? int.parse(fatController.text)
+                                    : 0,
+                              );
+                          toastMessage(
+                            context,
+                            "${nameController.text}(이)가 정상적으로\n추가되었습니다!",
                           );
-                      toastMessage(
-                        context,
-                        "${nameController.text}(이)가 정상적으로\n추가되었습니다!",
-                      );
-                      await ref
-                          .read(refrigeratorNotifier.notifier)
-                          .loadContentList(_group?.groupId ?? 0);
-                      context.pop();
-                    }
-                    : null,
-            backgroundColor: Colors.amber[300]!,
-            foregroundColor: Colors.black,
-            borderColor: Colors.transparent,
-          ),
+                          await ref
+                              .read(refrigeratorNotifier.notifier)
+                              .loadContentList(_group?.groupId ?? 0);
+                          context.pop();
+                        }
+                        : null,
+                backgroundColor: Colors.amber[300]!,
+                foregroundColor: Colors.black,
+                borderColor: Colors.transparent,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -986,26 +1089,51 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required VoidCallback onChanged,
     required TextInputType textInputType,
   }) {
+    final Design design = Design(context);
     return Row(
       spacing: 10,
       children: <Widget>[
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.22,
-          child: Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          width: design.addContentNutritionTextWidth,
+          child: Row(
+            spacing: 2,
+            children: <Widget>[
+              Text(
+                label,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Design.normalFontSize1,
+                ),
+              ),
+              const Text(
+                '*',
+                style: TextStyle(
+                  color: Colors.indigo,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Design.normalFontSize1,
+                ),
+              ),
+            ],
           ),
         ),
-        Expanded(
+        const Spacer(),
+        SizedBox(
+          width: 110,
           child: TextField(
             key: key,
             keyboardType: textInputType,
             controller: controller,
+            textAlign: TextAlign.right,
             style: const TextStyle(color: Colors.black),
             enabled: enabled,
             decoration: InputDecoration(
-              border: const OutlineInputBorder(),
               hintText: hintText,
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: design.textFieldborderColor),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: design.textFieldborderColor),
+              ),
             ),
             onChanged: (String? newValue) {
               if (newValue != null) {
@@ -1026,17 +1154,40 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required Color foregroundColor,
     required Color borderColor,
   }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-          side: BorderSide(color: borderColor, width: 2.0),
+    return SizedBox(
+      height: 50,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.disabled)) {
+              return Colors.grey.shade300;
+            }
+            return backgroundColor;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.disabled)) {
+              return Colors.grey.shade600;
+            }
+            return foregroundColor;
+          }),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+              side: BorderSide(color: borderColor, width: 2.0),
+            ),
+          ),
         ),
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
+        child: Text(
+          label,
+          style: TextStyle(color: foregroundColor),
+          textAlign: TextAlign.center,
+        ),
       ),
-      child: Text(label, style: TextStyle(color: foregroundColor)),
     );
   }
 

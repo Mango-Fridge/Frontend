@@ -22,25 +22,30 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
     String keyword, {
     bool isRefresh = false,
   }) async {
-    if (state?.isLoading == true) return;
-
-    state = state?.copyWith(isLoading: true);
-
-    await Future.delayed(Duration(milliseconds: 1000)); // 테스트용
+    if ((isRefresh && state?.isLoading == true) ||
+        (!isRefresh && state?.isLoadingMore == true))
+      return;
 
     try {
+      if (isRefresh) {
+        state = state?.copyWith(isLoading: true);
+      } else {
+        state = state?.copyWith(isLoadingMore: true);
+      }
+
       final int currentPage = isRefresh ? 0 : state?.page ?? 0;
+
       final List<RefrigeratorItem> newList = await _itemRepository
           .loadItemListByString(keyword, currentPage);
 
       List<RefrigeratorItem> updatedList = <RefrigeratorItem>[];
-      if (!isRefresh) {
+      if (isRefresh) {
+        updatedList = newList;
+      } else {
         updatedList = <RefrigeratorItem>[
           ...?state?.refrigeratorItemList,
           ...newList,
         ];
-      } else {
-        updatedList = newList;
       }
 
       final int nextPage = newList.isNotEmpty ? currentPage + 1 : currentPage;
@@ -49,12 +54,14 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
       state = state?.copyWith(
         refrigeratorItemList: updatedList,
         page: nextPage,
-        isLoading: false,
         hasMore: hasMore,
+        isLoading: false,
+        isLoadingMore: false,
       );
     } catch (e) {
       AppLogger.logger.e("[search_item_provider/loadItemListByString] $e");
-      state = state?.copyWith(isLoading: false);
+
+      state = state?.copyWith(isLoading: false, isLoadingMore: false);
     }
   }
 
@@ -67,6 +74,14 @@ class SearchItemNotifier extends Notifier<SearchItemState?> {
     } catch (e) {
       AppLogger.logger.e("[search_item_provider/loadItemListByString]: $e");
     }
+  }
+
+  void setLoading(bool loading) {
+    state = state?.copyWith(isLoading: loading);
+  }
+
+  void setSearching(bool value) {
+    state = state?.copyWith(isSearching: value);
   }
 }
 

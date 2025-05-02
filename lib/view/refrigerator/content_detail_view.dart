@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
@@ -165,7 +166,7 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
                   ),
                   minimumSize: const Size(120, 50),
                 ),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.pop(),
                 child: const Text('닫기', style: TextStyle(fontSize: 18)),
               ),
             ],

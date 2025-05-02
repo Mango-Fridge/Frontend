@@ -31,6 +31,8 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(searchContentProvider.notifier).resetState();
 
+      bool _isFetchingNextPage = false;
+
       _listViewScrollController.addListener(() {
         final bool isNearBottom =
             _listViewScrollController.position.pixels >=
@@ -40,11 +42,16 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             ref.read(searchContentProvider)?.hasMore ?? false;
         final bool isLoading =
             ref.read(searchContentProvider)?.isLoading ?? false;
+        final bool isLoadingMore =
+            ref.read(searchContentProvider)?.isLoadingMore ?? false;
 
-        if (isNearBottom && !isLoading && canLoadMore) {
+        if (isNearBottom && !isLoading && !isLoadingMore && canLoadMore) {
+          _isFetchingNextPage = true;
+
           ref
               .read(searchContentProvider.notifier)
-              .loadItemListByString(_controller.text);
+              .loadItemListByString(_controller.text)
+              .whenComplete(() => _isFetchingNextPage = false);
         }
       });
     });
@@ -109,7 +116,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             ),
             Expanded(
               child:
-                  (ref.watch(searchContentProvider)?.isLoading ?? false)
+                  (ref.watch(searchContentProvider)?.isSearching ?? false)
                       ? _buildSkeleton()
                       : _controller.text != ''
                       ? (_searchContentState != null &&
@@ -163,6 +170,9 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
 
   Widget _buildItem(List<RefrigeratorItem>? itemList) {
     final Design design = Design(context);
+    final bool hasMore = _searchContentState?.hasMore ?? false;
+    final bool isLoadingMore = _searchContentState?.isLoadingMore ?? false;
+
     return Column(
       children: <Widget>[
         Expanded(
@@ -190,8 +200,16 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                   )
                   : ListView.builder(
                     controller: _listViewScrollController,
-                    itemCount: itemList?.length ?? 0,
+                    itemCount:
+                        (itemList?.length ?? 0) +
+                        (hasMore && isLoadingMore ? 1 : 0),
                     itemBuilder: (BuildContext context, int index) {
+                      if (index == itemList?.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
                       final RefrigeratorItem item = itemList![index];
                       return _buildItemRow(item);
                     },
@@ -357,11 +375,15 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
       ref.read(searchContentProvider.notifier).resetState();
       return;
     }
+
+    ref.read(searchContentProvider.notifier).setSearching(true);
+
     if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
-      ref
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      await ref
           .read(searchContentProvider.notifier)
           .loadItemListByString(keyword, isRefresh: true);
+      ref.read(searchContentProvider.notifier).setSearching(false);
     });
   }
 }
