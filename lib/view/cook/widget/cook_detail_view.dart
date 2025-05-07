@@ -140,7 +140,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                                   // '${content.itemName ?? '재료 이름 없음'}',
                                   style: const TextStyle(fontSize: 18),
                                 ),
-                                Text('(${item.category})'), // 중분류 후에 디자인 할 것
+                                Text('(${item.subCategory})'), // 중분류 배치, 후에 디자인 할 것
                               ],
                             ),
                             const Spacer(),
