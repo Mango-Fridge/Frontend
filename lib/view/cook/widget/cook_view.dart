@@ -152,10 +152,11 @@ class _CookViewState extends ConsumerState<CookView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: Column(
+                child: Row(
                   children: [
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           (cook.cookName ?? '').length > 10
@@ -167,33 +168,11 @@ class _CookViewState extends ConsumerState<CookView> {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
+                        Text(
+                          '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개의 재료'
+                        ),
                       ],
                     ),
-                    // add2 변경 후 복구
-
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.start,
-                    //   children: <Widget>[
-                    //     Text(
-                    //       (cook.cookItems[0].contentName ?? '').length > 10
-                    //           ? '${(cook.cookItems[0].contentName ?? '').substring(0, 10)}...'
-                    //           : cook.cookItems[0].contentName ?? '',
-                    //       style: const TextStyle(
-                    //         fontSize: 14,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //       overflow: TextOverflow.ellipsis,
-                    //     ),
-                    //     Text(
-                    //       ' 외 ${cook.cookItems.length}종',
-                    //       style: const TextStyle(
-                    //         fontSize: 14,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //       overflow: TextOverflow.ellipsis,
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),
