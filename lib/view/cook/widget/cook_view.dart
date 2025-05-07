@@ -66,8 +66,26 @@ class _CookViewState extends ConsumerState<CookView> {
         padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.00),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 20,
           children: [
+            Container(
+              margin: EdgeInsets.symmetric(
+                vertical: 4,
+                horizontal: design.marginAndPadding,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    '${_group?.groupName}님의 냉장고',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text('총 ${_cookState?.cookList?.length}개의 요리'),
+                ],
+              ),
+            ),
             Expanded(
               child:
                   _cookState != null &&
@@ -169,7 +187,7 @@ class _CookViewState extends ConsumerState<CookView> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개의 재료'
+                          '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개의 재료',
                         ),
                       ],
                     ),
