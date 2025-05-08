@@ -57,8 +57,8 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    (widget.item?.itemName ?? '').length > 20
-                        ? '${(widget.item?.itemName ?? '').substring(0, 10)}...'
+                    (widget.item?.itemName ?? '').length > 17
+                        ? '${(widget.item?.itemName ?? '').substring(0, 17)}...'
                         : widget.item?.itemName ?? '',
                     style: const TextStyle(
                       fontSize: 20,

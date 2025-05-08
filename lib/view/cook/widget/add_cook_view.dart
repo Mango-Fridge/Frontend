@@ -273,10 +273,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(child: _buildItemRow(item, content(item))),
-                    if (isCookItemRow)
+                    if (isCookItemRow) ...<Widget>{
                       Transform.translate(
-                        offset: const Offset(-8, 0),
+                        offset: const Offset(8, 0),
                         child: IconButton(
                           icon: const Icon(Icons.close),
                           color: Colors.red,
@@ -297,6 +296,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           },
                         ),
                       ),
+                    },
+                    Expanded(child: _buildItemRow(item, content(item))),
                   ],
                 );
               },
@@ -410,13 +411,15 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.itemName ?? '',
+                    (item.itemName ?? '').length > 10
+                        ? '${(item.itemName ?? '').substring(0, 10)}...'
+                        : item.itemName ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    // overflow: TextOverflow.ellipsis,
+                    // maxLines: 1,
                   ),
                   Text("${item.brandName}"),
                 ],
@@ -426,10 +429,10 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 child: Column(
                   children: [
                     Text(
-                      "용량: ${(item.nutriCapacity ?? 0)}g",
+                      '${item.nutriKcal ?? 0}kcal',
                       // "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 65, 65, 65),
                       ),
@@ -437,10 +440,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                       maxLines: 1,
                     ),
                     Text(
-                      "칼로리: ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
-                      // "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
+                      '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / ${(item.nutriProtein ?? 0) * (item.count ?? 0)} / ${(item.nutriFat ?? 0) * (item.count ?? 0)}',
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 65, 65, 65),
                       ),
@@ -448,6 +450,13 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                       maxLines: 1,
                     ),
                   ],
+                ),
+              ),
+              Text(
+                '${item.count}개',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
