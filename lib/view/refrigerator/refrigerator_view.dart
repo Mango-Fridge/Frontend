@@ -874,7 +874,11 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text('$count개'),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {},
+                child: Text('$count개'),
+              ),
             ),
             Material(
               color: Colors.transparent,
