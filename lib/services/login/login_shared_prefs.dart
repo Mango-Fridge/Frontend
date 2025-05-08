@@ -30,6 +30,22 @@ class LoginSharePrefs {
     }
   }
 
+  // (appleLogin 한정) 로컬에 token을 저장하기 위한 용도
+  Future<void> saveAppleToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('AppleToken', token);
+    debugPrint(
+      '[shared_preferences] AppleToken: ${prefs.getString('AppleToken')}',
+    );
+  }
+
+  // (appleLogin 한정) 로컬에 저장된 토큰 가져오기
+  Future<String?> getAppleToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString('AppleToken') ?? "";
+  }
+
   // 로컬에 저장된 이메일 가져오기
   Future<String?> getEmail(String platform) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
