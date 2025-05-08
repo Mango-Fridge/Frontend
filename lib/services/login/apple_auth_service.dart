@@ -64,7 +64,8 @@ class AppleAuthService implements AbstractAuth {
         // 이메일 저장
         await _LoginSharePrefs.saveAuth(AuthPlatform.APPLE.name, email);
 
-        return AuthInfo(oauthProvider: AuthPlatform.APPLE, email: email);
+        // 서버와 로그인 처리
+        return await _loginService.postLogin();
       }
     } catch (error) {
       if (error is SignInWithAppleAuthorizationException) {
@@ -103,7 +104,6 @@ class AppleAuthService implements AbstractAuth {
         LoginSharePrefs(); // shared_preferences 뷰모델
 
     try {
-      // 예정 : [애플에서 사용자 정보 제거 하는 로직]
       await _LoginSharePrefs.removeAuth('Apple'); // 로컬 계정 삭제
       if (kDebugMode) print("[Apple] 애플 로그아웃 성공");
     } catch (error) {

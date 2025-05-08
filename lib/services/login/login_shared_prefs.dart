@@ -69,7 +69,14 @@ class LoginSharePrefs {
   // 로컬에 저장한 플랫폼/이메일 제거
   Future<void> removeAuth(String platform) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(platform);
+
+    // (appleLogin 한정) 로컬에 저장된 토큰 제거
+    switch (platform) {
+      case 'Apple':
+        await prefs.remove('AppleToken');
+    }
+
     await prefs.remove('${platform}Email');
+    await prefs.remove(platform);
   }
 }
