@@ -165,7 +165,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         ref.watch(addContentProvider)?.selectedContentCategory == '직접 입력';
     Design design = Design(context);
     return Column(
-      spacing: 20,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextField(
@@ -201,8 +200,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 .updateNameErrorMessage(value);
           },
         ),
-        Row(
+        const SizedBox(height: 10),
+        Column(
           spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
               width: design.addContentTextWidth,
@@ -212,7 +213,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     '카테고리 ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
+                      fontSize: Design.normalFontSize1,
                     ),
                   ),
                   Text(
@@ -220,176 +221,233 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
+                      fontSize: Design.normalFontSize1,
                     ),
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child:
-                  isCustomInput
-                      ? Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              controller: categoryController,
-                              decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: design.textFieldborderColor,
-                                  ),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: design.textFieldborderColor,
-                                  ),
-                                ),
-                              ),
-                              onChanged: (String value) {
-                                ref
-                                    .read(addContentProvider.notifier)
-                                    .setCustomCategory(value);
-                              },
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              ref
-                                  .read(addContentProvider.notifier)
-                                  .setCategory(contentCategory[0]);
-                              ref
-                                  .read(addContentProvider.notifier)
-                                  .setCustomCategory('');
-                            },
-                          ),
-                        ],
-                      )
-                      : DropdownButtonFormField2<String>(
-                        value:
-                            ref
-                                .watch(addContentProvider)
-                                ?.selectedContentCategory ??
-                            '직접 입력',
-                        isExpanded: true,
+            isCustomInput
+                ? Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        controller: categoryController,
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.zero,
-                          border: OutlineInputBorder(
+                          enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: design.textFieldborderColor,
-                              width: 2.0,
                             ),
-                            borderRadius: BorderRadius.circular(16.0),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: design.textFieldborderColor,
-                              width: 2.0,
                             ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: design.textFieldborderColor,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
                           ),
                         ),
-                        dropdownStyleData: DropdownStyleData(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: design.subColor,
-                          ),
-                        ),
-                        buttonStyleData: const ButtonStyleData(
-                          height: 20,
-                          padding: EdgeInsets.only(right: 10),
-                        ),
-                        items:
-                            contentCategory.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                        onChanged: (String? newValue) {
-                          if (newValue == '직접 입력') {
-                            ref
-                                .read(addContentProvider.notifier)
-                                .setCategory('직접 입력');
-                            ref
-                                .read(addContentProvider.notifier)
-                                .setCustomCategory('');
-                          } else {
-                            ref
-                                .read(addContentProvider.notifier)
-                                .setCategory(newValue ?? '');
-                            ref
-                                .read(addContentProvider.notifier)
-                                .setCustomCategory('');
-                          }
+                        onChanged: (String value) {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .setCustomCategory(value);
                         },
                       ),
-            ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        ref
+                            .read(addContentProvider.notifier)
+                            .setCategory(contentCategory[0]);
+                        ref
+                            .read(addContentProvider.notifier)
+                            .setCustomCategory('');
+                      },
+                    ),
+                  ],
+                )
+                : DropdownButtonFormField2<String>(
+                  value:
+                      ref.watch(addContentProvider)?.selectedContentCategory ??
+                      '직접 입력',
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: design.textFieldborderColor,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: design.textFieldborderColor,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: design.textFieldborderColor,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                  ),
+                  dropdownStyleData: DropdownStyleData(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.0),
+                      color: design.subColor,
+                    ),
+                  ),
+                  buttonStyleData: const ButtonStyleData(
+                    height: 30,
+                    padding: EdgeInsets.only(right: 10),
+                  ),
+                  items:
+                      contentCategory.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                  onChanged: (String? newValue) {
+                    if (newValue == '직접 입력') {
+                      ref
+                          .read(addContentProvider.notifier)
+                          .setCategory('직접 입력');
+                      ref
+                          .read(addContentProvider.notifier)
+                          .setCustomCategory('');
+                    } else {
+                      ref
+                          .read(addContentProvider.notifier)
+                          .setCategory(newValue ?? '');
+                      ref
+                          .read(addContentProvider.notifier)
+                          .setCustomCategory('');
+                    }
+                  },
+                ),
           ],
         ),
+        const SizedBox(height: 25),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          spacing: 10,
           children: <Widget>[
-            SizedBox(
-              width: design.addContentTextWidth,
-              child: const Row(
-                children: <Widget>[
-                  Text(
-                    '수량(인분) ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: <Widget>[
+                SizedBox(
+                  width: design.addContentTextWidth,
+                  child: const Row(
+                    children: <Widget>[
+                      Text(
+                        '수량(인분) ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Design.normalFontSize1,
+                        ),
+                      ),
+                      Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Design.normalFontSize1,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    '*',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 150,
-              child: TextField(
-                key: _countKey,
-                textAlign: TextAlign.right,
-                onTap: () => _focusTextField(_countKey),
-                controller: countController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: design.textFieldborderColor),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: design.textFieldborderColor),
-                  ),
-                  errorText:
-                      _addContentState?.contentCountErrorMessage?.isEmpty ??
-                              true
-                          ? null
-                          : _addContentState?.contentCountErrorMessage,
                 ),
-                onChanged: (String value) {
-                  ref.watch(addContentProvider.notifier).updateCount(value);
-                },
-              ),
+                SizedBox(
+                  width: 150,
+                  child: TextField(
+                    key: _countKey,
+                    textAlign: TextAlign.right,
+                    onTap: () => _focusTextField(_countKey),
+                    controller: countController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: design.textFieldborderColor,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      errorText:
+                          _addContentState?.contentCountErrorMessage?.isEmpty ??
+                                  true
+                              ? null
+                              : _addContentState?.contentCountErrorMessage,
+                      isDense: true,
+                    ),
+                    onChanged: (String value) {
+                      ref.watch(addContentProvider.notifier).updateCount(value);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: <Widget>[
+                SizedBox(
+                  width: design.addContentTextWidth,
+                  child: const Row(
+                    children: <Widget>[
+                      Text(
+                        '보관 장소 ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Design.normalFontSize1,
+                        ),
+                      ),
+                      Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Design.normalFontSize1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _doubleSegmentedControl(
+                  segments: const <int, Widget>{1: Text('냉장'), 2: Text('냉동')},
+                  onValueChanged: (int value) {
+                    String storage = '';
+
+                    switch (value) {
+                      case 1:
+                        storage = '냉장';
+                        break;
+                      case 2:
+                        storage = '냉동';
+                        break;
+                    }
+                    ref.watch(addContentProvider.notifier).setStorage(storage);
+                  },
+                  padding: 30,
+                ),
+              ],
             ),
           ],
         ),
-        Row(
+        const SizedBox(height: 35),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: <Widget>[
             SizedBox(
@@ -400,7 +458,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     '등록 날짜 ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
+                      fontSize: Design.normalFontSize1,
                     ),
                   ),
                   Text(
@@ -408,40 +466,42 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
+                      fontSize: Design.normalFontSize1,
                     ),
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  _selectDateTime(context, true);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(design.marginAndPadding),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    border: Border.all(
-                      color: design.textFieldborderColor,
-                      width: 2,
-                    ),
+            GestureDetector(
+              onTap: () {
+                _selectDateTime(context, true);
+              },
+              child: Container(
+                height: 45,
+                padding: EdgeInsets.all(design.marginAndPadding),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  border: Border.all(
+                    color: design.textFieldborderColor,
+                    width: 2,
                   ),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
-                        _addContentState?.selectedRegDate ?? DateTime.now(),
-                      ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
+                      _addContentState?.selectedRegDate ?? DateTime.now(),
                     ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
             ),
           ],
         ),
-        Row(
+        const SizedBox(height: 20),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: <Widget>[
             SizedBox(
@@ -452,7 +512,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     '소비 기한 ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
+                      fontSize: Design.normalFontSize1,
                     ),
                   ),
                   Text(
@@ -460,42 +520,40 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
+                      fontSize: Design.normalFontSize1,
                     ),
                   ),
                 ],
               ),
             ),
-
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  _selectDateTime(context, false);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(design.marginAndPadding),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    border: Border.all(
-                      color: design.textFieldborderColor,
-                      width: 2,
-                    ),
+            GestureDetector(
+              onTap: () {
+                _selectDateTime(context, false);
+              },
+              child: Container(
+                height: 45,
+                padding: EdgeInsets.all(design.marginAndPadding),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  border: Border.all(
+                    color: design.textFieldborderColor,
+                    width: 2,
                   ),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      _addContentState?.selectedExpDate == null
-                          ? '날짜를 선택하세요'
-                          : DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
-                            _addContentState!.selectedExpDate ?? DateTime.now(),
-                          ),
-                      style: TextStyle(
-                        color:
-                            _addContentState?.selectedExpDate == null
-                                ? Colors.red[300]
-                                : Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    _addContentState?.selectedExpDate == null
+                        ? '날짜를 선택하세요'
+                        : DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
+                          _addContentState!.selectedExpDate ?? DateTime.now(),
+                        ),
+                    style: TextStyle(
+                      color:
+                          _addContentState?.selectedExpDate == null
+                              ? Colors.red[300]
+                              : Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -503,83 +561,41 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          spacing: 10,
-          children: <Widget>[
-            SizedBox(
-              width: design.addContentTextWidth,
-              child: const Row(
-                children: <Widget>[
-                  Text(
-                    '보관 장소 ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
-                    ),
-                  ),
-                  Text(
-                    '*',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            _doubleSegmentedControl(
-              segments: const <int, Widget>{1: Text('냉장'), 2: Text('냉동')},
-              onValueChanged: (int value) {
-                String storage = '';
-
-                switch (value) {
-                  case 1:
-                    storage = '냉장';
-                    break;
-                  case 2:
-                    storage = '냉동';
-                    break;
-                }
-                ref.watch(addContentProvider.notifier).setStorage(storage);
-              },
-            ),
-          ],
-        ),
-
+        const SizedBox(height: 50),
         Container(
           padding: EdgeInsets.symmetric(vertical: design.marginAndPadding),
           child: dottedDivider(
-            color: Colors.green,
+            color: Colors.black.withAlpha(100),
             dashWidth: 1,
             text: '선택 사항',
           ),
         ),
+        const SizedBox(height: 10),
         const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('선택사항 일부는 '),
+            Text('선택사항 일부는 ', style: TextStyle(color: Colors.black87)),
             Text(
-              '요리',
+              '요리 재료 조회',
               style: TextStyle(
-                color: Colors.red,
                 fontWeight: FontWeight.bold,
-                fontSize: Design.normalFontSize2,
+                fontSize: Design.normalFontSize1,
               ),
             ),
             Text(' / '),
             Text(
               '물품 검색',
               style: TextStyle(
-                color: Colors.indigo,
                 fontWeight: FontWeight.bold,
+                fontSize: Design.normalFontSize1,
               ),
             ),
-            Text('에 사용됩니다.'),
+            Text('에 사용됩니다.', style: TextStyle(color: Colors.black87)),
           ],
         ),
-        Row(
+        const SizedBox(height: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: <Widget>[
             SizedBox(
@@ -588,38 +604,43 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 '브랜드 명',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: Design.normalFontSize2,
+                  fontSize: Design.normalFontSize1,
                 ),
               ),
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextField(
-                    key: _brandNameKey,
-                    onTap: () => _focusTextField(_brandNameKey),
-                    controller: brandNameController,
-                    textAlign: TextAlign.right,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: design.textFieldborderColor,
-                        ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextField(
+                  key: _brandNameKey,
+                  onTap: () => _focusTextField(_brandNameKey),
+                  controller: brandNameController,
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: design.textFieldborderColor,
+                        width: 2.0,
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: design.textFieldborderColor,
-                        ),
-                      ),
-                      hintText: "ex) 오리온",
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: design.textFieldborderColor,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    hintText: "ex) 오리온",
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    isDense: true,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
+        const SizedBox(height: 20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
@@ -631,7 +652,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   '메모',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: Design.normalFontSize2,
+                    fontSize: Design.normalFontSize1,
                   ),
                 ),
                 Text(
@@ -668,7 +689,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ),
           ],
         ),
-        Row(
+        const SizedBox(height: 20),
+        Column(
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
               width: design.addContentTextWidth,
@@ -679,7 +703,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     '중분류',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize2,
+                      fontSize: Design.normalFontSize1,
                     ),
                   ),
                   Tooltip(
@@ -690,35 +714,39 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 ],
               ),
             ),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextField(
-                    key: _subCategoryKey,
-                    onTap: () => _focusTextField(_subCategoryKey),
-                    controller: subCategoryController,
-                    textAlign: TextAlign.right,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: design.textFieldborderColor,
-                        ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextField(
+                  key: _subCategoryKey,
+                  onTap: () => _focusTextField(_subCategoryKey),
+                  controller: subCategoryController,
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: design.textFieldborderColor,
+                        width: 2.0,
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: design.textFieldborderColor,
-                        ),
-                      ),
-                      hintText: "ex) 돼지고기, 소고기",
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: design.textFieldborderColor,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    hintText: "ex) 돼지고기, 소고기",
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    isDense: true,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
+        const SizedBox(height: 30),
         nutritionView(),
       ],
     );
@@ -736,7 +764,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               Text(
                 '영양 성분',
                 style: TextStyle(
-                  fontSize: Design.normalFontSize2,
+                  fontSize: Design.normalFontSize1,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -762,139 +790,222 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               horizontal: design.nutritionViewMarginAndPadding,
             ),
             child: Column(
-              spacing: 10,
+              spacing: 20,
               children: <Widget>[
                 Row(
-                  spacing: 10,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(
-                      width: design.addContentNutritionTextWidth,
-                      child: const Row(
-                        spacing: 2,
+                    Expanded(
+                      child: Column(
+                        spacing: 10,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            '1회 제공 용량',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: Design.normalFontSize1,
-                            ),
-                          ),
+                          Row(
+                            spacing: 10,
+                            children: <Widget>[
+                              SizedBox(
+                                width: design.addContentNutritionTextWidth,
+                                child: const Row(
+                                  spacing: 2,
+                                  children: <Widget>[
+                                    Text(
+                                      '1회 제공 용량',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Design.normalFontSize1,
+                                      ),
+                                    ),
 
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              color: Colors.indigo,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Design.normalFontSize1,
+                                    Text(
+                                      '*',
+                                      style: TextStyle(
+                                        color: Colors.indigo,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Design.normalFontSize1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            child: TextField(
+                              key: _capacityKey,
+                              keyboardType: TextInputType.number,
+                              controller: capacityController,
+                              textAlign: TextAlign.right,
+                              enabled: widget.item == null,
+                              style: const TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                hintText: 'ex) 150',
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: design.textFieldborderColor,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: design.textFieldborderColor,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                isDense: true,
+                              ),
+                              onChanged: (String? newValue) {
+                                ref
+                                    .read(addContentProvider.notifier)
+                                    .updateCapacity(capacityController.text);
+                              },
+                              onTap: () => _focusTextField(_capacityKey),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const Spacer(),
-                    SizedBox(
-                      width: 110,
-                      child: TextField(
-                        key: _capacityKey,
-                        keyboardType: TextInputType.number,
-                        controller: capacityController,
-                        textAlign: TextAlign.right,
-                        enabled: widget.item == null,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          hintText: 'ex) 150',
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: design.textFieldborderColor,
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: design.textFieldborderColor,
-                            ),
-                          ),
-                        ),
-                        onChanged: (String? newValue) {
-                          ref
-                              .read(addContentProvider.notifier)
-                              .updateCapacity(capacityController.text);
-                        },
-                        onTap: () => _focusTextField(_capacityKey),
-                      ),
-                    ),
-                    _doubleSegmentedControl(
-                      segments: const <int, Widget>{
-                        1: Text(' g '),
-                        2: Text('ml'),
-                      },
-                      onValueChanged: (int value) {
-                        String unit = '';
+                    const SizedBox(width: 25),
+                    Expanded(
+                      child: Column(
+                        spacing: 10,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Row(
+                                spacing: 10,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: design.addContentNutritionTextWidth,
+                                    child: const Row(
+                                      spacing: 2,
+                                      children: <Widget>[
+                                        Text(
+                                          '단위',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Design.normalFontSize1,
+                                          ),
+                                        ),
 
-                        switch (value) {
-                          case 1:
-                            unit = 'g';
-                            break;
-                          case 2:
-                            unit = 'ml';
-                            break;
-                        }
-                        ref.watch(addContentProvider.notifier).setUnit(unit);
-                      },
+                                        Text(
+                                          '*',
+                                          style: TextStyle(
+                                            color: Colors.indigo,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Design.normalFontSize1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          _doubleSegmentedControl(
+                            segments: const <int, Widget>{
+                              1: Text(' g '),
+                              2: Text('ml'),
+                            },
+                            onValueChanged: (int value) {
+                              String unit = '';
+
+                              switch (value) {
+                                case 1:
+                                  unit = 'g';
+                                  break;
+                                case 2:
+                                  unit = 'ml';
+                                  break;
+                              }
+                              ref
+                                  .watch(addContentProvider.notifier)
+                                  .setUnit(unit);
+                            },
+                            padding: 30,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                optionTextField(
-                  key: _kcalKey,
-                  label: '열량',
-                  controller: kcalController,
-                  enabled: widget.item == null,
-                  hintText: 'ex) 150',
-                  textInputType: TextInputType.number,
-                  onChanged: () {
-                    ref
-                        .read(addContentProvider.notifier)
-                        .updateKcal(kcalController.text);
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: optionTextField(
+                        key: _kcalKey,
+                        label: '열량',
+                        controller: kcalController,
+                        enabled: widget.item == null,
+                        hintText: 'ex) 150',
+                        textInputType: TextInputType.number,
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateKcal(kcalController.text);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 25),
+                    Expanded(
+                      child: optionTextField(
+                        key: _carbsKey,
+                        label: '탄수화물',
+                        controller: carbsController,
+                        enabled: widget.item == null,
+                        hintText: 'ex) 150',
+                        textInputType: TextInputType.number,
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateCarbs(carbsController.text);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                optionTextField(
-                  key: _carbsKey,
-                  label: '탄수화물',
-                  controller: carbsController,
-                  enabled: widget.item == null,
-                  hintText: 'ex) 50',
-                  textInputType: TextInputType.number,
-                  onChanged: () {
-                    ref
-                        .read(addContentProvider.notifier)
-                        .updateCarbs(carbsController.text);
-                  },
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: optionTextField(
+                        key: _proteinKey,
+                        label: '단백질',
+                        controller: proteinController,
+                        enabled: widget.item == null,
+                        hintText: 'ex) 150',
+                        textInputType: TextInputType.number,
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateProtein(proteinController.text);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 25),
+                    Expanded(
+                      child: optionTextField(
+                        key: _fatKey,
+                        label: '지방',
+                        controller: fatController,
+                        enabled: widget.item == null,
+                        hintText: 'ex) 150',
+                        textInputType: TextInputType.number,
+                        onChanged: () {
+                          ref
+                              .read(addContentProvider.notifier)
+                              .updateFat(fatController.text);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                optionTextField(
-                  key: _proteinKey,
-                  label: '단백질',
-                  controller: proteinController,
-                  enabled: widget.item == null,
-                  hintText: 'ex) 150',
-                  textInputType: TextInputType.number,
-                  onChanged: () {
-                    ref
-                        .read(addContentProvider.notifier)
-                        .updateProtein(proteinController.text);
-                  },
-                ),
-                optionTextField(
-                  key: _fatKey,
-                  label: '지방',
-                  controller: fatController,
-                  enabled: widget.item == null,
-                  hintText: 'ex) 150',
-                  textInputType: TextInputType.number,
-                  onChanged: () {
-                    ref
-                        .read(addContentProvider.notifier)
-                        .updateFat(fatController.text);
-                  },
-                ),
+
                 const SizedBox(height: 70),
               ],
             ),
@@ -907,6 +1018,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   Widget _doubleSegmentedControl({
     required Map<int, Widget> segments,
     required void Function(int) onValueChanged,
+    required double padding,
   }) {
     final Design design = Design(context);
     return Theme(
@@ -916,16 +1028,17 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       ),
       child: CustomSlidingSegmentedControl<int>(
         initialValue: 1,
+        height: 40,
         children: segments,
-        padding: 15,
+        padding: padding,
         decoration: BoxDecoration(
           border: Border.all(color: design.textFieldborderColor, width: 2),
           color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(16),
         ),
         thumbDecoration: BoxDecoration(
           color: design.mainColor,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(12),
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: Colors.grey.withAlpha(150),
@@ -1090,8 +1203,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
     required TextInputType textInputType,
   }) {
     final Design design = Design(context);
-    return Row(
-      spacing: 10,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(
           width: design.addContentNutritionTextWidth,
@@ -1116,9 +1229,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ],
           ),
         ),
-        const Spacer(),
         SizedBox(
-          width: 110,
           child: TextField(
             key: key,
             keyboardType: textInputType,
@@ -1128,12 +1239,21 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             enabled: enabled,
             decoration: InputDecoration(
               hintText: hintText,
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: design.textFieldborderColor),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: design.textFieldborderColor,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
               ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: design.textFieldborderColor),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: design.textFieldborderColor,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
               ),
+              isDense: true,
             ),
             onChanged: (String? newValue) {
               if (newValue != null) {
