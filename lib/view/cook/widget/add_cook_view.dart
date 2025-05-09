@@ -273,10 +273,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(child: _buildItemRow(item, content(item))),
-                    if (isCookItemRow)
+                    if (isCookItemRow) ...<Widget>{
                       Transform.translate(
-                        offset: const Offset(-8, 0),
+                        offset: const Offset(8, 0),
                         child: IconButton(
                           icon: const Icon(Icons.close),
                           color: Colors.red,
@@ -297,6 +296,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           },
                         ),
                       ),
+                    },
+                    Expanded(child: _buildItemRow(item, content(item))),
                   ],
                 );
               },
@@ -406,28 +407,56 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Expanded(
-                child: Text(
-                  item.itemName ?? '',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    (item.itemName ?? '').length > 10
+                        ? '${(item.itemName ?? '').substring(0, 10)}...'
+                        : item.itemName ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    // overflow: TextOverflow.ellipsis,
+                    // maxLines: 1,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
+                  Text("${item.brandName}"),
+                ],
               ),
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 100),
-                child: Text(
-                  "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 65, 65, 65),
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+                child: Column(
+                  children: [
+                    Text(
+                      '${item.nutriKcal ?? 0}kcal',
+                      // "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 65, 65, 65),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / ${(item.nutriProtein ?? 0) * (item.count ?? 0)} / ${(item.nutriFat ?? 0) * (item.count ?? 0)}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 65, 65, 65),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                '${item.count}개',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],

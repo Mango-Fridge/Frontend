@@ -7,23 +7,23 @@ import 'package:mango/model/rest_client.dart';
 class CookRepository {
   final Dio dio = Dio();
 
-  CookRepository() {
-    dio.interceptors.add(
-      LogInterceptor(
-        request: true,
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-      ),
-    );
-  }
+  // CookRepository() {
+  //   dio.interceptors.add(
+  //     LogInterceptor(
+  //       request: true,
+  //       requestHeader: true,
+  //       requestBody: true,
+  //       responseHeader: true,
+  //       responseBody: true,
+  //     ),
+  //   );
+  // }
 
   // groupId로 cook list 불러오는 함수
   Future<List<Cook>> loadCookList(int groupId) async {
     RestClient client = RestClient(dio);
 
-    AppLogger.logger.i("Requesting cook list with groupId: $groupId");
+    // AppLogger.logger.i("Requesting cook list with groupId: $groupId");
 
     try {
       ApiResponse response = await client.getCookList(groupId);
@@ -95,7 +95,7 @@ class CookRepository {
   Future<Cook> getCookDetail(int cookId) async {
     RestClient client = RestClient(dio);
 
-    AppLogger.logger.i("Requesting cook detail with cookId: $cookId");
+    // AppLogger.logger.i("Requesting cook detail with cookId: $cookId");
 
     try {
       ApiResponse response = await client.getCookDetail(cookId);
@@ -120,7 +120,7 @@ class CookRepository {
   Future<Cook> getCookDetailList(int cookId) async {
     RestClient client = RestClient(dio);
 
-    AppLogger.logger.i("Requesting cook detail with cookId: $cookId");
+    // AppLogger.logger.i("Requesting cook detail with cookId: $cookId");
 
     try {
       ApiResponse response = await client.getCookDetailList(cookId);

@@ -132,10 +132,16 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         ),
                         child: Row(
                           children: <Widget>[
-                            Text(
-                              item.itemName ?? '재료 이름 없음',
-                              // '${content.itemName ?? '재료 이름 없음'}',
-                              style: const TextStyle(fontSize: 18),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.itemName ?? '재료 이름 없음',
+                                  // '${content.itemName ?? '재료 이름 없음'}',
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                Text('(${item.subCategory})'), // 중분류 배치, 후에 디자인 할 것
+                              ],
                             ),
                             const Spacer(),
                             Text(

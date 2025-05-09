@@ -66,8 +66,26 @@ class _CookViewState extends ConsumerState<CookView> {
         padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.00),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 20,
           children: [
+            Container(
+              margin: EdgeInsets.symmetric(
+                vertical: 4,
+                horizontal: design.marginAndPadding,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    '${_group?.groupName}님의 냉장고',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text('총 ${_cookState?.cookList?.length}개의 요리'),
+                ],
+              ),
+            ),
             Expanded(
               child:
                   _cookState != null &&
@@ -152,10 +170,11 @@ class _CookViewState extends ConsumerState<CookView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: Column(
+                child: Row(
                   children: [
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           (cook.cookName ?? '').length > 10
@@ -167,33 +186,11 @@ class _CookViewState extends ConsumerState<CookView> {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
+                        Text(
+                          '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개의 재료',
+                        ),
                       ],
                     ),
-                    // add2 변경 후 복구
-
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.start,
-                    //   children: <Widget>[
-                    //     Text(
-                    //       (cook.cookItems[0].contentName ?? '').length > 10
-                    //           ? '${(cook.cookItems[0].contentName ?? '').substring(0, 10)}...'
-                    //           : cook.cookItems[0].contentName ?? '',
-                    //       style: const TextStyle(
-                    //         fontSize: 14,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //       overflow: TextOverflow.ellipsis,
-                    //     ),
-                    //     Text(
-                    //       ' 외 ${cook.cookItems.length}종',
-                    //       style: const TextStyle(
-                    //         fontSize: 14,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //       overflow: TextOverflow.ellipsis,
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),

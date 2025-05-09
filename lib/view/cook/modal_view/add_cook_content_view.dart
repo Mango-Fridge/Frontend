@@ -53,12 +53,12 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
           Column(
             spacing: 10,
             children: <Widget>[
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    (widget.item?.itemName ?? '').length > 10
-                        ? '${(widget.item?.itemName ?? '').substring(0, 10)}...'
+                    (widget.item?.itemName ?? '').length > 17
+                        ? '${(widget.item?.itemName ?? '').substring(0, 17)}...'
                         : widget.item?.itemName ?? '',
                     style: const TextStyle(
                       fontSize: 20,
@@ -67,7 +67,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    (widget.item?.brandName ?? '').length > 5
+                    (widget.item?.brandName ?? '').length > 20
                         ? '${(widget.item?.brandName ?? '').substring(0, 5)}...'
                         : widget.item?.brandName ?? '',
                     style: const TextStyle(fontSize: 14),
@@ -75,30 +75,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                   ),
                 ],
               ),
-              const Divider(thickness: 1, color: Colors.grey),
-            ],
-          ),
-
-          // 영양성분 - 칼로리
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              SizedBox(
-                width: design.screenWidth * 0.63,
-                height: design.screenHeight * 0.06,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "${getItemTotalKcal()} kcal",
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-              ),
+              // const Divider(thickness: 1, color: Colors.grey),
             ],
           ),
 
@@ -107,56 +84,67 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 10,
             children: <Widget>[
-              nutrientBox('탄', '${getItemTotalCarbohydrate()}'),
-              nutrientBox('단', '${getItemTotalProtein()}'),
-              nutrientBox('지', '${getItemTotalFat()}'),
+              nutrientBox('열량', '${getItemTotalKcal()}'),
+              nutrientBox('탄수화물', '${getItemTotalCarbohydrate()}'),
+              nutrientBox('단백질', '${getItemTotalProtein()}'),
+              nutrientBox('지방', '${getItemTotalFat()}'),
             ],
           ),
 
           // 수량 조절 버튼
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 20,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    ref.watch(addCookProvider.notifier).reduceItemCount();
-                  },
-                  icon: const Icon(Icons.remove, size: 20),
-                  padding: const EdgeInsets.all(8.0),
+          Column(
+            children: [
+              const Text(
+                '선택된 수량',
+                style: TextStyle(
+                  fontSize: 20,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10.0,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: Text(
-                  '${_addCookState?.itemCount}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    ref.watch(addCookProvider.notifier).addItemCount();
-                  },
-                  icon: const Icon(Icons.add, size: 20),
-                  padding: const EdgeInsets.all(8.0),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 20,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        ref.watch(addCookProvider.notifier).reduceItemCount();
+                      },
+                      icon: const Icon(Icons.remove, size: 30),
+                      padding: const EdgeInsets.all(8.0),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 5.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: Text(
+                      '${_addCookState?.itemCount}',
+                      style: const TextStyle(fontSize: 25),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        ref.watch(addCookProvider.notifier).addItemCount();
+                      },
+                      icon: const Icon(Icons.add, size: 30),
+                      padding: const EdgeInsets.all(8.0),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -192,9 +180,10 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
   // 영양 성분
   Widget nutrientBox(String label, String value) {
     final Design design = Design(context);
+    final String displayValue = label == '열량' ? '${value}kcal' : value;
     return SizedBox(
-      width: design.screenWidth * 0.19,
-      height: design.screenHeight * 0.06,
+      width: design.screenWidth * 0.14,
+      height: design.screenHeight * 0.1, // 여기서 뷰 크기 조절
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -204,8 +193,8 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(label, style: const TextStyle(fontSize: 12)),
-              Text('$value g', style: const TextStyle(fontSize: 12)),
+              Text(label, style: const TextStyle(fontSize: 15)),
+              Text(displayValue, style: const TextStyle(fontSize: 15)),
             ],
           ),
         ),
