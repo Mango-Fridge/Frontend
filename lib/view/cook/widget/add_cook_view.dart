@@ -333,7 +333,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
         children: <Widget>[
-          const Divider(),
+          // const Divider(),
           Expanded(
             child: ListView.builder(
               itemCount: itemList?.length ?? 0,
@@ -372,7 +372,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               },
             ),
           ),
-          const Divider(),
+          // const Divider(),
         ],
       ),
     );
