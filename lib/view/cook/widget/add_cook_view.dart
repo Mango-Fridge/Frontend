@@ -170,7 +170,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                               controller: _searchIngridientController,
                               focusNode: _searchIngredientFocusNode,
                               decoration: InputDecoration(
-                                hintText: '요리 재료를 검색해보세요',
+                                hintText: 'ex) 돼지고기, 소고기',
                                 border: const OutlineInputBorder(),
                                 suffixIcon: IconButton(
                                   icon: Icon(
