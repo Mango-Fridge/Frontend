@@ -457,16 +457,16 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   Text(
                     '등록 날짜 ',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
                       fontSize: Design.normalFontSize1,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.bold,
                       fontSize: Design.normalFontSize1,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -492,7 +492,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     DateFormat('yyyy년 M월 d일 a h시 m분', 'ko').format(
                       _addContentState?.selectedRegDate ?? DateTime.now(),
                     ),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -511,16 +510,16 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   Text(
                     '소비 기한 ',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
                       fontSize: Design.normalFontSize1,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     '*',
                     style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.bold,
                       fontSize: Design.normalFontSize1,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -553,7 +552,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                           _addContentState?.selectedExpDate == null
                               ? Colors.red[300]
                               : Colors.black,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
