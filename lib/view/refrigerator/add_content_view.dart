@@ -12,6 +12,7 @@ import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_content_state.dart';
 import 'package:mango/toastMessage.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:mango/view/asterisk_label.dart';
 import 'package:mango/view/dotted_divider.dart';
 
 class AddContentView extends ConsumerStatefulWidget {
@@ -209,21 +210,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text(
-                    '카테고리 ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize1,
-                    ),
-                  ),
-                  Text(
-                    '*',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Design.normalFontSize1,
-                    ),
-                  ),
+                  AsteriskLabel(text: '카테고리', color: Colors.red),
                 ],
               ),
             ),
@@ -348,21 +335,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   width: design.addContentTextWidth,
                   child: const Row(
                     children: <Widget>[
-                      Text(
-                        '수량(인분) ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: Design.normalFontSize1,
-                        ),
-                      ),
-                      Text(
-                        '*',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: Design.normalFontSize1,
-                        ),
-                      ),
+                      AsteriskLabel(text: '수량(인분)', color: Colors.red),
                     ],
                   ),
                 ),
@@ -411,21 +384,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   width: design.addContentTextWidth,
                   child: const Row(
                     children: <Widget>[
-                      Text(
-                        '보관 장소 ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: Design.normalFontSize1,
-                        ),
-                      ),
-                      Text(
-                        '*',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: Design.normalFontSize1,
-                        ),
-                      ),
+                      AsteriskLabel(text: '보관 장소', color: Colors.red),
                     ],
                   ),
                 ),
@@ -458,21 +417,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text(
-                    '등록 날짜 ',
-                    style: TextStyle(
-                      fontSize: Design.normalFontSize1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '*',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: Design.normalFontSize1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  AsteriskLabel(text: '등록 날짜', color: Colors.red),
                 ],
               ),
             ),
@@ -510,21 +455,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               width: design.addContentTextWidth,
               child: const Row(
                 children: <Widget>[
-                  Text(
-                    '소비 기한 ',
-                    style: TextStyle(
-                      fontSize: Design.normalFontSize1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '*',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: Design.normalFontSize1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  AsteriskLabel(text: '소비 기한', color: Colors.red),
                 ],
               ),
             ),
@@ -804,20 +735,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                               child: const Row(
                                 spacing: 2,
                                 children: <Widget>[
-                                  Text(
-                                    '1회 제공 용량',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Design.normalFontSize1,
-                                    ),
-                                  ),
-                                  Text(
-                                    '*',
-                                    style: TextStyle(
-                                      color: Colors.indigo,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Design.normalFontSize1,
-                                    ),
+                                  AsteriskLabel(
+                                    text: '1회 제공 용량',
+                                    color: Colors.indigo,
                                   ),
                                 ],
                               ),
@@ -884,21 +804,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                   child: const Row(
                                     spacing: 2,
                                     children: <Widget>[
-                                      Text(
-                                        '단위',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Design.normalFontSize1,
-                                        ),
-                                      ),
-
-                                      Text(
-                                        '*',
-                                        style: TextStyle(
-                                          color: Colors.indigo,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Design.normalFontSize1,
-                                        ),
+                                      AsteriskLabel(
+                                        text: '단위',
+                                        color: Colors.indigo,
                                       ),
                                     ],
                                   ),
@@ -1210,21 +1118,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           child: Row(
             spacing: 2,
             children: <Widget>[
-              Text(
-                label,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: Design.normalFontSize1,
-                ),
-              ),
-              const Text(
-                '*',
-                style: TextStyle(
-                  color: Colors.indigo,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Design.normalFontSize1,
-                ),
-              ),
+              AsteriskLabel(text: label, color: Colors.indigo),
             ],
           ),
         ),
