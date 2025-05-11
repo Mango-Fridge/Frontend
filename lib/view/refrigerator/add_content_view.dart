@@ -365,7 +365,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   width: 150,
                   child: TextField(
                     key: _countKey,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.left,
                     onTap: () => _focusTextField(_countKey),
                     controller: countController,
                     keyboardType: TextInputType.number,
@@ -439,7 +439,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     }
                     ref.watch(addContentProvider.notifier).setStorage(storage);
                   },
-                  padding: 30,
                 ),
               ],
             ),
@@ -613,7 +612,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   key: _brandNameKey,
                   onTap: () => _focusTextField(_brandNameKey),
                   controller: brandNameController,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.left,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -719,7 +718,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   key: _subCategoryKey,
                   onTap: () => _focusTextField(_subCategoryKey),
                   controller: subCategoryController,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.left,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -783,230 +782,224 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             ],
           ),
           const SizedBox(height: 15),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: design.nutritionViewMarginAndPadding,
-            ),
-            child: Column(
-              spacing: 20,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        spacing: 10,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            spacing: 10,
-                            children: <Widget>[
-                              SizedBox(
-                                width: design.addContentNutritionTextWidth,
-                                child: const Row(
-                                  spacing: 2,
-                                  children: <Widget>[
-                                    Text(
-                                      '1회 제공 용량',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Design.normalFontSize1,
-                                      ),
-                                    ),
-
-                                    Text(
-                                      '*',
-                                      style: TextStyle(
-                                        color: Colors.indigo,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Design.normalFontSize1,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            child: TextField(
-                              key: _capacityKey,
-                              keyboardType: TextInputType.number,
-                              controller: capacityController,
-                              textAlign: TextAlign.right,
-                              enabled: widget.item == null,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                hintText: 'ex) 150',
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: design.textFieldborderColor,
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: design.textFieldborderColor,
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                isDense: true,
-                              ),
-                              onChanged: (String? newValue) {
-                                ref
-                                    .read(addContentProvider.notifier)
-                                    .updateCapacity(capacityController.text);
-                              },
-                              onTap: () => _focusTextField(_capacityKey),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 25),
-                    Expanded(
-                      child: Column(
-                        spacing: 10,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Row(
-                                spacing: 10,
+          Column(
+            spacing: 20,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      spacing: 10,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          spacing: 10,
+                          children: <Widget>[
+                            SizedBox(
+                              width: design.addContentNutritionTextWidth,
+                              child: const Row(
+                                spacing: 2,
                                 children: <Widget>[
-                                  SizedBox(
-                                    width: design.addContentNutritionTextWidth,
-                                    child: const Row(
-                                      spacing: 2,
-                                      children: <Widget>[
-                                        Text(
-                                          '단위',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: Design.normalFontSize1,
-                                          ),
-                                        ),
+                                  Text(
+                                    '1회 제공 용량',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Design.normalFontSize1,
+                                    ),
+                                  ),
 
-                                        Text(
-                                          '*',
-                                          style: TextStyle(
-                                            color: Colors.indigo,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: Design.normalFontSize1,
-                                          ),
-                                        ),
-                                      ],
+                                  Text(
+                                    '*',
+                                    style: TextStyle(
+                                      color: Colors.indigo,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Design.normalFontSize1,
                                     ),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          _doubleSegmentedControl(
-                            segments: const <int, Widget>{
-                              1: Text(' g '),
-                              2: Text('ml'),
-                            },
-                            onValueChanged: (int value) {
-                              String unit = '';
-
-                              switch (value) {
-                                case 1:
-                                  unit = 'g';
-                                  break;
-                                case 2:
-                                  unit = 'ml';
-                                  break;
-                              }
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          child: TextField(
+                            key: _capacityKey,
+                            keyboardType: TextInputType.number,
+                            controller: capacityController,
+                            textAlign: TextAlign.left,
+                            enabled: widget.item == null,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                              hintText: 'ex) 150',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: design.textFieldborderColor,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: design.textFieldborderColor,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              isDense: true,
+                            ),
+                            onChanged: (String? newValue) {
                               ref
-                                  .watch(addContentProvider.notifier)
-                                  .setUnit(unit);
+                                  .read(addContentProvider.notifier)
+                                  .updateCapacity(capacityController.text);
                             },
-                            padding: 30,
+                            onTap: () => _focusTextField(_capacityKey),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: optionTextField(
-                        key: _kcalKey,
-                        label: '열량',
-                        controller: kcalController,
-                        enabled: widget.item == null,
-                        hintText: 'ex) 150',
-                        textInputType: TextInputType.number,
-                        onChanged: () {
-                          ref
-                              .read(addContentProvider.notifier)
-                              .updateKcal(kcalController.text);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 25),
-                    Expanded(
-                      child: optionTextField(
-                        key: _carbsKey,
-                        label: '탄수화물',
-                        controller: carbsController,
-                        enabled: widget.item == null,
-                        hintText: 'ex) 150',
-                        textInputType: TextInputType.number,
-                        onChanged: () {
-                          ref
-                              .read(addContentProvider.notifier)
-                              .updateCarbs(carbsController.text);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 25),
+                  Expanded(
+                    child: Column(
+                      spacing: 10,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Row(
+                              spacing: 10,
+                              children: <Widget>[
+                                SizedBox(
+                                  width: design.addContentNutritionTextWidth,
+                                  child: const Row(
+                                    spacing: 2,
+                                    children: <Widget>[
+                                      Text(
+                                        '단위',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Design.normalFontSize1,
+                                        ),
+                                      ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: optionTextField(
-                        key: _proteinKey,
-                        label: '단백질',
-                        controller: proteinController,
-                        enabled: widget.item == null,
-                        hintText: 'ex) 150',
-                        textInputType: TextInputType.number,
-                        onChanged: () {
-                          ref
-                              .read(addContentProvider.notifier)
-                              .updateProtein(proteinController.text);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 25),
-                    Expanded(
-                      child: optionTextField(
-                        key: _fatKey,
-                        label: '지방',
-                        controller: fatController,
-                        enabled: widget.item == null,
-                        hintText: 'ex) 150',
-                        textInputType: TextInputType.number,
-                        onChanged: () {
-                          ref
-                              .read(addContentProvider.notifier)
-                              .updateFat(fatController.text);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                                      Text(
+                                        '*',
+                                        style: TextStyle(
+                                          color: Colors.indigo,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Design.normalFontSize1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        _doubleSegmentedControl(
+                          segments: const <int, Widget>{
+                            1: Text(' g '),
+                            2: Text('ml'),
+                          },
+                          onValueChanged: (int value) {
+                            String unit = '';
 
-                const SizedBox(height: 70),
-              ],
-            ),
+                            switch (value) {
+                              case 1:
+                                unit = 'g';
+                                break;
+                              case 2:
+                                unit = 'ml';
+                                break;
+                            }
+                            ref
+                                .watch(addContentProvider.notifier)
+                                .setUnit(unit);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: optionTextField(
+                      key: _kcalKey,
+                      label: '열량',
+                      controller: kcalController,
+                      enabled: widget.item == null,
+                      hintText: 'ex) 150',
+                      textInputType: TextInputType.number,
+                      onChanged: () {
+                        ref
+                            .read(addContentProvider.notifier)
+                            .updateKcal(kcalController.text);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 25),
+                  Expanded(
+                    child: optionTextField(
+                      key: _carbsKey,
+                      label: '탄수화물',
+                      controller: carbsController,
+                      enabled: widget.item == null,
+                      hintText: 'ex) 150',
+                      textInputType: TextInputType.number,
+                      onChanged: () {
+                        ref
+                            .read(addContentProvider.notifier)
+                            .updateCarbs(carbsController.text);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: optionTextField(
+                      key: _proteinKey,
+                      label: '단백질',
+                      controller: proteinController,
+                      enabled: widget.item == null,
+                      hintText: 'ex) 150',
+                      textInputType: TextInputType.number,
+                      onChanged: () {
+                        ref
+                            .read(addContentProvider.notifier)
+                            .updateProtein(proteinController.text);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 25),
+                  Expanded(
+                    child: optionTextField(
+                      key: _fatKey,
+                      label: '지방',
+                      controller: fatController,
+                      enabled: widget.item == null,
+                      hintText: 'ex) 150',
+                      textInputType: TextInputType.number,
+                      onChanged: () {
+                        ref
+                            .read(addContentProvider.notifier)
+                            .updateFat(fatController.text);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 70),
+            ],
           ),
         ],
       ),
@@ -1016,7 +1009,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   Widget _doubleSegmentedControl({
     required Map<int, Widget> segments,
     required void Function(int) onValueChanged,
-    required double padding,
   }) {
     final Design design = Design(context);
     return Theme(
@@ -1025,10 +1017,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         highlightColor: Colors.transparent,
       ),
       child: CustomSlidingSegmentedControl<int>(
+        fixedWidth: design.addContentNutritionTextWidth - 15,
         initialValue: 1,
         height: 40,
         children: segments,
-        padding: padding,
         decoration: BoxDecoration(
           border: Border.all(color: design.textFieldborderColor, width: 2),
           color: Colors.white,
@@ -1202,6 +1194,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
   }) {
     final Design design = Design(context);
     return Column(
+      spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(
@@ -1232,7 +1225,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             key: key,
             keyboardType: textInputType,
             controller: controller,
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.left,
             style: const TextStyle(color: Colors.black),
             enabled: enabled,
             decoration: InputDecoration(
