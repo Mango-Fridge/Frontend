@@ -187,7 +187,9 @@ class _CookViewState extends ConsumerState<CookView> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개의 재료',
+                          cook.cookItems != null && cook.cookItems!.isNotEmpty
+                              ? '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개'
+                              : 'No items available',
                         ),
                       ],
                     ),
