@@ -482,7 +482,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               },
               child: Container(
                 height: 45,
-                padding: EdgeInsets.all(design.marginAndPadding),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
                   border: Border.all(
@@ -535,7 +534,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
               },
               child: Container(
                 height: 45,
-                padding: EdgeInsets.all(design.marginAndPadding),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
                   border: Border.all(
@@ -1021,7 +1019,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         highlightColor: Colors.transparent,
       ),
       child: CustomSlidingSegmentedControl<int>(
-        fixedWidth: design.addContentNutritionTextWidth - 15,
+        fixedWidth: design.addContentNutritionTextWidth - 19,
         initialValue: 1,
         height: 40,
         children: segments,
