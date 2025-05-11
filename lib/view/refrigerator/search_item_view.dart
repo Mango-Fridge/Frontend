@@ -249,15 +249,10 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(
-          vertical: design.marginAndPadding,
+          vertical: design.marginAndPadding / 3,
           horizontal: design.marginAndPadding,
         ),
-        padding: EdgeInsets.only(
-          left: design.marginAndPadding * 1.5,
-          right: design.marginAndPadding * 1.5,
-          top: design.marginAndPadding * 1.3,
-          bottom: design.marginAndPadding * 1.3,
-        ),
+        padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color: design.subColor,
           borderRadius: BorderRadius.circular(16),
