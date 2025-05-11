@@ -6,14 +6,12 @@ import 'package:mango/providers/add_cook_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
 
 class AddCookBottomSheetWidget extends ConsumerWidget {
-  final TextEditingController memoController;
   final VoidCallback onAddPressed; // 추가하기 버튼 콜백
   final String cookName; // 요리 제목 추가
   final List<RefrigeratorItem>? itemListForCook; // 재료 리스트 추가
 
   const AddCookBottomSheetWidget({
     super.key,
-    required this.memoController,
     required this.onAddPressed,
     required this.cookName,
     required this.itemListForCook,
@@ -29,8 +27,12 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
         cookName.trim().isNotEmpty && (itemListForCook?.isNotEmpty ?? false);
 
     return Container(
-      color: Colors.amber,
-      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(30), // 둥근 모서리 반경 설정
+        border: Border.all(color: Colors.brown, width: 1),
+      ),
+      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 30),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -45,22 +47,16 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: nutrientColumn(
-                    '열량',
-                    "${_addCookState?.totalKcal}kcal",
-                  ),
+                  child: nutrientColumn('열량', "${_addCookState.totalKcal}kcal"),
                 ),
                 Expanded(
-                  child: nutrientColumn('탄수화물', "${_addCookState?.totalCarb}"),
+                  child: nutrientColumn('탄수화물', "${_addCookState.totalCarb}"),
                 ),
                 Expanded(
-                  child: nutrientColumn(
-                    '단백질',
-                    "${_addCookState?.totalProtein}",
-                  ),
+                  child: nutrientColumn('단백질', "${_addCookState.totalProtein}"),
                 ),
                 Expanded(
-                  child: nutrientColumn('지방', "${_addCookState?.totalFat}"),
+                  child: nutrientColumn('지방', "${_addCookState.totalFat}"),
                 ),
               ],
             ),
@@ -68,6 +64,7 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
 
           // 추가하기 버튼
           Container(
+            width: 330,
             padding: const EdgeInsets.only(bottom: 10),
             child: ElevatedButton(
               onPressed: isButtonEnabled ? onAddPressed : null, // 콜백 호출
@@ -79,6 +76,7 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
               child: Text(
                 '추가하기',
                 style: TextStyle(
+                  fontSize: 23,
                   color:
                       isButtonEnabled
                           ? Colors.black
@@ -98,7 +96,7 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
 Widget nutrientColumn(String label, String value) {
   return Column(
     children: <Widget>[
-      Text(label, style: const TextStyle(fontSize: 20)),
+      Text(label, style: const TextStyle(fontSize: 16)),
       Text(value, style: const TextStyle(fontSize: 20)),
     ],
   );

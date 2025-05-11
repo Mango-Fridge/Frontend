@@ -224,7 +224,6 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           ),
                           // 바텀: 열량/탄수화물/단백질/지방, 추가하기 버튼
                           AddCookBottomSheetWidget(
-                            memoController: _memoController,
                             onAddPressed: () async {
                               final String cookName = _cookNameController.text;
                               final String memo = _memoController.text;
@@ -247,7 +246,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                         ),
                                       )
                                       .toList();
-
+                      
                               final bool isSuccess = await ref
                                   .read(cookProvider.notifier)
                                   .addCook(
@@ -260,7 +259,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                     _group?.groupId ?? 0,
                                     cookItems,
                                   );
-
+                      
                               if (isSuccess) {
                                 ref
                                     .watch(cookProvider.notifier)

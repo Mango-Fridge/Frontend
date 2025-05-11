@@ -67,7 +67,8 @@ class _CookViewState extends ConsumerState<CookView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_cookState?.cookList?.isNotEmpty ?? false) ...<Widget>{ // 요리가 없을때, 냉장고명 과 개수가 출력되지 않게 수정
+            if (_cookState?.cookList?.isNotEmpty ?? false) ...<Widget>{
+              // 요리가 없을때, 냉장고명 과 개수가 출력되지 않게 수정
               Container(
                 margin: EdgeInsets.symmetric(
                   vertical: 4,
@@ -189,7 +190,9 @@ class _CookViewState extends ConsumerState<CookView> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개의 재료',
+                          cook.cookItems!.length > 1
+                              ? '${cook.cookItems?.first.cookItemName} 외 ${(cook.cookItems?.length ?? 0) - 1}개의 재료'
+                              : '${cook.cookItems?.first.cookItemName}',
                         ),
                       ],
                     ),
