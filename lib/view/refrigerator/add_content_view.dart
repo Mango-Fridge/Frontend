@@ -234,15 +234,20 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                       child: TextField(
                         controller: categoryController,
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
+                          isDense: true,
+                          enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: design.textFieldborderColor,
+                              width: 2.0,
                             ),
+                            borderRadius: BorderRadius.circular(16.0),
                           ),
-                          focusedBorder: UnderlineInputBorder(
+                          focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: design.textFieldborderColor,
+                              width: 2.0,
                             ),
+                            borderRadius: BorderRadius.circular(16.0),
                           ),
                         ),
                         onChanged: (String value) {
