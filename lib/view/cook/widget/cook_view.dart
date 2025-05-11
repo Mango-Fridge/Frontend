@@ -38,32 +38,38 @@ class _CookViewState extends ConsumerState<CookView> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text('요리', style: TextStyle(color: Colors.black)),
-        centerTitle: true,
+        title: const Text(
+          '요리',
+          style: TextStyle(color: Colors.black, fontSize: 30),
+        ),
+        centerTitle: false,
         toolbarHeight: design.screenHeight * 0.08,
         // + 버튼 -> 클릭 시 add_cook_view로 이동
         // 요리가 없다면 보이지 않음
         actions: <Widget>[
           if (_cookState?.cookList?.isNotEmpty ?? false)
             Padding(
-              padding: EdgeInsets.only(right: design.marginAndPadding),
-              child: IconButton(
-                icon: const Icon(Icons.add, color: Colors.black, size: 25),
+              padding: EdgeInsets.only(right: design.screenWidth * 0.04),
+              child: TextButton(
                 onPressed: () {
                   context.push('/addCook');
                 },
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.amber,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
+                child: const Text("요리 추가하기", style: TextStyle(fontSize: 17)),
               ),
             ),
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: design.screenWidth * 0.00),
+        padding: EdgeInsets.symmetric(
+          horizontal: design.screenWidth * 0.02,
+          vertical: design.screenHeight * 0.01,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -82,7 +88,10 @@ class _CookViewState extends ConsumerState<CookView> {
                     ),
                   ),
                   const Spacer(),
-                  Text('총 ${_cookState?.cookList?.length}개의 요리'),
+                  Text(
+                    '총 ${_cookState?.cookList?.length}개의 요리',
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ],
               ),
             ),
@@ -134,7 +143,7 @@ class _CookViewState extends ConsumerState<CookView> {
           "삭제",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 17,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -152,51 +161,66 @@ class _CookViewState extends ConsumerState<CookView> {
           toastMessage(context, "${cook.cookName}를 삭제하지 못했습니다.");
         }
       },
-      child: GestureDetector(
-        onTap: () {
-          context.push('/cookDetail', extra: cook);
-        },
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            vertical: 4,
-            horizontal: design.marginAndPadding,
-          ),
-          padding: EdgeInsets.all(design.marginAndPadding),
-          decoration: BoxDecoration(
-            color: Colors.amber[300],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          (cook.cookName ?? '').length > 10
-                              ? '${(cook.cookName ?? '').substring(0, 10)}...'
-                              : cook.cookName ?? '',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          cook.cookItems != null && cook.cookItems!.isNotEmpty
-                              ? '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개'
-                              : 'No items available',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: GestureDetector(
+          onTap: () {
+            context.push('/cookDetail', extra: cook);
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(
+              vertical: 4,
+              horizontal: design.marginAndPadding,
+            ),
+            padding: EdgeInsets.all(design.marginAndPadding),
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(255, 244, 216, 1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: const Color.fromRGBO(195, 142, 1, 1), // 원하는 테두리 색상
+                width: 1.0, // 테두리 두께
               ),
-            ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Image.asset("assets/images/chef_Hat.png"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              (cook.cookName ?? '').length > 10
+                                  ? '${(cook.cookName ?? '').substring(0, 10)}...'
+                                  : cook.cookName ?? '',
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              cook.cookItems != null &&
+                                      cook.cookItems!.isNotEmpty
+                                  ? '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개'
+                                  : 'No items available',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -217,7 +241,7 @@ class _CookViewState extends ConsumerState<CookView> {
           const Text(
             "다양한 물품을 검색해서 \n 나만의 요리를 만들어보세요!",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 17),
           ),
           const SizedBox(height: 5),
           // 요리 추가 버튼
@@ -237,7 +261,7 @@ class _CookViewState extends ConsumerState<CookView> {
             ),
             child: const Text(
               '요리 추가하기',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(color: Colors.black, fontSize: 17),
             ),
           ),
           Spacer(),
