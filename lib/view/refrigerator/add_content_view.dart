@@ -811,7 +811,6 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                       fontSize: Design.normalFontSize1,
                                     ),
                                   ),
-
                                   Text(
                                     '*',
                                     style: TextStyle(
@@ -836,6 +835,13 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             decoration: InputDecoration(
                               hintText: 'ex) 150',
                               enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: design.textFieldborderColor,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              disabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: design.textFieldborderColor,
                                   width: 2.0,
@@ -1233,6 +1239,13 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             decoration: InputDecoration(
               hintText: hintText,
               enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: design.textFieldborderColor,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              disabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: design.textFieldborderColor,
                   width: 2.0,
