@@ -69,7 +69,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         appBar: AppBar(
           title: const Text(
             "물품 추가",
-            style: TextStyle(fontSize: Design.normalFontSize4),
+            style: TextStyle(fontSize: Design.normalFontSize2),
           ),
           scrolledUnderElevation: 0,
         ),

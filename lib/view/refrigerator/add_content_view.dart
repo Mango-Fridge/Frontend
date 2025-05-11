@@ -135,7 +135,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         appBar: AppBar(
           title: const Text(
             '물품 추가 상세 입력',
-            style: TextStyle(fontSize: Design.normalFontSize4),
+            style: TextStyle(fontSize: Design.normalFontSize2),
           ),
           scrolledUnderElevation: 0,
           backgroundColor: Colors.white,
@@ -1002,8 +1002,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 70),
+              SizedBox(height: design.screenHeight * 0.3),
             ],
           ),
         ],
