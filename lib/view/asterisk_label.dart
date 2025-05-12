@@ -33,6 +33,7 @@ class AsteriskPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const String text = '*';
     final TextStyle textStyle = TextStyle(
+      fontFamily: 'Mainfonts',
       color: color,
       fontSize: Design.normalFontSize1,
       fontWeight: FontWeight.bold,
