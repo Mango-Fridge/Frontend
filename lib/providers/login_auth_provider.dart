@@ -96,8 +96,8 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
   // 문자열을 AuthPlatform Enum으로 변환
   AuthPlatform? _getPlatformFromString(String? platformStr) {
     const Map<String, AuthPlatform> platformMap = <String, AuthPlatform>{
-      'KAKAO': AuthPlatform.KAKAO,
-      'APPLE': AuthPlatform.APPLE,
+      'Kakao': AuthPlatform.KAKAO,
+      'Apple': AuthPlatform.APPLE,
     };
     return platformMap[platformStr];
   }

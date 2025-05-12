@@ -4,9 +4,9 @@ extension AuthPlatformExtension on AuthPlatform {
   String get name {
     switch (this) {
       case AuthPlatform.KAKAO:
-        return "KAKAO";
+        return "Kakao";
       case AuthPlatform.APPLE:
-        return "APPLE";
+        return "Apple";
     }
   }
 }

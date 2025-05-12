@@ -17,12 +17,12 @@ class LoginService {
     final String? platformStr =
         await _loginSharePrefs.getPlatform(); // 로컬에 저장된 platform 가져오기
 
-    if (platformStr == "KAKAO") {
+    if (platformStr == "Kakao") {
       OAuthToken? token =
           await TokenManagerProvider.instance.manager.getToken();
 
       snsToken = token!.accessToken;
-    } else if (platformStr == "APPLE") {
+    } else if (platformStr == "Apple") {
       snsToken = await _loginSharePrefs.getAppleToken();
     }
 

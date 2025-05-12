@@ -9,7 +9,7 @@ class LoginSharePrefs {
     await prefs.setString('platform', platform);
 
     switch (platform) {
-      case 'KAKAO':
+      case 'Kakao':
         await prefs.setString('KakaoEmail', email);
         debugPrint(
           '[shared_preferences] KakaoEmail: ${prefs.getString('KakaoEmail')}',
@@ -18,7 +18,7 @@ class LoginSharePrefs {
           '[shared_preferences] platform: ${prefs.getString('platform')}',
         );
         break;
-      case 'APPLE':
+      case 'Apple':
         await prefs.setString('AppleEmail', email);
         debugPrint(
           '[shared_preferences] AppleEmail: ${prefs.getString('AppleEmail')}',
@@ -51,9 +51,9 @@ class LoginSharePrefs {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     switch (platform) {
-      case 'KAKAO':
+      case 'Kakao':
         return prefs.getString('KakaoEmail');
-      case 'APPLE':
+      case 'Apple':
         return prefs.getString('AppleEmail');
     }
 
