@@ -391,7 +391,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       },
       child: Container(
         width: 120,
-        padding: EdgeInsets.all(design.marginAndPadding),
+        padding: EdgeInsets.all(design.expContentCardMarginAndPadding),
         decoration: BoxDecoration(
           color: ref
               .watch(refrigeratorNotifier.notifier)
@@ -665,8 +665,8 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         );
       },
       child: Container(
-        height: 100,
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        height: 110,
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color:
@@ -743,82 +743,85 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 수량 조절 버튼 탭 했을 시 나오는 수량 업데이트 뷰
   Widget _setCountView() {
     Design design = Design(context);
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: Colors.black, width: 2),
-        color: design.mainColor.withAlpha(150),
-      ),
-      height: design.contentUpdateViewHeight,
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              itemCount: _refrigeratorState?.updateContentList?.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Content? content =
-                    _refrigeratorState?.updateContentList?[index];
-                return Padding(
-                  padding: EdgeInsets.only(
-                    left: design.marginAndPadding + 5,
-                    right: design.marginAndPadding + 5,
-                    top: design.marginAndPadding,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            ref
-                                .watch(refrigeratorNotifier.notifier)
-                                .removeUpdateContentById(
-                                  content!.contentId ?? 0,
-                                );
-                          },
-                          splashColor: Colors.grey.shade200,
-                          highlightColor: Colors.grey.shade200,
-                          child: Container(
-                            padding: const EdgeInsets.all(1),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red,
-                            ),
-                            child: const Icon(
-                              Icons.close_rounded,
-                              color: Colors.white,
-                              size: 15,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: design.marginAndPadding - 10),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border.all(color: Colors.black, width: 2),
+          color: design.mainColor.withAlpha(150),
+        ),
+        height: design.contentUpdateViewHeight,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView.builder(
+                itemCount: _refrigeratorState?.updateContentList?.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final Content? content =
+                      _refrigeratorState?.updateContentList?[index];
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: design.marginAndPadding + 5,
+                      right: design.marginAndPadding + 5,
+                      top: design.marginAndPadding,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              ref
+                                  .watch(refrigeratorNotifier.notifier)
+                                  .removeUpdateContentById(
+                                    content!.contentId ?? 0,
+                                  );
+                            },
+                            splashColor: Colors.grey.shade200,
+                            highlightColor: Colors.grey.shade200,
+                            child: Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red,
+                              ),
+                              child: const Icon(
+                                Icons.close_rounded,
+                                color: Colors.white,
+                                size: 15,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          content!.contentName,
-                          style: const TextStyle(
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            content!.contentName,
+                            style: const TextStyle(
+                              fontSize: Design.normalFontSize1,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          content.count.toString(),
+                          style: TextStyle(
                             fontSize: Design.normalFontSize1,
                             fontWeight: FontWeight.bold,
+                            color: content.count > 0 ? Colors.blue : Colors.red,
                           ),
                         ),
-                      ),
-                      Text(
-                        content.count.toString(),
-                        style: TextStyle(
-                          fontSize: Design.normalFontSize1,
-                          fontWeight: FontWeight.bold,
-                          color: content.count > 0 ? Colors.blue : Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          _setCountButtons(),
-        ],
+            _setCountButtons(),
+          ],
+        ),
       ),
     );
   }
