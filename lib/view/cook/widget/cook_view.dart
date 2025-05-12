@@ -67,25 +67,28 @@ class _CookViewState extends ConsumerState<CookView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                vertical: 4,
-                horizontal: design.marginAndPadding,
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    '${_group?.groupName}님의 냉장고',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+            if (_cookState?.cookList?.isNotEmpty ?? false) ...<Widget>{
+              // 요리가 없을때, 냉장고명 과 개수가 출력되지 않게 수정
+              Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: design.marginAndPadding,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      '${_group?.groupName}님의 냉장고',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  Text('총 ${_cookState?.cookList?.length}개의 요리'),
-                ],
+                    const Spacer(),
+                    Text('총 ${_cookState?.cookList?.length}개의 요리'),
+                  ],
+                ),
               ),
-            ),
+            },
             Expanded(
               child:
                   _cookState != null &&
@@ -187,7 +190,9 @@ class _CookViewState extends ConsumerState<CookView> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          '${cook.cookItems!.first.cookItemName} 외 ${cook.cookItems!.length - 1}개의 재료',
+                          cook.cookItems!.length > 1
+                              ? '${cook.cookItems?.first.cookItemName} 외 ${(cook.cookItems?.length ?? 0) - 1}개의 재료'
+                              : '${cook.cookItems?.first.cookItemName}',
                         ),
                       ],
                     ),

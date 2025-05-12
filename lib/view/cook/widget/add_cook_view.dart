@@ -124,130 +124,198 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           ),
         ),
 
-        // -------------------- 페이지 내용
-        body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제 및 키보드 내리기
-          },
+        // 탭바
+        body: DefaultTabController(
+          length: 2,
           child: Column(
             children: <Widget>[
-              // 검색 필드
               Padding(
-                padding: EdgeInsets.all(design.marginAndPadding),
-                child: TextField(
-                  controller: _searchIngridientController,
-                  focusNode: _searchIngredientFocusNode,
-                  decoration: InputDecoration(
-                    hintText: '요리 재료를 검색해보세요',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _addCookState?.isSearchFieldEmpty ?? true
-                            ? Icons.search
-                            : Icons.close,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        if (!(_addCookState?.isSearchFieldEmpty ?? false)) {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          _searchIngridientController.clear();
-                          ref
-                              .read(addCookProvider.notifier)
-                              .updateSearchFieldEmpty(true);
-                        }
-                      },
-                    ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: design.marginAndPadding,
+                ),
+                child: const TabBar(
+                  indicatorColor: Colors.amber,
+                  indicatorWeight: 4.0,
+                  labelStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Design.tabBarSelectedFontSize,
+                    fontFamily: 'Mainfonts',
                   ),
-                  onChanged: (String value) {
-                    // 입력값이 변경될 때 상태 업데이트
-                    _onSearchChanged(value);
-                  },
+                  unselectedLabelStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: Design.tabBarUnSelectedFontSize,
+                    fontFamily: 'Mainfonts',
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  tabs: <Widget>[Tab(text: '물품'), Tab(text: '메모')],
                 ),
               ),
               Expanded(
-                child:
-                    _addCookState?.isSearchIngredientFocused ?? false
-                        ? _searchContentState != null &&
-                                _searchContentState?.refrigeratorItemList !=
-                                    null &&
-                                _searchContentState!
-                                    .refrigeratorItemList!
-                                    .isNotEmpty &&
-                                _searchIngridientController.text != ''
-                            ? _buildItem(
-                              _searchContentState?.refrigeratorItemList!,
-                              _itemRow,
-                            )
-                            : _noItemView()
-                        : _buildItem(
-                          _addCookState?.itemListForCook,
-                          _cookItemRow,
-                        ),
+                child: TabBarView(
+                  children: [
+                    // 물품 탭의 콘텐츠
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        FocusManager.instance.primaryFocus
+                            ?.unfocus(); // 포커스 해제 및 키보드 내리기
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          // 검색 필드
+                          Padding(
+                            padding: EdgeInsets.all(design.marginAndPadding),
+                            child: TextField(
+                              controller: _searchIngridientController,
+                              focusNode: _searchIngredientFocusNode,
+                              decoration: InputDecoration(
+                                hintText: 'ex) 돼지고기, 소고기',
+                                border: const OutlineInputBorder(),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _addCookState?.isSearchFieldEmpty ?? true
+                                        ? Icons.search
+                                        : Icons.close,
+                                    color: Colors.black,
+                                  ),
+                                  onPressed: () {
+                                    if (!(_addCookState?.isSearchFieldEmpty ??
+                                        false)) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                      _searchIngridientController.clear();
+                                      ref
+                                          .read(addCookProvider.notifier)
+                                          .updateSearchFieldEmpty(true);
+                                    }
+                                  },
+                                ),
+                              ),
+                              onChanged: (String value) {
+                                // 입력값이 변경될 때 상태 업데이트
+                                _onSearchChanged(value);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child:
+                                _addCookState?.isSearchIngredientFocused ??
+                                        false
+                                    ? _searchContentState != null &&
+                                            _searchContentState
+                                                    ?.refrigeratorItemList !=
+                                                null &&
+                                            _searchContentState!
+                                                .refrigeratorItemList!
+                                                .isNotEmpty &&
+                                            _searchIngridientController.text !=
+                                                ''
+                                        ? _buildItem(
+                                          _searchContentState
+                                              ?.refrigeratorItemList!,
+                                          _itemRow,
+                                        )
+                                        : _noItemView()
+                                    : _buildItem(
+                                      _addCookState?.itemListForCook,
+                                      _cookItemRow,
+                                    ),
+                          ),
+                          // 바텀: 열량/탄수화물/단백질/지방, 추가하기 버튼
+                          AddCookBottomSheetWidget(
+                            onAddPressed: () async {
+                              final String cookName = _cookNameController.text;
+                              final String memo = _memoController.text;
+                              final List<CookItems> cookItems =
+                                  (_addCookState?.itemListForCook ?? [])
+                                      .map(
+                                        (item) => CookItems(
+                                          cookItemId: item.itemId ?? 0,
+                                          itemName: item.itemName ?? '',
+                                          count: item.count ?? 1,
+                                          nutriKcal: item.nutriKcal ?? 0,
+                                          cookItemName: item.itemName ?? '',
+                                          category: item.category ?? '',
+                                          brandName: item.brandName ?? '',
+                                          storageArea: item.storageArea ?? '',
+                                          nutriUnit: item.nutriUnit ?? '',
+                                          nutriCapacity:
+                                              item.nutriCapacity ?? 0,
+                                          subCategory: item.subCategory ?? '',
+                                        ),
+                                      )
+                                      .toList();
+                      
+                              final bool isSuccess = await ref
+                                  .read(cookProvider.notifier)
+                                  .addCook(
+                                    cookName,
+                                    memo,
+                                    _addCookState?.totalKcal ?? 0,
+                                    _addCookState?.totalCarb ?? 0,
+                                    _addCookState?.totalProtein ?? 0,
+                                    _addCookState?.totalFat ?? 0,
+                                    _group?.groupId ?? 0,
+                                    cookItems,
+                                  );
+                      
+                              if (isSuccess) {
+                                ref
+                                    .watch(cookProvider.notifier)
+                                    .loadCookList(_group?.groupId ?? 0);
+                                FToast()
+                                    .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
+                                toastMessage(context, "$cookName 추가했습니다.");
+                                context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
+                              } else {
+                                FToast().removeCustomToast();
+                                toastMessage(
+                                  context,
+                                  '$cookName 추가에 실패했습니다.',
+                                  type: ToastmessageType.errorType,
+                                );
+                              }
+                            },
+                            cookName: _cookNameController.text, // 요리 제목 전달
+                            itemListForCook:
+                                _addCookState?.itemListForCook, // 재료 리스트 전달
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 메모 탭의 콘텐츠 -> 추후 따로 서브로 빼면 좋을 것같아용
+                    TextField(
+                      controller: _memoController,
+                      decoration: InputDecoration(
+                        hintText: '요리에 대한 메모를 입력해보세요',
+                        border: const OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                        suffixIcon:
+                            _memoController.text.isNotEmpty
+                                ? IconButton(
+                                  onPressed: () {
+                                    _memoController.clear();
+                                  },
+                                  icon: const Icon(Icons.clear),
+                                )
+                                : null,
+                      ),
+                      maxLength: 90,
+                      minLines: 1,
+                      maxLines: 3,
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.newline,
+                      onChanged: (String value) {
+                        // 상태 변경은 부모 위젯에서 setState로 처리
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
-          ),
-        ),
-
-        // 바텀 시트 - 키보드 등장 시 숨김 관리 위해 visibility 위젯 사용
-        bottomSheet: Visibility(
-          visible: !(_addCookState?.isSearchIngredientFocused ?? false),
-          child: AddCookBottomSheetWidget(
-            memoController: _memoController,
-            onAddPressed: () async {
-              final String cookName = _cookNameController.text;
-              final String memo = _memoController.text;
-              final List<CookItems> cookItems =
-                  (_addCookState?.itemListForCook ?? [])
-                      .map(
-                        (item) => CookItems(
-                          cookItemId: item.itemId ?? 0,
-                          itemName: item.itemName ?? '',
-                          count: item.count ?? 1,
-                          nutriKcal: item.nutriKcal ?? 0,
-                          cookItemName: item.itemName ?? '',
-                          category: item.category ?? '',
-                          brandName: item.brandName ?? '',
-                          storageArea: item.storageArea ?? '',
-                          nutriUnit: item.nutriUnit ?? '',
-                          nutriCapacity: item.nutriCapacity ?? 0,
-                          subCategory: item.subCategory ?? '',
-                        ),
-                      )
-                      .toList();
-
-              final bool isSuccess = await ref
-                  .read(cookProvider.notifier)
-                  .addCook(
-                    cookName,
-                    memo,
-                    _addCookState?.totalKcal ?? 0,
-                    _addCookState?.totalCarb ?? 0,
-                    _addCookState?.totalProtein ?? 0,
-                    _addCookState?.totalFat ?? 0,
-                    _group?.groupId ?? 0,
-                    cookItems,
-                  );
-
-              if (isSuccess) {
-                ref
-                    .watch(cookProvider.notifier)
-                    .loadCookList(_group?.groupId ?? 0);
-                FToast()
-                    .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
-                toastMessage(context, "$cookName 추가했습니다.");
-                context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
-              } else {
-                FToast().removeCustomToast();
-                toastMessage(
-                  context,
-                  '$cookName 추가에 실패했습니다.',
-                  type: ToastmessageType.errorType,
-                );
-              }
-            },
-            cookName: _cookNameController.text, // 요리 제목 전달
-            itemListForCook: _addCookState?.itemListForCook, // 재료 리스트 전달
           ),
         ),
       ),
@@ -264,7 +332,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
         children: <Widget>[
-          const Divider(),
+          // const Divider(),
           Expanded(
             child: ListView.builder(
               itemCount: itemList?.length ?? 0,
@@ -303,7 +371,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               },
             ),
           ),
-          const Divider(),
+          // const Divider(),
         ],
       ),
     );
