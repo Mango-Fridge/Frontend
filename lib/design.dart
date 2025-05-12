@@ -60,7 +60,7 @@ class Design {
       mainColor = const Color.fromRGBO(255, 205, 72, 1.0),
       subColor = const Color.fromRGBO(255, 244, 216, 1.0),
       textFieldColor = const Color.fromRGBO(255, 238, 192, 1.0),
-      textFieldborderColor = const Color.fromRGBO(195, 142, 1, 1.0),
+      textFieldborderColor = const Color.fromARGB(255, 0, 0, 0),
       cancelColor = const Color.fromRGBO(255, 208, 208, 1.0),
       cookBtnColor = const Color.fromRGBO(219, 254, 128, 1.0),
 
