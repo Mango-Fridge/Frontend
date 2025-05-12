@@ -522,10 +522,28 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
 
   // 냉장고 ContentListView
   Widget _refrigeratorContent() {
+    return _contentSection(
+      contentList: _refrigeratorState?.refrigeratorContentList,
+      expiringList: _refrigeratorState?.refExpContentList,
+    );
+  }
+
+  // 냉동실 ContentListView
+  Widget _freezerContent() {
+    return _contentSection(
+      contentList: _refrigeratorState?.freezerContentList,
+      expiringList: _refrigeratorState?.frzExpContentList,
+    );
+  }
+
+  Widget _contentSection({
+    required List<Content>? contentList,
+    required List<Content>? expiringList,
+  }) {
     final Design design = Design(context);
     final int totalCount =
-        (_refrigeratorState?.refrigeratorContentList?.length ?? 0) +
-        (_refrigeratorState?.refExpContentList?.length ?? 0);
+        (contentList?.length ?? 0) + (expiringList?.length ?? 0);
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -536,52 +554,21 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               child: Row(
                 children: <Widget>[
                   Text('총 $totalCount개 물품'),
-                  (_refrigeratorState?.refExpContentList?.isNotEmpty ?? false)
-                      ? Text(
-                        ' (마감 임박 ${_refrigeratorState!.refExpContentList!.length}개)',
-                        style: const TextStyle(color: Colors.red),
-                      )
-                      : const SizedBox.shrink(),
+                  if (expiringList?.isNotEmpty ?? false)
+                    Text(
+                      ' (마감 임박 ${expiringList!.length}개)',
+                      style: const TextStyle(color: Colors.red),
+                    ),
                 ],
               ),
             ),
           ),
-
-          if (_refrigeratorState?.refExpContentList?.isNotEmpty ??
-              false) ...<Widget>[
+          if (expiringList?.isNotEmpty ?? false)
             SizedBox(
               height: 160,
-              child: horizontalExpContentCards(
-                context,
-                _refrigeratorState!.refExpContentList!,
-              ),
+              child: horizontalExpContentCards(context, expiringList!),
             ),
-          ],
-          if (_refrigeratorState?.refrigeratorContentList?.isNotEmpty ?? false)
-            _listViewBuilder(_refrigeratorState!.refrigeratorContentList!),
-        ],
-      ),
-    );
-  }
-
-  // 냉동실 ContentListView
-  Widget _freezerContent() {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          if (_refrigeratorState?.frzExpContentList?.isNotEmpty ??
-              false) ...<Widget>[
-            contentExpansionTile(
-              context,
-              '유통 기한 마감 임박',
-              _refrigeratorState!.frzExpContentList!,
-            ),
-
-            const Divider(),
-          ],
-
-          if (_refrigeratorState?.freezerContentList?.isNotEmpty ?? false)
-            _listViewBuilder(_refrigeratorState!.freezerContentList!),
+          if (contentList?.isNotEmpty ?? false) _listViewBuilder(contentList!),
         ],
       ),
     );
