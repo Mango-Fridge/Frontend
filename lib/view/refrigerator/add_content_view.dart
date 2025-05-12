@@ -67,6 +67,11 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
 
   final ScrollController _scrollController = ScrollController();
 
+  final OutlineInputBorder textFieldBorder = OutlineInputBorder(
+    borderSide: const BorderSide(color: Colors.black),
+    borderRadius: BorderRadius.circular(16.0),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -177,16 +182,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
           ),
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: design.textFieldborderColor,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: design.textFieldborderColor),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: design.textFieldborderColor,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: design.textFieldborderColor),
             ),
             hintText: 'ex) 촉촉한 초코칩',
             hintStyle: const TextStyle(color: Colors.grey),
@@ -222,20 +221,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                         controller: categoryController,
                         decoration: InputDecoration(
                           isDense: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: design.textFieldborderColor,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: design.textFieldborderColor,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
+                          enabledBorder: textFieldBorder,
+                          focusedBorder: textFieldBorder,
                         ),
                         onChanged: (String value) {
                           ref
@@ -264,27 +251,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   isExpanded: true,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.zero,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: design.textFieldborderColor,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: design.textFieldborderColor,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: design.textFieldborderColor,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
+                    border: textFieldBorder,
+                    enabledBorder: textFieldBorder,
+                    focusedBorder: textFieldBorder,
                   ),
                   dropdownStyleData: DropdownStyleData(
                     decoration: BoxDecoration(
@@ -348,20 +317,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     controller: countController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: design.textFieldborderColor,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: design.textFieldborderColor,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
+                      enabledBorder: textFieldBorder,
+                      focusedBorder: textFieldBorder,
                       errorText:
                           _addContentState?.contentCountErrorMessage?.isEmpty ??
                                   true
@@ -429,10 +386,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 height: 45,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
-                  border: Border.all(
-                    color: design.textFieldborderColor,
-                    width: 2,
-                  ),
+                  border: Border.all(color: design.textFieldborderColor),
                 ),
                 child: Align(
                   alignment: Alignment.center,
@@ -467,10 +421,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 height: 45,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
-                  border: Border.all(
-                    color: design.textFieldborderColor,
-                    width: 2,
-                  ),
+                  border: Border.all(color: design.textFieldborderColor),
                 ),
                 child: Align(
                   alignment: Alignment.center,
@@ -548,20 +499,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   controller: brandNameController,
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: design.textFieldborderColor,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: design.textFieldborderColor,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
+                    enabledBorder: textFieldBorder,
+                    focusedBorder: textFieldBorder,
                     hintText: "ex) 오리온",
                     hintStyle: const TextStyle(color: Colors.grey),
                     isDense: true,
@@ -602,20 +541,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                 hintText: "최대 100자 까지 작성 가능합니다.",
                 filled: true,
                 fillColor: design.subColor,
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: design.textFieldborderColor,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: design.textFieldborderColor,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
+                enabledBorder: textFieldBorder,
+                focusedBorder: textFieldBorder,
               ),
             ),
           ],
@@ -654,20 +581,8 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                   controller: subCategoryController,
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: design.textFieldborderColor,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: design.textFieldborderColor,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
+                    enabledBorder: textFieldBorder,
+                    focusedBorder: textFieldBorder,
                     hintText: "ex) 돼지고기, 소고기",
                     hintStyle: const TextStyle(color: Colors.grey),
                     isDense: true,
@@ -754,27 +669,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             style: const TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               hintText: 'ex) 150',
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: design.textFieldborderColor,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: design.textFieldborderColor,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: design.textFieldborderColor,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
+                              enabledBorder: textFieldBorder,
+                              disabledBorder: textFieldBorder,
+                              focusedBorder: textFieldBorder,
                               isDense: true,
                             ),
                             onChanged: (String? newValue) {
@@ -938,7 +835,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
         height: 40,
         children: segments,
         decoration: BoxDecoration(
-          border: Border.all(color: design.textFieldborderColor, width: 2),
+          border: Border.all(color: design.textFieldborderColor),
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
@@ -1132,27 +1029,9 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             enabled: enabled,
             decoration: InputDecoration(
               hintText: hintText,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: design.textFieldborderColor,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: design.textFieldborderColor,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: design.textFieldborderColor,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(16.0),
-              ),
+              enabledBorder: textFieldBorder,
+              disabledBorder: textFieldBorder,
+              focusedBorder: textFieldBorder,
               isDense: true,
             ),
             onChanged: (String? newValue) {

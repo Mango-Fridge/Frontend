@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mango/design.dart';
 
 class AsteriskLabel extends StatelessWidget {
@@ -33,6 +32,7 @@ class AsteriskPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const String text = '*';
     final TextStyle textStyle = TextStyle(
+      fontFamily: 'Mainfonts',
       color: color,
       fontSize: Design.normalFontSize1,
       fontWeight: FontWeight.bold,

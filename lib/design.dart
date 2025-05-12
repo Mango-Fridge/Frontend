@@ -17,7 +17,8 @@ class Design {
   final double screenWidth; // 시스템 가로
   final double screenHeight; // 시스템 세로
   final double marginAndPadding; // 기본 마진 및 패딩
-  final double homeBottomMarginAndPadding; // 메인화면 바텀시트 마진
+  final double expContentCardMarginAndPadding; // expContentCard 마진 및 패딩
+  final double homeBottomMarginAndPadding; // 메인화면 바텀시트 마진 및 패딩
   final double nutritionViewMarginAndPadding; // 영양 성분 뷰 마진 및 패딩
   final double splashImageSize; // splash & login 로고 이미지 크기 (scale)
   final double termsOverlayWidth; // 약관 동의 overlay 가로 크기
@@ -45,6 +46,7 @@ class Design {
     : screenWidth = MediaQuery.of(context).size.width,
       screenHeight = MediaQuery.of(context).size.height,
       marginAndPadding = 16.0,
+      expContentCardMarginAndPadding = 8.0,
       homeBottomMarginAndPadding = 8.0,
       nutritionViewMarginAndPadding = MediaQuery.of(context).size.width * 0.030,
       splashImageSize = MediaQuery.of(context).size.height * 0.007,
@@ -60,7 +62,7 @@ class Design {
       mainColor = const Color.fromRGBO(255, 205, 72, 1.0),
       subColor = const Color.fromRGBO(255, 244, 216, 1.0),
       textFieldColor = const Color.fromRGBO(255, 238, 192, 1.0),
-      textFieldborderColor = const Color.fromRGBO(195, 142, 1, 1.0),
+      textFieldborderColor = const Color.fromARGB(255, 0, 0, 0),
       cancelColor = const Color.fromRGBO(255, 208, 208, 1.0),
       cookBtnColor = const Color.fromRGBO(219, 254, 128, 1.0),
 
