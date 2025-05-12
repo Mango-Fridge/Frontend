@@ -27,8 +27,8 @@ class SearchItemListView extends StatelessWidget {
       itemCount: itemList.length + (hasMore && isLoadingMore ? 1 : 0),
       itemBuilder: (BuildContext context, int index) {
         if (index == itemList.length) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: design.marginAndPadding),
             child: Center(child: CircularProgressIndicator()),
           );
         }

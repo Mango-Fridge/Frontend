@@ -24,7 +24,8 @@ class SearchResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<RefrigeratorItem> list = searchState?.refrigeratorItemList ?? [];
+    final List<RefrigeratorItem> list =
+        searchState?.refrigeratorItemList ?? <RefrigeratorItem>[];
 
     if (isSearching) {
       return _buildSkeleton();
