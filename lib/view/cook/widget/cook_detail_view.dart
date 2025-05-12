@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/providers/cook_detail_provider.dart';
+import 'package:mango/providers/cook_provider.dart';
 import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/add_cook_state.dart';
 import 'package:mango/state/refrigerator_state.dart';
+import 'package:mango/toastMessage.dart';
 
 class CookDetailView extends ConsumerStatefulWidget {
   final Cook? cook;
@@ -198,39 +201,68 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   ),
                 ],
               ),
+              // 요리 삭제 버튼
+              Center(
+                child: TextButton(
+                  onPressed: () async {
+                    // AlertDialog를 표시해 사용자 확인을 받음
+                    bool? confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('요리 삭제'),
+                          content: Text(
+                            '${_cookState?.cookDetail?.cookName}을(를) 삭제하시겠습니까?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => context.pop(false), // 취소
+                              child: const Text('취소'),
+                            ),
+                            TextButton(
+                              onPressed: () => context.pop(true), // 확인
+                              child: const Text(
+                                '삭제',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                    // 사용자가 '삭제' 버튼을 눌렀을 때만 삭제 동작 실행
+                    if (confirm == true) {
+                      if (await ref
+                          .read(cookProvider.notifier)
+                          .deleteCook(_cookState?.cookDetail?.cookId ?? 0)) {
+                        // 삭제 성공
+                        FToast().removeCustomToast();
+                        toastMessage(
+                          context,
+                          "${_cookState?.cookDetail?.cookName}이(가) 삭제되었습니다.",
+                        );
+                        context.pop();
+                      } else {
+                        // 삭제 실패
+                        FToast().removeCustomToast();
+                        toastMessage(
+                          context,
+                          "${_cookState?.cookDetail?.cookName}를 삭제하지 못했습니다.",
+                        );
+                      }
+                    }
+                  },
+                  child: const Text(
+                    "요리 삭제",
+                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  // 요리 삭제하기
-  void _showExitDialog() {
-    showDialog(
-      context: context,
-      builder:
-          (BuildContext context) => AlertDialog(
-            title: const Text('요리 나가기'),
-            content: const Text('해당 페이지를 나가면 요리가 삭제됩니다.\n진행하시겠습니까?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => context.pop(), // "취소" 버튼: 알럿 창 닫기
-                child: const Text('취소'),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.pop(); // 알럿 창 닫기
-                  if (context.canPop()) {
-                    context.pop(); // 이전 화면으로 돌아가기
-                  } else {
-                    context.go('/cook');
-                  }
-                },
-                child: const Text('확인'),
-              ),
-            ],
-          ),
     );
   }
 
