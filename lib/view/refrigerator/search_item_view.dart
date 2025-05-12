@@ -69,7 +69,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
         appBar: AppBar(
           title: const Text(
             "물품 추가",
-            style: TextStyle(fontSize: Design.normalFontSize4),
+            style: TextStyle(fontSize: Design.normalFontSize2),
           ),
           scrolledUnderElevation: 0,
         ),
@@ -79,7 +79,7 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: design.marginAndPadding),
               padding: EdgeInsets.only(
-                left: design.marginAndPadding * 1.5,
+                left: design.marginAndPadding,
                 top: design.marginAndPadding * 0.5,
                 bottom: design.marginAndPadding * 0.5,
               ),
@@ -95,17 +95,28 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
                 controller: _controller,
                 style: const TextStyle(fontSize: Design.normalFontSize2),
                 decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.zero,
                   hintText: "ex) 초코칩",
                   border: InputBorder.none,
-                  suffixIcon:
+                  suffix:
                       (_controller.text.isNotEmpty)
-                          ? IconButton(
-                            icon: const Icon(Icons.clear, color: Colors.red),
-                            onPressed: () {
+                          ? GestureDetector(
+                            onTap: () {
                               _controller.clear();
                               _onSearchChanged('');
                               FocusScope.of(context).unfocus();
                             },
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: design.marginAndPadding,
+                              ),
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.red,
+                                size: 18,
+                              ),
+                            ),
                           )
                           : null,
                 ),
@@ -238,15 +249,10 @@ class _SearchContentViewState extends ConsumerState<SearchContentView> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(
-          vertical: design.marginAndPadding,
+          vertical: design.marginAndPadding / 3,
           horizontal: design.marginAndPadding,
         ),
-        padding: EdgeInsets.only(
-          left: design.marginAndPadding * 1.5,
-          right: design.marginAndPadding * 1.5,
-          top: design.marginAndPadding * 1.3,
-          bottom: design.marginAndPadding * 1.3,
-        ),
+        padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color: design.subColor,
           borderRadius: BorderRadius.circular(16),
