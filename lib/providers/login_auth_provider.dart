@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/abstract_auth.dart';
 import 'package:mango/model/login/platform_auth.dart';
 import 'package:mango/model/login/auth_model.dart';
-import 'package:mango/model/rest_client.dart';
 import 'package:mango/services/login/apple_auth_service.dart';
-import 'package:mango/services/login/login_service.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 import 'package:mango/toastMessage.dart';
 import '../services/login/kakao_auth_service.dart';
@@ -38,13 +35,20 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
   }
 
   // 로그인
-  Future<void> login(AuthPlatform platform) async {
+  Future<void> login(AuthPlatform platform, BuildContext context) async {
     final authService = _getAuthService(platform); // platform에 따른 서비스 반환
     if (authService == null) return;
 
     state = await authService.login();
 
-    if (state == null) throw Exception("서버와 통신하지 못했습니다");
+    if (state == null) {
+      debugPrint("[Server] 로그인으로, 데이터 받아오기 실패");
+      toastMessage(
+        context,
+        "서버와 연결할 수 없습니다.",
+        type: ToastmessageType.errorType,
+      );
+    }
   }
 
   // 로그아웃
@@ -79,10 +83,10 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
         // 서버에서 받아온 데이터가 있을 때,
         context.go('/home'); // 메인화면으로 이동
       } else {
-        debugPrint("[Server] 서버와 통신하지 못했습니다");
+        debugPrint("[Server] 자동 로그인으로, 데이터 받아오기 실패");
         toastMessage(
           context,
-          "서버와 통신하지 못했습니다",
+          "서버와 연결할 수 없습니다.",
           type: ToastmessageType.errorType,
         );
         context.go('/login'); // 로그인 화면으로 이동

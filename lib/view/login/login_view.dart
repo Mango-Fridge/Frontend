@@ -79,16 +79,9 @@ class _LoginButton extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       height: 40,
       onPressed: () async {
-        try {
-          await ref.read(loginAuthProvider.notifier).login(AuthPlatform.APPLE);
-        } catch (e) {
-          debugPrint("$e");
-          toastMessage(
-            context,
-            "서버와 통신하지 못했습니다",
-            type: ToastmessageType.errorType,
-          );
-        }
+        await ref
+            .read(loginAuthProvider.notifier)
+            .login(AuthPlatform.APPLE, context);
       },
     );
   }
@@ -102,16 +95,9 @@ class _LoginButton extends StatelessWidget {
         minimumSize: const Size.fromHeight(40),
       ),
       onPressed: () async {
-        try {
-          await ref.read(loginAuthProvider.notifier).login(AuthPlatform.KAKAO);
-        } catch (e) {
-          debugPrint("$e");
-          toastMessage(
-            context,
-            "서버와 통신하지 못했습니다",
-            type: ToastmessageType.errorType,
-          );
-        }
+        await ref
+            .read(loginAuthProvider.notifier)
+            .login(AuthPlatform.KAKAO, context);
       },
       child: const Text("카카오로그인"),
     );
