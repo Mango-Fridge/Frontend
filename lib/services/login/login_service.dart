@@ -9,8 +9,8 @@ import 'package:mango/services/login/login_shared_prefs.dart';
 class LoginService {
   final Dio dio = Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 20), // 연결 타임아웃
-      receiveTimeout: const Duration(seconds: 20), // 응답 타임아웃
+      connectTimeout: const Duration(seconds: 10), // 연결 타임아웃
+      receiveTimeout: const Duration(seconds: 10), // 응답 타임아웃
     ),
   );
 

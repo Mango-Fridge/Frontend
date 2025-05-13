@@ -10,6 +10,8 @@ import 'package:mango/toastMessage.dart';
 import '../services/login/kakao_auth_service.dart';
 import 'package:mango/services/login/terms_service.dart';
 
+final loginLoadingProvider = StateProvider<bool>((ref) => false);
+
 // 상태 관리를 위한 provider와 notifier
 class LoginAuthNotifier extends Notifier<AuthInfo?> {
   final KakaoAuthService _kakaoAuthService = KakaoAuthService();
@@ -36,6 +38,7 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
 
   // 로그인
   Future<void> login(AuthPlatform platform, BuildContext context) async {
+    ref.read(loginLoadingProvider.notifier).state = true;
     final authService = _getAuthService(platform); // platform에 따른 서비스 반환
     if (authService == null) return;
 
@@ -43,12 +46,10 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
 
     if (state == null) {
       debugPrint("[Server] 로그인으로, 데이터 받아오기 실패");
-      toastMessage(
-        context,
-        "서버와 연결할 수 없습니다.",
-        type: ToastmessageType.errorType,
-      );
+      toastMessage(context, "로그인에 실패하였습니다.", type: ToastmessageType.errorType);
     }
+
+    ref.read(loginLoadingProvider.notifier).state = false;
   }
 
   // 로그아웃
