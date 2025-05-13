@@ -405,6 +405,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           color: Colors.red,
                           onPressed: () {
                             if (item.itemId != null) {
+                              ref.read(addCookProvider.notifier).itemToSub(item); // 삭제 버튼 눌렀을 때 해당 열량,탄/단/지 총량 제거
                               final updatedList =
                                   itemList
                                       .where((i) => i.itemId != item.itemId)
@@ -473,7 +474,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                   child: Column(
                     children: [
                       Text(
-                        '${item.nutriKcal ?? 0}kcal',
+                        '${(item.nutriKcal ?? 0) * (item.count ?? 0) }kcal',
                         // "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
                         style: const TextStyle(
                           fontSize: 16,
