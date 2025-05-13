@@ -10,6 +10,7 @@ import 'package:mango/toastMessage.dart';
 import '../services/login/kakao_auth_service.dart';
 import 'package:mango/services/login/terms_service.dart';
 
+// 로그인 상태 관리 provider
 final loginLoadingProvider = StateProvider<bool>((ref) => false);
 
 // 상태 관리를 위한 provider와 notifier
