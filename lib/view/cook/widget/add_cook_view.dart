@@ -209,35 +209,60 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                             ?.unfocus(); // 포커스 해제 및 키보드 내리기
                       },
                       child: Column(
+                        spacing: 20,
                         children: <Widget>[
                           // 검색 필드
-                          Padding(
-                            padding: EdgeInsets.all(design.marginAndPadding),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: design.marginAndPadding,
+                              right: design.marginAndPadding,
+                              left: design.marginAndPadding,
+                            ),
+                            padding: EdgeInsets.only(
+                              left: design.marginAndPadding,
+                              top: design.marginAndPadding * 0.5,
+                              bottom: design.marginAndPadding * 0.5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: design.textFieldColor,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: design.textFieldborderColor,
+                              ),
+                            ),
                             child: TextField(
                               controller: _searchIngridientController,
                               focusNode: _searchIngredientFocusNode,
+                              style: const TextStyle(
+                                fontSize: Design.normalFontSize2,
+                              ),
                               decoration: InputDecoration(
-                                hintText: 'ex) 돼지고기, 소고기',
-                                border: const OutlineInputBorder(),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _addCookState?.isSearchFieldEmpty ?? true
-                                        ? Icons.search
-                                        : Icons.close,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () {
-                                    if (!(_addCookState?.isSearchFieldEmpty ??
-                                        false)) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                      _searchIngridientController.clear();
-                                      ref
-                                          .read(addCookProvider.notifier)
-                                          .updateSearchFieldEmpty(true);
-                                    }
-                                  },
-                                ),
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                                hintText: "ex) 돼지고기, 소고기",
+                                border: InputBorder.none,
+                                suffix:
+                                    (_searchIngridientController
+                                            .text
+                                            .isNotEmpty)
+                                        ? GestureDetector(
+                                          onTap: () {
+                                            _searchIngridientController.clear();
+                                            _onSearchChanged('');
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                              right: design.marginAndPadding,
+                                            ),
+                                            child: const Icon(
+                                              Icons.clear,
+                                              color: Colors.red,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        )
+                                        : null,
                               ),
                               onChanged: (String value) {
                                 // 입력값이 변경될 때 상태 업데이트
