@@ -23,7 +23,7 @@ class AppleAuthService implements AbstractAuth {
 
       String? token = await _LoginSharePrefs.getAppleToken();
 
-      if (token!.isNotEmpty) {
+      if (token != null) {
         debugPrint("[Apple] 저장된 토큰값이 존재하여 로그인을 시도합니다.");
         return await _loginService.postLogin(); // 서버와 로그인 처리
       } else {

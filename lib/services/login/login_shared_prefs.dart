@@ -43,7 +43,7 @@ class LoginSharePrefs {
   Future<String?> getAppleToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return prefs.getString('AppleToken') ?? "";
+    return prefs.getString('AppleToken');
   }
 
   // 로컬에 저장된 이메일 가져오기
