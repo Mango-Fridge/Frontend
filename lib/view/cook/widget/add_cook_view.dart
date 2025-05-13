@@ -405,7 +405,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           color: Colors.red,
                           onPressed: () {
                             if (item.itemId != null) {
-                              ref.read(addCookProvider.notifier).itemToSub(item); // 삭제 버튼 눌렀을 때 해당 열량,탄/단/지 총량 제거
+                              ref
+                                  .read(addCookProvider.notifier)
+                                  .itemToSub(
+                                    item,
+                                  ); // 삭제 버튼 눌렀을 때 해당 열량,탄/단/지 총량 제거
                               final updatedList =
                                   itemList
                                       .where((i) => i.itemId != item.itemId)
@@ -463,36 +467,32 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
-                      // overflow: TextOverflow.ellipsis,
-                      // maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     Text("${item.brandName}"),
                   ],
                 ),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 100),
+                Flexible(
                   child: Column(
                     children: [
                       Text(
-                        '${(item.nutriKcal ?? 0) * (item.count ?? 0) }kcal',
-                        // "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
+                        '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 65, 65, 65),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                       ),
                       Text(
-                        '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / ${(item.nutriProtein ?? 0) * (item.count ?? 0)} / ${(item.nutriFat ?? 0) * (item.count ?? 0)}',
+                        '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / '
+                        '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / '
+                        '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 65, 65, 65),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                       ),
                     ],
                   ),
