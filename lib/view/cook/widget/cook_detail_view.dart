@@ -138,46 +138,59 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         .firstOrNull;
 
                 Icon icon;
+
                 if (isFridge == null) {
                   icon = const Icon(Icons.close, color: Colors.red);
-                } else if ((isFridge.count ?? 0) >= (item.count ?? 0)) {
+                } else if (isFridge.subCategory == '미분류') {
+                  icon = const Icon(Icons.circle, color: Colors.black, size: 4);
+                } else if ((isFridge.count) >= (item.count ?? 0)) {
                   icon = const Icon(Icons.check, color: Colors.green);
                 } else {
                   icon = const Icon(Icons.check, color: Colors.orange);
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              icon,
-                              Text(
-                                item.itemName ?? '재료 이름 없음',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          Text('($subCategory)'), // 중분류 표시
-                        ],
-                      ),
-                      const Spacer(),
-                      Text(
-                        '${item.count ?? 0}개 / ',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        '${item.nutriKcal ?? 0} kcal',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
+                return Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            // '미분류'일 때 패딩
+                            subCategory == '미분류'
+                                ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0,
+                                  ),
+                                  child: icon,
+                                )
+                                : icon,
+                            Text(
+                              item.itemName ?? '재료 이름 없음',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        Visibility(
+                          // 중분류 표시
+                          visible: subCategory != '미분류',
+                          child: Text('($subCategory)'),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${item.count ?? 0}개 / ',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      '${item.nutriKcal ?? 0} kcal',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 );
               }),
+              
               // Memo box
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
