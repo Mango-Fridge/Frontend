@@ -37,6 +37,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
     final Design design = Design(context);
 
     return Scaffold(
+      backgroundColor: design.mainColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +49,13 @@ class _SplashViewState extends ConsumerState<SplashView> {
                   "assets/images/title.png",
                   scale: design.splashImageSize,
                 ),
-                const Text("Mango"),
+                Text(
+                  "Mango",
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.09,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 100),
