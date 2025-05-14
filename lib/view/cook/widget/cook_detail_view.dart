@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 import 'package:mango/model/content.dart';
 import 'package:mango/model/cook.dart';
 import 'package:mango/providers/cook_detail_provider.dart';
@@ -37,18 +38,26 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    final Design design = Design(context);
+    bool isCookMemo =
+        _cookState?.cookDetail?.cookMemo != null &&
+        _cookState!.cookDetail!.cookMemo!.isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
-        title: Text(_cookState?.cookDetail?.cookName ?? '음식 명 없음'),
-        centerTitle: true,
+        title: Text(
+          _cookState?.cookDetail?.cookName ?? '음식 명 없음',
+          style: const TextStyle(fontSize: 30),
+        ),
+        centerTitle: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 25.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 20,
@@ -58,42 +67,43 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    '영양성분표',
+                    "영양성분표",
                     style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: 24,
+                      color: const Color.fromRGBO(195, 142, 1, 1),
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    '${_cookState?.cookDetail?.cookNutriKcal}kcal',
-                    style: const TextStyle(fontSize: 40),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      '${_cookState?.cookDetail?.cookNutriKcal} kcal',
+                      style: const TextStyle(fontSize: 35),
+                    ),
                   ),
                 ],
               ),
 
               // 영양성분
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   nutrientLabel(
                     nutriLabel: '탄',
                     nutriCapacity:
-                        '${_cookState?.cookDetail?.cookNutriCarbohydrate}',
+                        '${_cookState?.cookDetail?.cookNutriCarbohydrate}g',
                   ),
-                  const Spacer(),
                   nutrientLabel(
                     nutriLabel: '단',
                     nutriCapacity:
-                        '${_cookState?.cookDetail?.cookNutriProtein}',
+                        '${_cookState?.cookDetail?.cookNutriProtein}g',
                   ),
-                  const Spacer(),
                   nutrientLabel(
                     nutriLabel: '지',
-                    nutriCapacity: '${_cookState?.cookDetail?.cookNutriFat}',
+                    nutriCapacity: '${_cookState?.cookDetail?.cookNutriFat}g',
                   ),
-                  const Spacer(),
                 ],
               ),
 
@@ -102,26 +112,41 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '재료',
-                    style: TextStyle(fontSize: 30, color: Colors.orange),
+                    "재료",
+                    style: TextStyle(
+                      color: Color.fromRGBO(195, 142, 1, 1),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '중분류명과 동일한 물품이 냉장고에 포함되는지 체크합니다.',
-                          style: TextStyle(fontSize: 15),
+                        const Text("   •  중분류명과 동일한 물품이 냉장고에 포함되는지 체크합니다."),
+                        const Row(
+                          children: [
+                            Text("   •  수량에 따른 색 변화가 존재합니다. ("),
+                            Text(
+                              "일치",
+                              style: TextStyle(
+                                color: Colors.greenAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(" / "),
+                            Text(
+                              "부족",
+                              style: TextStyle(
+                                color: Colors.amber,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(" ) "),
+                          ],
                         ),
-                        Text(
-                          '수량에 따른 색 변화가 존재합니다. (일치 / 부족)',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        Text(
-                          '해당 물품에 중분류명이 없다면 별도의 체크가 되지 않습니다.',
-                          style: TextStyle(fontSize: 15),
-                        ),
+                        const Text("   •  해당 물품에 중분류명이 없다면 별도의 체크가 되지 않습니다."),
                       ],
                     ),
                   ),
@@ -149,14 +174,16 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   icon = const Icon(Icons.check, color: Colors.orange);
                 }
 
-                return Row(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            // '미분류'일 때 패딩
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              // '미분류'일 때 패딩
                             subCategory == '미분류'
                                 ? Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -165,55 +192,90 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                                   child: icon,
                                 )
                                 : icon,
-                            Text(
-                              item.itemName ?? '재료 이름 없음',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                        Visibility(
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxWidth:
+                                      19 *
+                                      17 *
+                                      0.6, // Approximate width for 15 characters
+                                ),
+                                child: Text(
+                                  item.itemName ?? '재료 이름 없음',
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Visibility(
                           // 중분류 표시
                           visible: subCategory != '미분류',
                           child: Text('($subCategory)'),
                         ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Text(
-                      '${item.count ?? 0}개 / ',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      '${item.nutriKcal ?? 0} kcal',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
+                        ],
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${item.count ?? 0}개 / ',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        '${item.nutriKcal ?? 0} kcal',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               }),
-              
+
               // Memo box
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '메모',
-                    style: const TextStyle(fontSize: 30, color: Colors.orange),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.amberAccent,
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.orange),
-                    ),
-                    child: Text(
-                      '${_cookState?.cookDetail?.cookMemo}',
-                      style: const TextStyle(fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+              isCookMemo
+                  ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "메모",
+                        style: TextStyle(
+                          color: Color.fromRGBO(195, 142, 1, 1),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        width: design.screenWidth * 0.95,
+                        padding: EdgeInsets.all(design.marginAndPadding),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(255, 244, 216, 1),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color.fromRGBO(
+                              195,
+                              142,
+                              1,
+                              1,
+                            ), // 원하는 테두리 색상
+                            width: 1.0, // 테두리 두께
+                          ),
+                        ),
+                        child: Text(
+                          '${_cookState?.cookDetail?.cookMemo}',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  )
+                  : const SizedBox.shrink(),
+
               // 요리 삭제 버튼
               Center(
                 child: TextButton(
@@ -285,19 +347,23 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
     required String nutriCapacity,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.amber,
-            borderRadius: BorderRadius.circular(20),
+          width: 35,
+          height: 35,
+          decoration: const BoxDecoration(
+            color: Colors.amber, // 노란색 배경
+            shape: BoxShape.circle,
           ),
           child: Center(
-            child: Text(nutriLabel, style: const TextStyle(fontSize: 25)),
+            child: Text(nutriLabel, style: const TextStyle(fontSize: 20)),
           ),
         ),
-        const SizedBox(width: 10),
-        Text(nutriCapacity, style: const TextStyle(fontSize: 30)),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(nutriCapacity, style: const TextStyle(fontSize: 20)),
+        ),
       ],
     );
   }
