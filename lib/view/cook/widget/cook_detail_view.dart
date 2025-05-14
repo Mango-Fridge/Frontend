@@ -181,11 +181,20 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           Row(
                             children: [
                               icon,
-                              Text(
-                                item.itemName ?? '재료 이름 없음',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxWidth:
+                                      19 *
+                                      17 *
+                                      0.6, // Approximate width for 15 characters
+                                ),
+                                child: Text(
+                                  item.itemName ?? '재료 이름 없음',
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 2,
                                 ),
                               ),
                             ],
@@ -198,14 +207,14 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         '${item.count ?? 0}개 / ',
                         style: const TextStyle(
                           color: Colors.grey,
-                          fontSize: 20,
+                          fontSize: 16,
                         ),
                       ),
                       Text(
                         '${item.nutriKcal ?? 0} kcal',
                         style: const TextStyle(
                           color: Colors.grey,
-                          fontSize: 20,
+                          fontSize: 16,
                         ),
                       ),
                     ],
