@@ -99,21 +99,30 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      context.push("/group");
-                    },
-                    child:
-                        _group?.groupName == null
-                            ? const SizedBox.shrink()
-                            : Text(
-                              "${_group?.groupName}의 냉장고 >",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: Design.normalFontSize2,
+                  Padding(
+                    padding: EdgeInsets.only(left: design.marginAndPadding),
+                    child: TextButton(
+                      onPressed: () {
+                        context.push("/group");
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child:
+                          _group?.groupName == null
+                              ? const SizedBox.shrink()
+                              : Text(
+                                "${_group?.groupName}의 냉장고 >",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Design.normalFontSize2,
+                                ),
                               ),
-                            ),
+                    ),
                   ),
+
                   if ((_group?.groupName ?? '').isNotEmpty)
                     Row(
                       children: <Widget>[
