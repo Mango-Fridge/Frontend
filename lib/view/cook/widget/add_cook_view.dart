@@ -49,7 +49,6 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   final TextEditingController _controller = TextEditingController();
 
   final GlobalKey _memoKey = GlobalKey();
-  final TextEditingController memoController = TextEditingController();
 
   bool isMemoEmpty = true;
   static const int _memoMaxLine = 15;
@@ -66,9 +65,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   void initState() {
     super.initState();
 
-    memoController.addListener(() {
+    _memoController.addListener(() {
       setState(() {
-        isMemoEmpty = memoController.text.isEmpty;
+        isMemoEmpty = _memoController.text.isEmpty;
       });
     });
 
@@ -154,7 +153,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   @override
   Widget build(BuildContext context) {
     final Design design = Design(context);
-    bool isMemoEmpty = memoController.text.isEmpty;
+    bool isMemoEmpty = _memoController.text.isEmpty;
 
     return PopScope(
       canPop: false, // 백버튼 작동 금지
@@ -357,7 +356,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                   left: design.marginAndPadding,
                                 ),
                                 child: Text(
-                                  '${memoController.text.length} / $_memoMaxLength',
+                                  '${_memoController.text.length} / $_memoMaxLength',
                                 ),
                               ),
                               Spacer(),
@@ -367,7 +366,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                     isMemoEmpty
                                         ? null
                                         : () {
-                                          memoController.clear();
+                                          _memoController.clear();
                                         },
                                 child: Text(
                                   '모두 지우기',
@@ -385,7 +384,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           TextField(
                             key: _memoKey,
                             onTap: () => _focusTextField(_memoKey),
-                            controller: memoController,
+                            controller: _memoController,
                             maxLines: _memoMaxLine,
                             maxLength: _memoMaxLength,
                             decoration: InputDecoration(
