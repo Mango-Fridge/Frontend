@@ -448,9 +448,13 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 255, 246, 218),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
+                side: const BorderSide(
+                  color: Colors.amber, // Yellow border
+                  width: 1.0, // Border thickness
+                ),
               ),
               content: AddCookContentView(item: loadedItem),
             );
