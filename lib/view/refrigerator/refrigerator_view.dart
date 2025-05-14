@@ -646,6 +646,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Widget _buildContentRow(Content content) {
     final Design design = Design(context);
 
+    final bool isCntUpdated =
+        _refrigeratorState!.updateContentList?.any(
+          (Content c) => c.contentId == content.contentId,
+        ) ??
+        false;
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -666,11 +672,15 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color:
-              (DateTime.now().difference(content.expDate!).inHours > -24)
-                  ? Colors.red[200]
-                  : Colors.amber.shade50,
+              isCntUpdated ? design.cntUpdateListColor : Colors.amber.shade50,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: design.mainColor, width: 1.5),
+          border: Border.all(
+            color:
+                isCntUpdated
+                    ? design.cntUpdateListBorderColor
+                    : design.mainColor,
+            width: 1.5,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
