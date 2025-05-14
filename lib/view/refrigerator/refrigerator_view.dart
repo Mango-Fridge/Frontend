@@ -405,7 +405,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         );
       },
       child: Container(
-        width: 120,
+        width: 130,
         padding: EdgeInsets.all(design.expContentCardMarginAndPadding),
         decoration: BoxDecoration(
           color:
@@ -849,62 +849,69 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     required int contentId,
     required WidgetRef ref,
   }) {
-    return SizedBox(
-      width: 100,
-      height: 30,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black, width: 1.5),
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 5,
-          children: <Widget>[
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  if (count > 0) {
-                    ref
-                        .watch(refrigeratorNotifier.notifier)
-                        .reduceContentCount(contentId);
-                  }
-                },
-                splashColor: Colors.grey.shade200,
-                highlightColor: Colors.grey.shade200,
-                child: const Icon(Icons.remove, size: 20, color: Colors.black),
-              ),
+    return GestureDetector(
+      onTap: () {},
+      child: SizedBox(
+        width: 110,
+        height: 30,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.black, width: 1.5),
+            color: Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 5,
+              children: <Widget>[
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .openUpdateContentCountView();
+                      if (count > 0) {
+                        ref
+                            .watch(refrigeratorNotifier.notifier)
+                            .reduceContentCount(contentId);
+                      }
+                    },
+                    splashColor: Colors.grey.shade200,
+                    highlightColor: Colors.grey.shade200,
+                    child: const Icon(
+                      Icons.remove,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {},
+                  child: Text('$count개'),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .openUpdateContentCountView();
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .addContentCount(contentId);
+                    },
+                    splashColor: Colors.grey.shade200,
+                    highlightColor: Colors.grey.shade200,
+                    child: const Icon(Icons.add, size: 20, color: Colors.black),
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {},
-                child: Text('$count개'),
-              ),
-            ),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .addContentCount(contentId);
-                },
-                splashColor: Colors.grey.shade200,
-                highlightColor: Colors.grey.shade200,
-                child: const Icon(Icons.add, size: 20, color: Colors.black),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
