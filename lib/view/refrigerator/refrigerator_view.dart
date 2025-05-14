@@ -384,6 +384,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 유통 기한 마감 임박 항목
   Widget expContentCard({required Content content}) {
     final Design design = Design(context);
+    final bool isCntUpdated =
+        _refrigeratorState!.updateContentList?.any(
+          (Content c) => c.contentId == content.contentId,
+        ) ??
+        false;
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -402,15 +408,21 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         width: 120,
         padding: EdgeInsets.all(design.expContentCardMarginAndPadding),
         decoration: BoxDecoration(
-          color: ref
-              .watch(refrigeratorNotifier.notifier)
-              .getColorByRemainTime(content.expDate!)
-              .withAlpha(100),
+          color:
+              isCntUpdated
+                  ? design.cntUpdateListColor
+                  : ref
+                      .watch(refrigeratorNotifier.notifier)
+                      .getColorByRemainTime(content.expDate!)
+                      .withAlpha(100),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: ref
-                .watch(refrigeratorNotifier.notifier)
-                .getColorByRemainTime(content.expDate!),
+            color:
+                isCntUpdated
+                    ? design.cntUpdateListBorderColor
+                    : ref
+                        .watch(refrigeratorNotifier.notifier)
+                        .getColorByRemainTime(content.expDate!),
           ),
         ),
         child: Column(
