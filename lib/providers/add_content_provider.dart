@@ -96,7 +96,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
       if (contentCount.isEmpty) {
         _addContentState = state!.copyWith(
-          contentCountErrorMessage: '물품의 개수를 입력해 주세요.',
+          contentCountErrorMessage: '수량을 입력해 주세요.',
           isCheckecCount: false,
         );
       } else if (!regex.hasMatch(contentCount)) {
