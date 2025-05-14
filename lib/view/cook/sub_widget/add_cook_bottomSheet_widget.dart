@@ -28,7 +28,7 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.amber,
+        color: const Color.fromRGBO(255, 228, 161, 1),
         borderRadius: BorderRadius.circular(30), // 둥근 모서리 반경 설정
         border: Border.all(color: Colors.brown, width: 1),
       ),
@@ -69,9 +69,16 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: isButtonEnabled ? onAddPressed : null, // 콜백 호출
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.amber[400],
                 minimumSize: const Size(double.infinity, 40),
-                disabledBackgroundColor: Colors.grey[300], // 비활성화 시 색상
+                disabledBackgroundColor: Colors.grey[100], // 비활성화 시 색상
+                side: BorderSide(
+                  color:
+                      isButtonEnabled
+                          ? Colors.black
+                          : Colors.transparent, // 활성화 시 검정 테두리, 비활성화 시 투명
+                  width: 1.0, // 테두리 두께
+                ),
               ),
               child: Text(
                 '추가하기',
@@ -80,7 +87,7 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
                   color:
                       isButtonEnabled
                           ? Colors.black
-                          : Color.fromARGB(255, 89, 88, 88),
+                          : Color.fromARGB(255, 140, 140, 140),
                 ),
               ),
             ),

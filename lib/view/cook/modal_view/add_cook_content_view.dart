@@ -57,11 +57,11 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    (widget.item?.itemName ?? '').length > 17
-                        ? '${(widget.item?.itemName ?? '').substring(0, 17)}...'
+                    (widget.item?.itemName ?? '').length > 25
+                        ? '${(widget.item?.itemName ?? '').substring(0, 25)}...'
                         : widget.item?.itemName ?? '',
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -80,68 +80,126 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
           ),
 
           // 영양성분 - 탄단지
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 10,
-            children: <Widget>[
-              nutrientBox('열량', '${getItemTotalKcal()}'),
-              nutrientBox('탄수화물', '${getItemTotalCarbohydrate()}'),
-              nutrientBox('단백질', '${getItemTotalProtein()}'),
-              nutrientBox('지방', '${getItemTotalFat()}'),
-            ],
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.0),
+              border: Border.all(
+                color: Colors.amber, // Yellow border
+                width: 1.0, // Border thickness
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8,
+              children: <Widget>[
+                nutrientBox('열량', '${getItemTotalKcal()}', Colors.black),
+                nutrientBox(
+                  '탄수화물',
+                  '${getItemTotalCarbohydrate()}',
+                  Colors.green,
+                ),
+                nutrientBox('단백질', '${getItemTotalProtein()}', Colors.amber),
+                nutrientBox(
+                  '지방',
+                  '${getItemTotalFat()}',
+                  const Color.fromARGB(255, 155, 118, 5),
+                ),
+              ],
+            ),
           ),
 
           // 수량 조절 버튼
           Column(
+            spacing: 10,
             children: [
               const Text(
                 '선택된 수량',
                 style: TextStyle(
-                  fontSize: 20,
+                  color: Colors.grey,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 20,
                 children: <Widget>[
+                  // 감소 버튼
                   Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: IconButton(
+                    child: ElevatedButton(
                       onPressed: () {
                         ref.watch(addCookProvider.notifier).reduceItemCount();
                       },
-                      icon: const Icon(Icons.remove, size: 30),
-                      padding: const EdgeInsets.all(8.0),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          252,
+                          117,
+                          117,
+                        ),
+                        foregroundColor: Colors.redAccent,
+                        side: BorderSide(color: Colors.redAccent, width: 1.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            16.0,
+                          ), // Rounded corners
+                        ),
+                        minimumSize: const Size(50, 50), // Square button size
+                        padding: const EdgeInsets.all(
+                          8.0,
+                        ), // Consistent with original padding
+                      ),
+                      child: const Icon(Icons.remove, size: 20),
                     ),
                   ),
+
+                  // 수량
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 5.0,
+                      horizontal: 30.0,
+                      vertical: 15.0,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(4.0),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16.0),
+                      border: Border.all(
+                        color: Colors.amber, // Yellow border
+                        width: 1.0, // Border thickness
+                      ),
                     ),
                     child: Text(
                       '${_addCookState?.itemCount}',
-                      style: const TextStyle(fontSize: 25),
+                      style: const TextStyle(fontSize: 30),
                     ),
                   ),
+
+                  // 추가 버튼
                   Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: IconButton(
+                    child: ElevatedButton(
                       onPressed: () {
                         ref.watch(addCookProvider.notifier).addItemCount();
                       },
-                      icon: const Icon(Icons.add, size: 30),
-                      padding: const EdgeInsets.all(8.0),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          118,
+                          168,
+                          255,
+                        ),
+                        foregroundColor: Colors.blueAccent,
+                        side: BorderSide(color: Colors.blueAccent, width: 1.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            16.0,
+                          ), // Rounded corners
+                        ),
+                        minimumSize: const Size(50, 50), // Square button size
+                        padding: const EdgeInsets.all(
+                          8.0,
+                        ), // Consistent with original padding
+                      ),
+                      child: const Icon(Icons.add, size: 20),
                     ),
                   ),
                 ],
@@ -149,18 +207,33 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              actionButton(
-                text: '닫기',
-                backgroundColor: Colors.white,
+              ElevatedButton(
+                child: Text('닫기', style: TextStyle(fontSize: 20)),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color.fromRGBO(255, 233, 175, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  minimumSize: const Size(100, 40),
+                ),
                 onPressed: () {
                   context.pop();
                 },
               ),
-              actionButton(
-                text: '추가',
-                backgroundColor: Colors.amber,
+
+              ElevatedButton(
+                child: Text('추가', style: TextStyle(fontSize: 20)),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: Colors.amber,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  minimumSize: const Size(100, 40),
+                ),
                 onPressed: () {
                   ref.watch(addCookProvider.notifier).addCookItem(widget.item!);
                   ref.watch(addCookProvider.notifier).sumKcal();
@@ -178,12 +251,12 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
   }
 
   // 영양 성분
-  Widget nutrientBox(String label, String value) {
+  Widget nutrientBox(String label, String value, Color color) {
     final Design design = Design(context);
     final String displayValue = label == '열량' ? '${value}kcal' : value;
     return SizedBox(
       width: design.screenWidth * 0.14,
-      height: design.screenHeight * 0.1, // 여기서 뷰 크기 조절
+      height: design.screenHeight * 0.07, // 여기서 뷰 크기 조절
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -193,8 +266,22 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(label, style: const TextStyle(fontSize: 15)),
-              Text(displayValue, style: const TextStyle(fontSize: 15)),
+              Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                displayValue,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),

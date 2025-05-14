@@ -119,6 +119,21 @@ class AddCookNotifier extends Notifier<AddCookState> {
     state = state.copyWith(totalFat: result);
   }
 
+  // 추가된 물품에서 삭제 버튼을 클릭했을 때 총량에서 제거
+  void itemToSub(RefrigeratorItem item) {
+    final int kcalToSub = (item.nutriKcal ?? 0) * (item.count ?? 0);
+    final int carbToSub = (item.nutriCarbohydrate ?? 0) * (item.count ?? 0);
+    final int proteinToSub = (item.nutriProtein ?? 0) * (item.count ?? 0);
+    final int fatToSub = (item.nutriFat ?? 0) * (item.count ?? 0);
+
+    state = state.copyWith(
+      totalKcal: state.totalKcal - kcalToSub,
+      totalCarb: state.totalCarb - carbToSub,
+      totalProtein: state.totalProtein - proteinToSub,
+      totalFat: state.totalFat - fatToSub,
+    );
+  }
+
   void addItemCount() {
     int test = state.itemCount + 1;
     state = state.copyWith(itemCount: test);

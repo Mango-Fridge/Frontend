@@ -48,12 +48,28 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   Group? get _group => ref.watch(groupProvider);
   final TextEditingController _controller = TextEditingController();
 
+  final GlobalKey _memoKey = GlobalKey();
+
+  bool isMemoEmpty = true;
+  static const int _memoMaxLine = 15;
+  static const int _memoMaxLength = 500;
+  final OutlineInputBorder textFieldBorder = OutlineInputBorder(
+    borderSide: const BorderSide(color: Colors.black),
+    borderRadius: BorderRadius.circular(16.0),
+  );
+
   Timer? _debounce;
 
   @override
   // 상태 초기화 - 포커스 상태 변경 리스너 상태 초기화
   void initState() {
     super.initState();
+
+    _memoController.addListener(() {
+      setState(() {
+        isMemoEmpty = _memoController.text.isEmpty;
+      });
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(addCookProvider.notifier).resetState();
@@ -137,6 +153,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   @override
   Widget build(BuildContext context) {
     final Design design = Design(context);
+    bool isMemoEmpty = _memoController.text.isEmpty;
 
     return PopScope(
       canPop: false, // 백버튼 작동 금지
@@ -191,35 +208,60 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                             ?.unfocus(); // 포커스 해제 및 키보드 내리기
                       },
                       child: Column(
+                        spacing: 20,
                         children: <Widget>[
                           // 검색 필드
-                          Padding(
-                            padding: EdgeInsets.all(design.marginAndPadding),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: design.marginAndPadding,
+                              right: design.marginAndPadding,
+                              left: design.marginAndPadding,
+                            ),
+                            padding: EdgeInsets.only(
+                              left: design.marginAndPadding,
+                              top: design.marginAndPadding * 0.5,
+                              bottom: design.marginAndPadding * 0.5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: design.textFieldColor,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: design.textFieldborderColor,
+                              ),
+                            ),
                             child: TextField(
                               controller: _searchIngridientController,
                               focusNode: _searchIngredientFocusNode,
+                              style: const TextStyle(
+                                fontSize: Design.normalFontSize2,
+                              ),
                               decoration: InputDecoration(
-                                hintText: 'ex) 돼지고기, 소고기',
-                                border: const OutlineInputBorder(),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _addCookState?.isSearchFieldEmpty ?? true
-                                        ? Icons.search
-                                        : Icons.close,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () {
-                                    if (!(_addCookState?.isSearchFieldEmpty ??
-                                        false)) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                      _searchIngridientController.clear();
-                                      ref
-                                          .read(addCookProvider.notifier)
-                                          .updateSearchFieldEmpty(true);
-                                    }
-                                  },
-                                ),
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                                hintText: "ex) 돼지고기, 소고기",
+                                border: InputBorder.none,
+                                suffix:
+                                    (_searchIngridientController
+                                            .text
+                                            .isNotEmpty)
+                                        ? GestureDetector(
+                                          onTap: () {
+                                            _searchIngridientController.clear();
+                                            _onSearchChanged('');
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                              right: design.marginAndPadding,
+                                            ),
+                                            child: const Icon(
+                                              Icons.clear,
+                                              color: Colors.red,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        )
+                                        : null,
                               ),
                               onChanged: (String value) {
                                 // 입력값이 변경될 때 상태 업데이트
@@ -301,31 +343,71 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                     ),
 
                     // 메모 탭의 콘텐츠 -> 추후 따로 서브로 빼면 좋을 것같아용
-                    TextField(
-                      controller: _memoController,
-                      decoration: InputDecoration(
-                        hintText: '요리에 대한 메모를 입력해보세요',
-                        border: const OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Colors.white,
-                        suffixIcon:
-                            _memoController.text.isNotEmpty
-                                ? IconButton(
-                                  onPressed: () {
-                                    _memoController.clear();
-                                  },
-                                  icon: const Icon(Icons.clear),
-                                )
-                                : null,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              // 좌측 상단: 글자수 표시
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: design.marginAndPadding,
+                                ),
+                                child: Text(
+                                  '${_memoController.text.length} / $_memoMaxLength',
+                                ),
+                              ),
+                              Spacer(),
+                              // 우측 상단: 모두 지우기 버튼
+                              TextButton(
+                                onPressed:
+                                    isMemoEmpty
+                                        ? null
+                                        : () {
+                                          _memoController.clear();
+                                        },
+                                child: Text(
+                                  '모두 지우기',
+                                  style: TextStyle(
+                                    color:
+                                        isMemoEmpty
+                                            ? Colors.grey.shade600
+                                            : Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // TextField
+                          TextField(
+                            key: _memoKey,
+                            onTap: () => _focusTextField(_memoKey),
+                            controller: _memoController,
+                            maxLines: _memoMaxLine,
+                            maxLength: _memoMaxLength,
+                            decoration: InputDecoration(
+                              hintText: "최대 500자 까지 작성 가능합니다.",
+                              filled: true,
+                              fillColor: design.subColor,
+                              enabledBorder: textFieldBorder,
+                              focusedBorder: textFieldBorder,
+                              counterText: "", // 기본 카운터 비활성화
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                              left: design.marginAndPadding,
+                            ),
+                            child: const Text(
+                              '* 요리 상세화면에서 확인이 가능합니다.\n* 메모를 작성하지 않아도 추가 가능합니다.',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        ],
                       ),
-                      maxLength: 90,
-                      minLines: 1,
-                      maxLines: 3,
-                      keyboardType: TextInputType.multiline,
-                      textInputAction: TextInputAction.newline,
-                      onChanged: (String value) {
-                        // 상태 변경은 부모 위젯에서 setState로 처리
-                      },
                     ),
                   ],
                 ),
@@ -365,9 +447,13 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 255, 246, 218),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
+                side: const BorderSide(
+                  color: Colors.amber, // Yellow border
+                  width: 1.0, // Border thickness
+                ),
               ),
               content: AddCookContentView(item: loadedItem),
             );
@@ -405,6 +491,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           color: Colors.red,
                           onPressed: () {
                             if (item.itemId != null) {
+                              ref
+                                  .read(addCookProvider.notifier)
+                                  .itemToSub(
+                                    item,
+                                  ); // 삭제 버튼 눌렀을 때 해당 열량,탄/단/지 총량 제거
                               final updatedList =
                                   itemList
                                       .where((i) => i.itemId != item.itemId)
@@ -462,36 +553,32 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
-                      // overflow: TextOverflow.ellipsis,
-                      // maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     Text("${item.brandName}"),
                   ],
                 ),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 100),
+                Flexible(
                   child: Column(
                     children: [
                       Text(
-                        '${item.nutriKcal ?? 0}kcal',
-                        // "${item.count}개 / ${(item.nutriKcal ?? 0) * (item.count ?? 0)}Kcal",
+                        '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 65, 65, 65),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                       ),
                       Text(
-                        '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / ${(item.nutriProtein ?? 0) * (item.count ?? 0)} / ${(item.nutriFat ?? 0) * (item.count ?? 0)}',
+                        '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / '
+                        '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / '
+                        '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 65, 65, 65),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                       ),
                     ],
                   ),
@@ -528,6 +615,20 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           .read(searchContentProvider.notifier)
           .loadItemListByString(keyword, isRefresh: true);
       ref.read(searchContentProvider.notifier).setSearching(false);
+    });
+  }
+
+  void _focusTextField(GlobalKey key) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final BuildContext? context = key.currentContext;
+      if (context != null) {
+        Scrollable.ensureVisible(
+          context, // BuildContext 전달
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          alignment: 0.5, // 중앙 설정
+        );
+      }
     });
   }
 }
