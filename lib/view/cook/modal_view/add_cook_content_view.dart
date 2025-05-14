@@ -178,7 +178,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        ref.watch(addCookProvider.notifier).reduceItemCount();
+                        ref.watch(addCookProvider.notifier).addItemCount();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(
@@ -199,7 +199,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                           8.0,
                         ), // Consistent with original padding
                       ),
-                      child: const Icon(Icons.remove, size: 20),
+                      child: const Icon(Icons.add, size: 20),
                     ),
                   ),
                 ],

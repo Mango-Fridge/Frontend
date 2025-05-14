@@ -184,14 +184,14 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           Row(
                             children: [
                               // '미분류'일 때 패딩
-                            subCategory == '미분류'
-                                ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0,
-                                  ),
-                                  child: icon,
-                                )
-                                : icon,
+                              subCategory == '미분류'
+                                  ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0,
+                                    ),
+                                    child: icon,
+                                  )
+                                  : icon,
                               ConstrainedBox(
                                 constraints: const BoxConstraints(
                                   maxWidth:
@@ -211,10 +211,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                             ],
                           ),
                           Visibility(
-                          // 중분류 표시
-                          visible: subCategory != '미분류',
-                          child: Text('($subCategory)'),
-                        ),
+                            // 중분류 표시
+                            visible: subCategory != '미분류',
+                            child: Text('($subCategory)'),
+                          ),
                         ],
                       ),
                       const Spacer(),
