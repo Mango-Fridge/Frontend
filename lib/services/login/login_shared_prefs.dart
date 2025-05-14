@@ -9,7 +9,7 @@ class LoginSharePrefs {
     await prefs.setString('platform', platform);
 
     switch (platform) {
-      case 'KAKAO':
+      case 'Kakao':
         await prefs.setString('KakaoEmail', email);
         debugPrint(
           '[shared_preferences] KakaoEmail: ${prefs.getString('KakaoEmail')}',
@@ -18,7 +18,7 @@ class LoginSharePrefs {
           '[shared_preferences] platform: ${prefs.getString('platform')}',
         );
         break;
-      case 'APPLE':
+      case 'Apple':
         await prefs.setString('AppleEmail', email);
         debugPrint(
           '[shared_preferences] AppleEmail: ${prefs.getString('AppleEmail')}',
@@ -30,14 +30,30 @@ class LoginSharePrefs {
     }
   }
 
+  // (appleLogin 한정) 로컬에 token을 저장하기 위한 용도
+  Future<void> saveAppleToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('AppleToken', token);
+    debugPrint(
+      '[shared_preferences] AppleToken: ${prefs.getString('AppleToken')}',
+    );
+  }
+
+  // (appleLogin 한정) 로컬에 저장된 토큰 가져오기
+  Future<String?> getAppleToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString('AppleToken');
+  }
+
   // 로컬에 저장된 이메일 가져오기
   Future<String?> getEmail(String platform) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     switch (platform) {
-      case 'KAKAO':
+      case 'Kakao':
         return prefs.getString('KakaoEmail');
-      case 'APPLE':
+      case 'Apple':
         return prefs.getString('AppleEmail');
     }
 
@@ -53,7 +69,11 @@ class LoginSharePrefs {
   // 로컬에 저장한 플랫폼/이메일 제거
   Future<void> removeAuth(String platform) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(platform);
+
+    // (AppleLogin 한정) 로컬에 저장된 토큰 제거
+    if (platform == 'Apple') await prefs.remove('AppleToken');
+
     await prefs.remove('${platform}Email');
+    await prefs.remove(platform);
   }
 }

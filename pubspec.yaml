@@ -54,6 +54,7 @@ flutter:
     - assets/images/null_home.png
     - assets/images/null_cook.png
     - assets/images/null_item.png
+    - assets/images/kakao_symbol.png
 
   fonts:
     - family: Mainfonts
