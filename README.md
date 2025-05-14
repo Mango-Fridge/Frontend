@@ -2,17 +2,23 @@
 
 냉장고 물품 관리 및 '전국통합식품영양성분정보표준데이터'API를 활용한 토이 프로젝트
 
-## VERSION 1.1.4 (2025-04-29)
+## VERSION 1.1.5 (2025-05-14)
+ - 로그인
+   - UI 전면 개선 (+ SplashView)
+   - 로그인 시도중일때, 시각적으로 알수있게 Progress Indicator 적용 (+ 버튼 disabled)
+   - JWT 인증 방식 적용 (Kakao / Apple)
+   - 서버 에러 관련 처리 (Timeout, 400 등)
  - 메인화면
-   - Figma 디자인 일부 적용
-   - 수량 조절 버튼 구조 개선
-   - 수량을 0에서 조절 할때 반영이 되지 않는 현상 수정
-   - 물품 추가에서 검색시, 시각적인 로딩 화면 추가 (shimmer)
+   - 메인 & 물품추가 관련 UI 개선
  - 그룹
    - 그룹 나가기 했을때, groupProvider에서 load 적용
  - 요리
-   - 요리 상세화면 일부 구현
-   - 요리 추가에서 물품을 삭제하는 기능 추가
+   - Figma에 맞게 UI 개선 및 구조 변경
+   - 요리 추가에서 검색 로직 변경 (물품 추가와 유사)
+   - 요리 리스트에서 삭제 스와이프 제거 (=> 상세화면에서 가능하게 변경)
+   - 중분류명이 누락된 이슈 수정
+   - 요리가 존재하지 않을때, 냉장고명과 개수가 출력되지 않게 수정
+   - log 관련 수정
 
 ### [이전 버전 기록](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
