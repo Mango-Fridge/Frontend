@@ -919,7 +919,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                   _addContentState?.selectedContentStorage ??
                                       '냉장',
                                   memoController.text,
-                                  _addContentState?.selectedUnit ?? '',
+                                  _addContentState?.selectedUnit ?? 'g',
                                   capacityController.text.isNotEmpty
                                       ? int.parse(capacityController.text)
                                       : 0,

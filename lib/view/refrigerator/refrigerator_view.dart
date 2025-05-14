@@ -233,7 +233,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     minimum: EdgeInsets.only(bottom: design.marginAndPadding),
                     child: Container(
                       height: design.homeBottomHeight,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: design.marginAndPadding,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[

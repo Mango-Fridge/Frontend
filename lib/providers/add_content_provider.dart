@@ -242,15 +242,6 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
     state = _addContentState;
   }
-
-  // 물품 공개 등록 관리 함수
-  void setIsOpen() {
-    if (state != null) {
-      _addContentState = state!.copyWith(isOpen: true);
-    }
-
-    state = _addContentState;
-  }
 }
 
 final NotifierProvider<AddContentNotifier, AddContentState?>
