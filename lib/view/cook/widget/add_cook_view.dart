@@ -295,8 +295,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           ),
                           Expanded(
                             child:
-                                _addCookState?.isSearchIngredientFocused ??
-                                        false
+                                (_addCookState?.isSearchIngredientFocused ??
+                                        false) || (_searchIngridientController.text.isNotEmpty)
                                     ? _buildItemList()
                                     : _buildCookItem(
                                       _addCookState?.itemListForCook,
