@@ -317,6 +317,21 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                                     .text
                                                     .isNotEmpty)
                                             ? _buildItemList()
+                                            : (_addCookState
+                                                    ?.itemListForCook
+                                                    ?.isEmpty ??
+                                                true)
+                                            ? Center(
+                                              child: Text(
+                                                '물품을 추가해주세요',
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      Design.normalFontSize2,
+                                                  color: Colors.grey[600],
+                                                  fontFamily: 'Mainfonts',
+                                                ),
+                                              ),
+                                            )
                                             : _buildCookItem(
                                               _addCookState?.itemListForCook,
                                               _cookItemRow,
@@ -624,11 +639,12 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
         ),
         padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
-          color: Colors.amber[300],
+          color: design.textFieldColor,
           borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.amber),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Expanded(
               child: Row(
@@ -648,33 +664,56 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      Text("${item.brandName}"),
+                      Text(
+                        (item.brandName ?? '').length > 12
+                            ? '${(item.brandName ?? '').substring(0, 12)}...'
+                            : item.brandName ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ],
                   ),
-                  Flexible(
-                    child: Column(
-                      children: [
-                        Text(
-                          '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 65, 65, 65),
-                          ),
+                  Column(
+                    children: [
+                      Text(
+                        '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 65, 65, 65),
                         ),
-                        Text(
-                          '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / '
-                          '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / '
-                          '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 65, 65, 65),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / ',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                          Text(
+                            '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / ',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                            ),
+                          ),
+                          Text(
+                            '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+
                   Text(
                     '${item.count}개',
                     style: const TextStyle(
