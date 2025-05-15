@@ -269,6 +269,24 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                               },
                             ),
                           ),
+                          // 물품 개수
+                          Visibility(
+                            visible:
+                                _addCookState?.itemListForCook?.isNotEmpty ??
+                                false,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                top: design.marginAndPadding,
+                                right: design.marginAndPadding,
+                                left: design.marginAndPadding,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '총 ${_addCookState?.itemListForCook?.length ?? 0}개 물품',
+                                style: const TextStyle(fontSize: Design.tabBarUnSelectedFontSize),
+                              ),
+                            ),
+                          ),
                           Expanded(
                             child:
                                 _addCookState?.isSearchIngredientFocused ??
