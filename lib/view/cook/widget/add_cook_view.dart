@@ -283,7 +283,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 '총 ${_addCookState?.itemListForCook?.length ?? 0}개 물품',
-                                style: const TextStyle(fontSize: Design.tabBarUnSelectedFontSize),
+                                style: const TextStyle(
+                                  fontSize: Design.tabBarUnSelectedFontSize,
+                                ),
                               ),
                             ),
                           ),
@@ -542,76 +544,109 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
   Widget _cookItemRow(RefrigeratorItem item) {
     Design design = Design(context);
+    // 물품 선택 시, 개수 조정 모달 띄움
+    return GestureDetector(
+      onTap: () async {
+        RefrigeratorItem? loadedItem = await ref
+            .read(searchContentProvider.notifier)
+            .loadItem(item.itemId ?? 0);
 
-    return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: 4,
-        horizontal: design.marginAndPadding,
-      ),
-      padding: EdgeInsets.all(design.marginAndPadding),
-      decoration: BoxDecoration(
-        color: Colors.amber[300],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      (item.itemName ?? '').length > 10
-                          ? '${(item.itemName ?? '').substring(0, 10)}...'
-                          : item.itemName ?? '',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text("${item.brandName}"),
-                  ],
-                ),
-                Flexible(
-                  child: Column(
-                    children: [
+        ref.watch(searchContentProvider.notifier).resetState();
+        _controller.text = '';
+        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+        _searchIngridientController.text = ''; // 텍스트 초기화
+        ref
+            .read(addCookProvider.notifier)
+            .updateSearchFieldEmpty(true); // 상태 업데이트
+        ref
+            .watch(addCookProvider.notifier)
+            .currentItemCount(
+              item.count ?? 1,
+            ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              content: AddCookContentView(item: loadedItem),
+            );
+          },
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: design.marginAndPadding,
+        ),
+        padding: EdgeInsets.all(design.marginAndPadding),
+        decoration: BoxDecoration(
+          color: Colors.amber[300],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       Text(
-                        '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
+                        (item.itemName ?? '').length > 10
+                            ? '${(item.itemName ?? '').substring(0, 10)}...'
+                            : item.itemName ?? '',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 65, 65, 65),
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      Text(
-                        '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / '
-                        '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / '
-                        '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 65, 65, 65),
-                        ),
-                      ),
+                      Text("${item.brandName}"),
                     ],
                   ),
-                ),
-                Text(
-                  '${item.count}개',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Column(
+                      children: [
+                        Text(
+                          '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 65, 65, 65),
+                          ),
+                        ),
+                        Text(
+                          '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / '
+                          '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / '
+                          '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 65, 65, 65),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Text(
+                    '${item.count}개',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
