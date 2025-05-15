@@ -124,10 +124,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("   •  중분류명과 동일한 물품이 냉장고에 포함되는지 체크합니다."),
+                        const Text("•  중분류명과 동일한 물품이 냉장고에 포함되는지 체크합니다."),
                         const Row(
                           children: [
-                            Text("   •  수량에 따른 색 변화가 존재합니다. ("),
+                            Text("•  수량에 따른 색 변화가 존재합니다. ("),
                             Text(
                               "일치",
                               style: TextStyle(
@@ -146,7 +146,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                             Text(" ) "),
                           ],
                         ),
-                        const Text("   •  해당 물품에 중분류명이 없다면 별도의 체크가 되지 않습니다."),
+                        const Text("•  해당 물품에 중분류명이 없다면 별도의 체크가 되지 않습니다."),
                       ],
                     ),
                   ),
