@@ -8,8 +8,9 @@ import 'package:mango/state/add_cook_state.dart';
 
 class AddCookContentView extends ConsumerStatefulWidget {
   final RefrigeratorItem? item;
+  final VoidCallback? onConfirmed; // 검색 필드에서 물품 클릭하고, 확인 버튼 눌렀을 때 실행하기 위함 콜백
 
-  const AddCookContentView({super.key, required this.item});
+  const AddCookContentView({super.key, required this.item, this.onConfirmed});
 
   @override
   ConsumerState<AddCookContentView> createState() => _AddCookContentViewState();
@@ -235,12 +236,13 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                   minimumSize: const Size(100, 40),
                 ),
                 onPressed: () {
+                  context.pop();
                   ref.watch(addCookProvider.notifier).addCookItem(widget.item!);
                   ref.watch(addCookProvider.notifier).sumKcal();
                   ref.watch(addCookProvider.notifier).sumCarb();
                   ref.watch(addCookProvider.notifier).sumProtein();
                   ref.watch(addCookProvider.notifier).sumFat();
-                  context.pop();
+                  widget.onConfirmed?.call(); // 콜백 실행
                 },
               ),
             ],

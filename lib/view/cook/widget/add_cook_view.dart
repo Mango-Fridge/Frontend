@@ -454,13 +454,6 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             .read(searchContentProvider.notifier)
             .loadItem(item.itemId ?? 0);
 
-        ref.watch(searchContentProvider.notifier).resetState();
-        _controller.text = '';
-        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
-        _searchIngridientController.text = ''; // 텍스트 초기화
-        ref
-            .read(addCookProvider.notifier)
-            .updateSearchFieldEmpty(true); // 상태 업데이트
         ref
             .watch(addCookProvider.notifier)
             .currentItemCount(
@@ -474,12 +467,20 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               backgroundColor: const Color.fromARGB(255, 255, 246, 218),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
-                side: const BorderSide(
-                  color: Colors.amber, // Yellow border
-                  width: 1.0, // Border thickness
-                ),
+                side: const BorderSide(color: Colors.amber, width: 1.0),
               ),
-              content: AddCookContentView(item: loadedItem),
+              content: AddCookContentView(
+                item: loadedItem,
+                onConfirmed: () {
+                  ref.watch(searchContentProvider.notifier).resetState();
+                  _controller.text = '';
+                  FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+                  _searchIngridientController.text = ''; // 텍스트 초기화
+                  ref
+                      .read(addCookProvider.notifier)
+                      .updateSearchFieldEmpty(true); // 상태 업데이트
+                },
+              ),
             );
           },
         );
