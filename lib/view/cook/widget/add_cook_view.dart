@@ -204,8 +204,11 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        FocusManager.instance.primaryFocus
-                            ?.unfocus(); // 포커스 해제 및 키보드 내리기
+                        // 검색 필드에 텍스트가 비어 있을 때만 포커스 변경
+                        if (_searchIngridientController.text.isEmpty) {
+                          FocusManager.instance.primaryFocus
+                              ?.unfocus(); // 포커스 해제 및 키보드 내리기
+                        }
                       },
                       child: Column(
                         spacing: 20,
@@ -274,6 +277,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                             visible:
                                 _addCookState?.itemListForCook?.isNotEmpty ??
                                 false,
+                            // 여기 부분
                             child: Container(
                               margin: EdgeInsets.only(
                                 top: design.marginAndPadding,
