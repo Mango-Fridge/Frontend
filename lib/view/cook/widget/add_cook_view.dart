@@ -275,9 +275,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           // 물품 개수
                           Visibility(
                             visible:
-                                _addCookState?.itemListForCook?.isNotEmpty ??
-                                false,
-                            // 여기 부분
+                                (_addCookState?.itemListForCook?.isNotEmpty ??
+                                    false) &&
+                                (!_searchIngridientController.text.isNotEmpty),
                             child: Container(
                               margin: EdgeInsets.only(
                                 top: design.marginAndPadding,
