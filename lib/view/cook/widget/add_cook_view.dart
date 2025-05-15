@@ -296,7 +296,10 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           Expanded(
                             child:
                                 (_addCookState?.isSearchIngredientFocused ??
-                                        false) || (_searchIngridientController.text.isNotEmpty)
+                                            false) ||
+                                        (_searchIngridientController
+                                            .text
+                                            .isNotEmpty)
                                     ? _buildItemList()
                                     : _buildCookItem(
                                       _addCookState?.itemListForCook,
@@ -460,6 +463,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               item.count ?? 1,
             ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
 
+        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -474,7 +479,6 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                 onConfirmed: () {
                   ref.watch(searchContentProvider.notifier).resetState();
                   _controller.text = '';
-                  FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
                   _searchIngridientController.text = ''; // 텍스트 초기화
                   ref
                       .read(addCookProvider.notifier)
