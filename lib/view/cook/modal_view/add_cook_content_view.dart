@@ -280,7 +280,7 @@ class _AddCookContentViewState extends ConsumerState<AddCookContentView> {
                 displayValue,
                 style: TextStyle(
                   color: color,
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),
