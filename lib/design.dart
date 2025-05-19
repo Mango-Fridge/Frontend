@@ -37,6 +37,10 @@ class Design {
   final Color textFieldborderColor; // 텍스트 필드 외곽 컬러
   final Color cancelColor; // 취소 컬러
   final Color cookBtnColor; // 요리 버튼 컬러
+  final Color
+  cntUpdateListColor; // RefrigeratorView content 수량 변경 중인 항목의 list color
+  final Color
+  cntUpdateListBorderColor; // RefrigeratorView content 수량 변경 중인 항목의 list border color
 
   final double settingBtnWidth;
   final double settingBtnHeight;
@@ -65,6 +69,8 @@ class Design {
       textFieldborderColor = const Color.fromARGB(255, 0, 0, 0),
       cancelColor = const Color.fromRGBO(255, 208, 208, 1.0),
       cookBtnColor = const Color.fromRGBO(219, 254, 128, 1.0),
+      cntUpdateListColor = const Color.fromARGB(255, 218, 253, 220),
+      cntUpdateListBorderColor = const Color.fromARGB(255, 52, 183, 56),
 
       settingBtnWidth = 100,
       settingBtnHeight = 30;

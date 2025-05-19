@@ -96,7 +96,7 @@ class AddContentNotifier extends Notifier<AddContentState?> {
 
       if (contentCount.isEmpty) {
         _addContentState = state!.copyWith(
-          contentCountErrorMessage: '물품의 개수를 입력해 주세요.',
+          contentCountErrorMessage: '수량을 입력해 주세요.',
           isCheckecCount: false,
         );
       } else if (!regex.hasMatch(contentCount)) {
@@ -238,15 +238,6 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   void setUnit(String unit) {
     if (state != null) {
       _addContentState = state!.copyWith(selectedUnit: unit, isUnitEmpty: true);
-    }
-
-    state = _addContentState;
-  }
-
-  // 물품 공개 등록 관리 함수
-  void setIsOpen() {
-    if (state != null) {
-      _addContentState = state!.copyWith(isOpen: true);
     }
 
     state = _addContentState;

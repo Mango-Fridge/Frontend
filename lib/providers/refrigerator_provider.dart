@@ -24,14 +24,26 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
       final List<Content> contentList = await _contentRepository
           .loadContentList(groupId);
 
-      _refrigeratorState.refrigeratorContentList = getRefrigeratorContentList(
-        contentList,
+      _refrigeratorState.refrigeratorContentList = filterContentList(
+        contentList: contentList,
+        storageArea: '냉장',
+        isExpired: false,
       );
-      _refrigeratorState.freezerContentList = getFreezerContentList(
-        contentList,
+      _refrigeratorState.freezerContentList = filterContentList(
+        contentList: contentList,
+        storageArea: '냉동',
+        isExpired: false,
       );
-      _refrigeratorState.refExpContentList = getRefExpContentList(contentList);
-      _refrigeratorState.frzExpContentList = getFrzExpContentList(contentList);
+      _refrigeratorState.refExpContentList = filterContentList(
+        contentList: contentList,
+        storageArea: '냉장',
+        isExpired: true,
+      );
+      _refrigeratorState.frzExpContentList = filterContentList(
+        contentList: contentList,
+        storageArea: '냉동',
+        isExpired: true,
+      );
       _refrigeratorState.contentList = contentList;
 
       state = state?.copyWith(
@@ -70,56 +82,23 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
     state = state?.copyWith(setCountMessage: setCountMessage);
   }
 
-  List<Content> getRefrigeratorContentList(List<Content> contentList) {
-    List<Content> refrigeratorContentList =
+  List<Content> filterContentList({
+    required List<Content> contentList,
+    required String storageArea,
+    required bool isExpired,
+  }) {
+    final List<Content> filtered =
         contentList.where((Content content) {
-          bool is24HoursOrMoreLeft =
-              DateTime.now().difference(content.expDate!).inHours <= -24;
-          bool isFrozen = content.storageArea == '냉장';
-          return is24HoursOrMoreLeft && isFrozen;
+          final int hoursDiff =
+              DateTime.now().difference(content.expDate!).inHours;
+          final bool isStorageMatched = content.storageArea == storageArea;
+
+          return isStorageMatched &&
+              (isExpired ? hoursDiff > -24 : hoursDiff <= -24);
         }).toList();
 
-    return refrigeratorContentList;
-  }
-
-  List<Content> getFreezerContentList(List<Content> contentList) {
-    List<Content> freezerContentList =
-        contentList.where((Content content) {
-          bool is24HoursOrMoreLeft =
-              DateTime.now().difference(content.expDate!).inHours <= -24;
-          bool isFrozen = content.storageArea == '냉동';
-          return is24HoursOrMoreLeft && isFrozen;
-        }).toList();
-
-    return freezerContentList;
-  }
-
-  List<Content> getRefExpContentList(List<Content> contentList) {
-    List<Content> expContentList =
-        contentList.where((Content content) {
-          return (DateTime.now().difference(content.expDate!).inHours > -24) &&
-              (content.storageArea == '냉장');
-        }).toList();
-
-    expContentList.sort(
-      (Content a, Content b) => a.expDate!.compareTo(b.expDate!),
-    );
-
-    return expContentList;
-  }
-
-  List<Content> getFrzExpContentList(List<Content> contentList) {
-    List<Content> expContentList =
-        contentList.where((Content content) {
-          return (DateTime.now().difference(content.expDate!).inHours > -24) &&
-              (content.storageArea == '냉동');
-        }).toList();
-
-    expContentList.sort(
-      (Content a, Content b) => a.expDate!.compareTo(b.expDate!),
-    );
-
-    return expContentList;
+    filtered.sort((Content a, Content b) => a.expDate!.compareTo(b.expDate!));
+    return filtered;
   }
 
   int getRefrigeratorContentCount() {
@@ -187,10 +166,26 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
     state = state?.copyWith(
       contentList: addedList,
-      refrigeratorContentList: getRefrigeratorContentList(addedList!),
-      freezerContentList: getFreezerContentList(addedList),
-      refExpContentList: getRefExpContentList(addedList),
-      frzExpContentList: getFrzExpContentList(addedList),
+      refrigeratorContentList: filterContentList(
+        contentList: addedList!,
+        storageArea: '냉장',
+        isExpired: false,
+      ),
+      freezerContentList: filterContentList(
+        contentList: addedList,
+        storageArea: '냉동',
+        isExpired: false,
+      ),
+      refExpContentList: filterContentList(
+        contentList: addedList,
+        storageArea: '냉장',
+        isExpired: true,
+      ),
+      frzExpContentList: filterContentList(
+        contentList: addedList,
+        storageArea: '냉동',
+        isExpired: true,
+      ),
       updateContentList: updateList,
       isUpdatedContent: updateList.isNotEmpty,
     );
@@ -247,10 +242,26 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
     state = state?.copyWith(
       contentList: reducedList,
-      refrigeratorContentList: getRefrigeratorContentList(reducedList!),
-      freezerContentList: getFreezerContentList(reducedList),
-      refExpContentList: getRefExpContentList(reducedList),
-      frzExpContentList: getFrzExpContentList(reducedList),
+      refrigeratorContentList: filterContentList(
+        contentList: reducedList!,
+        storageArea: '냉장',
+        isExpired: false,
+      ),
+      freezerContentList: filterContentList(
+        contentList: reducedList,
+        storageArea: '냉동',
+        isExpired: false,
+      ),
+      refExpContentList: filterContentList(
+        contentList: reducedList,
+        storageArea: '냉장',
+        isExpired: true,
+      ),
+      frzExpContentList: filterContentList(
+        contentList: reducedList,
+        storageArea: '냉동',
+        isExpired: true,
+      ),
       updateContentList: updateList,
       isUpdatedContent: updateList.isNotEmpty,
     );
@@ -289,10 +300,26 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
       state = state!.copyWith(
         contentList: updatedContentList,
-        refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
-        freezerContentList: getFreezerContentList(updatedContentList),
-        refExpContentList: getRefExpContentList(updatedContentList),
-        frzExpContentList: getFrzExpContentList(updatedContentList),
+        refrigeratorContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉장',
+          isExpired: false,
+        ),
+        freezerContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉동',
+          isExpired: false,
+        ),
+        refExpContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉장',
+          isExpired: true,
+        ),
+        frzExpContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉동',
+          isExpired: true,
+        ),
         updateContentList: <Content>[],
       );
     }
@@ -325,10 +352,26 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
 
       state = state?.copyWith(
         contentList: updatedContentList,
-        refrigeratorContentList: getRefrigeratorContentList(updatedContentList),
-        freezerContentList: getFreezerContentList(updatedContentList),
-        refExpContentList: getRefExpContentList(updatedContentList),
-        frzExpContentList: getFrzExpContentList(updatedContentList),
+        refrigeratorContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉장',
+          isExpired: false,
+        ),
+        freezerContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉동',
+          isExpired: false,
+        ),
+        refExpContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉장',
+          isExpired: true,
+        ),
+        frzExpContentList: filterContentList(
+          contentList: updatedContentList,
+          storageArea: '냉동',
+          isExpired: true,
+        ),
         updateContentList: updatedUpdateList,
         isUpdatedContent: updatedUpdateList.isNotEmpty,
       );
@@ -343,10 +386,26 @@ class RefrigeratorNotifier extends Notifier<RefrigeratorState?> {
             .toList();
     state = state?.copyWith(
       contentList: removedList,
-      refrigeratorContentList: getRefrigeratorContentList(removedList),
-      freezerContentList: getFreezerContentList(removedList),
-      refExpContentList: getRefExpContentList(removedList),
-      frzExpContentList: getFrzExpContentList(removedList),
+      refrigeratorContentList: filterContentList(
+        contentList: removedList,
+        storageArea: '냉장',
+        isExpired: false,
+      ),
+      freezerContentList: filterContentList(
+        contentList: removedList,
+        storageArea: '냉동',
+        isExpired: false,
+      ),
+      refExpContentList: filterContentList(
+        contentList: removedList,
+        storageArea: '냉장',
+        isExpired: true,
+      ),
+      frzExpContentList: filterContentList(
+        contentList: removedList,
+        storageArea: '냉동',
+        isExpired: true,
+      ),
     );
   }
 

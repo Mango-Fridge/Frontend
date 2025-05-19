@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
@@ -315,21 +316,39 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     textAlign: TextAlign.left,
                     onTap: () => _focusTextField(_countKey),
                     controller: countController,
-                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(6),
+                    ],
                     decoration: InputDecoration(
                       enabledBorder: textFieldBorder,
                       focusedBorder: textFieldBorder,
-                      errorText:
-                          _addContentState?.contentCountErrorMessage?.isEmpty ??
-                                  true
-                              ? null
-                              : _addContentState?.contentCountErrorMessage,
+                      errorBorder: textFieldBorder,
+                      focusedErrorBorder: textFieldBorder,
+
                       isDense: true,
                     ),
                     onChanged: (String value) {
                       ref.watch(addContentProvider.notifier).updateCount(value);
                     },
                   ),
+                ),
+                SizedBox(
+                  height: 15,
+                  child:
+                      _addContentState?.contentCountErrorMessage?.isEmpty ??
+                              true
+                          ? null
+                          : Padding(
+                            padding: const EdgeInsets.only(left: 12),
+                            child: Text(
+                              _addContentState?.contentCountErrorMessage ?? '',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
                 ),
               ],
             ),
@@ -361,11 +380,12 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                     ref.watch(addContentProvider.notifier).setStorage(storage);
                   },
                 ),
+                const SizedBox(height: 15),
               ],
             ),
           ],
         ),
-        const SizedBox(height: 35),
+        const SizedBox(height: 20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
@@ -667,6 +687,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                             textAlign: TextAlign.left,
                             enabled: widget.item == null,
                             style: const TextStyle(color: Colors.black),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(4),
+                            ],
                             decoration: InputDecoration(
                               hintText: 'ex) 150',
                               enabledBorder: textFieldBorder,
@@ -832,7 +856,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
       child: CustomSlidingSegmentedControl<int>(
         fixedWidth: design.addContentNutritionTextWidth - 19,
         initialValue: 1,
-        height: 40,
+        height: 42,
         children: segments,
         decoration: BoxDecoration(
           border: Border.all(color: design.textFieldborderColor),
@@ -895,7 +919,7 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
                                   _addContentState?.selectedContentStorage ??
                                       '냉장',
                                   memoController.text,
-                                  _addContentState?.selectedUnit ?? '',
+                                  _addContentState?.selectedUnit ?? 'g',
                                   capacityController.text.isNotEmpty
                                       ? int.parse(capacityController.text)
                                       : 0,
@@ -1027,6 +1051,10 @@ class _AddContentViewState extends ConsumerState<AddContentView> {
             textAlign: TextAlign.left,
             style: const TextStyle(color: Colors.black),
             enabled: enabled,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(4),
+            ],
             decoration: InputDecoration(
               hintText: hintText,
               enabledBorder: textFieldBorder,

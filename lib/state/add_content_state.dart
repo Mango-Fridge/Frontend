@@ -31,8 +31,7 @@ class AddContentState {
   bool isOpen;
 
   bool get isNutritionEmpty {
-    return isUnitEmpty &&
-        isCapacityEmpty &&
+    return isCapacityEmpty &&
         isKcalEmpty &&
         isCarbsEmpty &&
         isProteinEmpty &&

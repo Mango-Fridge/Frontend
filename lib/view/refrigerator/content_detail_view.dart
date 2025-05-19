@@ -109,7 +109,7 @@ class _ContentDetailViewState extends ConsumerState<ContentDetailView> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Text(
-                    '총 중량 ${widget.content.nutriCapacity}${widget.content.nutriUnit}g  /',
+                    '총 중량 ${widget.content.nutriCapacity}${widget.content.nutriUnit}  /',
                   ),
                   nutrientText(
                     '탄수화물',

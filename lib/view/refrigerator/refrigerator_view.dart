@@ -99,21 +99,30 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      context.push("/group");
-                    },
-                    child:
-                        _group?.groupName == null
-                            ? const SizedBox.shrink()
-                            : Text(
-                              "${_group?.groupName}의 냉장고 >",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: Design.normalFontSize2,
+                  Padding(
+                    padding: EdgeInsets.only(left: design.marginAndPadding),
+                    child: TextButton(
+                      onPressed: () {
+                        context.push("/group");
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child:
+                          _group?.groupName == null
+                              ? const SizedBox.shrink()
+                              : Text(
+                                "${_group?.groupName}의 냉장고 >",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Design.normalFontSize2,
+                                ),
                               ),
-                            ),
+                    ),
                   ),
+
                   if ((_group?.groupName ?? '').isNotEmpty)
                     Row(
                       children: <Widget>[
@@ -224,7 +233,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     minimum: EdgeInsets.only(bottom: design.marginAndPadding),
                     child: Container(
                       height: design.homeBottomHeight,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: design.marginAndPadding,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -375,6 +386,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   // 유통 기한 마감 임박 항목
   Widget expContentCard({required Content content}) {
     final Design design = Design(context);
+    final bool isCntUpdated =
+        _refrigeratorState!.updateContentList?.any(
+          (Content c) => c.contentId == content.contentId,
+        ) ??
+        false;
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -390,18 +407,24 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         );
       },
       child: Container(
-        width: 120,
+        width: 130,
         padding: EdgeInsets.all(design.expContentCardMarginAndPadding),
         decoration: BoxDecoration(
-          color: ref
-              .watch(refrigeratorNotifier.notifier)
-              .getColorByRemainTime(content.expDate!)
-              .withAlpha(100),
+          color:
+              isCntUpdated
+                  ? design.cntUpdateListColor
+                  : ref
+                      .watch(refrigeratorNotifier.notifier)
+                      .getColorByRemainTime(content.expDate!)
+                      .withAlpha(100),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: ref
-                .watch(refrigeratorNotifier.notifier)
-                .getColorByRemainTime(content.expDate!),
+            color:
+                isCntUpdated
+                    ? design.cntUpdateListBorderColor
+                    : ref
+                        .watch(refrigeratorNotifier.notifier)
+                        .getColorByRemainTime(content.expDate!),
           ),
         ),
         child: Column(
@@ -637,6 +660,12 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
   Widget _buildContentRow(Content content) {
     final Design design = Design(context);
 
+    final bool isCntUpdated =
+        _refrigeratorState!.updateContentList?.any(
+          (Content c) => c.contentId == content.contentId,
+        ) ??
+        false;
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -657,11 +686,15 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
         padding: EdgeInsets.all(design.marginAndPadding),
         decoration: BoxDecoration(
           color:
-              (DateTime.now().difference(content.expDate!).inHours > -24)
-                  ? Colors.red[200]
-                  : Colors.amber.shade50,
+              isCntUpdated ? design.cntUpdateListColor : Colors.amber.shade50,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: design.mainColor, width: 1.5),
+          border: Border.all(
+            color:
+                isCntUpdated
+                    ? design.cntUpdateListBorderColor
+                    : design.mainColor,
+            width: 1.5,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -735,7 +768,7 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(color: Colors.black, width: 2),
+          border: Border.all(color: Colors.black, width: 1),
           color: design.mainColor.withAlpha(150),
         ),
         height: design.contentUpdateViewHeight,
@@ -818,62 +851,69 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
     required int contentId,
     required WidgetRef ref,
   }) {
-    return SizedBox(
-      width: 100,
-      height: 30,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black, width: 1.5),
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 5,
-          children: <Widget>[
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  if (count > 0) {
-                    ref
-                        .watch(refrigeratorNotifier.notifier)
-                        .reduceContentCount(contentId);
-                  }
-                },
-                splashColor: Colors.grey.shade200,
-                highlightColor: Colors.grey.shade200,
-                child: const Icon(Icons.remove, size: 20, color: Colors.black),
-              ),
+    return GestureDetector(
+      onTap: () {},
+      child: SizedBox(
+        width: 110,
+        height: 30,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.black, width: 1.5),
+            color: Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 5,
+              children: <Widget>[
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .openUpdateContentCountView();
+                      if (count > 0) {
+                        ref
+                            .watch(refrigeratorNotifier.notifier)
+                            .reduceContentCount(contentId);
+                      }
+                    },
+                    splashColor: Colors.grey.shade200,
+                    highlightColor: Colors.grey.shade200,
+                    child: const Icon(
+                      Icons.remove,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {},
+                  child: Text('$count개'),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .openUpdateContentCountView();
+                      ref
+                          .watch(refrigeratorNotifier.notifier)
+                          .addContentCount(contentId);
+                    },
+                    splashColor: Colors.grey.shade200,
+                    highlightColor: Colors.grey.shade200,
+                    child: const Icon(Icons.add, size: 20, color: Colors.black),
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {},
-                child: Text('$count개'),
-              ),
-            ),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .openUpdateContentCountView();
-                  ref
-                      .watch(refrigeratorNotifier.notifier)
-                      .addContentCount(contentId);
-                },
-                splashColor: Colors.grey.shade200,
-                highlightColor: Colors.grey.shade200,
-                child: const Icon(Icons.add, size: 20, color: Colors.black),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
