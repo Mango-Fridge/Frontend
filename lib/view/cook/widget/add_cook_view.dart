@@ -204,139 +204,209 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        FocusManager.instance.primaryFocus
-                            ?.unfocus(); // 포커스 해제 및 키보드 내리기
+                        // 검색 필드에 텍스트가 비어 있을 때만 포커스 변경
+                        if (_searchIngridientController.text.isEmpty) {
+                          FocusManager.instance.primaryFocus
+                              ?.unfocus(); // 포커스 해제 및 키보드 내리기
+                        }
                       },
-                      child: Column(
-                        spacing: 20,
+                      child: Stack(
                         children: <Widget>[
-                          // 검색 필드
-                          Container(
-                            margin: EdgeInsets.only(
-                              top: design.marginAndPadding,
-                              right: design.marginAndPadding,
-                              left: design.marginAndPadding,
-                            ),
-                            padding: EdgeInsets.only(
-                              left: design.marginAndPadding,
-                              top: design.marginAndPadding * 0.5,
-                              bottom: design.marginAndPadding * 0.5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: design.textFieldColor,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: design.textFieldborderColor,
-                              ),
-                            ),
-                            child: TextField(
-                              controller: _searchIngridientController,
-                              focusNode: _searchIngredientFocusNode,
-                              style: const TextStyle(
-                                fontSize: Design.normalFontSize2,
-                              ),
-                              decoration: InputDecoration(
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
-                                hintText: "ex) 돼지고기, 소고기",
-                                border: InputBorder.none,
-                                suffix:
-                                    (_searchIngridientController
-                                            .text
-                                            .isNotEmpty)
-                                        ? GestureDetector(
-                                          onTap: () {
-                                            _searchIngridientController.clear();
-                                            _onSearchChanged('');
-                                            FocusScope.of(context).unfocus();
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                              right: design.marginAndPadding,
-                                            ),
-                                            child: const Icon(
-                                              Icons.clear,
-                                              color: Colors.red,
-                                              size: 18,
-                                            ),
-                                          ),
-                                        )
-                                        : null,
-                              ),
-                              onChanged: (String value) {
-                                // 입력값이 변경될 때 상태 업데이트
-                                _onSearchChanged(value);
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child:
-                                _addCookState?.isSearchIngredientFocused ??
-                                        false
-                                    ? _buildItemList()
-                                    : _buildCookItem(
-                                      _addCookState?.itemListForCook,
-                                      _cookItemRow,
+                          SafeArea(
+                            bottom: true,
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 10),
+                              child: Column(
+                                spacing: 10,
+                                children: [
+                                  // 검색 필드
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      top: design.marginAndPadding,
+                                      right: design.marginAndPadding,
+                                      left: design.marginAndPadding,
                                     ),
-                          ),
-                          // 바텀: 열량/탄수화물/단백질/지방, 추가하기 버튼
-                          AddCookBottomSheetWidget(
-                            onAddPressed: () async {
-                              final String cookName = _cookNameController.text;
-                              final String memo = _memoController.text;
-                              final List<CookItems> cookItems =
-                                  (_addCookState?.itemListForCook ?? [])
-                                      .map(
-                                        (item) => CookItems(
-                                          cookItemId: item.itemId ?? 0,
-                                          itemName: item.itemName ?? '',
-                                          count: item.count ?? 1,
-                                          nutriKcal: item.nutriKcal ?? 0,
-                                          cookItemName: item.itemName ?? '',
-                                          category: item.category ?? '',
-                                          brandName: item.brandName ?? '',
-                                          storageArea: item.storageArea ?? '',
-                                          nutriUnit: item.nutriUnit ?? '',
-                                          nutriCapacity:
-                                              item.nutriCapacity ?? 0,
-                                          subCategory: item.subCategory ?? '',
+                                    padding: EdgeInsets.only(
+                                      left: design.marginAndPadding,
+                                      top: design.marginAndPadding * 0.5,
+                                      bottom: design.marginAndPadding * 0.5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: design.textFieldColor,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: design.textFieldborderColor,
+                                      ),
+                                    ),
+                                    child: TextField(
+                                      controller: _searchIngridientController,
+                                      focusNode: _searchIngredientFocusNode,
+                                      style: const TextStyle(
+                                        fontSize: Design.normalFontSize2,
+                                      ),
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.zero,
+                                        hintText: "ex) 돼지고기, 소고기",
+                                        border: InputBorder.none,
+                                        suffix:
+                                            (_searchIngridientController
+                                                    .text
+                                                    .isNotEmpty)
+                                                ? GestureDetector(
+                                                  onTap: () {
+                                                    _searchIngridientController
+                                                        .clear();
+                                                    _onSearchChanged('');
+                                                    FocusScope.of(
+                                                      context,
+                                                    ).unfocus();
+                                                  },
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                      right:
+                                                          design
+                                                              .marginAndPadding,
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.clear,
+                                                      color: Colors.red,
+                                                      size: 18,
+                                                    ),
+                                                  ),
+                                                )
+                                                : null,
+                                      ),
+                                      onChanged: (String value) {
+                                        // 입력값이 변경될 때 상태 업데이트
+                                        _onSearchChanged(value);
+                                      },
+                                    ),
+                                  ),
+                                  // 물품 개수
+                                  Visibility(
+                                    visible:
+                                        (_addCookState
+                                                ?.itemListForCook
+                                                ?.isNotEmpty ??
+                                            false) &&
+                                        (!_searchIngridientController
+                                            .text
+                                            .isNotEmpty),
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                        top: design.marginAndPadding,
+                                        right: design.marginAndPadding,
+                                        left: design.marginAndPadding,
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '총 ${_addCookState?.itemListForCook?.length ?? 0}개 물품',
+                                        style: const TextStyle(
+                                          fontSize:
+                                              Design.tabBarUnSelectedFontSize,
                                         ),
-                                      )
-                                      .toList();
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child:
+                                        (_addCookState?.isSearchIngredientFocused ??
+                                                    false) ||
+                                                (_searchIngridientController
+                                                    .text
+                                                    .isNotEmpty)
+                                            ? _buildItemList()
+                                            : (_addCookState
+                                                    ?.itemListForCook
+                                                    ?.isEmpty ??
+                                                true)
+                                            ? Center(
+                                              child: Text(
+                                                '물품을 추가해주세요',
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      Design.normalFontSize2,
+                                                  color: Colors.grey[600],
+                                                  fontFamily: 'Mainfonts',
+                                                ),
+                                              ),
+                                            )
+                                            : _buildCookItem(
+                                              _addCookState?.itemListForCook,
+                                              _cookItemRow,
+                                            ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Spacer(),
+                              // 바텀: 열량/탄수화물/단백질/지방, 추가하기 버튼
+                              AddCookBottomSheetWidget(
+                                onAddPressed: () async {
+                                  final String cookName =
+                                      _cookNameController.text;
+                                  final String memo = _memoController.text;
+                                  final List<CookItems> cookItems =
+                                      (_addCookState?.itemListForCook ?? [])
+                                          .map(
+                                            (item) => CookItems(
+                                              cookItemId: item.itemId ?? 0,
+                                              itemName: item.itemName ?? '',
+                                              count: item.count ?? 1,
+                                              nutriKcal: item.nutriKcal ?? 0,
+                                              cookItemName: item.itemName ?? '',
+                                              category: item.category ?? '',
+                                              brandName: item.brandName ?? '',
+                                              storageArea:
+                                                  item.storageArea ?? '',
+                                              nutriUnit: item.nutriUnit ?? '',
+                                              nutriCapacity:
+                                                  item.nutriCapacity ?? 0,
+                                              subCategory:
+                                                  item.subCategory ?? '',
+                                            ),
+                                          )
+                                          .toList();
 
-                              final bool isSuccess = await ref
-                                  .read(cookProvider.notifier)
-                                  .addCook(
-                                    cookName,
-                                    memo,
-                                    _addCookState?.totalKcal ?? 0,
-                                    _addCookState?.totalCarb ?? 0,
-                                    _addCookState?.totalProtein ?? 0,
-                                    _addCookState?.totalFat ?? 0,
-                                    _group?.groupId ?? 0,
-                                    cookItems,
-                                  );
+                                  final bool isSuccess = await ref
+                                      .read(cookProvider.notifier)
+                                      .addCook(
+                                        cookName,
+                                        memo,
+                                        _addCookState?.totalKcal ?? 0,
+                                        _addCookState?.totalCarb ?? 0,
+                                        _addCookState?.totalProtein ?? 0,
+                                        _addCookState?.totalFat ?? 0,
+                                        _group?.groupId ?? 0,
+                                        cookItems,
+                                      );
 
-                              if (isSuccess) {
-                                ref
-                                    .watch(cookProvider.notifier)
-                                    .loadCookList(_group?.groupId ?? 0);
-                                FToast()
-                                    .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
-                                toastMessage(context, "$cookName 추가했습니다.");
-                                context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
-                              } else {
-                                FToast().removeCustomToast();
-                                toastMessage(
-                                  context,
-                                  '$cookName 추가에 실패했습니다.',
-                                  type: ToastmessageType.errorType,
-                                );
-                              }
-                            },
-                            cookName: _cookNameController.text, // 요리 제목 전달
-                            itemListForCook:
-                                _addCookState?.itemListForCook, // 재료 리스트 전달
+                                  if (isSuccess) {
+                                    ref
+                                        .watch(cookProvider.notifier)
+                                        .loadCookList(_group?.groupId ?? 0);
+                                    FToast()
+                                        .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
+                                    toastMessage(context, "$cookName 추가했습니다.");
+                                    context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
+                                  } else {
+                                    FToast().removeCustomToast();
+                                    toastMessage(
+                                      context,
+                                      '$cookName 추가에 실패했습니다.',
+                                      type: ToastmessageType.errorType,
+                                    );
+                                  }
+                                },
+                                cookName: _cookNameController.text, // 요리 제목 전달
+                                itemListForCook:
+                                    _addCookState?.itemListForCook, // 재료 리스트 전달
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -420,6 +490,9 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   }
 
   Widget _buildItemList() {
+    if (_searchIngridientController.text.isEmpty) {
+      return _buildCookItem(_addCookState?.itemListForCook, _cookItemRow);
+    }
     return SearchResultView(
       controller: _searchIngridientController,
       searchState: _searchContentState,
@@ -430,18 +503,13 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             .read(searchContentProvider.notifier)
             .loadItem(item.itemId ?? 0);
 
-        ref.watch(searchContentProvider.notifier).resetState();
-        _controller.text = '';
-        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
-        _searchIngridientController.text = ''; // 텍스트 초기화
-        ref
-            .read(addCookProvider.notifier)
-            .updateSearchFieldEmpty(true); // 상태 업데이트
         ref
             .watch(addCookProvider.notifier)
             .currentItemCount(
               item.count ?? 1,
             ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
+
+        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
 
         showDialog(
           context: context,
@@ -450,12 +518,19 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
               backgroundColor: const Color.fromARGB(255, 255, 246, 218),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
-                side: const BorderSide(
-                  color: Colors.amber, // Yellow border
-                  width: 1.0, // Border thickness
-                ),
+                side: const BorderSide(color: Colors.amber, width: 1.0),
               ),
-              content: AddCookContentView(item: loadedItem),
+              content: AddCookContentView(
+                item: loadedItem,
+                onConfirmed: () {
+                  ref.watch(searchContentProvider.notifier).resetState();
+                  _controller.text = '';
+                  _searchIngridientController.text = ''; // 텍스트 초기화
+                  ref
+                      .read(addCookProvider.notifier)
+                      .updateSearchFieldEmpty(true); // 상태 업데이트
+                },
+              ),
             );
           },
         );
@@ -524,43 +599,81 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
   Widget _cookItemRow(RefrigeratorItem item) {
     Design design = Design(context);
+    // 물품 선택 시, 개수 조정 모달 띄움
+    return GestureDetector(
+      onTap: () async {
+        RefrigeratorItem? loadedItem = await ref
+            .read(searchContentProvider.notifier)
+            .loadItem(item.itemId ?? 0);
 
-    return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: 4,
-        horizontal: design.marginAndPadding,
-      ),
-      padding: EdgeInsets.all(design.marginAndPadding),
-      decoration: BoxDecoration(
-        color: Colors.amber[300],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      (item.itemName ?? '').length > 10
-                          ? '${(item.itemName ?? '').substring(0, 10)}...'
-                          : item.itemName ?? '',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+        ref.watch(searchContentProvider.notifier).resetState();
+        _controller.text = '';
+        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+        _searchIngridientController.text = ''; // 텍스트 초기화
+        ref
+            .read(addCookProvider.notifier)
+            .updateSearchFieldEmpty(true); // 상태 업데이트
+        ref
+            .watch(addCookProvider.notifier)
+            .currentItemCount(
+              item.count ?? 1,
+            ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              content: AddCookContentView(item: loadedItem),
+            );
+          },
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: design.marginAndPadding,
+        ),
+        padding: EdgeInsets.all(design.marginAndPadding),
+        decoration: BoxDecoration(
+          color: design.textFieldColor,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.amber),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        (item.itemName ?? '').length > 10
+                            ? '${(item.itemName ?? '').substring(0, 10)}...'
+                            : item.itemName ?? '',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text("${item.brandName}"),
-                  ],
-                ),
-                Flexible(
-                  child: Column(
+                      Text(
+                        (item.brandName ?? '').length > 12
+                            ? '${(item.brandName ?? '').substring(0, 12)}...'
+                            : item.brandName ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                  Column(
                     children: [
                       Text(
                         '${(item.nutriKcal ?? 0) * (item.count ?? 0)} kcal',
@@ -570,30 +683,49 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                           color: Color.fromARGB(255, 65, 65, 65),
                         ),
                       ),
-                      Text(
-                        '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / '
-                        '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / '
-                        '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 65, 65, 65),
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            '${(item.nutriCarbohydrate ?? 0) * (item.count ?? 0)} / ',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                          Text(
+                            '${(item.nutriProtein ?? 0) * (item.count ?? 0)} / ',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                            ),
+                          ),
+                          Text(
+                            '${(item.nutriFat ?? 0) * (item.count ?? 0)}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-                Text(
-                  '${item.count}개',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+
+                  Text(
+                    '${item.count}개',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
