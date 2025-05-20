@@ -4,7 +4,6 @@ import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/view/group/modal_view/group_create_view.dart';
 import 'package:mango/view/group/modal_view/group_participation_view.dart';
-import 'package:mango/view/group/modal_view/group_start_view.dart';
 
 // 상태에따라 모달창을 보여줌
 void groupModalStateView(BuildContext context, WidgetRef ref) {
@@ -28,8 +27,8 @@ void groupModalStateView(BuildContext context, WidgetRef ref) {
               ); // 상태를 계속 추적하여 변화
 
               switch (groupModalState) {
-                case GroupModalState.start:
-                  return const GroupStartView(); // 모달 시작하기 뷰
+                // case GroupModalState.start:
+                //   return const GroupStartView(); // 모달 시작하기 뷰
                 case GroupModalState.create:
                   return const GroupCreateView(); // 모달 생성하기 뷰
                 case GroupModalState.participation:

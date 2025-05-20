@@ -22,20 +22,10 @@ Widget groupModalTitle({
           crossAxisAlignment: CrossAxisAlignment.start, // 위쪽 정렬
           children: <Widget>[
             IconButton(
-              icon: Icon(
-                // '냉장고 시작하기' 모달 뷰일 때는 뒤로가기 버튼 'X'
-                currentState == GroupModalState.start
-                    ? Icons.close
-                    : Icons.arrow_back,
-              ),
+              icon: const Icon(Icons.close),
               iconSize: 25,
               onPressed: () {
-                if (currentState == GroupModalState.start) {
-                  context.pop(); // go_router 사용하여 해당 모달창 닫기
-                } else {
-                  ref.read(groupModalStateProvider.notifier).state =
-                      GroupModalState.start; // 그룹 모달 시작 뷰
-                }
+                context.pop(); // go_router 사용하여 해당 모달창 닫기
               },
             ),
             Padding(

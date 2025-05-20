@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mango/design.dart';
+import 'package:mango/providers/group_create_provider.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
+import 'package:mango/providers/group_participation_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/view/group/modal_view/group_modal_state_view.dart';
 import 'package:mango/view/group/sub_widget/group_action_button.dart';
@@ -57,6 +59,7 @@ Widget createButton(BuildContext context, WidgetRef ref) {
     text: "냉장고 생성",
     icon: Icons.add_outlined,
     onPressed: () {
+      ref.read(groupCreateProvider.notifier).resetState(); // 생성하기 뷰로 갈 때, 상태초기화
       ref.read(groupModalStateProvider.notifier).state = GroupModalState.create;
       groupModalStateView(context, ref);
     },
@@ -70,6 +73,9 @@ Widget participationButton(BuildContext context, WidgetRef ref) {
     text: "냉장고 참가",
     icon: Icons.subdirectory_arrow_right,
     onPressed: () {
+      ref
+          .read(groupParticipationProvider.notifier)
+          .resetState(); // 참여하기 뷰로 갈 때, 상태초기화
       ref.read(groupModalStateProvider.notifier).state =
           GroupModalState.participation;
       groupModalStateView(context, ref);
