@@ -830,7 +830,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                           ),
                         ),
                         Text(
-                          content.count.toString(),
+                          content.count > 0
+                              ? '+${content.count.toString()}'
+                              : content.count.toString(),
                           style: TextStyle(
                             fontSize: Design.normalFontSize1,
                             fontWeight: FontWeight.bold,
