@@ -450,7 +450,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
               ),
             ),
             Text(
-              content.contentName,
+              content.contentName.length > 8
+                  ? '${content.contentName.substring(0, 8)}...'
+                  : content.contentName,
               style: const TextStyle(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -714,7 +716,9 @@ class _RefrigeratorViewState extends ConsumerState<RefrigeratorView> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '${content.brandName}',
+                    (content.brandName?.length ?? 0) > 10
+                        ? '${content.brandName?.substring(0, 10)}...'
+                        : content.contentName,
                     style: const TextStyle(fontSize: Design.normalFontSize1),
                   ),
                 ],
