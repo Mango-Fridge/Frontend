@@ -10,7 +10,6 @@ import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/view/group/widget/group_empty_widget.dart';
 import 'package:mango/view/group/widget/group_firstRequest_widget.dart';
 import 'package:mango/view/group/widget/group_exist_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GroupView extends ConsumerStatefulWidget {
   const GroupView({super.key});
