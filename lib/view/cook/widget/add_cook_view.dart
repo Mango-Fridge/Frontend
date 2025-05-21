@@ -283,66 +283,58 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                       },
                                     ),
                                   ),
-                                  Column(
-                                    children: [
-                                      // 물품 개수
-                                      Visibility(
-                                        visible:
-                                            (_addCookState
-                                                    ?.itemListForCook
-                                                    ?.isNotEmpty ??
-                                                false) &&
-                                            (!_searchIngridientController
-                                                .text
-                                                .isNotEmpty),
-                                        child: Container(
-                                          margin: EdgeInsets.only(
-                                            top: design.marginAndPadding,
-                                            right: design.marginAndPadding,
-                                            left: design.marginAndPadding,
-                                          ),
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            '총 ${_addCookState?.itemListForCook?.length ?? 0}개 물품',
-                                            style: const TextStyle(
-                                              fontSize:
-                                                  Design
-                                                      .tabBarUnSelectedFontSize,
-                                            ),
-                                          ),
+                                  Visibility(
+                                    visible:
+                                        (_addCookState
+                                                ?.itemListForCook
+                                                ?.isNotEmpty ??
+                                            false) &&
+                                        (!_searchIngridientController
+                                            .text
+                                            .isNotEmpty),
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                        top: design.marginAndPadding,
+                                        right: design.marginAndPadding,
+                                        left: design.marginAndPadding,
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '총 ${_addCookState?.itemListForCook?.length ?? 0}개 물품',
+                                        style: const TextStyle(
+                                          fontSize:
+                                              Design.tabBarUnSelectedFontSize,
                                         ),
                                       ),
-                                      Expanded(
-                                        child:
-                                            (_addCookState?.isSearchIngredientFocused ??
-                                                        false) ||
-                                                    (_searchIngridientController
-                                                        .text
-                                                        .isNotEmpty)
-                                                ? _buildItemList()
-                                                : (_addCookState
-                                                        ?.itemListForCook
-                                                        ?.isEmpty ??
-                                                    true)
-                                                ? Center(
-                                                  child: Text(
-                                                    '물품을 추가해주세요',
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          Design
-                                                              .normalFontSize2,
-                                                      color: Colors.grey[600],
-                                                      fontFamily: 'Mainfonts',
-                                                    ),
-                                                  ),
-                                                )
-                                                : _buildCookItem(
-                                                  _addCookState
-                                                      ?.itemListForCook,
-                                                  _cookItemRow,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child:
+                                        (_addCookState?.isSearchIngredientFocused ??
+                                                    false) ||
+                                                (_searchIngridientController
+                                                    .text
+                                                    .isNotEmpty)
+                                            ? _buildItemList()
+                                            : (_addCookState
+                                                    ?.itemListForCook
+                                                    ?.isEmpty ??
+                                                true)
+                                            ? Center(
+                                              child: Text(
+                                                '물품을 추가해주세요',
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      Design.normalFontSize2,
+                                                  color: Colors.grey[600],
+                                                  fontFamily: 'Mainfonts',
                                                 ),
-                                      ),
-                                    ],
+                                              ),
+                                            )
+                                            : _buildCookItem(
+                                              _addCookState?.itemListForCook,
+                                              _cookItemRow,
+                                            ),
                                   ),
                                 ],
                               ),
