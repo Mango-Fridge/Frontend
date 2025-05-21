@@ -8,7 +8,6 @@ import 'package:mango/providers/group_enum_state_provider.dart';
 Widget groupModalTitle({
   required BuildContext context,
   required String textTitle, // 타이틀
-  required String textSub, // 추가 타이틀
 }) {
   return Consumer(
     builder: (context, ref, child) {
@@ -38,13 +37,6 @@ Widget groupModalTitle({
                     style: TextStyle(
                       fontSize: fontSizeMediaQuery * 0.06,
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    textSub,
-                    style: TextStyle(
-                      fontSize: fontSizeMediaQuery * 0.045,
-                      fontWeight: FontWeight.normal,
                     ),
                   ),
                 ],
