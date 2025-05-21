@@ -38,7 +38,6 @@ class GroupParticipationView extends ConsumerWidget {
             groupModalTitle(
               context: context,
               textTitle: '기존 냉장고 참여하기',
-              textSub: '다른 냉장고 코드를 입력해 참여하세요',
             ),
             // const Spacer(),
             SizedBox(
@@ -94,7 +93,8 @@ class GroupParticipationView extends ConsumerWidget {
             const Spacer(),
             groupCommonButton(
               context: context,
-              text: "참여하기",
+              text: "참가 요청하기",
+              isCreateButton: false, 
               onPressed:
                   groupState.isButton
                       ? () async {

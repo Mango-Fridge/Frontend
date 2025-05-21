@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_provider.dart';
@@ -23,36 +24,89 @@ class GroupCreateView extends ConsumerWidget {
       groupCreateProvider.notifier,
     );
     final AuthInfo? user = ref.watch(loginAuthProvider);
+    final Design design = Design(context);
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.45,
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+        border: Border(
+          top: BorderSide(color: Colors.amber, width: 5),
+          // left: BorderSide(color: Colors.amber, width: 5),
+          // right: BorderSide(color: Colors.amber, width: 5),
+        ),
+      ),
+      height: MediaQuery.of(context).size.height * 0.52,
       child: Center(
         child: Column(
           children: <Widget>[
-            groupModalTitle(
-              context: context,
-              textTitle: '냉장고 생성하기',
-              textSub: '냉장고 이름을 정하여 만들어보세요',
-            ),
-            // const Spacer(),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: '2~8자 입력',
-                  errorText: groupState.errorMessage, // 에러 메시지 표시
-                ),
-                onChanged:
-                    (String groupName) => groupNotifier.checkGroupName(
-                      groupName,
-                    ), // 입력값 지속적으로 상태확인
+            groupModalTitle(context: context, textTitle: '냉장고 생성'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(height: Design.tabBarSelectedFontSize),
+                  const Text(
+                    '냉장고의 이름을 정해주세요.',
+                    style: TextStyle(
+                      fontSize: Design.appTitleFontSize,
+                      fontWeight: FontWeight.w300, // 얇게
+                    ),
+                  ),
+                  const SizedBox(height: Design.normalFontSize4),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.width * 0.12,
+                    child: TextField(
+                      onChanged:
+                          (String groupName) =>
+                              groupNotifier.checkGroupName(groupName),
+                      maxLength: 8,
+                      decoration: InputDecoration(
+                        hintText: 'ex) 홍길동의 냉장고',
+                        hintStyle: const TextStyle(
+                          fontSize: 17,
+                          color: Colors.grey,
+                        ),
+                        errorText: groupState.errorMessage,
+                        filled: true,
+                        fillColor: design.subColor,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.amber),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.amber),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.red),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.red),
+                        ),
+                        errorStyle: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 14,
+                          height: 1.2,
+                        ),
+                        counterText: "",
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const Spacer(),
             groupCommonButton(
               context: context,
               text: "생성하기",
+              isCreateButton: true,
               onPressed:
                   groupState.isButton
                       ? () async {
