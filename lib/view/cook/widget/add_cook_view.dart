@@ -490,51 +490,64 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
   }
 
   Widget _buildItemList() {
-    if (_searchIngridientController.text.isEmpty) {
-      return _buildCookItem(_addCookState?.itemListForCook, _cookItemRow);
-    }
-    return SearchResultView(
-      controller: _searchIngridientController,
-      searchState: _searchContentState,
-      isSearching: ref.watch(searchContentProvider)?.isSearching ?? false,
-      scrollController: _listViewScrollController,
-      onItemTap: (RefrigeratorItem item) async {
-        RefrigeratorItem? loadedItem = await ref
-            .read(searchContentProvider.notifier)
-            .loadItem(item.itemId ?? 0);
+    final Design design = Design(context);
 
-        ref
-            .watch(addCookProvider.notifier)
-            .currentItemCount(
-              item.count ?? 1,
-            ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
+    // Wrap the content in a SingleChildScrollView to ensure scrolling
+    return SingleChildScrollView(
+      controller: _listViewScrollController, // Use provided scroll controller
+      child: Column(
+        children: [
+          if (_searchIngridientController.text.isEmpty)
+            _buildCookItem(_addCookState?.itemListForCook, _cookItemRow)
+          else
+            SearchResultView(
+              controller: _searchIngridientController,
+              searchState: _searchContentState,
+              isSearching:
+                  ref.watch(searchContentProvider)?.isSearching ?? false,
+              scrollController: _listViewScrollController,
+              onItemTap: (RefrigeratorItem item) async {
+                RefrigeratorItem? loadedItem = await ref
+                    .read(searchContentProvider.notifier)
+                    .loadItem(item.itemId ?? 0);
 
-        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+                ref
+                    .watch(addCookProvider.notifier)
+                    .currentItemCount(
+                      item.count ?? 1,
+                    ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
 
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: const Color.fromARGB(255, 255, 246, 218),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: const BorderSide(color: Colors.amber, width: 1.0),
-              ),
-              content: AddCookContentView(
-                item: loadedItem,
-                onConfirmed: () {
-                  ref.watch(searchContentProvider.notifier).resetState();
-                  _controller.text = '';
-                  _searchIngridientController.text = ''; // 텍스트 초기화
-                  ref
-                      .read(addCookProvider.notifier)
-                      .updateSearchFieldEmpty(true); // 상태 업데이트
-                },
-              ),
-            );
-          },
-        );
-      },
+                FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: design.subColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        side: const BorderSide(color: Colors.amber, width: 1.0),
+                      ),
+                      content: AddCookContentView(
+                        item: loadedItem,
+                        onConfirmed: () {
+                          ref
+                              .watch(searchContentProvider.notifier)
+                              .resetState();
+                          _controller.text = '';
+                          _searchIngridientController.text = ''; // 텍스트 초기화
+                          ref
+                              .read(addCookProvider.notifier)
+                              .updateSearchFieldEmpty(true); // 상태 업데이트
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+        ],
+      ),
     );
   }
 
@@ -623,7 +636,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: Colors.white,
+              backgroundColor: design.subColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
