@@ -66,23 +66,16 @@ class AddContentNotifier extends Notifier<AddContentState?> {
   // name error message 관리 함수
   void updateNameErrorMessage(String contentName) {
     if (state != null) {
-      if (contentName.length > 15) {
+      if (contentName.isNotEmpty) {
         _addContentState = state!.copyWith(
-          contentNameErrorMessage: '물품 이름의 최대 길이는 15자 입니다.',
-          isNameEmpty: false,
+          contentNameErrorMessage: '',
+          isNameEmpty: true,
         );
       } else {
-        if (contentName.isNotEmpty) {
-          _addContentState = state!.copyWith(
-            contentNameErrorMessage: '',
-            isNameEmpty: true,
-          );
-        } else {
-          _addContentState = state!.copyWith(
-            contentNameErrorMessage: '물품 이름을 입력해 주세요.',
-            isNameEmpty: false,
-          );
-        }
+        _addContentState = state!.copyWith(
+          contentNameErrorMessage: '물품 이름을 입력해 주세요.',
+          isNameEmpty: false,
+        );
       }
     }
 
