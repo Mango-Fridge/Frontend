@@ -124,15 +124,22 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("•  중분류명과 동일한 물품이 냉장고에 포함되는지 체크합니다."),
+                        const Text(
+                          "•  중분류명과 동일한 물품이 냉장고에 포함되는지 체크합니다.",
+                          style: TextStyle(fontSize: 13),
+                        ),
                         const Row(
                           children: [
-                            Text("•  수량에 따른 색 변화가 존재합니다. ("),
+                            Text(
+                              "•  수량에 따른 색 변화가 존재합니다. (",
+                              style: TextStyle(fontSize: 13),
+                            ),
                             Text(
                               "일치",
                               style: TextStyle(
                                 color: Colors.greenAccent,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 13,
                               ),
                             ),
                             Text(" / "),
@@ -141,12 +148,16 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                               style: TextStyle(
                                 color: Colors.amber,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 13,
                               ),
                             ),
                             Text(" ) "),
                           ],
                         ),
-                        const Text("•  해당 물품에 중분류명이 없다면 별도의 체크가 되지 않습니다."),
+                        const Text(
+                          "•  해당 물품에 중분류명이 없다면 별도의 체크가 되지 않습니다.",
+                          style: TextStyle(fontSize: 13),
+                        ),
                       ],
                     ),
                   ),
@@ -174,35 +185,44 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   icon = const Icon(Icons.check, color: Colors.orange);
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(13.0)),
+                    color: design.subColor,
+                    border: Border.all(
+                      color: Colors.amber, // 원하는 모서리 색상
+                      width: 1.0, // 모서리 두께
+                    ),
+                  ),
+                  padding: EdgeInsets.all(design.marginAndPadding),
                   child: Row(
                     children: <Widget>[
                       Column(
+                        spacing: 1,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              // '미분류'일 때 패딩
-                              subCategory == '미분류'
-                                  ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0,
-                                    ),
-                                    child: icon,
-                                  )
-                                  : icon,
+                              // '미분류'일 때 패딩 - 왜 패딩을 준건지?
+
+                              // subCategory == '미분류'
+                              //     ? Padding(
+                              //       padding: const EdgeInsets.symmetric(
+                              //         horizontal: 10.0,
+                              //       ),
+                              //       child: icon,
+                              //     )
+                              //     : icon,
+                              SizedBox(width: 8, child: Center(child: icon)),
+                              const SizedBox(width: 15),
                               ConstrainedBox(
                                 constraints: const BoxConstraints(
-                                  maxWidth:
-                                      19 *
-                                      17 *
-                                      0.6, // Approximate width for 15 characters
+                                  maxWidth: 19 * 17 * 0.6,
                                 ),
                                 child: Text(
                                   item.itemName ?? '재료 이름 없음',
                                   style: const TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   maxLines: 2,
@@ -213,7 +233,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           Visibility(
                             // 중분류 표시
                             visible: subCategory != '미분류',
-                            child: Text('($subCategory)'),
+                            child: Text(
+                              '$subCategory',
+                              style: const TextStyle(fontSize: 13),
+                            ),
                           ),
                         ],
                       ),
