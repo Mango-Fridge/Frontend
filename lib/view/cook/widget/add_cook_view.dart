@@ -336,6 +336,7 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                               _cookItemRow,
                                             ),
                                   ),
+                                  SizedBox(height: design.homeBottomHeight),
                                 ],
                               ),
                             ),
