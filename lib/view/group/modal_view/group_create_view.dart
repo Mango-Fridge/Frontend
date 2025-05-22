@@ -59,7 +59,7 @@ class GroupCreateView extends ConsumerWidget {
                   const SizedBox(height: Design.normalFontSize4),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.width * 0.12,
+                    height: MediaQuery.of(context).size.width * 0.2,
                     child: TextField(
                       onChanged:
                           (String groupName) =>
@@ -74,6 +74,9 @@ class GroupCreateView extends ConsumerWidget {
                         errorText: groupState.errorMessage,
                         filled: true,
                         fillColor: design.subColor,
+                        contentPadding: const EdgeInsets.only(
+                          left: Design.normalFontSize1,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: Colors.amber),
