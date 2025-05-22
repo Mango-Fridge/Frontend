@@ -7,6 +7,7 @@ import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/providers/refrigerator_provider.dart';
 import 'package:mango/state/group_enum_state.dart';
 import 'package:mango/toastMessage.dart';
 
@@ -257,6 +258,7 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                                 type: ToastmessageType.errorType,
                               );
                             }
+                            ref.read(refrigeratorNotifier.notifier).resetState();
                           },
                           child: const Text('확인'),
                         ),
