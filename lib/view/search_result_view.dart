@@ -113,24 +113,30 @@ class SearchResultView extends StatelessWidget {
   // 검색어에 의한 물품이 없을 시 화면
   Widget _noItemView(BuildContext context) {
     Design design = Design(context);
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 10,
-          children: <Widget>[
-            Image.asset(
-              "assets/images/null_item.png",
-              width: design.cartImageSize,
-              height: design.cartImageSize,
+    return IgnorePointer(
+      ignoring: false,
+      child: Container(
+        height: design.screenHeight * 0.6,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 10,
+              children: <Widget>[
+                Image.asset(
+                  "assets/images/null_item.png",
+                  width: design.cartImageSize,
+                  height: design.cartImageSize,
+                ),
+                const Text(
+                  "검색어에 해당하는 물품이 없습니다.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: Design.normalFontSize1),
+                ),
+                const SizedBox(height: 100),
+              ],
             ),
-            const Text(
-              "검색어에 해당하는 물품이 없습니다.",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: Design.normalFontSize1),
-            ),
-            const SizedBox(height: 100),
-          ],
+          ),
         ),
       ),
     );

@@ -344,66 +344,82 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                             children: [
                               Spacer(),
                               // 바텀: 열량/탄수화물/단백질/지방, 추가하기 버튼
-                              AddCookBottomSheetWidget(
-                                onAddPressed: () async {
-                                  final String cookName =
-                                      _cookNameController.text;
-                                  final String memo = _memoController.text;
-                                  final List<CookItems> cookItems =
-                                      (_addCookState?.itemListForCook ?? [])
-                                          .map(
-                                            (item) => CookItems(
-                                              cookItemId: item.itemId ?? 0,
-                                              itemName: item.itemName ?? '',
-                                              count: item.count ?? 1,
-                                              nutriKcal: item.nutriKcal ?? 0,
-                                              cookItemName: item.itemName ?? '',
-                                              category: item.category ?? '',
-                                              brandName: item.brandName ?? '',
-                                              storageArea:
-                                                  item.storageArea ?? '',
-                                              nutriUnit: item.nutriUnit ?? '',
-                                              nutriCapacity:
-                                                  item.nutriCapacity ?? 0,
-                                              subCategory:
-                                                  item.subCategory ?? '',
-                                            ),
-                                          )
-                                          .toList();
+                              Visibility(
+                                visible:
+                                    !(_addCookState?.isCookNameFocused ??
+                                        false) &&
+                                    !(_addCookState
+                                            ?.isSearchIngredientFocused ??
+                                        false),
+                                child: AddCookBottomSheetWidget(
+                                  onAddPressed: () async {
+                                    final String cookName =
+                                        _cookNameController.text;
+                                    final String memo = _memoController.text;
+                                    final List<CookItems> cookItems =
+                                        (_addCookState?.itemListForCook ?? [])
+                                            .map(
+                                              (item) => CookItems(
+                                                cookItemId: item.itemId ?? 0,
+                                                itemName: item.itemName ?? '',
+                                                count: item.count ?? 1,
+                                                nutriKcal: item.nutriKcal ?? 0,
+                                                cookItemName:
+                                                    item.itemName ?? '',
+                                                category: item.category ?? '',
+                                                brandName: item.brandName ?? '',
+                                                storageArea:
+                                                    item.storageArea ?? '',
+                                                nutriUnit: item.nutriUnit ?? '',
+                                                nutriCapacity:
+                                                    item.nutriCapacity ?? 0,
+                                                subCategory:
+                                                    item.subCategory ?? '',
+                                              ),
+                                            )
+                                            .toList();
 
-                                  final bool isSuccess = await ref
-                                      .read(cookProvider.notifier)
-                                      .addCook(
-                                        cookName,
-                                        memo,
-                                        _addCookState?.totalKcal ?? 0,
-                                        _addCookState?.totalCarb ?? 0,
-                                        _addCookState?.totalProtein ?? 0,
-                                        _addCookState?.totalFat ?? 0,
-                                        _group?.groupId ?? 0,
-                                        cookItems,
+                                    final bool isSuccess = await ref
+                                        .read(cookProvider.notifier)
+                                        .addCook(
+                                          cookName,
+                                          memo,
+                                          _addCookState?.totalKcal ?? 0,
+                                          _addCookState?.totalCarb ?? 0,
+                                          _addCookState?.totalProtein ?? 0,
+                                          _addCookState?.totalFat ?? 0,
+                                          _group?.groupId ?? 0,
+                                          cookItems,
+                                        );
+
+                                    if (isSuccess) {
+                                      ref
+                                          .watch(cookProvider.notifier)
+                                          .loadCookList(_group?.groupId ?? 0);
+                                      FToast()
+                                          .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
+                                      toastMessage(
+                                        context,
+                                        "$cookName 추가했습니다.",
                                       );
-
-                                  if (isSuccess) {
-                                    ref
-                                        .watch(cookProvider.notifier)
-                                        .loadCookList(_group?.groupId ?? 0);
-                                    FToast()
-                                        .removeCustomToast(); // 띄어졌던 토스트 메시지를 삭제 => 토스트 메시지 중첩 시, 오류 발생
-                                    toastMessage(context, "$cookName 추가했습니다.");
-                                    context.pop(context); // 성공적으로 음식 추가 후 화면 닫기
-                                  } else {
-                                    FToast().removeCustomToast();
-                                    toastMessage(
-                                      context,
-                                      '$cookName 추가에 실패했습니다.',
-                                      type: ToastmessageType.errorType,
-                                    );
-                                  }
-                                },
-                                cookName: _cookNameController.text, // 요리 제목 전달
-                                itemListForCook:
-                                    _addCookState?.itemListForCook, // 재료 리스트 전달
+                                      context.pop(
+                                        context,
+                                      ); // 성공적으로 음식 추가 후 화면 닫기
+                                    } else {
+                                      FToast().removeCustomToast();
+                                      toastMessage(
+                                        context,
+                                        '$cookName 추가에 실패했습니다.',
+                                        type: ToastmessageType.errorType,
+                                      );
+                                    }
+                                  },
+                                  cookName:
+                                      _cookNameController.text, // 요리 제목 전달
+                                  itemListForCook:
+                                      _addCookState
+                                          ?.itemListForCook, // 재료 리스트 전달
+                                ),
                               ),
                             ],
                           ),
