@@ -7,7 +7,6 @@ import 'package:mango/providers/group_participation_provider.dart';
 Widget groupCommonButton({
   required BuildContext context,
   required String text, // 버튼 텍스트
-  required bool isCreateButton, // 생성하기 버튼일 때
   VoidCallback? onPressed, // 버튼 액션
 }) {
   return Consumer(
