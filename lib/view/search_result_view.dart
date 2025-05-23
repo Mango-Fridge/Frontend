@@ -71,60 +71,68 @@ class SearchResultView extends StatelessWidget {
   // 검색어를 입력하지 않았을 때의 화면
   Widget _noSearchView(BuildContext context) {
     Design design = Design(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 10,
-      children: <Widget>[
-        Image.asset(
-          "assets/images/cart.png",
-          width: design.cartImageSize,
-          height: design.cartImageSize,
-        ),
-        const Text(
-          "찾고 싶은 물품을 검색하거나,\n원하는 물품이 없다면 직접 추가해 보세요!",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: Design.normalFontSize1),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            context.push('/addContent');
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.amber[300],
-            foregroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 10,
+          children: <Widget>[
+            Image.asset(
+              "assets/images/cart.png",
+              width: design.cartImageSize,
+              height: design.cartImageSize,
             ),
-          ),
-          child: const Text(
-            "직접 물품 추가",
-            style: TextStyle(fontSize: Design.normalFontSize1),
-          ),
+            const Text(
+              "찾고 싶은 물품을 검색하거나,\n원하는 물품이 없다면 직접 추가해 보세요!",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: Design.normalFontSize1),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.push('/addContent');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber[300],
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: const Text(
+                "직접 물품 추가",
+                style: TextStyle(fontSize: Design.normalFontSize1),
+              ),
+            ),
+            const SizedBox(height: 100),
+          ],
         ),
-        const SizedBox(height: 100),
-      ],
+      ),
     );
   }
 
   // 검색어에 의한 물품이 없을 시 화면
   Widget _noItemView(BuildContext context) {
     Design design = Design(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 10,
-      children: <Widget>[
-        Image.asset(
-          "assets/images/null_item.png",
-          width: design.cartImageSize,
-          height: design.cartImageSize,
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 10,
+          children: <Widget>[
+            Image.asset(
+              "assets/images/null_item.png",
+              width: design.cartImageSize,
+              height: design.cartImageSize,
+            ),
+            const Text(
+              "검색어에 해당하는 물품이 없습니다.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: Design.normalFontSize1),
+            ),
+            const SizedBox(height: 100),
+          ],
         ),
-        const Text(
-          "검색어에 해당하는 물품이 없습니다.",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: Design.normalFontSize1),
-        ),
-        const SizedBox(height: 100),
-      ],
+      ),
     );
   }
 }
