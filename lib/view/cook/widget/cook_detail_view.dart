@@ -190,7 +190,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                     borderRadius: const BorderRadius.all(Radius.circular(13.0)),
                     color: design.subColor,
                     border: Border.all(
-                      color: Colors.amber, // 원하는 모서리 색상
+                      color: const Color.fromRGBO(195, 142, 1, 1),
                       width: 1.0, // 모서리 두께
                     ),
                   ),
@@ -278,7 +278,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         width: design.screenWidth * 0.95,
                         padding: EdgeInsets.all(design.marginAndPadding),
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(255, 244, 216, 1),
+                          color: design.subColor,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: const Color.fromRGBO(
