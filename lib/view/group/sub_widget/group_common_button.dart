@@ -7,7 +7,6 @@ import 'package:mango/providers/group_participation_provider.dart';
 Widget groupCommonButton({
   required BuildContext context,
   required String text, // 버튼 텍스트
-  required bool isCreateButton, // 생성하기 버튼일 때
   VoidCallback? onPressed, // 버튼 액션
 }) {
   return Consumer(
@@ -18,9 +17,8 @@ Widget groupCommonButton({
           MediaQuery.of(context).size.width; // 폰트 사이즈
 
       return SizedBox(
-        width: MediaQuery.of(context).size.width *
-            (isCreateButton ? 0.4 : 0.5),
-        height: MediaQuery.of(context).size.height * 0.06,
+        width: MediaQuery.of(context).size.width * 0.5,
+        height: MediaQuery.of(context).size.height * 0.07,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.amber, // 배경색
@@ -40,7 +38,7 @@ Widget groupCommonButton({
                   ? const CircularProgressIndicator(color: Colors.white)
                   : Text(
                     text,
-                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.06),
+                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.07),
                   ),
         ),
       );
