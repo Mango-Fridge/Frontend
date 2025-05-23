@@ -57,6 +57,7 @@ flutter:
     - assets/images/chef_Hat.png
     - assets/images/kakao_symbol.png
     - assets/images/null_group.png
+    - assets/images/group_request.png
 
   fonts:
     - family: Mainfonts

@@ -23,6 +23,8 @@ class GroupFirstRequestWidget extends ConsumerWidget {
       future: Future.wait([
         groupPrefs.getJoinedGroupId(),
         groupPrefs.getJoinedGroupName(),
+        groupPrefs.getjoinedGroupOwnerName(),
+        groupPrefs.getjoinedGroupCode(),
       ]),
       builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (!snapshot.hasData) {
@@ -31,6 +33,8 @@ class GroupFirstRequestWidget extends ConsumerWidget {
 
         final int? joinGroupId = snapshot.data![0] as int?;
         final String? joinGroupName = snapshot.data![1] as String?;
+        final String? joinedGroupOwnerName = snapshot.data![2] as String?;
+        final String? joinedGroupCode = snapshot.data![3] as String?;
 
         return Container(
           padding: const EdgeInsets.all(16),
@@ -60,8 +64,7 @@ class GroupFirstRequestWidget extends ConsumerWidget {
                       children: [
                         Text(
                           joinGroupName ?? '',
-                          style:
-                              TextStyle(fontSize: fontSizeMediaQuery * 0.04),
+                          style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
                         ),
                         const Spacer(),
                         const Text(
@@ -73,6 +76,14 @@ class GroupFirstRequestWidget extends ConsumerWidget {
                         ),
                       ],
                     ),
+                  ),
+                  Text(
+                    joinedGroupOwnerName ?? '',
+                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
+                  ),
+                  Text(
+                    joinedGroupCode ?? '',
+                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
                   ),
                 ],
               ),
@@ -87,44 +98,47 @@ class GroupFirstRequestWidget extends ConsumerWidget {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('그룹 나가기'),
-                      content: const Text(
-                        '해당 그룹을 나가면 되돌릴 수 없습니다.\n그룹을 나가겠습니까?',
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => context.pop(),
-                          child: const Text('취소'),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            context.pop();
-                            final success = await groupNotifier.exitCurrentGroup(
-                              user?.usrId ?? 0,
-                              joinGroupId ?? 0,
-                            );
+                    builder:
+                        (BuildContext context) => AlertDialog(
+                          title: const Text('그룹 나가기'),
+                          content: const Text(
+                            '해당 그룹을 나가면 되돌릴 수 없습니다.\n그룹을 나가겠습니까?',
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => context.pop(),
+                              child: const Text('취소'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                context.pop();
+                                final success = await groupNotifier
+                                    .exitCurrentGroup(
+                                      user?.usrId ?? 0,
+                                      joinGroupId ?? 0,
+                                    );
 
-                            if (success) {
-                              await groupPrefs.removeJoinedGroup();
-                              ref.read(grouViewStateProvider.notifier).state =
-                                  GroupViewState.empty;
-                              toastMessage(
-                                context,
-                                "'$joinGroupName' 그룹을 나갔습니다.",
-                              );
-                            } else {
-                              toastMessage(
-                                context,
-                                "'$joinGroupName' 그룹을 나갈 수 없습니다.",
-                                type: ToastmessageType.errorType,
-                              );
-                            }
-                          },
-                          child: const Text('확인'),
+                                if (success) {
+                                  await groupPrefs.removeJoinedGroup();
+                                  ref
+                                      .read(grouViewStateProvider.notifier)
+                                      .state = GroupViewState.empty;
+                                  toastMessage(
+                                    context,
+                                    "'$joinGroupName' 그룹을 나갔습니다.",
+                                  );
+                                } else {
+                                  toastMessage(
+                                    context,
+                                    "'$joinGroupName' 그룹을 나갈 수 없습니다.",
+                                    type: ToastmessageType.errorType,
+                                  );
+                                }
+                              },
+                              child: const Text('확인'),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
                   );
                 },
                 child: Text(

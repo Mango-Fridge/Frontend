@@ -192,7 +192,9 @@ class _GroupParticipationViewState
                           )) {
                             await groupPrefs.saveJoinedGroup(
                               groupState.groupId ?? 0,
-                              groupState.groupName ?? "",
+                              groupState.groupName ?? '',
+                              groupState.groupOwnerName ?? '',
+                              groupState.groupCode ?? ''
                             ); // 참여 희망 그룹id, 이름 로컬 저장
                             ref.read(grouViewStateProvider.notifier).state =
                                 GroupViewState
