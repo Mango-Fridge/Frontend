@@ -71,7 +71,7 @@ class LoginSharePrefs {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // (AppleLogin 한정) 로컬에 저장된 토큰 제거
-    if (platform == 'Apple') await prefs.remove('AppleToken');
+    await prefs.remove('AppleToken');
 
     await prefs.remove('${platform}Email');
     await prefs.remove(platform);
