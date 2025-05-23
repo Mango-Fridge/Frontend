@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_provider.dart';
@@ -36,63 +37,96 @@ class GroupFirstRequestWidget extends ConsumerWidget {
         final String? joinedGroupOwnerName = snapshot.data![2] as String?;
         final String? joinedGroupCode = snapshot.data![3] as String?;
 
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '승인 요청 대기',
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: fontSizeMediaQuery * 0.15),
+            Image.asset("assets/images/group_request.png"),
+            const SizedBox(height: 77),
+            RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style.copyWith(
+                  fontSize: Design.appTitleFontSize,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: const <InlineSpan>[
+                  TextSpan(text: '현재 '),
+                  TextSpan(
+                    text: '승인 대기중',
                     style: TextStyle(
-                      fontSize: fontSizeMediaQuery * 0.045,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.green, // 빨간색 강조
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.amberAccent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          joinGroupName ?? '',
-                          style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          '승인 대기 중',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    joinedGroupOwnerName ?? '',
-                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
-                  ),
-                  Text(
-                    joinedGroupCode ?? '',
-                    style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
-                  ),
+                  TextSpan(text: '입니다.'),
                 ],
               ),
-              ElevatedButton(
+            ),
+            const SizedBox(height: 34),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '그룹명',
+                      style: TextStyle(
+                        fontSize: Design.appTitleFontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      ' : $joinGroupName의 냉장고',
+                      style: const TextStyle(fontSize: Design.appTitleFontSize),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '그룹장',
+                      style: TextStyle(
+                        fontSize: Design.appTitleFontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      ' : $joinedGroupOwnerName',
+                      style: const TextStyle(fontSize: Design.appTitleFontSize),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '냉장고 ID',
+                      style: TextStyle(
+                        fontSize: Design.appTitleFontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      ' : $joinedGroupCode',
+                      style: const TextStyle(fontSize: Design.appTitleFontSize),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 34),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: MediaQuery.of(context).size.height * 0.07,
+              child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color(0xFFFFD0D0),
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 onPressed: () {
@@ -141,13 +175,13 @@ class GroupFirstRequestWidget extends ConsumerWidget {
                         ),
                   );
                 },
-                child: Text(
-                  "그룹 나가기",
-                  style: TextStyle(fontSize: fontSizeMediaQuery * 0.04),
+                child: const Text(
+                  "참가 취소",
+                  style: TextStyle(fontSize: Design.normalFontSize4),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
