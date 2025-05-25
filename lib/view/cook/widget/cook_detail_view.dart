@@ -174,47 +174,44 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         .firstOrNull;
 
                 Icon icon;
+                Color color;
 
                 if (isFridge == null) {
                   icon = const Icon(Icons.close, color: Colors.red);
+                  color = Colors.red;
                 } else if (isFridge.subCategory == '미분류') {
                   icon = const Icon(Icons.circle, color: Colors.black, size: 4);
+                  color = Colors.black;
                 } else if ((isFridge.count) >= (item.count ?? 0)) {
                   icon = const Icon(Icons.check, color: Colors.green);
+                  color = Colors.green;
                 } else {
                   icon = const Icon(Icons.check, color: Colors.orange);
+                  color = Colors.orange;
                 }
 
                 return Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(13.0)),
-                    color: design.subColor,
+                    // color: design.subColor,
                     border: Border.all(
-                      color: const Color.fromRGBO(195, 142, 1, 1),
-                      width: 1.0, // 모서리 두께
+                      color: color,
+                      width: 1.2, // 모서리 두께
                     ),
                   ),
                   padding: EdgeInsets.all(design.marginAndPadding),
                   child: Row(
                     children: <Widget>[
+                      SizedBox(width: 8, child: Center(child: icon)),
+                      const SizedBox(width: 20),
                       Column(
                         spacing: 1,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              // '미분류'일 때 패딩 - 왜 패딩을 준건지?
-
-                              // subCategory == '미분류'
-                              //     ? Padding(
-                              //       padding: const EdgeInsets.symmetric(
-                              //         horizontal: 10.0,
-                              //       ),
-                              //       child: icon,
-                              //     )
-                              //     : icon,
-                              SizedBox(width: 8, child: Center(child: icon)),
-                              const SizedBox(width: 15),
+                              // SizedBox(width: 8, child: Center(child: icon)),
+                              // const SizedBox(width: 15),
                               ConstrainedBox(
                                 constraints: const BoxConstraints(
                                   maxWidth: 19 * 17 * 0.6,
@@ -351,9 +348,25 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                       }
                     }
                   },
-                  child: const Text(
-                    "요리 삭제",
-                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: design.homeBottomHeight),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12.0), // 둥근 모서리
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 6.0,
+                      ), // 텍스트 주변 여백
+                      child: const Text(
+                        "요리 삭제",
+                        style: TextStyle(
+                          color: Colors.white, // 빨간 배경에 흰색 텍스트로 변경
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
