@@ -336,7 +336,13 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                               _cookItemRow,
                                             ),
                                   ),
-                                  SizedBox(height: design.homeBottomHeight),
+                                  if (!(_addCookState?.isCookNameFocused ??
+                                          false) &&
+                                      !(_addCookState
+                                              ?.isSearchIngredientFocused ??
+                                          false) &&
+                                      _searchIngridientController.text.isEmpty)
+                                    SizedBox(height: design.homeBottomHeight),
                                 ],
                               ),
                             ),
@@ -351,7 +357,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                         false) &&
                                     !(_addCookState
                                             ?.isSearchIngredientFocused ??
-                                        false),
+                                        false) &&
+                                    _searchIngridientController.text.isEmpty,
                                 child: AddCookBottomSheetWidget(
                                   onAddPressed: () async {
                                     final String cookName =
