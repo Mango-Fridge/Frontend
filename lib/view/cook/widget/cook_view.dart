@@ -183,8 +183,8 @@ class _CookViewState extends ConsumerState<CookView> {
                           ),
                           Text(
                             cook.cookItems!.length > 1
-                                ? '${cook.cookItems?.first.cookItemName} 외 ${(cook.cookItems?.length ?? 0) - 1}개의 재료'
-                                : '${cook.cookItems?.first.cookItemName}',
+                                ? '${(cook.cookItems?.first.cookItemName ?? '').length > 15 ? '${(cook.cookItems?.first.cookItemName ?? '').substring(0, 15)}...' : cook.cookItems?.first.cookItemName ?? ''} 외 ${(cook.cookItems?.length ?? 0) - 1}개의 재료'
+                                : '${(cook.cookItems?.first.cookItemName ?? '').length > 25 ? '${(cook.cookItems?.first.cookItemName ?? '').substring(0, 25)}...' : cook.cookItems?.first.cookItemName ?? ''}',
                           ),
                         ],
                       ),
