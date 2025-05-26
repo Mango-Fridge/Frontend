@@ -537,6 +537,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
 
         FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
 
+        await Future.delayed(const Duration(milliseconds: 300));
+
         showDialog(
           context: context,
           builder: (BuildContext context) {
