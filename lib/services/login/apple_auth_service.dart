@@ -109,13 +109,25 @@ class AppleAuthService implements AbstractAuth {
       if (kDebugMode) print("[Apple] 애플 로그아웃 성공");
     } catch (error) {
       if (kDebugMode) print("[Apple] 로그아웃 실패 $error");
+      throw Exception(error);
     }
 
     return null;
   }
 
   @override
-  Future<AuthInfo?> deleteUser(AuthInfo authInfo) {
-    throw UnimplementedError();
+  Future<AuthInfo?> deleteUser(AuthInfo authInfo) async {
+    final LoginSharePrefs _LoginSharePrefs =
+        LoginSharePrefs(); // shared_preferences 뷰모델
+
+    try {
+      await _loginService.deleteUser(authInfo); // 서버 회원탈퇴
+      await _LoginSharePrefs.removeAuth('Apple'); // 로컬 계정 삭제
+      if (kDebugMode) print("[Apple] 회원탈퇴 성공");
+      return null;
+    } catch (error) {
+      if (kDebugMode) print("[Apple] 회원탈퇴 실패 $error");
+      throw Exception(error);
+    }
   }
 }

@@ -170,6 +170,8 @@ class KakaoAuthService implements AbstractAuth {
     }
   }
 
+  // 카카오 회원탈퇴
+  @override
   Future<AuthInfo?> deleteUser(AuthInfo authInfo) async {
     final LoginSharePrefs _LoginSharePrefs =
         LoginSharePrefs(); // shared_preferences 뷰모델
