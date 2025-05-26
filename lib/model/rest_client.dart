@@ -8,7 +8,7 @@ part 'rest_client.g.dart';
 
 /// Android : 10.0.2.2 으로 변경하고 "flutter pub run build_runner build" 실행
 /// iOS : localhost 혹은 127.0.0.1 으로 변경하고 "flutter pub run build_runner build" 실행
-@RestApi(baseUrl: "http://10.0.2.2:8080")
+@RestApi(baseUrl: "http://localhost:8080")
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
