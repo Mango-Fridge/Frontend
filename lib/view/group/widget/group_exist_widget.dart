@@ -37,10 +37,10 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final Design design = Design(context);
-    final double fontSizeMediaQuery = MediaQuery.of(context).size.width;
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    // final Design design = Design(context);
+    // final double fontSizeMediaQuery = MediaQuery.of(context).size.width;
+    // final double screenWidth = MediaQuery.of(context).size.width;
+    // final double screenHeight = MediaQuery.of(context).size.height;
 
     final List<GroupHopeUser> hopeUsers = _group?.groupHopeUsers ?? [];
     final List<GroupUser> groupUsers = groupNotifier.getSortedGroupUsers();
@@ -340,15 +340,15 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                     _user?.usrId ?? 0,
                     _group?.groupId ?? 0,
                   )) {
+                    toastMessage(
+                      context,
+                      "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
+                    );
                     await ref
                         .read(groupProvider.notifier)
                         .loadGroup(_user?.usrId ?? 0);
                     ref.read(grouViewStateProvider.notifier).state =
                         GroupViewState.empty;
-                    toastMessage(
-                      context,
-                      "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
-                    );
                   } else {
                     toastMessage(
                       context,
