@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
@@ -37,260 +38,348 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
   @override
   Widget build(BuildContext context) {
     final Design design = Design(context);
-    final double fontSizeMediaQuery =
-        MediaQuery.of(context).size.width; // 폰트 사이즈
+    final double fontSizeMediaQuery = MediaQuery.of(context).size.width;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
+    final List<GroupHopeUser> hopeUsers = _group?.groupHopeUsers ?? [];
+    final List<GroupUser> groupUsers = groupNotifier.getSortedGroupUsers();
+
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  '${_group?.groupName}',
-                  style: TextStyle(fontSize: fontSizeMediaQuery * 0.06),
-                ),
-                const Spacer(),
-                Text(
-                  '냉장고ID: ${_group?.groupCode ?? ''}',
-                  style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          ExpansionTile(
-            // 승인 요청 대기
-            initiallyExpanded: true, // 처음부터 펼쳐지게
-            title: Text(
-              '승인 요청 대기(${_group?.groupHopeUsers?.length ?? 0})',
-              style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
-            ),
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
-                children:
-                    _group?.groupHopeUsers?.map((GroupHopeUser user) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        padding: EdgeInsets.all(design.marginAndPadding),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              user.username,
-                              style: TextStyle(
-                                fontSize: fontSizeMediaQuery * 0.06,
-                              ),
-                            ),
-                            const Spacer(),
-                            if (_user?.usrId == _group?.groupOwnerId) ...<Widget>{
-                              actionButton(
-                                label: "거절",
-                                onPressed: () async {
-                                  await groupNotifier.putGroupReject( 
-                                    user.userId,
-                                    _group?.groupId ?? 0,
-                                  );
-                                  await ref
-                                      .read(groupProvider.notifier)
-                                      .groupUserList(
-                                        _user?.usrId ?? 0,
-                                        _group?.groupId ?? 0,
-                                      );
-                                },
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                fontSizeMediaQuery: fontSizeMediaQuery,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              actionButton(
-                                label: "승인",
-                                onPressed: () async {
-                                  await groupNotifier.putGroupApprove(
-                                    user.userId,
-                                    _group?.groupId ?? 0,
-                                  );
-                                  await ref
-                                      .read(groupProvider.notifier)
-                                      .groupUserList(
-                                        _user?.usrId ?? 0,
-                                        _group?.groupId ?? 0,
-                                      );
-                                },
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                fontSizeMediaQuery: fontSizeMediaQuery,
-                              ),
-                            },
-                          ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${_group?.groupName}의 냉장고',
+                          style: const TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      );
-                    }).toList() ??
-                    <Widget>[const SizedBox()],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          ExpansionTile(
-            // 그룹원
-            initiallyExpanded: true, // 처음부터 펼쳐지게
-            title: Text(
-              '그룹원(${_group?.groupUsers?.length})',
-              style: TextStyle(fontSize: fontSizeMediaQuery * 0.05),
-            ),
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
-                children:
-                    groupNotifier.getSortedGroupUsers().map((GroupUser user) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        padding: EdgeInsets.all(design.marginAndPadding),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              user.username,
-                              style: TextStyle(
-                                fontSize: fontSizeMediaQuery * 0.06,
-                              ),
-                            ),
-                            if (_group?.groupOwnerId ==
-                                user.userId) ...<Widget>[
-                              const Icon(
-                                Icons.emoji_events,
-                                size: 26,
-                                color: Colors.amber,
-                              ),
-                            ],
-                            const Spacer(),
-                            if (_user?.usrId == _group?.groupOwnerId && _user?.usrId != user.userId) ...<Widget>{
-                              actionButton(
-                                label: "내보내기",
-                                onPressed: () async {
-                                  await groupNotifier.exitCurrentGroup( 
-                                    user.userId,
-                                    _group?.groupId ?? 0,
-                                  );
-                                  await ref
-                                      .read(groupProvider.notifier)
-                                      .groupUserList(
-                                        _user?.usrId ?? 0,
-                                        _group?.groupId ?? 0,
-                                      );
-                                },
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                fontSizeMediaQuery: fontSizeMediaQuery,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              actionButton(
-                                label: "위임하기",
-                                onPressed: () async {
-                                  await groupNotifier.putGroupOwner(
-                                    user.userId,
-                                    _group?.groupId ?? 0,
-                                  );
-                                  await ref
-                                      .read(groupProvider.notifier)
-                                      .groupUserList(
-                                        _user?.usrId ?? 0,
-                                        _group?.groupId ?? 0,
-                                      );
-                                },
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                fontSizeMediaQuery: fontSizeMediaQuery,
-                              ),
-                            },
-                          ],
-                        ),
-                      );
-                    }).toList() ??
-                    [const SizedBox()],
-              ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          actionButton(
-            label: "그룹 나가기",
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder:
-                    (BuildContext context) => AlertDialog(
-                      title: const Text('그룹 나가기'),
-                      content: const Text(
-                        '해당 그룹을 나가면 되돌릴 수 없습니다.\n그룹을 나가겠습니까?',
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => context.pop(),
-                          child: const Text('취소'),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            context.pop();
-                            if (await groupNotifier.exitCurrentGroup(
-                              _user?.usrId ?? 0,
-                              _group?.groupId ?? 0,
-                            )) {
-                              await ref
-                              .read(groupProvider.notifier)
-                              .loadGroup(_user?.usrId ?? 0);
-                              ref.read(grouViewStateProvider.notifier).state =
-                                  GroupViewState.empty;
-                              toastMessage(
-                                context,
-                                "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
-                              );
-                            } else {
-                              toastMessage(
-                                context,
-                                "'${_group?.groupName ?? ''}' 그룹을 나갈 수 없습니다.",
-                                type: ToastmessageType.errorType,
-                              );
-                            }
-                            ref.read(refrigeratorNotifier.notifier).resetState();
-                          },
-                          child: const Text('확인'),
+                        const SizedBox(height: 4),
+                        Text(
+                          _group?.groupCode ?? '',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                          ),
                         ),
                       ],
                     ),
-              );
-            },
-            screenWidth: screenWidth,
-            screenHeight: screenHeight,
-            fontSizeMediaQuery: fontSizeMediaQuery,
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(text: _group?.groupCode ?? ''),
+                        );
+                        toastMessage(context, 'ID가 복사되었습니다');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF78BEFF),
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 8,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text(
+                        'ID 복사',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Row(
+            children: [
+              const Text(
+                '그룹장',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Image.asset("assets/images/crown.png"),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${groupNotifier.groupOwnerName}',
+                    style: const TextStyle(fontSize: 25),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // 승인 요청 대기 섹션
+          if (hopeUsers.isNotEmpty) ...{
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Text(
+                  '승인 요청 대기',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  '(${hopeUsers.length}명)',
+                  style: const TextStyle(fontSize: 20, color: Colors.grey),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF4D8),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.amber),
+              ),
+              child: Column(
+                children:
+                    hopeUsers.map((GroupHopeUser user) {
+                      return Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              user.username,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          if (_user?.usrId == _group?.groupOwnerId) ...{
+                            ElevatedButton(
+                              onPressed: () async {
+                                await groupNotifier.putGroupApprove(
+                                  user.userId,
+                                  _group?.groupId ?? 0,
+                                );
+                                await ref
+                                    .read(groupProvider.notifier)
+                                    .groupUserList(
+                                      _user?.usrId ?? 0,
+                                      _group?.groupId ?? 0,
+                                    );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green.shade200,
+                                foregroundColor: Colors.black,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 30,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text('승인'),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () async {
+                                await groupNotifier.putGroupReject(
+                                  user.userId,
+                                  _group?.groupId ?? 0,
+                                );
+                                await ref
+                                    .read(groupProvider.notifier)
+                                    .groupUserList(
+                                      _user?.usrId ?? 0,
+                                      _group?.groupId ?? 0,
+                                    );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red.shade200,
+                                foregroundColor: Colors.black,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 30,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text('거절'),
+                            ),
+                          },
+                        ],
+                      );
+                    }).toList(),
+              ),
+            ),
+            const SizedBox(height: 20),
+          },
+
+          // 그룹원 리스트
+          // if (groupUsers.isNotEmpty) ...{
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Text(
+                '그룹원',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+              ),
+              Text(
+                '(${groupUsers.length}명)',
+                style: const TextStyle(fontSize: 20, color: Colors.grey),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF4D8),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.amber),
+            ),
+            child: Column(
+              children:
+                  groupUsers.map((user) {
+                    final bool isCurrentUserOwner =
+                        _user?.usrId == _group?.groupOwnerId;
+                    final bool isOtherUser = _user?.usrId != user.userId;
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  user.username,
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (isCurrentUserOwner && isOtherUser) ...{
+                            ElevatedButton(
+                              onPressed: () async {
+                                await groupNotifier.putGroupOwner(
+                                  user.userId,
+                                  _group?.groupId ?? 0,
+                                );
+                                await ref
+                                    .read(groupProvider.notifier)
+                                    .groupUserList(
+                                      _user?.usrId ?? 0,
+                                      _group?.groupId ?? 0,
+                                    );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.amber,
+                                foregroundColor: Colors.black,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 30,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text('위임하기'),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () async {
+                                await groupNotifier.exitCurrentGroup(
+                                  user.userId,
+                                  _group?.groupId ?? 0,
+                                );
+                                await ref
+                                    .read(groupProvider.notifier)
+                                    .groupUserList(
+                                      _user?.usrId ?? 0,
+                                      _group?.groupId ?? 0,
+                                    );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red.shade200,
+                                foregroundColor: Colors.black,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 30,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text('내보내기'),
+                            ),
+                          },
+                        ],
+                      ),
+                    );
+                  }).toList(),
+            ),
+          ),
+
+          // },
+          const SizedBox(height: 20),
+          // 그룹 나가기 버튼
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  if (await groupNotifier.exitCurrentGroup(
+                    _user?.usrId ?? 0,
+                    _group?.groupId ?? 0,
+                  )) {
+                    await ref
+                        .read(groupProvider.notifier)
+                        .loadGroup(_user?.usrId ?? 0);
+                    ref.read(grouViewStateProvider.notifier).state =
+                        GroupViewState.empty;
+                    toastMessage(
+                      context,
+                      "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
+                    );
+                  } else {
+                    toastMessage(
+                      context,
+                      "'${_group?.groupName ?? ''}' 그룹을 나갈 수 없습니다.",
+                      type: ToastmessageType.errorType,
+                    );
+                  }
+                  ref.read(refrigeratorNotifier.notifier).resetState();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFFD0D0),
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 20,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text('그룹 나가기', style: TextStyle(fontSize: 20)),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                '* 그룹장일 때 나갈 수 없습니다.',
+                style: TextStyle(fontSize: 12, color: Colors.red),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
-}
-
-Widget actionButton({
-  required String label,
-  required VoidCallback onPressed,
-  required double screenWidth,
-  required double screenHeight,
-  required double fontSizeMediaQuery,
-}) {
-  return ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.blue,
-      foregroundColor: Colors.black,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      minimumSize: Size(screenWidth * 0.15, screenHeight * 0.04),
-    ),
-    onPressed: onPressed,
-    child: Text(label, style: TextStyle(fontSize: fontSizeMediaQuery * 0.04)),
-  );
 }

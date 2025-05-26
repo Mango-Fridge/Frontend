@@ -58,6 +58,7 @@ flutter:
     - assets/images/kakao_symbol.png
     - assets/images/null_group.png
     - assets/images/group_request.png
+    - assets/images/crown.png
 
   fonts:
     - family: Mainfonts
