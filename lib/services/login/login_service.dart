@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/rest_client.dart';
+import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 
 // 서버와 로그인
@@ -72,6 +73,19 @@ class LoginService {
     } catch (e) {
       debugPrint("알 수 없는 오류 발생: $e");
       return null;
+    }
+  }
+
+  Future<AuthInfo?> deleteUser(AuthInfo authInfo) async {
+    try {
+      final RestClient client = RestClient(dio);
+      await client.deleteAuthUser(authInfo.usrId!);
+      return null;
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      throw Exception(e);
+    } catch (e) {
+      debugPrint("[Kakao] 카카오 회원탈퇴 에러 $e");
     }
   }
 }

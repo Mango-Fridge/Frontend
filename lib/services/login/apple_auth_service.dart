@@ -113,4 +113,9 @@ class AppleAuthService implements AbstractAuth {
 
     return null;
   }
+
+  @override
+  Future<AuthInfo?> deleteUser(AuthInfo authInfo) {
+    throw UnimplementedError();
+  }
 }

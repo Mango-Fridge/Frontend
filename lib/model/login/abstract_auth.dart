@@ -4,4 +4,5 @@ import 'package:mango/model/login/auth_model.dart';
 abstract class AbstractAuth {
   Future<AuthInfo?> login(); // 로그인
   Future<AuthInfo?> logout(); // 로그아웃
+  Future<AuthInfo?> deleteUser(AuthInfo authInfo); // 회원탈퇴
 }

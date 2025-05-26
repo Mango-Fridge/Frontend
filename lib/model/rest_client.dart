@@ -18,6 +18,9 @@ abstract class RestClient {
     @Body() Map<String, String> body,
   );
 
+  @DELETE('/user/deleteUser/{userId}')
+  Future<ApiResponse> deleteAuthUser(@Path('userId') int userId);
+
   @POST('/agreement/agree')
   Future<ApiResponse> updateTerms(@Body() Map<String, Object?> body);
 

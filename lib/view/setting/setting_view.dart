@@ -166,8 +166,8 @@ class _SettingViewState extends ConsumerState<SettingView> {
                     loginAuthProvider.notifier,
                   );
                   if (user != null) {
-                    await authNotifier.logout(user!.oauthProvider!);
-                    context.go('/login'); // 로그인 화면
+                    await authNotifier.logout(user!.oauthProvider!, context);
+                    context.pop();
                   }
                 },
                 child: const Text("확인", style: TextStyle(color: Colors.red)),
@@ -195,7 +195,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '확인하는 즉시 "${user!.usrNm}"과 관련된 정보는 서버에서 삭제되며, 복구가 불가능합니다.',
+                  '확인하는 즉시 "${user?.usrNm}"과 관련된 정보는 서버에서 삭제되며, 복구가 불가능합니다.',
                 ),
                 const Text(
                   "\n\n정말로 회원탈퇴 하시겠습니까?",
@@ -209,7 +209,19 @@ class _SettingViewState extends ConsumerState<SettingView> {
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final LoginAuthNotifier authNotifier = ref.read(
+                    loginAuthProvider.notifier,
+                  );
+                  if (user != null) {
+                    await authNotifier.deleteUser(
+                      user!.oauthProvider!,
+                      user!,
+                      context,
+                    );
+                    context.pop();
+                  }
+                },
                 child: const Text("확인", style: TextStyle(color: Colors.red)),
               ),
               TextButton(
