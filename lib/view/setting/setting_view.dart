@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -33,6 +34,8 @@ class _SettingViewState extends ConsumerState<SettingView> {
 
   @override
   Widget build(BuildContext context) {
+    final Design design = Design(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("설정"),
@@ -42,48 +45,102 @@ class _SettingViewState extends ConsumerState<SettingView> {
         // shrinkWrap: true,
         // physics: const ClampingScrollPhysics(),
         children: <Widget>[
-          const ListTile(dense: true, title: Text('개인')),
+          const ListTile(
+            dense: true,
+            title: Text('개인', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
           Card(
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.amber, width: 1.5),
+            ),
             child: ListTile(
-              leading: const Icon(Icons.badge),
+              leading: const Icon(Icons.badge, color: Colors.orange),
               title: const Text('닉네임 변경'),
-              trailing: const Icon(Icons.keyboard_arrow_right),
+              trailing: const Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.orange,
+              ),
               onTap: () => context.push('/editNickName'),
             ),
           ),
 
-          const ListTile(dense: true, title: Text('계정 및 보안')),
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.person_off),
-              title: const Text('회원 탈퇴'),
-              trailing: const Icon(Icons.keyboard_arrow_right),
-              onTap: () {},
+          const ListTile(
+            dense: true,
+            title: Text(
+              '계정 및 보안',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           Card(
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.amber, width: 1.5),
+            ),
             child: ListTile(
-              leading: const Icon(Icons.logout),
+              leading: const Icon(Icons.person_off, color: Colors.orange),
+              title: const Text('회원 탈퇴'),
+              trailing: const Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.orange,
+              ),
+              onTap: () {},
+            ),
+          ),
+          const SizedBox(height: 10),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.amber, width: 1.5),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.logout, color: Colors.orange),
               title: const Text('로그아웃'),
-              trailing: const Icon(Icons.keyboard_arrow_right),
+              trailing: const Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.orange,
+              ),
               onTap: () {
                 logoutDialog(context);
               },
             ),
           ),
 
-          const ListTile(dense: true, title: Text('정보')),
-          Card(
-            child: ListTile(
-              title: const Text('버전 정보'),
-              trailing: Text("v$version"),
-            ),
+          const ListTile(
+            dense: true,
+            title: Text('정보', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           Card(
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.amber, width: 1.5),
+            ),
             child: ListTile(
-              leading: const Icon(Icons.badge),
+              title: const Text('버전 정보'),
+              trailing: Text(
+                "v$version",
+                style: const TextStyle(fontSize: Design.normalFontSize1),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.amber, width: 1.5),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.badge, color: Colors.orange),
               title: const Text('약관 및 정책'),
-              trailing: const Icon(Icons.keyboard_arrow_right),
+              trailing: const Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.orange,
+              ),
               onTap: () => context.push('/settingTerms'),
             ),
           ),
