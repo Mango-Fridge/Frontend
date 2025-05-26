@@ -86,7 +86,9 @@ class _SettingViewState extends ConsumerState<SettingView> {
                 Icons.keyboard_arrow_right,
                 color: Colors.orange,
               ),
-              onTap: () {},
+              onTap: () {
+                deleteUserDialog(context);
+              },
             ),
           ),
           const SizedBox(height: 10),
@@ -149,6 +151,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
     );
   }
 
+  // 로그아웃 dialog
   void logoutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -167,6 +170,46 @@ class _SettingViewState extends ConsumerState<SettingView> {
                     context.go('/login'); // 로그인 화면
                   }
                 },
+                child: const Text("확인", style: TextStyle(color: Colors.red)),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: const Text("취소", style: TextStyle(color: Colors.grey)),
+              ),
+            ],
+          ),
+    );
+  }
+
+  // 회원탈퇴 dialog
+  void deleteUserDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (BuildContext context) => AlertDialog(
+            title: const Text("회원탈퇴"),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '확인하는 즉시 "${user!.usrNm}"과 관련된 정보는 서버에서 삭제되며, 복구가 불가능합니다.',
+                ),
+                const Text(
+                  "\n\n정말로 회원탈퇴 하시겠습니까?",
+                  style: TextStyle(
+                    fontSize: Design.normalFontSize1,
+                    color: Colors.orange,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {},
                 child: const Text("확인", style: TextStyle(color: Colors.red)),
               ),
               TextButton(

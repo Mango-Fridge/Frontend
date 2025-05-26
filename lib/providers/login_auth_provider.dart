@@ -61,6 +61,11 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
     state = await authService.logout();
   }
 
+  // 회원탈퇴
+  Future<void> deleteUser() async {
+    // 로직
+  }
+
   // 자동 로그인 기능
   Future<void> autoLogin(BuildContext context) async {
     final String? platformStr =
