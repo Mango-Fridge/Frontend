@@ -61,6 +61,21 @@ class GroupNotifier extends Notifier<Group?> {
     }
   }
 
+  // 그룹장의 이름 가져오기
+  String? get groupOwnerName {
+    final group = state;
+    if (group == null || group.groupUsers == null) {
+      return null;
+    }
+
+    final owner = group.groupUsers!.firstWhere(
+      (user) => user.userId == group.groupOwnerId,
+      orElse: () => GroupUser(userId: 0, username: ''),
+    );
+
+    return owner.userId == 0 ? null : owner.username;
+  }
+
   // 그룹원에서 그룹장은 제일 상단 위치 함수
   List<GroupUser> getSortedGroupUsers() {
     final group = state;

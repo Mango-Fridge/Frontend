@@ -12,6 +12,7 @@ void toastMessage(
 }) {
   final fToast = FToast();
   fToast.init(context);
+  fToast.removeCustomToast(); // 이전에 띄운 토스트메시지 삭제를 위함
 
   // 토스트 색상 및 아이콘 변경
   Color backgroundColor =

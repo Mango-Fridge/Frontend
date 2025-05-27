@@ -153,14 +153,14 @@ class GroupFirstRequestWidget extends ConsumerWidget {
                                     );
 
                                 if (success) {
-                                  await groupPrefs.removeJoinedGroup();
-                                  ref
-                                      .read(grouViewStateProvider.notifier)
-                                      .state = GroupViewState.empty;
                                   toastMessage(
                                     context,
                                     "'$joinGroupName' 그룹을 나갔습니다.",
                                   );
+                                  await groupPrefs.removeJoinedGroup();
+                                  ref
+                                      .read(grouViewStateProvider.notifier)
+                                      .state = GroupViewState.empty;
                                 } else {
                                   toastMessage(
                                     context,
