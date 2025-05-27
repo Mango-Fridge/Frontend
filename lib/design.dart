@@ -41,6 +41,7 @@ class Design {
   cntUpdateListColor; // RefrigeratorView content 수량 변경 중인 항목의 list color
   final Color
   cntUpdateListBorderColor; // RefrigeratorView content 수량 변경 중인 항목의 list border color
+  final Color borderColor;
 
   final double settingBtnWidth;
   final double settingBtnHeight;
@@ -71,6 +72,7 @@ class Design {
       cookBtnColor = const Color.fromRGBO(219, 254, 128, 1.0),
       cntUpdateListColor = const Color.fromARGB(255, 218, 253, 220),
       cntUpdateListBorderColor = const Color.fromARGB(255, 52, 183, 56),
+      borderColor = const Color.fromRGBO(195, 142, 1, 1),
 
       settingBtnWidth = 100,
       settingBtnHeight = 30;

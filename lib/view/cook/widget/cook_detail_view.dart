@@ -66,10 +66,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     "영양성분표",
                     style: TextStyle(
-                      color: const Color.fromRGBO(195, 142, 1, 1),
+                      color: design.borderColor,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -108,18 +108,18 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
               ),
 
               // 재료: 충분히 재료가 있는지, 개수가 부족한지, 재료가 없는지
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "재료",
                     style: TextStyle(
-                      color: Color.fromRGBO(195, 142, 1, 1),
+                      color: design.borderColor,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,50 +174,46 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         .firstOrNull;
 
                 Icon icon;
+                Color color;
 
                 if (isFridge == null) {
                   icon = const Icon(Icons.close, color: Colors.red);
+                  color = Colors.red;
                 } else if (isFridge.subCategory == '미분류') {
                   icon = const Icon(Icons.circle, color: Colors.black, size: 4);
+                  color = Colors.black;
                 } else if ((isFridge.count) >= (item.count ?? 0)) {
                   icon = const Icon(Icons.check, color: Colors.green);
+                  color = Colors.green;
                 } else {
                   icon = const Icon(Icons.check, color: Colors.orange);
+                  color = Colors.orange;
                 }
 
                 return Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(13.0)),
-                    color: design.subColor,
                     border: Border.all(
-                      color: const Color.fromRGBO(195, 142, 1, 1),
-                      width: 1.0, // 모서리 두께
+                      color: color,
+                      width: 1.2, // 모서리 두께
                     ),
                   ),
                   padding: EdgeInsets.all(design.marginAndPadding),
                   child: Row(
                     children: <Widget>[
+                      SizedBox(width: 8, child: Center(child: icon)),
+                      const SizedBox(width: 20),
                       Column(
                         spacing: 1,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              // '미분류'일 때 패딩 - 왜 패딩을 준건지?
-
-                              // subCategory == '미분류'
-                              //     ? Padding(
-                              //       padding: const EdgeInsets.symmetric(
-                              //         horizontal: 10.0,
-                              //       ),
-                              //       child: icon,
-                              //     )
-                              //     : icon,
-                              SizedBox(width: 8, child: Center(child: icon)),
-                              const SizedBox(width: 15),
+                              // SizedBox(width: 8, child: Center(child: icon)),
+                              // const SizedBox(width: 15),
                               ConstrainedBox(
                                 constraints: const BoxConstraints(
-                                  maxWidth: 19 * 17 * 0.6,
+                                  maxWidth: 19 * 15 * 0.6,
                                 ),
                                 child: Text(
                                   item.itemName ?? '재료 이름 없음',
@@ -245,14 +241,14 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                         '${item.count ?? 0}개 / ',
                         style: const TextStyle(
                           color: Colors.grey,
-                          fontSize: 16,
+                          fontSize: 15,
                         ),
                       ),
                       Text(
                         '${item.nutriKcal ?? 0} kcal',
                         style: const TextStyle(
                           color: Colors.grey,
-                          fontSize: 16,
+                          fontSize: 15,
                         ),
                       ),
                     ],
@@ -265,10 +261,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "메모",
                         style: TextStyle(
-                          color: Color.fromRGBO(195, 142, 1, 1),
+                          color: design.borderColor,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -281,12 +277,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           color: design.subColor,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: const Color.fromRGBO(
-                              195,
-                              142,
-                              1,
-                              1,
-                            ), // 원하는 테두리 색상
+                            color: design.borderColor, // 원하는 테두리 색상
                             width: 1.0, // 테두리 두께
                           ),
                         ),
@@ -351,9 +342,25 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                       }
                     }
                   },
-                  child: const Text(
-                    "요리 삭제",
-                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: design.homeBottomHeight),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12.0), // 둥근 모서리
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 6.0,
+                      ), // 텍스트 주변 여백
+                      child: const Text(
+                        "요리 삭제",
+                        style: TextStyle(
+                          color: Colors.white, // 빨간 배경에 흰색 텍스트로 변경
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -384,7 +391,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: Text(nutriCapacity, style: const TextStyle(fontSize: 20)),
         ),
       ],

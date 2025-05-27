@@ -212,133 +212,135 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                       },
                       child: Stack(
                         children: <Widget>[
-                          SafeArea(
-                            bottom: true,
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 10),
-                              child: Column(
-                                spacing: 10,
-                                children: [
-                                  // 검색 필드
-                                  Container(
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: Column(
+                              spacing: 10,
+                              children: [
+                                // 검색 필드
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    top: design.marginAndPadding,
+                                    right: design.marginAndPadding,
+                                    left: design.marginAndPadding,
+                                  ),
+                                  padding: EdgeInsets.only(
+                                    left: design.marginAndPadding,
+                                    top: design.marginAndPadding * 0.5,
+                                    bottom: design.marginAndPadding * 0.5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: design.textFieldColor,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: design.textFieldborderColor,
+                                    ),
+                                  ),
+                                  child: TextField(
+                                    controller: _searchIngridientController,
+                                    focusNode: _searchIngredientFocusNode,
+                                    style: const TextStyle(
+                                      fontSize: Design.normalFontSize2,
+                                    ),
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      hintText: "ex) 돼지고기, 소고기",
+                                      border: InputBorder.none,
+                                      suffix:
+                                          (_searchIngridientController
+                                                  .text
+                                                  .isNotEmpty)
+                                              ? GestureDetector(
+                                                onTap: () {
+                                                  _searchIngridientController
+                                                      .clear();
+                                                  _onSearchChanged('');
+                                                  FocusScope.of(
+                                                    context,
+                                                  ).unfocus();
+                                                },
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                    right:
+                                                        design.marginAndPadding,
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.clear,
+                                                    color: Colors.red,
+                                                    size: 18,
+                                                  ),
+                                                ),
+                                              )
+                                              : null,
+                                    ),
+                                    onChanged: (String value) {
+                                      // 입력값이 변경될 때 상태 업데이트
+                                      _onSearchChanged(value);
+                                    },
+                                  ),
+                                ),
+                                Visibility(
+                                  visible:
+                                      (_addCookState
+                                              ?.itemListForCook
+                                              ?.isNotEmpty ??
+                                          false) &&
+                                      (!_searchIngridientController
+                                          .text
+                                          .isNotEmpty),
+                                  child: Container(
                                     margin: EdgeInsets.only(
                                       top: design.marginAndPadding,
                                       right: design.marginAndPadding,
                                       left: design.marginAndPadding,
                                     ),
-                                    padding: EdgeInsets.only(
-                                      left: design.marginAndPadding,
-                                      top: design.marginAndPadding * 0.5,
-                                      bottom: design.marginAndPadding * 0.5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: design.textFieldColor,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: design.textFieldborderColor,
-                                      ),
-                                    ),
-                                    child: TextField(
-                                      controller: _searchIngridientController,
-                                      focusNode: _searchIngredientFocusNode,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      '총 ${_addCookState?.itemListForCook?.length ?? 0}개 물품',
                                       style: const TextStyle(
-                                        fontSize: Design.normalFontSize2,
-                                      ),
-                                      decoration: InputDecoration(
-                                        isDense: true,
-                                        contentPadding: EdgeInsets.zero,
-                                        hintText: "ex) 돼지고기, 소고기",
-                                        border: InputBorder.none,
-                                        suffix:
-                                            (_searchIngridientController
-                                                    .text
-                                                    .isNotEmpty)
-                                                ? GestureDetector(
-                                                  onTap: () {
-                                                    _searchIngridientController
-                                                        .clear();
-                                                    _onSearchChanged('');
-                                                    FocusScope.of(
-                                                      context,
-                                                    ).unfocus();
-                                                  },
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                      right:
-                                                          design
-                                                              .marginAndPadding,
-                                                    ),
-                                                    child: const Icon(
-                                                      Icons.clear,
-                                                      color: Colors.red,
-                                                      size: 18,
-                                                    ),
-                                                  ),
-                                                )
-                                                : null,
-                                      ),
-                                      onChanged: (String value) {
-                                        // 입력값이 변경될 때 상태 업데이트
-                                        _onSearchChanged(value);
-                                      },
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible:
-                                        (_addCookState
-                                                ?.itemListForCook
-                                                ?.isNotEmpty ??
-                                            false) &&
-                                        (!_searchIngridientController
-                                            .text
-                                            .isNotEmpty),
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                        top: design.marginAndPadding,
-                                        right: design.marginAndPadding,
-                                        left: design.marginAndPadding,
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        '총 ${_addCookState?.itemListForCook?.length ?? 0}개 물품',
-                                        style: const TextStyle(
-                                          fontSize:
-                                              Design.tabBarUnSelectedFontSize,
-                                        ),
+                                        fontSize:
+                                            Design.tabBarUnSelectedFontSize,
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child:
-                                        (_addCookState?.isSearchIngredientFocused ??
-                                                    false) ||
-                                                (_searchIngridientController
-                                                    .text
-                                                    .isNotEmpty)
-                                            ? _buildItemList()
-                                            : (_addCookState
-                                                    ?.itemListForCook
-                                                    ?.isEmpty ??
-                                                true)
-                                            ? Center(
-                                              child: Text(
-                                                '물품을 추가해주세요',
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      Design.normalFontSize2,
-                                                  color: Colors.grey[600],
-                                                  fontFamily: 'Mainfonts',
-                                                ),
+                                ),
+                                Expanded(
+                                  child:
+                                      (_addCookState?.isSearchIngredientFocused ??
+                                                  false) ||
+                                              (_searchIngridientController
+                                                  .text
+                                                  .isNotEmpty)
+                                          ? _buildItemList()
+                                          : (_addCookState
+                                                  ?.itemListForCook
+                                                  ?.isEmpty ??
+                                              true)
+                                          ? Center(
+                                            child: Text(
+                                              '물품을 추가해주세요',
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Design.normalFontSize2,
+                                                color: Colors.grey[600],
+                                                fontFamily: 'Mainfonts',
                                               ),
-                                            )
-                                            : _buildCookItem(
-                                              _addCookState?.itemListForCook,
-                                              _cookItemRow,
                                             ),
-                                  ),
-                                  SizedBox(height: design.homeBottomHeight),
-                                ],
-                              ),
+                                          )
+                                          : _buildCookItem(
+                                            _addCookState?.itemListForCook,
+                                            _cookItemRow,
+                                          ),
+                                ),
+                                if (!(_addCookState?.isCookNameFocused ??
+                                        false) &&
+                                    !(_addCookState
+                                            ?.isSearchIngredientFocused ??
+                                        false) &&
+                                    _searchIngridientController.text.isEmpty)
+                                  SizedBox(height: design.homeBottomHeight * 2),
+                              ],
                             ),
                           ),
                           Column(
@@ -351,7 +353,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
                                         false) &&
                                     !(_addCookState
                                             ?.isSearchIngredientFocused ??
-                                        false),
+                                        false) &&
+                                    _searchIngridientController.text.isEmpty,
                                 child: AddCookBottomSheetWidget(
                                   onAddPressed: () async {
                                     final String cookName =
@@ -529,6 +532,8 @@ class _AddCookViewState extends ConsumerState<AddCookView> {
             ); // 재료(아이템) 개수(디폴트 1, 수정할 시 개수 그대로 가져옴)
 
         FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+
+        await Future.delayed(const Duration(milliseconds: 300));
 
         showDialog(
           context: context,

@@ -57,7 +57,7 @@ class _CookViewState extends ConsumerState<CookView> {
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.amber,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
                 ),
                 child: const Text("요리 추가하기", style: TextStyle(fontSize: 17)),
@@ -148,10 +148,10 @@ class _CookViewState extends ConsumerState<CookView> {
           ),
           padding: EdgeInsets.all(design.marginAndPadding),
           decoration: BoxDecoration(
-            color: const Color.fromRGBO(255, 244, 216, 1),
+            color: design.subColor,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: const Color.fromRGBO(195, 142, 1, 1),
+              color: design.borderColor,
               width: 1.0, // 테두리 두께
             ),
           ),
@@ -183,8 +183,8 @@ class _CookViewState extends ConsumerState<CookView> {
                           ),
                           Text(
                             cook.cookItems!.length > 1
-                                ? '${cook.cookItems?.first.cookItemName} 외 ${(cook.cookItems?.length ?? 0) - 1}개의 재료'
-                                : '${cook.cookItems?.first.cookItemName}',
+                                ? '${(cook.cookItems?.first.cookItemName ?? '').length > 13 ? '${(cook.cookItems?.first.cookItemName ?? '').substring(0, 13)}...' : cook.cookItems?.first.cookItemName ?? ''} 외 ${(cook.cookItems?.length ?? 0) - 1}개의 재료'
+                                : '${(cook.cookItems?.first.cookItemName ?? '').length > 24 ? '${(cook.cookItems?.first.cookItemName ?? '').substring(0, 24)}...' : cook.cookItems?.first.cookItemName ?? ''}',
                           ),
                         ],
                       ),
@@ -224,7 +224,7 @@ class _CookViewState extends ConsumerState<CookView> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.amber,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
+                borderRadius: BorderRadius.circular(16.0),
               ),
               padding: const EdgeInsets.symmetric(
                 horizontal: 32.0,
