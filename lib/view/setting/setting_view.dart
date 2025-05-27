@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
+import 'package:mango/model/group/group.dart';
 import 'package:mango/model/login/auth_model.dart';
+import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -15,6 +17,7 @@ class SettingView extends ConsumerStatefulWidget {
 
 class _SettingViewState extends ConsumerState<SettingView> {
   AuthInfo? get user => ref.watch(loginAuthProvider);
+  Group? get group => ref.watch(groupProvider);
   String version = "";
 
   @override
@@ -82,13 +85,26 @@ class _SettingViewState extends ConsumerState<SettingView> {
             child: ListTile(
               leading: const Icon(Icons.person_off, color: Colors.orange),
               title: const Text('회원 탈퇴'),
-              trailing: const Icon(
-                Icons.keyboard_arrow_right,
-                color: Colors.orange,
-              ),
-              onTap: () {
-                deleteUserDialog(context);
-              },
+              trailing:
+                  group?.groupOwnerId != user?.usrId
+                      ? const Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Colors.orange,
+                      )
+                      : const Text(
+                        "그룹장은 할 수 없습니다.",
+                        style: TextStyle(
+                          fontSize: Design.normalFontSize0,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              onTap:
+                  group?.groupOwnerId != user?.usrId
+                      ? () {
+                        deleteUserDialog(context);
+                      }
+                      : null,
             ),
           ),
           const SizedBox(height: 10),

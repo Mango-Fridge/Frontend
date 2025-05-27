@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 
@@ -24,7 +25,7 @@ class _NicknameEditViewState extends ConsumerState<NicknameEditView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const TextField(),
+            const TextField(style: TextStyle(fontSize: Design.normalFontSize2)),
             Text(
               "- 현재 닉네임 : ${user!.usrNm}",
               style: const TextStyle(
