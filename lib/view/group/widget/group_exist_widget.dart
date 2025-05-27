@@ -431,15 +431,15 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                       if (!mounted) return;
       
                       if (success) {
+                        toastMessage(
+                          context,
+                          "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
+                        );
                         await ref
                             .read(groupProvider.notifier)
                             .loadGroup(_user?.usrId ?? 0);
                         ref.read(grouViewStateProvider.notifier).state =
                             GroupViewState.empty;
-                        toastMessage(
-                          context,
-                          "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
-                        );
                       } else {
                         toastMessage(
                           context,
