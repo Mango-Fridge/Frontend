@@ -271,16 +271,49 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                           if (isCurrentUserOwner && isOtherUser) ...{
                             ElevatedButton(
                               onPressed: () async {
-                                await groupNotifier.putGroupOwner(
-                                  user.userId,
-                                  _group?.groupId ?? 0,
+                                final result = await showDialog<bool>(
+                                  context: context,
+                                  builder:
+                                      (context) => AlertDialog(
+                                        title: const Text('위임하기'),
+                                        content: const Text(
+                                          '그룹장을 위임하면 현재 그룹장 권한이 사라집니다.\n정말로 계속하시겠습니까?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.of(
+                                                  context,
+                                                ).pop(false),
+                                            child: const Text('취소'),
+                                          ),
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.of(
+                                                  context,
+                                                ).pop(true),
+                                            child: const Text('확인'),
+                                          ),
+                                        ],
+                                      ),
                                 );
-                                await ref
-                                    .read(groupProvider.notifier)
-                                    .groupUserList(
-                                      _user?.usrId ?? 0,
-                                      _group?.groupId ?? 0,
-                                    );
+                                if (result == true) {
+                                  await groupNotifier.putGroupOwner(
+                                    user.userId,
+                                    _group?.groupId ?? 0,
+                                  );
+                                  await ref
+                                      .read(groupProvider.notifier)
+                                      .groupUserList(
+                                        _user?.usrId ?? 0,
+                                        _group?.groupId ?? 0,
+                                      );
+
+                                  toastMessage(
+                                    context,
+                                    "'${user.username}'님에게 그룹장 권한을 위임했습니다.",
+                                  );
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.amber,
@@ -297,16 +330,49 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                             const SizedBox(width: 8),
                             ElevatedButton(
                               onPressed: () async {
-                                await groupNotifier.exitCurrentGroup(
-                                  user.userId,
-                                  _group?.groupId ?? 0,
+                                final result = await showDialog<bool>(
+                                  context: context,
+                                  builder:
+                                      (context) => AlertDialog(
+                                        title: const Text('내보내기'),
+                                        content: const Text(
+                                          '해당 그룹원을 내보내면 되돌릴 수 없습니다.\n그룹원을 내보내겠습니까?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.of(
+                                                  context,
+                                                ).pop(false),
+                                            child: const Text('취소'),
+                                          ),
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.of(
+                                                  context,
+                                                ).pop(true),
+                                            child: const Text('확인'),
+                                          ),
+                                        ],
+                                      ),
                                 );
-                                await ref
-                                    .read(groupProvider.notifier)
-                                    .groupUserList(
-                                      _user?.usrId ?? 0,
-                                      _group?.groupId ?? 0,
-                                    );
+
+                                if (result == true) {
+                                  await groupNotifier.exitCurrentGroup(
+                                    user.userId,
+                                    _group?.groupId ?? 0,
+                                  );
+                                  await ref
+                                      .read(groupProvider.notifier)
+                                      .groupUserList(
+                                        _user?.usrId ?? 0,
+                                        _group?.groupId ?? 0,
+                                      );
+                                  toastMessage(
+                                    context,
+                                    "'${user.username}'을 그룹에서 내보냈습니다.",
+                                  );
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red.shade200,
@@ -336,27 +402,56 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  if (await groupNotifier.exitCurrentGroup(
-                    _user?.usrId ?? 0,
-                    _group?.groupId ?? 0,
-                  )) {
-                    toastMessage(
-                      context,
-                      "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
+                  final result = await showDialog<bool>(
+                    context: context,
+                    builder:
+                        (BuildContext context) => AlertDialog(
+                          title: const Text('그룹 나가기'),
+                          content: const Text(
+                            '해당 그룹을 나가면 되돌릴 수 없습니다.\n그룹을 나가겠습니까?',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => context.pop(false),
+                              child: const Text('취소'),
+                            ),
+                            TextButton(
+                              onPressed: () => context.pop(true),
+                              child: const Text('확인'),
+                            ),
+                          ],
+                        ),
+                  );
+
+                  if (result == true) {
+                    final success = await groupNotifier.exitCurrentGroup(
+                      _user?.usrId ?? 0,
+                      _group?.groupId ?? 0,
                     );
-                    await ref
-                        .read(groupProvider.notifier)
-                        .loadGroup(_user?.usrId ?? 0);
-                    ref.read(grouViewStateProvider.notifier).state =
-                        GroupViewState.empty;
-                  } else {
-                    toastMessage(
-                      context,
-                      "'${_group?.groupName ?? ''}' 그룹을 나갈 수 없습니다.",
-                      type: ToastmessageType.errorType,
-                    );
+
+                    if (!mounted) return;
+
+                    if (success) {
+                      await ref
+                          .read(groupProvider.notifier)
+                          .loadGroup(_user?.usrId ?? 0);
+                      ref.read(grouViewStateProvider.notifier).state =
+                          GroupViewState.empty;
+                      toastMessage(
+                        context,
+                        "'${_group?.groupName ?? ''}' 그룹을 나갔습니다.",
+                      );
+                    } else {
+                      toastMessage(
+                        context,
+                        "'${_group?.groupName ?? ''}' 그룹을 나갈 수 없습니다.",
+                        type: ToastmessageType.errorType,
+                      );
+                    }
+
+                    ref.read(refrigeratorNotifier.notifier).resetState();
                   }
-                  ref.read(refrigeratorNotifier.notifier).resetState();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFFFD0D0),
