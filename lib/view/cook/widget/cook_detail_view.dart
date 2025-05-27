@@ -66,10 +66,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     "영양성분표",
                     style: TextStyle(
-                      color: const Color.fromRGBO(195, 142, 1, 1),
+                      color: design.borderColor,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -108,18 +108,18 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
               ),
 
               // 재료: 충분히 재료가 있는지, 개수가 부족한지, 재료가 없는지
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "재료",
                     style: TextStyle(
-                      color: Color.fromRGBO(195, 142, 1, 1),
+                      color: design.borderColor,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +193,6 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                 return Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(13.0)),
-                    // color: design.subColor,
                     border: Border.all(
                       color: color,
                       width: 1.2, // 모서리 두께
@@ -262,10 +261,10 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                   ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "메모",
                         style: TextStyle(
-                          color: Color.fromRGBO(195, 142, 1, 1),
+                          color: design.borderColor,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -278,12 +277,7 @@ class _CookDetailViewState extends ConsumerState<CookDetailView> {
                           color: design.subColor,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: const Color.fromRGBO(
-                              195,
-                              142,
-                              1,
-                              1,
-                            ), // 원하는 테두리 색상
+                            color: design.borderColor, // 원하는 테두리 색상
                             width: 1.0, // 테두리 두께
                           ),
                         ),

@@ -28,7 +28,7 @@ class AddCookBottomSheetWidget extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(255, 228, 161, 1),
+        color: design.textFieldColor,
         borderRadius: BorderRadius.circular(30), // 둥근 모서리 반경 설정
         border: Border.all(color: Colors.brown, width: 1),
       ),
