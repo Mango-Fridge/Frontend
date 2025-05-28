@@ -33,6 +33,14 @@ dependencies:
   shimmer: ^3.0.0
   custom_sliding_segmented_control: ^1.8.5
   dropdown_button2: ^2.3.9
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/mainIcon.png"
+  min_sdk_android: 16
 
 dev_dependencies:
   flutter_test:
