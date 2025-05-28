@@ -12,11 +12,20 @@ part 'rest_client.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @PUT('/user')
+  Future<ApiResponse> editNickName(
+    @Query('userId') int userId,
+    @Query('username') String username,
+  );
+
   @POST('/user/login')
   Future<ApiResponse> getAuthUser(
     @Header("Authorization") String token,
     @Body() Map<String, String> body,
   );
+
+  @DELETE('/user/deleteUser/{userId}')
+  Future<ApiResponse> deleteAuthUser(@Path('userId') int userId);
 
   @POST('/agreement/agree')
   Future<ApiResponse> updateTerms(@Body() Map<String, Object?> body);

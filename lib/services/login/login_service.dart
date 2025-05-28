@@ -74,4 +74,17 @@ class LoginService {
       return null;
     }
   }
+
+  Future<AuthInfo?> deleteUser(AuthInfo authInfo) async {
+    try {
+      final RestClient client = RestClient(dio);
+      await client.deleteAuthUser(authInfo.usrId!);
+      return null;
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      throw Exception(e);
+    } catch (e) {
+      debugPrint("[Kakao] 카카오 회원탈퇴 에러 $e");
+    }
+  }
 }

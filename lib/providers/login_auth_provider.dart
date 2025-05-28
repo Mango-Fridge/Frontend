@@ -54,11 +54,33 @@ class LoginAuthNotifier extends Notifier<AuthInfo?> {
   }
 
   // 로그아웃
-  Future<void> logout(AuthPlatform platform) async {
+  Future<void> logout(AuthPlatform platform, BuildContext context) async {
     final authService = _getAuthService(platform); // platform에 따른 서비스 반환
     if (authService == null) return;
 
-    state = await authService.logout();
+    try {
+      state = await authService.logout();
+      context.go('/login'); // 로그인 화면
+    } catch (e) {
+      toastMessage(context, '로그아웃에 실패했습니다.', type: ToastmessageType.errorType);
+    }
+  }
+
+  // 회원탈퇴
+  Future<void> deleteUser(
+    AuthPlatform platform,
+    AuthInfo authInfo,
+    BuildContext context,
+  ) async {
+    final authService = _getAuthService(platform); // platform에 따른 서비스 반환
+    if (authService == null) return;
+
+    try {
+      state = await authService.deleteUser(authInfo);
+      context.go('/login'); // 로그인 화면
+    } catch (e) {
+      toastMessage(context, '회원탈퇴에 실패했습니다.', type: ToastmessageType.errorType);
+    }
   }
 
   // 자동 로그인 기능

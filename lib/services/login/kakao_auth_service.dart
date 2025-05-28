@@ -166,7 +166,25 @@ class KakaoAuthService implements AbstractAuth {
       return null;
     } catch (error) {
       if (kDebugMode) print("[Kakao] 로그아웃 실패 $error");
+      throw Exception(error);
     }
-    return null;
+  }
+
+  // 카카오 회원탈퇴
+  @override
+  Future<AuthInfo?> deleteUser(AuthInfo authInfo) async {
+    final LoginSharePrefs _LoginSharePrefs =
+        LoginSharePrefs(); // shared_preferences 뷰모델
+
+    try {
+      await _loginService.deleteUser(authInfo); // 서버 회원탈퇴
+      await UserApi.instance.logout(); // 카카오 로그아웃
+      await _LoginSharePrefs.removeAuth('Kakao'); // 로컬 계정 삭제
+      if (kDebugMode) print("[Kakao] 회원탈퇴 성공");
+      return null;
+    } catch (error) {
+      if (kDebugMode) print("[Kakao] 회원탈퇴 실패 $error");
+      throw Exception(error);
+    }
   }
 }
