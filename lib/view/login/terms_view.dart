@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mango/design.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -25,8 +26,8 @@ class _TermsViewState extends State<TermsView> {
           ..loadRequest(
             Uri.parse(
               widget.termsType == 'privacy policy'
-                  ? 'https://www.naver.com'
-                  : 'https://google.com',
+                  ? dotenv.get('Privacy_Policy')
+                  : dotenv.get('Terms_Of_Service'),
             ),
           );
   }
@@ -42,6 +43,15 @@ class _TermsViewState extends State<TermsView> {
           children: <Widget>[
             Expanded(child: WebViewWidget(controller: _webViewController)),
             const SizedBox(height: 20),
+            const Text(
+              "필수 약관에 동의하면 서비스 이용이 가능합니다.",
+              style: TextStyle(
+                color: Colors.orange,
+                fontSize: Design.normalFontSize1,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: widget.onAccept,
               style: ElevatedButton.styleFrom(
@@ -49,12 +59,19 @@ class _TermsViewState extends State<TermsView> {
                   double.infinity,
                   design.termsAgreeButtonHeight,
                 ),
-                backgroundColor: Colors.amber[300],
+                backgroundColor: Colors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
               ),
-              child: const Text('동의', style: TextStyle(color: Colors.black)),
+              child: const Text(
+                '동의',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Design.normalFontSize1,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),

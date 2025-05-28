@@ -56,7 +56,7 @@ class Design {
       nutritionViewMarginAndPadding = MediaQuery.of(context).size.width * 0.030,
       splashImageSize = MediaQuery.of(context).size.height * 0.007,
       termsOverlayWidth = MediaQuery.of(context).size.width * 0.95,
-      termsOverlayHeight = MediaQuery.of(context).size.height * 0.7,
+      termsOverlayHeight = MediaQuery.of(context).size.height * 0.8,
       termsAgreeButtonHeight = MediaQuery.of(context).size.height * 0.05,
       contentUpdateViewHeight = MediaQuery.of(context).size.height * 0.20,
       addContentTextWidth = MediaQuery.of(context).size.width * 0.30,
