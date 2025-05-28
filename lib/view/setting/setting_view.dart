@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/group/group.dart';
 import 'package:mango/model/login/auth_model.dart';
+import 'package:mango/providers/group_enum_state_provider.dart';
 import 'package:mango/providers/group_provider.dart';
 import 'package:mango/providers/login_auth_provider.dart';
+import 'package:mango/services/group_shared_prefs.dart';
+import 'package:mango/state/group_enum_state.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingView extends ConsumerStatefulWidget {
@@ -19,11 +22,22 @@ class _SettingViewState extends ConsumerState<SettingView> {
   AuthInfo? get user => ref.watch(loginAuthProvider);
   Group? get group => ref.watch(groupProvider);
   String version = "";
+  final GroupSharedPrefs groupSharedPrefs = GroupSharedPrefs();
 
   @override
   void initState() {
     super.initState();
     checkVersion();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkGroupOwner();
+    });
+  }
+
+  // 그룹장인지 체크
+  Future<void> checkGroupOwner() async {
+    await ref
+        .read(groupProvider.notifier)
+        .groupUserList(user?.usrId ?? 0, ref.read(groupProvider)?.groupId ?? 0);
   }
 
   // App Version 체크
