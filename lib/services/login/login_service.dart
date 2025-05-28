@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/model/rest_client.dart';
-import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/services/login/login_shared_prefs.dart';
 
 // 서버와 로그인

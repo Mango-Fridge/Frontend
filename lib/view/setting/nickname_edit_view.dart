@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mango/design.dart';
 import 'package:mango/model/login/auth_model.dart';
 import 'package:mango/providers/login_auth_provider.dart';
 import 'package:mango/providers/nickName_edit_provider.dart';
+import 'package:mango/services/nickName_repository.dart';
+import 'package:mango/toastMessage.dart';
 
 class NicknameEditView extends ConsumerStatefulWidget {
   const NicknameEditView({super.key});
@@ -15,6 +18,7 @@ class NicknameEditView extends ConsumerStatefulWidget {
 class _NicknameEditViewState extends ConsumerState<NicknameEditView> {
   AuthInfo? get user => ref.watch(loginAuthProvider);
   TextEditingController nickNameController = TextEditingController();
+  final NicknameRepository _nicknameRepository = NicknameRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,33 @@ class _NicknameEditViewState extends ConsumerState<NicknameEditView> {
           width: double.infinity,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            onPressed: isCheck ? () {} : null,
+            onPressed:
+                isCheck
+                    ? () async {
+                      try {
+                        await _nicknameRepository.putEditNickName(
+                          user!.usrId!,
+                          nickNameController.text,
+                        );
+
+                        // 닉네임만 변경하여 상태 갱신
+                        final updatedUser = user!.copyWith(
+                          usrNm: nickNameController.text,
+                        );
+                        ref.read(loginAuthProvider.notifier).state =
+                            updatedUser;
+
+                        toastMessage(context, "닉네임 변경에 성공했습니다.");
+                        context.pop();
+                      } catch (e) {
+                        toastMessage(
+                          context,
+                          "닉네임 변경에 실패했습니다.",
+                          type: ToastmessageType.errorType,
+                        );
+                      }
+                    }
+                    : null,
             child: const Text("변경하기"),
           ),
         ),
