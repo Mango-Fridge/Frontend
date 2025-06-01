@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,11 +40,17 @@ class _GroupParticipationViewState
     final groupPrefs = GroupSharedPrefs();
     final Design design = Design(context);
 
+    final double modalHeight =
+        groupState.isButton
+            ? (Platform.isIOS
+                ? MediaQuery.of(context).size.height * 0.6
+                : MediaQuery.of(context).size.height * 0.56)
+            : (Platform.isIOS
+                ? MediaQuery.of(context).size.height * 0.4
+                : MediaQuery.of(context).size.height * 0.45);
+
     return SizedBox(
-      height:
-          groupState.isButton
-              ? MediaQuery.of(context).size.height * 0.62
-              : MediaQuery.of(context).size.height * 0.4,
+      height: modalHeight,
       child: Center(
         child: Column(
           children: <Widget>[
@@ -61,28 +69,34 @@ class _GroupParticipationViewState
                   children: [
                     Text(
                       '${groupState.groupName ?? ''}의 냉장고',
-                      style: const TextStyle(
-                        fontSize: 30,
+                      style: TextStyle(
+                        fontSize: Platform.isIOS ? 30 : 24,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: fontSizeMediaQuery * 0.03),
+                    SizedBox(
+                      height: Platform.isIOS ? fontSizeMediaQuery * 0.03 : 0,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.emoji_events, color: Colors.amber, size: 25),
+                        Icon(
+                          Icons.emoji_events,
+                          color: Colors.amber,
+                          size: Platform.isIOS ? 25 : 20,
+                        ),
                         SizedBox(width: 6),
                         Text(
                           groupState.groupOwnerName ?? '',
-                          style: TextStyle(fontSize: 30, color: Colors.black),
+                          style: TextStyle(fontSize: Platform.isIOS ? 30 : 25, color: Colors.black),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: fontSizeMediaQuery * 0.08),
+              SizedBox(height: Platform.isIOS ? fontSizeMediaQuery * 0.08 : 0),
             ],
             if (!groupState.isButton) ...[
               const SizedBox(height: 40),
@@ -126,10 +140,13 @@ class _GroupParticipationViewState
                 ],
               ),
             ],
-            SizedBox(height: fontSizeMediaQuery * 0.05),
+            SizedBox(height: Platform.isIOS ? fontSizeMediaQuery * 0.05 : 10),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.width * 0.2,
+              height:
+                  Platform.isIOS
+                      ? MediaQuery.of(context).size.width * 0.2
+                      : MediaQuery.of(context).size.width * 0.1,
               child: TextField(
                 controller: _controller,
                 onChanged:
@@ -194,7 +211,7 @@ class _GroupParticipationViewState
                               groupState.groupId ?? 0,
                               groupState.groupName ?? '',
                               groupState.groupOwnerName ?? '',
-                              groupState.groupCode ?? ''
+                              groupState.groupCode ?? '',
                             ); // 참여 희망 그룹id, 이름 로컬 저장
                             ref.read(grouViewStateProvider.notifier).state =
                                 GroupViewState
