@@ -63,7 +63,7 @@ class _GroupUserListWidgetState extends ConsumerState<GrouExistWidget> {
                           Text(
                             '${_group?.groupName}의 냉장고',
                             style: const TextStyle(
-                              fontSize: 30,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
