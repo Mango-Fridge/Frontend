@@ -46,7 +46,7 @@ class _GroupCreateViewState extends ConsumerState<GroupCreateView> {
       //     // right: BorderSide(color: Colors.amber, width: 5),
       //   ),
       // ),
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: 430,
       child: Center(
         child: Column(
           children: <Widget>[
@@ -67,7 +67,7 @@ class _GroupCreateViewState extends ConsumerState<GroupCreateView> {
                     onChanged:
                         (String groupName) =>
                             groupNotifier.checkGroupName(groupName),
-                    maxLength: 8,
+                    maxLength: 6,
                     decoration: InputDecoration(
                       hintText: 'ex) 홍길동의 냉장고',
                       hintStyle: const TextStyle(

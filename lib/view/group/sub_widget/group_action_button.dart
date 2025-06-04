@@ -12,8 +12,8 @@ Widget groupActionButton({
   return Consumer(
     builder: (context, ref, child) {
       return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.4,
-        height: MediaQuery.of(context).size.height * 0.11,
+        width: 160,
+        height: 100,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.amber, // 배경색
