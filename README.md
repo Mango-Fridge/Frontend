@@ -95,7 +95,7 @@
 
 |기술스택|이름|
 |:---|:---:|
-|**프론트엔드**|![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white) (Dart Version: >=3.29.0) |
+|**프론트엔드**|![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white) >=3.29.0 (Dart Version: >=3.7.0) |
 |**백엔드**|![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) / ![mysql](https://img.shields.io/badge/-mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white) / ![springsecurity](https://img.shields.io/badge/-springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white) / ![docker](https://img.shields.io/badge/-docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) / ![redis](https://img.shields.io/badge/-redis-FF4438?style=for-the-badge&logo=redis&logoColor=white) / JAVA / JPA / JWT |
 |**협업**|![Git](https://img.shields.io/badge/-GitHub-181717?style=for-the-badge&logo=github&logoColor=white) / ![Notion](https://img.shields.io/badge/-Notion-000000?style=for-the-badge&logo=Notion&logoColor=white) / ![Discord](https://img.shields.io/badge/-Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white) |
 |**디자인**|![figma](https://img.shields.io/badge/-figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)|
@@ -108,8 +108,6 @@
  
 | 이름           | 설명                           | 버전               |
 | ------------ | ---------------------------- | ----------------- |
-| `Flutter`      | 개발 프레임워크       | `3.29.0` |
-| `Dart`      | 개발 프로그래밍 언어       | `3.7.0` |
 | `flutter_riverpod`      | 상태관리 패키지       | `2.6.1` |
 | `go_router`      | 라우팅 패키지       | `14.8.1` |
 | `flutter_dotenv`      | 환경 변수 설정 패키지       | `5.2.1` |
