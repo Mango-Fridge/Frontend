@@ -114,13 +114,11 @@ Mango(My refrigerator의 줄임말)는 사용자가 제품명 키워드를 검�
 ### Flow Charts
 ![Section 1](https://github.com/user-attachments/assets/a545e829-1a55-4686-98d3-324c294b013f)
 
-### 와이어 프레임
-![image](https://github.com/user-attachments/assets/8fcb5e94-b959-461f-8e58-9cdbbc943812)
+### 와이어 프레임 & User Flow
+![와이어 프레임](https://github.com/user-attachments/assets/6957160c-87f9-4454-955a-e5fc2302929a)
 
 ### UI/UX
-![image](https://github.com/user-attachments/assets/8520c4d4-286c-4e32-90b9-1fc61b222568)
-
-### 
+![UX](https://github.com/user-attachments/assets/07f8b3a1-6ea6-4d2a-9b87-64ac9c0dce00)
 
 
 # 주요 기능
