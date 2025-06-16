@@ -97,7 +97,6 @@ Mango(My refrigerator의 줄임말)는 사용자가 제품명 키워드를 검�
 
 <br>
 
-# 설계
 ### 🛠️ 개발 도구
 <div align="center">
 
@@ -110,6 +109,24 @@ Mango(My refrigerator의 줄임말)는 사용자가 제품명 키워드를 검�
 
 </div>
 <br>
+
+# 설계
+### Flow Charts
+![Section 1](https://github.com/user-attachments/assets/a545e829-1a55-4686-98d3-324c294b013f)
+
+### 와이어 프레임
+![image](https://github.com/user-attachments/assets/8fcb5e94-b959-461f-8e58-9cdbbc943812)
+
+### UI/UX
+![image](https://github.com/user-attachments/assets/8520c4d4-286c-4e32-90b9-1fc61b222568)
+
+### 
+
+
+# 주요 기능
+
+# 기타
+### 📑 [버전 기록(Google Docs)](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
 
 ### 📚 주요 라이브러리
 <div align="center">
@@ -129,12 +146,6 @@ Mango(My refrigerator의 줄임말)는 사용자가 제품명 키워드를 검�
 
 </div>
 <br>
-
-# 주요 기능
-
-### 📑 기타
-### [버전 기록(Google Docs)](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
-
 
 
 
