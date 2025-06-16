@@ -115,7 +115,7 @@ Mango(My refrigerator의 줄임말)는 사용자가 제품명 키워드를 검�
 ![Section 1](https://github.com/user-attachments/assets/a545e829-1a55-4686-98d3-324c294b013f)
 
 ### 와이어 프레임 & User Flow
-![와이어 프레임](https://github.com/user-attachments/assets/6957160c-87f9-4454-955a-e5fc2302929a)
+![와이어 프레임](https://github.com/user-attachments/assets/d6aeb9da-aa16-4ee2-98c7-b29471895043)
 
 ### UI/UX
 ![UX](https://github.com/user-attachments/assets/07f8b3a1-6ea6-4d2a-9b87-64ac9c0dce00)
