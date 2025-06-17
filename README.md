@@ -122,6 +122,31 @@ Mango(My refrigerator의 줄임말)는 사용자가 제품명 키워드를 검�
 
 
 # 주요 기능
+### 약관동의 & 설정
+<img src="https://github.com/user-attachments/assets/61d5a445-470d-48de-8aca-9c2f5f7c5f8a" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/4ea20ad8-81bb-4e33-b64b-c33f00d3ebaa" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/61bac009-1d8a-42ab-b88c-a7553f35cb06" width="300" height="650"/>
+
+### 그룹
+<img src="https://github.com/user-attachments/assets/f1b56bd2-a81a-4711-838b-aa2d5a5d3667" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/34ae97ba-1ca2-4f93-a113-3344f21e9cec" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/8e0a0119-ecfe-4517-8239-763b7dfebbbe" width="300" height="650"/>
+
+### 메인화면
+<img src="https://github.com/user-attachments/assets/ba8d5766-c2dc-40c8-9872-cad9b2a9081b" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/255ab58f-88db-4557-9f18-9f599ba2aaf6" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/3ecfdfc7-cc63-4575-89ca-9ee11551ce16" width="300" height="650"/>
+
+### 물품 추가
+<img src="https://github.com/user-attachments/assets/f31c8ceb-b824-4aa0-8035-0756cb2c133b" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/efcf7814-a5de-473b-97ef-7e435e54aec0" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/923fb9f5-da1b-4177-8bb9-65e89f897b7f" width="300" height="650"/>
+
+### 요리
+<img src="https://github.com/user-attachments/assets/95ed5eec-337b-4e6c-ad40-66823e73cdc3" width="300" height="650"/>
+<img src="https://github.com/user-attachments/assets/78bc81fc-2bb6-41f3-945e-e721062f36e0" width="300" height="650"/>
+
+
 
 # 기타
 ### 📑 [버전 기록(Google Docs)](https://docs.google.com/document/d/1jGvCaHdyLdExCCWo95xoGkFYdY4Mc1hrtk55fEWGx1o/edit?usp=sharing) <br>
