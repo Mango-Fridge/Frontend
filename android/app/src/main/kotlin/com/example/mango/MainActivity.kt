@@ -1,4 +1,4 @@
-package com.example.mango
+package com.mango.refrigerator
 
 import io.flutter.embedding.android.FlutterActivity
 
